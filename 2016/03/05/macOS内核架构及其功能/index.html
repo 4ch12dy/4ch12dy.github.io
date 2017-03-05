@@ -8,34 +8,28 @@
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
   <title>macOS内核架构及其功能 | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#macOS内核架构及其功能
-##the xnu Kernal of following component
-Mach servers layer
+  <meta name="description" content="macOS内核架构及其功能the xnu Kernal of following componentMach servers layer
 BSD primary systerm programming interface provide
 The I/OKit runtime environment for drivers
 libkernal in-kernel library
-libsa">
+libsaan in">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS内核架构及其功能">
 <meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2016/03/05/macOS内核架构及其功能/index.html">
 <meta property="og:site_name" content="4chendy">
-<meta property="og:description" content="#macOS内核架构及其功能
-##the xnu Kernal of following component
-Mach servers layer
+<meta property="og:description" content="macOS内核架构及其功能the xnu Kernal of following componentMach servers layer
 BSD primary systerm programming interface provide
 The I/OKit runtime environment for drivers
 libkernal in-kernel library
-libsa">
-<meta property="og:updated_time" content="2017-03-04T17:55:15.000Z">
+libsaan in">
+<meta property="og:updated_time" content="2017-03-05T12:49:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS内核架构及其功能">
-<meta name="twitter:description" content="#macOS内核架构及其功能
-##the xnu Kernal of following component
-Mach servers layer
+<meta name="twitter:description" content="macOS内核架构及其功能the xnu Kernal of following componentMach servers layer
 BSD primary systerm programming interface provide
 The I/OKit runtime environment for drivers
 libkernal in-kernel library
-libsa">
+libsaan in">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -191,17 +185,14 @@ libsa">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#macOS内核架构及其功能</p>
-<p>##the xnu Kernal of following component</p>
-<p>Mach servers layer</p>
+        <h1 id="macOS内核架构及其功能"><a href="#macOS内核架构及其功能" class="headerlink" title="macOS内核架构及其功能"></a>macOS内核架构及其功能</h1><h2 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h2><p>Mach servers layer</p>
 <p>BSD primary systerm programming interface provide</p>
 <p>The I/OKit runtime environment for drivers</p>
 <p>libkernal in-kernel library</p>
 <p>libsaan in-kernel library that is normally used only during early systerm startup</p>
 <p>the platform expert hardware abstraction module</p>
 <p>kernel extension various I/OKit family,the majority of loadable device drivers,and some non-I/O Kit extention</p>
-<p>##Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)</p>
-<p>hardware abstraction to some extent</p>
+<h2 id="Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu"><a href="#Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu" class="headerlink" title="Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)"></a>Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)</h2><p>hardware abstraction to some extent</p>
 <p>processor management including symmetric mutiprocessing and scheduling</p>
 <p>Preemptive multitasking, including support for tasks and threads</p>
 <p>Virtual memory management, including low-level paging, memory protection, sharing, and inheritance</p>
@@ -209,8 +200,7 @@ libsa">
 <p>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</p>
 <p>Kernel debugging support</p>
 <p>Console I/O</p>
-<p>##BSD</p>
-<p>BSD-style process model</p>
+<h2 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h2><p>BSD-style process model</p>
 <p>Signals</p>
 <p>User IDs, permissions, and basic security policies</p>
 <p>POSIX APIs</p>
@@ -225,7 +215,7 @@ libsa">
 <p>The fsevents file system change notification mechanism that is used by the Spotlight search technology</p>
 <p>Access control lists (ACLs) and the kauth authorization framework</p>
 <p>Various synchronization primitives</p>
-<p>##The I/O Kit<br>Extensive programming interfaces, including interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
+<h2 id="The-I-O-Kit"><a href="#The-I-O-Kit" class="headerlink" title="The I/O Kit"></a>The I/O Kit</h2><p>Extensive programming interfaces, including interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
 <p>Numerous device families such as ATA/ATAPI, FireWire, Graphics, HID, Network, PCI, and USB</p>
 <p>Object-oriented abstractions of devices</p>
 <p>Plug-and-play and dynamic device management (“hot-plugging”)</p>
@@ -235,22 +225,19 @@ libsa">
 <p>A database for tracking and maintaining detailed information on instantiated objects (the I/O Registry)</p>
 <p>A database of all I/O Kit classes available on a system (the I/O Catalog)<br>Interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
 <p>Driver stacking</p>
-<p>##The libkern Library</p>
-<p>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</p>
+<h2 id="The-libkern-Library"><a href="#The-libkern-Library" class="headerlink" title="The libkern Library"></a>The libkern Library</h2><p>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</p>
 <p>Atomic operations and miscellaneous functions such as bcmp(), memcmp(), and strlen()</p>
 <p>Functions for byte-swapping</p>
 <p>Provisions for tracking the number of current instances for each class</p>
 <p>Mechanisms that help alleviate the C++ fragile base-class problem</p>
-<p>##The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)</p>
-<p>Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</p>
+<h2 id="The-libsa-Library-libsa-is-an-in-kernel-support-library-essentially-an-in-kernel-linkerused-during-early-system-startup-for-loading-kernel-extensions-sa-stand-alone"><a href="#The-libsa-Library-libsa-is-an-in-kernel-support-library-essentially-an-in-kernel-linkerused-during-early-system-startup-for-loading-kernel-extensions-sa-stand-alone" class="headerlink" title="The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)"></a>The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)</h2><p>Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</p>
 <p>Simple memory allocation</p>
 <p>Binary searching</p>
 <p>Sorting</p>
 <p>Miscellaneous string-handling functions  Symbol remangling</p>
 <p>A dependency graph package used while determining kernel extension dependencies</p>
 <p>Decompression of compressed kernels and verification of checksums</p>
-<p>##The Platform Expert</p>
-<p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
+<h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
 <p>Constructing device trees</p>
 <p>Parsing certain boot arguments</p>
 <p>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</p>
@@ -263,7 +250,7 @@ libsa">
 <p>Initializing a “user interface” to be used in case of kernel panics</p>
 <p>Reading and writing the nonvolatile memory (NVRAM)</p>
 <p>Reading and writing the parameter memory (PRAM)</p>
-<p>##task and thread<br>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
+<h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
 
       
 
@@ -298,7 +285,7 @@ libsa">
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">macOS 内核</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
         		</li>
       		
 		</ul>
@@ -366,20 +353,6 @@ libsa">
 </article>
 
   
-<nav id="article-nav">
-  
-    <a href="/2017/03/04/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Hello World
-        
-      </div>
-    </a>
-  
-  
-</nav>
-
 
 
 
@@ -478,7 +451,7 @@ libsa">
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">macOS 内核</a>
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
             
             <div class="clearfix"></div>
