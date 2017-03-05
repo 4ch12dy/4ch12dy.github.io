@@ -6,30 +6,54 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>macOS内核架构及其功能 | 4chendy</title>
+  <title>看雪iOSCrackme破解报告 | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="macOS内核架构及其功能the xnu Kernal of following componentMach servers layer
-BSD primary systerm programming interface provide
-The I/OKit runtime environment for drivers
-libkernal in-kernel library
-libsaan in">
+  <meta name="description" content="看雪iOSCrackme破解报告0x01.首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，可以很容易在控制器中找到如下函数
+0x02.然后将可执行文件拉入IDA分析，直接跳到check这个函数。很容易猜到这个函数应该就是加密函数。下面重点对这个函数进行详细分析。
+0x03.在分析之前，先在手机屏幕上直接点击check，无反应。然后输入">
 <meta property="og:type" content="article">
-<meta property="og:title" content="macOS内核架构及其功能">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2016/03/05/macOS内核架构及其功能/index.html">
+<meta property="og:title" content="看雪iOSCrackme破解报告">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/index.html">
 <meta property="og:site_name" content="4chendy">
-<meta property="og:description" content="macOS内核架构及其功能the xnu Kernal of following componentMach servers layer
-BSD primary systerm programming interface provide
-The I/OKit runtime environment for drivers
-libkernal in-kernel library
-libsaan in">
-<meta property="og:updated_time" content="2017-03-05T12:49:04.000Z">
+<meta property="og:description" content="看雪iOSCrackme破解报告0x01.首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，可以很容易在控制器中找到如下函数
+0x02.然后将可执行文件拉入IDA分析，直接跳到check这个函数。很容易猜到这个函数应该就是加密函数。下面重点对这个函数进行详细分析。
+0x03.在分析之前，先在手机屏幕上直接点击check，无反应。然后输入">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/1.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/2.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/3.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/4.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/5.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/6.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/7.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/8.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/9.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/10.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/11.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/12.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/13.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/14.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/15.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/16.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/17.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/18.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/19.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/20.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/21.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/22.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/23.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/24.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/25.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/26.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/27.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/28.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/29.png">
+<meta property="og:updated_time" content="2017-03-05T15:47:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="macOS内核架构及其功能">
-<meta name="twitter:description" content="macOS内核架构及其功能the xnu Kernal of following componentMach servers layer
-BSD primary systerm programming interface provide
-The I/OKit runtime environment for drivers
-libkernal in-kernel library
-libsaan in">
+<meta name="twitter:title" content="看雪iOSCrackme破解报告">
+<meta name="twitter:description" content="看雪iOSCrackme破解报告0x01.首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，可以很容易在控制器中找到如下函数
+0x02.然后将可执行文件拉入IDA分析，直接跳到check这个函数。很容易猜到这个函数应该就是加密函数。下面重点对这个函数进行详细分析。
+0x03.在分析之前，先在手机屏幕上直接点击check，无反应。然后输入">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/1.png">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -165,19 +189,19 @@ libsaan in">
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-macOS内核架构及其功能" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-iOSCrackme/iOSCrackme" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      macOS内核架构及其功能
+      看雪iOSCrackme破解报告
     </h1>
   
 
         
-        <a href="/2016/03/05/macOS内核架构及其功能/" class="archive-article-date">
+        <a href="/2016/03/05/iOSCrackme/iOSCrackme/" class="archive-article-date">
   	<time datetime="2016-03-04T17:51:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-05</time>
 </a>
         
@@ -185,72 +209,32 @@ libsaan in">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="macOS内核架构及其功能"><a href="#macOS内核架构及其功能" class="headerlink" title="macOS内核架构及其功能"></a>macOS内核架构及其功能</h1><h2 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h2><p>Mach servers layer</p>
-<p>BSD primary systerm programming interface provide</p>
-<p>The I/OKit runtime environment for drivers</p>
-<p>libkernal in-kernel library</p>
-<p>libsaan in-kernel library that is normally used only during early systerm startup</p>
-<p>the platform expert hardware abstraction module</p>
-<p>kernel extension various I/OKit family,the majority of loadable device drivers,and some non-I/O Kit extention</p>
-<h2 id="Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu"><a href="#Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu" class="headerlink" title="Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)"></a>Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)</h2><p>hardware abstraction to some extent</p>
-<p>processor management including symmetric mutiprocessing and scheduling</p>
-<p>Preemptive multitasking, including support for tasks and threads</p>
-<p>Virtual memory management, including low-level paging, memory protection, sharing, and inheritance</p>
-<p>Low-level IPC mechanisms that are the basis for all messaging in the kernel</p>
-<p>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</p>
-<p>Kernel debugging support</p>
-<p>Console I/O</p>
-<h2 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h2><p>BSD-style process model</p>
-<p>Signals</p>
-<p>User IDs, permissions, and basic security policies</p>
-<p>POSIX APIs</p>
-<p>Asynchronous I/O APIs (AIO)</p>
-<p>BSD-style system calls</p>
-<p>TCP/IP stack, BSD sockets, and firewalling</p>
-<p>Network Kernel Extensions (NKEs), a type of kernel extension for making the BSD networking architecture fit into xnu[11]</p>
-<p>The virtual file system (VFS) layer and numerous file systems, including a file-system-independent VFS-level journaling mechanism</p>
-<p>System V and POSIX interprocess communication mechanisms</p>
-<p>In-kernel cryptographic framework</p>
-<p> A system notification mechanism based on FreeBSD’s kqueue/kevent mechanism, which is a system- wide service enabling notifications between applications, and from the kernel to applications</p>
-<p>The fsevents file system change notification mechanism that is used by the Spotlight search technology</p>
-<p>Access control lists (ACLs) and the kauth authorization framework</p>
-<p>Various synchronization primitives</p>
-<h2 id="The-I-O-Kit"><a href="#The-I-O-Kit" class="headerlink" title="The I/O Kit"></a>The I/O Kit</h2><p>Extensive programming interfaces, including interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
-<p>Numerous device families such as ATA/ATAPI, FireWire, Graphics, HID, Network, PCI, and USB</p>
-<p>Object-oriented abstractions of devices</p>
-<p>Plug-and-play and dynamic device management (“hot-plugging”)</p>
-<p>Power management</p>
-<p>Preemptive multitasking, threading, symmetric multiprocessing, memory protection, and data management</p>
-<p>Dynamic matching and loading of drivers for multiple bus types</p>
-<p>A database for tracking and maintaining detailed information on instantiated objects (the I/O Registry)</p>
-<p>A database of all I/O Kit classes available on a system (the I/O Catalog)<br>Interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
-<p>Driver stacking</p>
-<h2 id="The-libkern-Library"><a href="#The-libkern-Library" class="headerlink" title="The libkern Library"></a>The libkern Library</h2><p>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</p>
-<p>Atomic operations and miscellaneous functions such as bcmp(), memcmp(), and strlen()</p>
-<p>Functions for byte-swapping</p>
-<p>Provisions for tracking the number of current instances for each class</p>
-<p>Mechanisms that help alleviate the C++ fragile base-class problem</p>
-<h2 id="The-libsa-Library-libsa-is-an-in-kernel-support-library-essentially-an-in-kernel-linkerused-during-early-system-startup-for-loading-kernel-extensions-sa-stand-alone"><a href="#The-libsa-Library-libsa-is-an-in-kernel-support-library-essentially-an-in-kernel-linkerused-during-early-system-startup-for-loading-kernel-extensions-sa-stand-alone" class="headerlink" title="The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)"></a>The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)</h2><p>Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</p>
-<p>Simple memory allocation</p>
-<p>Binary searching</p>
-<p>Sorting</p>
-<p>Miscellaneous string-handling functions  Symbol remangling</p>
-<p>A dependency graph package used while determining kernel extension dependencies</p>
-<p>Decompression of compressed kernels and verification of checksums</p>
-<h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
-<p>Constructing device trees</p>
-<p>Parsing certain boot arguments</p>
-<p>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</p>
-<p>Retrieving and setting system time</p>
-<p>Retrieving and setting console information</p>
-<p>Halting and restarting the machine</p>
-<p>Accessing the interrupt controller</p>
-<p>Creating the system serial number string</p>
-<p>Saving kernel panic information</p>
-<p>Initializing a “user interface” to be used in case of kernel panics</p>
-<p>Reading and writing the nonvolatile memory (NVRAM)</p>
-<p>Reading and writing the parameter memory (PRAM)</p>
-<h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
+        <h1 id="看雪iOSCrackme破解报告"><a href="#看雪iOSCrackme破解报告" class="headerlink" title="看雪iOSCrackme破解报告"></a>看雪iOSCrackme破解报告</h1><h4 id="0x01-首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，可以很容易在控制器中找到如下函数"><a href="#0x01-首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，可以很容易在控制器中找到如下函数" class="headerlink" title="0x01.首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，可以很容易在控制器中找到如下函数"></a>0x01.首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，可以很容易在控制器中找到如下函数</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/1.png" alt="pic"></p>
+<h4 id="0x02-然后将可执行文件拉入IDA分析，直接跳到check这个函数。很容易猜到这个函数应该就是加密函数。下面重点对这个函数进行详细分析。"><a href="#0x02-然后将可执行文件拉入IDA分析，直接跳到check这个函数。很容易猜到这个函数应该就是加密函数。下面重点对这个函数进行详细分析。" class="headerlink" title="0x02.然后将可执行文件拉入IDA分析，直接跳到check这个函数。很容易猜到这个函数应该就是加密函数。下面重点对这个函数进行详细分析。"></a>0x02.然后将可执行文件拉入IDA分析，直接跳到check这个函数。很容易猜到这个函数应该就是加密函数。下面重点对这个函数进行详细分析。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/2.png" alt="pic"></p>
+<h4 id="0x03-在分析之前，先在手机屏幕上直接点击check，无反应。然后输入一定字符后再点击check，仍然没有反应。没有一点的错误提示，看来只能一步一步看汇编了。在IDA中先大概看下流程图的结构，拉到最底下，发现貌似成功的界面"><a href="#0x03-在分析之前，先在手机屏幕上直接点击check，无反应。然后输入一定字符后再点击check，仍然没有反应。没有一点的错误提示，看来只能一步一步看汇编了。在IDA中先大概看下流程图的结构，拉到最底下，发现貌似成功的界面" class="headerlink" title="0x03.在分析之前，先在手机屏幕上直接点击check，无反应。然后输入一定字符后再点击check，仍然没有反应。没有一点的错误提示，看来只能一步一步看汇编了。在IDA中先大概看下流程图的结构，拉到最底下，发现貌似成功的界面"></a>0x03.在分析之前，先在手机屏幕上直接点击check，无反应。然后输入一定字符后再点击check，仍然没有反应。没有一点的错误提示，看来只能一步一步看汇编了。在IDA中先大概看下流程图的结构，拉到最底下，发现貌似成功的界面</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/3.png" alt="pic"></p>
+<h4 id="不管怎样，先试试直接跳转到该地址，看能不能弹出成功的界面？"><a href="#不管怎样，先试试直接跳转到该地址，看能不能弹出成功的界面？" class="headerlink" title="不管怎样，先试试直接跳转到该地址，看能不能弹出成功的界面？: /"></a>不管怎样，先试试直接跳转到该地址，看能不能弹出成功的界面？: /</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/4.png" alt="pic"></p>
+<h4 id="修改为B-0x0000C1AC-然后再屏幕上点击check，成功弹出welcome-to-kanxue的界面！再接再厉-看看中间都经历了什么步骤。"><a href="#修改为B-0x0000C1AC-然后再屏幕上点击check，成功弹出welcome-to-kanxue的界面！再接再厉-看看中间都经历了什么步骤。" class="headerlink" title="修改为B 0x0000C1AC 然后再屏幕上点击check，成功弹出welcome to kanxue的界面！再接再厉,看看中间都经历了什么步骤。"></a>修改为<code>B 0x0000C1AC</code> 然后再屏幕上点击check，成功弹出welcome to kanxue的界面！再接再厉,看看中间都经历了什么步骤。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/5.png" alt="pic"></p>
+<h4 id="0x04-下面进入汇编，第一阶段，根据strlen函数很容易知道，这是在对用户输入的字符串进行长度判断，若不满足情况，直接跳到失败代码。name为14位，serialnumber为8位"><a href="#0x04-下面进入汇编，第一阶段，根据strlen函数很容易知道，这是在对用户输入的字符串进行长度判断，若不满足情况，直接跳到失败代码。name为14位，serialnumber为8位" class="headerlink" title="0x04.下面进入汇编，第一阶段，根据strlen函数很容易知道，这是在对用户输入的字符串进行长度判断，若不满足情况，直接跳到失败代码。name为14位，serialnumber为8位"></a>0x04.下面进入汇编，第一阶段，根据strlen函数很容易知道，这是在对用户输入的字符串进行长度判断，若不满足情况，直接跳到失败代码。<strong><em>name为14位，serialnumber为8位</em></strong></h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/6.png" alt="pic"></p>
+<h4 id="既然是逆向工程，所以先分析下在弹出这个界面前的代码都在做写些什么-r11为我们输入的serialnumber然后可以发现如果栈中的值和serialnumber8次匹配成功就会弹出成功的界面。"><a href="#既然是逆向工程，所以先分析下在弹出这个界面前的代码都在做写些什么-r11为我们输入的serialnumber然后可以发现如果栈中的值和serialnumber8次匹配成功就会弹出成功的界面。" class="headerlink" title="既然是逆向工程，所以先分析下在弹出这个界面前的代码都在做写些什么,r11为我们输入的serialnumber然后可以发现如果栈中的值和serialnumber8次匹配成功就会弹出成功的界面。"></a>既然是逆向工程，所以先分析下在弹出这个界面前的代码都在做写些什么,r11为我们输入的serialnumber然后可以发现如果栈中的值和serialnumber8次匹配成功就会弹出成功的界面。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/7.png" alt="pic"></p>
+<h4 id="0x05-一段插曲，不知道是程序自身的原因还是手机的问题，在一步步向下调试的时候，发现内存非法访问，为什么会出现这个问题呢？向上找的时候，发现这样一条指令MOV-PC-PC按理说，根据arm处理器流水线的处理机制，PC会指向当前的下面两条指令，所以执行这条语句后应该会跳到VDUP-8-Q9-R1指令"><a href="#0x05-一段插曲，不知道是程序自身的原因还是手机的问题，在一步步向下调试的时候，发现内存非法访问，为什么会出现这个问题呢？向上找的时候，发现这样一条指令MOV-PC-PC按理说，根据arm处理器流水线的处理机制，PC会指向当前的下面两条指令，所以执行这条语句后应该会跳到VDUP-8-Q9-R1指令" class="headerlink" title="0x05.一段插曲，不知道是程序自身的原因还是手机的问题，在一步步向下调试的时候，发现内存非法访问，为什么会出现这个问题呢？向上找的时候，发现这样一条指令MOV    PC, PC按理说，根据arm处理器流水线的处理机制，PC会指向当前的下面两条指令，所以执行这条语句后应该会跳到VDUP.8    Q9, R1指令."></a>0x05.一段插曲，不知道是程序自身的原因还是手机的问题，在一步步向下调试的时候，发现内存非法访问，为什么会出现这个问题呢？向上找的时候，发现这样一条指令<code>MOV    PC, PC</code>按理说，根据arm处理器流水线的处理机制，PC会指向当前的下面两条指令，所以执行这条语句后应该会跳到<code>VDUP.8    Q9, R1</code>指令.</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/8.png" alt="pic"></p>
+<h4 id="但是实际情况却是把拆成四条指令，并把r0的值变为了0，导致r2变化，从而非法访问了r2地址的内存。"><a href="#但是实际情况却是把拆成四条指令，并把r0的值变为了0，导致r2变化，从而非法访问了r2地址的内存。" class="headerlink" title="但是实际情况却是把拆成四条指令，并把r0的值变为了0，导致r2变化，从而非法访问了r2地址的内存。"></a>但是实际情况却是把拆成四条指令，并把r0的值变为了0，导致r2变化，从而非法访问了r2地址的内存。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/9.png" alt="pic"><br><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/10.png" alt="pic"></p>
+<h4 id="所以为了让r0的值不改变-之前都是通过每次动态修register-write-r0的值，导致每次调试都要在那两处下个断点，浪费了很多时间。后来直接把静态修改重新打包安装到手机，lsls-r0-r0改为nop代替，同理下面还有一处，作相应的修改。"><a href="#所以为了让r0的值不改变-之前都是通过每次动态修register-write-r0的值，导致每次调试都要在那两处下个断点，浪费了很多时间。后来直接把静态修改重新打包安装到手机，lsls-r0-r0改为nop代替，同理下面还有一处，作相应的修改。" class="headerlink" title="所以为了让r0的值不改变,之前都是通过每次动态修register write $r0的值，导致每次调试都要在那两处下个断点，浪费了很多时间。后来直接把静态修改重新打包安装到手机，lsls r0 r0改为nop代替，同理下面还有一处，作相应的修改。"></a>所以为了让r0的值不改变,之前都是通过每次动态修<code>register write $r0</code>的值，导致每次调试都要在那两处下个断点，浪费了很多时间。后来直接把静态修改重新打包安装到手机，<code>lsls r0 r0</code>改为<code>nop</code>代替，同理下面还有一处，作相应的修改。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/11.png" alt="pic"><br><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/12.png" alt="pic"></p>
+<h4 id="0x06-回到我们之前的分析，现在开始加密阶段，首先进入的是下面的一个循环"><a href="#0x06-回到我们之前的分析，现在开始加密阶段，首先进入的是下面的一个循环" class="headerlink" title="0x06.回到我们之前的分析，现在开始加密阶段，首先进入的是下面的一个循环"></a>0x06.回到我们之前的分析，现在开始加密阶段，首先进入的是下面的一个循环</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/13.png" alt="pic"></p>
+<h4 id="r0的值为栈中的某个地址，d18-d19的值为00-0f，然后循环了16次，每次都对d18-d19加一，所以循环结束后在栈中生成了一个16-16大小的矩阵，且值为00-ff"><a href="#r0的值为栈中的某个地址，d18-d19的值为00-0f，然后循环了16次，每次都对d18-d19加一，所以循环结束后在栈中生成了一个16-16大小的矩阵，且值为00-ff" class="headerlink" title="r0的值为栈中的某个地址，d18-d19的值为00-0f，然后循环了16次，每次都对d18-d19加一，所以循环结束后在栈中生成了一个16*16大小的矩阵，且值为00-ff."></a>r0的值为栈中的某个地址，d18-d19的值为00-0f，然后循环了16次，每次都对d18-d19加一，所以循环结束后在栈中生成了一个16*16大小的矩阵，且值为00-ff.</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/14.png" alt="pic"></p>
+<h4 id="0x07-接着往下面分析，又是一个循环。循环了256次，可以猜测应该是对上面的矩阵进行变换，分析可以发现这个循环通过r9-0xaaaaaaab-和r1相乘结果来对矩阵中的值进行交换。"><a href="#0x07-接着往下面分析，又是一个循环。循环了256次，可以猜测应该是对上面的矩阵进行变换，分析可以发现这个循环通过r9-0xaaaaaaab-和r1相乘结果来对矩阵中的值进行交换。" class="headerlink" title="0x07.接着往下面分析，又是一个循环。循环了256次，可以猜测应该是对上面的矩阵进行变换，分析可以发现这个循环通过r9(0xaaaaaaab)和r1相乘结果来对矩阵中的值进行交换。"></a>0x07.接着往下面分析，又是一个循环。循环了256次，可以猜测应该是对上面的矩阵进行变换，分析可以发现这个循环通过r9(0xaaaaaaab)和r1相乘结果来对矩阵中的值进行交换。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/15.png" alt="pic"></p>
+<h4 id="在循环的结束的下一条地址下个断点，打印对应的内存，验证了我们的猜想。"><a href="#在循环的结束的下一条地址下个断点，打印对应的内存，验证了我们的猜想。" class="headerlink" title="在循环的结束的下一条地址下个断点，打印对应的内存，验证了我们的猜想。"></a>在循环的结束的下一条地址下个断点，打印对应的内存，验证了我们的猜想。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/16.png" alt="pic"></p>
+<h4 id="我们之前的分析中好像还没有和我们输入的name和serialnumber有什么联系。接着分析，这个循环终于对name进行了存取操作，通过四次循环把name的前四位取出来与之前的矩阵加密后又放回到name的前四位。"><a href="#我们之前的分析中好像还没有和我们输入的name和serialnumber有什么联系。接着分析，这个循环终于对name进行了存取操作，通过四次循环把name的前四位取出来与之前的矩阵加密后又放回到name的前四位。" class="headerlink" title="我们之前的分析中好像还没有和我们输入的name和serialnumber有什么联系。接着分析，这个循环终于对name进行了存取操作，通过四次循环把name的前四位取出来与之前的矩阵加密后又放回到name的前四位。"></a>我们之前的分析中好像还没有和我们输入的name和serialnumber有什么联系。接着分析，这个循环终于对name进行了存取操作，通过四次循环把name的前四位取出来与之前的矩阵加密后又放回到name的前四位。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/17.png" alt="pic"></p>
+<h4 id="内存图："><a href="#内存图：" class="headerlink" title="内存图："></a>内存图：</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/18.png" alt="pic"></p>
+<h4 id="下面这一段有点繁琐，各种跳转，但是并不复杂，就是通过判断加密后的name的长度然后复制到栈中地址r8处。"><a href="#下面这一段有点繁琐，各种跳转，但是并不复杂，就是通过判断加密后的name的长度然后复制到栈中地址r8处。" class="headerlink" title="下面这一段有点繁琐，各种跳转，但是并不复杂，就是通过判断加密后的name的长度然后复制到栈中地址r8处。"></a>下面这一段有点繁琐，各种跳转，但是并不复杂，就是通过判断加密后的name的长度然后复制到栈中地址r8处。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/19.png" alt="pic"></p>
+<h4 id="接着又是一个循环，分析可知是对r8即刚才复制加密name后的内存进行每四位反序变换。"><a href="#接着又是一个循环，分析可知是对r8即刚才复制加密name后的内存进行每四位反序变换。" class="headerlink" title="接着又是一个循环，分析可知是对r8即刚才复制加密name后的内存进行每四位反序变换。"></a>接着又是一个循环，分析可知是对r8即刚才复制加密name后的内存进行每四位反序变换。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/20.png" alt="pic"></p>
+<h4 id="内存图：-1"><a href="#内存图：-1" class="headerlink" title="内存图："></a>内存图：</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/21.png" alt="pic"></p>
+<h4 id="keep-going！这一段不是很复杂，就是把刚才变换后的首地址r8向下的64个字节复制到内存栈中-sp-0x50-处。后来得知从这个地址到r8后的内存就是整个栈变化的结束，后面的四个循环并没有进行栈的存操作，只是将这块内存的值取出来加密。"><a href="#keep-going！这一段不是很复杂，就是把刚才变换后的首地址r8向下的64个字节复制到内存栈中-sp-0x50-处。后来得知从这个地址到r8后的内存就是整个栈变化的结束，后面的四个循环并没有进行栈的存操作，只是将这块内存的值取出来加密。" class="headerlink" title="keep going！这一段不是很复杂，就是把刚才变换后的首地址r8向下的64个字节复制到内存栈中[sp 0x50]处。后来得知从这个地址到r8后的内存就是整个栈变化的结束，后面的四个循环并没有进行栈的存操作，只是将这块内存的值取出来加密。"></a>keep going！这一段不是很复杂，就是把刚才变换后的首地址r8向下的64个字节复制到内存栈中[sp 0x50]处。后来得知从这个地址到r8后的内存就是整个栈变化的结束，后面的四个循环并没有进行栈的存操作，只是将这块内存的值取出来加密。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/22.png" alt="pic"></p>
+<h4 id="内存图：-2"><a href="#内存图：-2" class="headerlink" title="内存图："></a>内存图：</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/23.png" alt="pic"></p>
+<h4 id="下面的四个循环很相似，都是将那块内存每次提取80个字节进行加密。刚好有80-4-320与内存块的字节数相同。"><a href="#下面的四个循环很相似，都是将那块内存每次提取80个字节进行加密。刚好有80-4-320与内存块的字节数相同。" class="headerlink" title="下面的四个循环很相似，都是将那块内存每次提取80个字节进行加密。刚好有80*4=320与内存块的字节数相同。"></a>下面的四个循环很相似，都是将那块内存每次提取80个字节进行加密。刚好有80*4=320与内存块的字节数相同。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/24.png" alt="pic"><br><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/25.png" alt="pic"></p>
+<h4 id="然后将这之后的寄存器值与对应的值相加spintf按-08x-08x-08x-08x-08x的格式写入栈。"><a href="#然后将这之后的寄存器值与对应的值相加spintf按-08x-08x-08x-08x-08x的格式写入栈。" class="headerlink" title="然后将这之后的寄存器值与对应的值相加spintf按%08x%08x%08x%08x%08x的格式写入栈。"></a>然后将这之后的寄存器值与对应的值相加spintf按%08x%08x%08x%08x%08x的格式写入栈。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/26.png" alt="pic"></p>
+<h4 id="最后对栈进行了5次存储，与后面分析可知这段内存就会与serialnumber进行匹配。"><a href="#最后对栈进行了5次存储，与后面分析可知这段内存就会与serialnumber进行匹配。" class="headerlink" title="最后对栈进行了5次存储，与后面分析可知这段内存就会与serialnumber进行匹配。"></a>最后对栈进行了5次存储，与后面分析可知这段内存就会与serialnumber进行匹配。</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/27.png" alt="pic"></p>
+<h4 id="0x07-根据上面的步骤写出代码，注册机为一个命令行程序，运行程序会提示如数14位的字母和数字的字符串，然后根据此就会生成对应的serialnumber。效果图如下："><a href="#0x07-根据上面的步骤写出代码，注册机为一个命令行程序，运行程序会提示如数14位的字母和数字的字符串，然后根据此就会生成对应的serialnumber。效果图如下：" class="headerlink" title="0x07.根据上面的步骤写出代码，注册机为一个命令行程序，运行程序会提示如数14位的字母和数字的字符串，然后根据此就会生成对应的serialnumber。效果图如下："></a>0x07.根据上面的步骤写出代码，注册机为一个命令行程序，运行程序会提示如数14位的字母和数字的字符串，然后根据此就会生成对应的serialnumber。效果图如下：</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/28.png" alt="pic"></p>
+<h4 id="在手机中输入生成的name和serialnumber弹出成功的界面！"><a href="#在手机中输入生成的name和serialnumber弹出成功的界面！" class="headerlink" title="在手机中输入生成的name和serialnumber弹出成功的界面！"></a>在手机中输入生成的name和serialnumber弹出成功的界面！</h4><p><img src="/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/29.png" alt="pic"></p>
 
       
 
@@ -285,7 +269,7 @@ libsaan in">
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Crackme 看雪</a>
         		</li>
       		
 		</ul>
@@ -341,7 +325,7 @@ libsaan in">
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2016/03/05/macOS内核架构及其功能/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2016/03/05/iOSCrackme/iOSCrackme/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -355,11 +339,15 @@ libsaan in">
   
 <nav id="article-nav">
   
-  
-    <a href="/2016/03/05/iOSCrackme/iOSCrackme/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">看雪iOSCrackme破解报告</div>
-      <i class="icon-circle-right"></i>
+    <a href="/2016/03/05/macOS内核架构及其功能/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          macOS内核架构及其功能
+        
+      </div>
     </a>
+  
   
 </nav>
 
