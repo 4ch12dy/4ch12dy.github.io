@@ -171,9 +171,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="macOS内核架构-amp-功能"><a href="#macOS内核架构-amp-功能" class="headerlink" title="macOS内核架构&amp;功能"></a>macOS内核架构&amp;功能</h1><h2 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Mach servers layer</div><div class="line"></div><div class="line">BSD primary systerm programming interface provide</div><div class="line"></div><div class="line">The I/OKit runtime environment for drivers</div><div class="line"></div><div class="line">libkernal in-kernel library</div><div class="line"></div><div class="line">libsaan in-kernel library that is normally used only during early systerm startup</div><div class="line"></div><div class="line">the platform expert hardware abstraction module</div><div class="line"></div><div class="line">kernel extension various I/OKit family,the majority of loadable device drivers,and some non-I/O Kit extention</div></pre></td></tr></table></figure>
-<h2 id="Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu"><a href="#Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu" class="headerlink" title="Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)"></a>Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">hardware abstraction to some extent</div><div class="line"></div><div class="line">processor management including symmetric mutiprocessing and scheduling</div><div class="line">	</div><div class="line">Preemptive multitasking, including support for tasks and threads</div><div class="line"></div><div class="line">Virtual memory management, including low-level paging, memory protection, sharing, and inheritance</div><div class="line"></div><div class="line">Low-level IPC mechanisms that are the basis for all messaging in the kernelReal-time support that allows time-sensitive applications (e.g., media applications such asGarageBand and iTunes) to have latency-bounded access to processor resources</div><div class="line"></div><div class="line">Kernel debugging support</div><div class="line"></div><div class="line">Console I/O</div><div class="line">```## BSD</div></pre></td></tr></table></figure>
-<p>BSD-style process model</p>
+        <h1 id="macOS内核架构-amp-功能"><a href="#macOS内核架构-amp-功能" class="headerlink" title="macOS内核架构&amp;功能"></a>macOS内核架构&amp;功能</h1><h2 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h2><p>Mach servers layer</p>
+<p>BSD primary systerm programming interface provide</p>
+<p>The I/OKit runtime environment for drivers</p>
+<p>libkernal in-kernel library</p>
+<p>libsaan in-kernel library that is normally used only during early systerm startup</p>
+<p>the platform expert hardware abstraction module</p>
+<p>kernel extension various I/OKit family,the majority of loadable device drivers,and some non-I/O Kit extention</p>
+<h2 id="Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu"><a href="#Mach-If-the-xnu-kernel-is-the-core-of-Mac-OS-X-then-Mach-may-be-considered-the-core-of-xnu" class="headerlink" title="Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)"></a>Mach(If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu.)</h2><p>hardware abstraction to some extent</p>
+<p>processor management including symmetric mutiprocessing and scheduling</p>
+<p>Preemptive multitasking, including support for tasks and threads</p>
+<p>Virtual memory management, including low-level paging, memory protection, sharing, and inheritance</p>
+<p>Low-level IPC mechanisms that are the basis for all messaging in the kernel</p>
+<p>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</p>
+<p>Kernel debugging support</p>
+<p>Console I/O</p>
+<h2 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h2><p>BSD-style process model</p>
 <p>Signals</p>
 <p>User IDs, permissions, and basic security policies</p>
 <p>POSIX APIs</p>
@@ -184,11 +197,11 @@
 <p>The virtual file system (VFS) layer and numerous file systems, including a file-system-independent VFS-level journaling mechanism</p>
 <p>System V and POSIX interprocess communication mechanisms</p>
 <p>In-kernel cryptographic framework</p>
-<p> A system notification mechanism based on FreeBSD’s kqueue/kevent mechanism, which is a system- wide service enabling notifications between applications, and from the kernel to applications</p>
+<p>A system notification mechanism based on FreeBSD’s kqueue/kevent mechanism, which is a system- wide service enabling notifications between applications, and from the kernel to applications</p>
 <p>The fsevents file system change notification mechanism that is used by the Spotlight search technology</p>
 <p>Access control lists (ACLs) and the kauth authorization framework</p>
-<p>Various synchronization primitives<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## The I/O Kit</div></pre></td></tr></table></figure></p>
-<p>Extensive programming interfaces, including interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
+<p>Various synchronization primitives</p>
+<h2 id="The-I-O-Kit"><a href="#The-I-O-Kit" class="headerlink" title="The I/O Kit"></a>The I/O Kit</h2><p>Extensive programming interfaces, including interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
 <p>Numerous device families such as ATA/ATAPI, FireWire, Graphics, HID, Network, PCI, and USB</p>
 <p>Object-oriented abstractions of devices</p>
 <p>Plug-and-play and dynamic device management (“hot-plugging”)</p>
@@ -196,15 +209,32 @@
 <p>Preemptive multitasking, threading, symmetric multiprocessing, memory protection, and data management</p>
 <p>Dynamic matching and loading of drivers for multiple bus types</p>
 <p>A database for tracking and maintaining detailed information on instantiated objects (the I/O Registry)</p>
-<p>A database of all I/O Kit classes available on a system (the I/O Catalog)<br>Interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
-<p>Driver stacking<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">## The libkern Library</div></pre></td></tr></table></figure></p>
-<p>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</p>
+<p>A database of all I/O Kit classes available on a system (the I/O Catalog)Interfaces for applications and user-space drivers to communicate with the I/O Kit</p>
+<p>Driver stacking</p>
+<h2 id="The-libkern-Library"><a href="#The-libkern-Library" class="headerlink" title="The libkern Library"></a>The libkern Library</h2><p>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</p>
 <p>Atomic operations and miscellaneous functions such as bcmp(), memcmp(), and strlen()</p>
 <p>Functions for byte-swapping</p>
 <p>Provisions for tracking the number of current instances for each class</p>
-<p>Mechanisms that help alleviate the C++ fragile base-class problem<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)</div><div class="line"></div><div class="line">``` Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd&apos;s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</div><div class="line"></div><div class="line">Simple memory allocationBinary searchingSortingMiscellaneous string-handling functions  Symbol remanglingA dependency graph package used while determining kernel extension dependenciesDecompression of compressed kernels and verification of checksums</div></pre></td></tr></table></figure></p>
-<h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Constructing device treesParsing certain boot argumentsIdentifying the machine, which includes determining processor and bus clock speeds  Accessing power management informationRetrieving and setting system timeRetrieving and setting console informationHalting and restarting the machineAccessing the interrupt controllerCreating the system serial number string</div><div class="line"></div><div class="line">Saving kernel panic informationInitializing a &quot;user interface&quot; to be used in case of kernel panicsReading and writing the nonvolatile memory (NVRAM)Reading and writing the parameter memory (PRAM)</div></pre></td></tr></table></figure>
+<p>Mechanisms that help alleviate the C++ fragile base-class problem</p>
+<h2 id="The-libsa-Library-libsa-is-an-in-kernel-support-library-essentially-an-in-kernel-linkerused-during-early-system-startup-for-loading-kernel-extensions-sa-stand-alone"><a href="#The-libsa-Library-libsa-is-an-in-kernel-support-library-essentially-an-in-kernel-linkerused-during-early-system-startup-for-loading-kernel-extensions-sa-stand-alone" class="headerlink" title="The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)"></a>The libsa Library(libsa is an in-kernel support library essentially an in-kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone)</h2><p> Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</p>
+<p>Simple memory allocation</p>
+<p>Binary searching</p>
+<p>Sorting</p>
+<p>Miscellaneous string-handling functions  Symbol remangling</p>
+<p>A dependency graph package used while determining kernel extension dependencies</p>
+<p>Decompression of compressed kernels and verification of checksums</p>
+<h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong><br>Constructing device trees</p>
+<p>Parsing certain boot arguments</p>
+<p>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</p>
+<p>Retrieving and setting system time</p>
+<p>Retrieving and setting console information</p>
+<p>Halting and restarting the machine</p>
+<p>Accessing the interrupt controller</p>
+<p>Creating the system serial number string</p>
+<p>Saving kernel panic information</p>
+<p>Initializing a “user interface” to be used in case of kernel panics</p>
+<p>Reading and writing the nonvolatile memory (NVRAM)</p>
+<p>Reading and writing the parameter memory (PRAM)</p>
 <h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
 
       
