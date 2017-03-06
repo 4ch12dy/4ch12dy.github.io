@@ -22,7 +22,7 @@ Mach servers layer
 BSD primary systerm programming interface provide
 The I/OKit runtime environment for drivers
 libkernal in* kernel library">
-<meta property="og:updated_time" content="2017-03-06T06:45:11.000Z">
+<meta property="og:updated_time" content="2017-03-06T13:02:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS内核架构&功能知识点整理">
 <meta name="twitter:description" content="macOS内核架构&amp;amp;功能知识点整理the xnu Kernal of following component
@@ -200,10 +200,8 @@ libkernal in* kernel library">
 <li>processor management including symmetric mutiprocessing * and scheduling</li>
 <li>Preemptive multitasking, including support for tasks and threads</li>
 <li>Virtual memory management, including low-level paging, memory protection, sharing, and inheritance<br>$Low-level IPC mechanisms that are the basis for all messaging in the kernel</li>
-<li><p>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</p>
-</li>
-<li><p>Kernel debugging support</p>
-</li>
+<li>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</li>
+<li>Kernel debugging support</li>
 <li>Console I/O</li>
 </ul>
 <h2 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h2><ul>
@@ -255,30 +253,18 @@ libkernal in* kernel library">
 </ul>
 <h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
 <ul>
-<li><p>Constructing device trees</p>
-</li>
-<li><p>Parsing certain boot arguments</p>
-</li>
-<li><p>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</p>
-</li>
-<li><p>Retrieving and setting system time</p>
-</li>
-<li><p>Retrieving and setting console information</p>
-</li>
-<li><p>Halting and restarting the machine</p>
-</li>
-<li><p>Accessing the interrupt controller</p>
-</li>
-<li><p>Creating the system serial number string</p>
-</li>
-<li><p>Saving kernel panic information</p>
-</li>
-<li><p>Initializing a “user interface” to be used in case of kernel panics</p>
-</li>
-<li><p>Reading and writing the nonvolatile memory (NVRAM)</p>
-</li>
-<li><p>Reading and writing the parameter memory (PRAM)</p>
-</li>
+<li>Constructing device trees</li>
+<li>Parsing certain boot arguments</li>
+<li>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</li>
+<li>Retrieving and setting system time</li>
+<li>Retrieving and setting console information</li>
+<li>Halting and restarting the machine</li>
+<li>Accessing the interrupt controller</li>
+<li>Creating the system serial number string</li>
+<li>Saving kernel panic information</li>
+<li>Initializing a “user interface” to be used in case of kernel panics</li>
+<li>Reading and writing the nonvolatile memory (NVRAM)</li>
+<li>Reading and writing the parameter memory (PRAM)</li>
 </ul>
 <h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
 
@@ -491,11 +477,11 @@ libkernal in* kernel library">
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Crackme 看雪</a>
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+                <a href="javascript:void(0)" class="js-tag color1">Crackme 看雪</a>
               </li>
             
             <div class="clearfix"></div>
