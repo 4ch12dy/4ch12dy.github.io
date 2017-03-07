@@ -6,14 +6,135 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>Archives: 2017 | 4chendy</title>
+  <title>macOS内核架构&amp;功能知识点整理 | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="4chendy">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/archives/2017/index.html">
+  <meta name="description" content="macOS内核架构&amp;amp;功能知识点整理
+XNU源码树
+
+
+目录
+包含的内容
+
+
+
+
+bsd
+内核的BSD组件
+
+
+config
+各种框架的导出符号
+
+
+iokit
+I/OKit驱动程序运行时子系统
+
+
+libkern
+内核主运行时库API
+
+
+osfmk
+内核的Mach组件
+
+
+pexpert
+平台相关的服务（PPC,i386）
+
+
+security
+BSD MAC框架
+
+
+
+BSD子目录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="macOS内核架构&功能知识点整理">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2016/12/06/macOS内核架构-功能/macOS内核架构-功能/index.html">
 <meta property="og:site_name" content="4chendy">
+<meta property="og:description" content="macOS内核架构&amp;amp;功能知识点整理
+XNU源码树
+
+
+目录
+包含的内容
+
+
+
+
+bsd
+内核的BSD组件
+
+
+config
+各种框架的导出符号
+
+
+iokit
+I/OKit驱动程序运行时子系统
+
+
+libkern
+内核主运行时库API
+
+
+osfmk
+内核的Mach组件
+
+
+pexpert
+平台相关的服务（PPC,i386）
+
+
+security
+BSD MAC框架
+
+
+
+BSD子目录">
+<meta property="og:updated_time" content="2017-03-07T04:16:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4chendy">
+<meta name="twitter:title" content="macOS内核架构&功能知识点整理">
+<meta name="twitter:description" content="macOS内核架构&amp;amp;功能知识点整理
+XNU源码树
+
+
+目录
+包含的内容
+
+
+
+
+bsd
+内核的BSD组件
+
+
+config
+各种框架的导出符号
+
+
+iokit
+I/OKit驱动程序运行时子系统
+
+
+libkern
+内核主运行时库API
+
+
+osfmk
+内核的Mach组件
+
+
+pexpert
+平台相关的服务（PPC,i386）
+
+
+security
+BSD MAC框架
+
+
+
+BSD子目录">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -52,9 +173,9 @@
 		<nav class="header-menu">
 			<ul>
 			
-				<li><a href="../../index.html">主页</a></li>
+				<li><a href="../../../../../index.html">主页</a></li>
 	        
-				<li><a href="../../tags/随笔/">随笔</a></li>
+				<li><a href="../../../../../tags/随笔/">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -132,9 +253,9 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="../../index.html">主页</a></li>
+					<li style="width: 50%"><a href="../../../../../index.html">主页</a></li>
 		        
-					<li style="width: 50%"><a href="../../tags/随笔/">随笔</a></li>
+					<li style="width: 50%"><a href="../../../../../tags/随笔/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -149,43 +270,377 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-macOS内核架构-功能/macOS内核架构-功能" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      macOS内核架构&amp;功能知识点整理
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="../../2017/03/06/macOS内核架构-功能/macOS内核架构-功能/" class="archive-article-date">
-  	<time datetime="2017-03-05T16:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-06</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+        
+        <a href="" class="archive-article-date">
+  	<time datetime="2016-12-05T16:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>macOS内核架构&amp;功能知识点整理
+</code></pre><h3 id="XNU源码树"><a href="#XNU源码树" class="headerlink" title="XNU源码树"></a>XNU源码树</h3><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>包含的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bsd</td>
+<td>内核的BSD组件</td>
+</tr>
+<tr>
+<td>config</td>
+<td>各种框架的导出符号</td>
+</tr>
+<tr>
+<td>iokit</td>
+<td>I/OKit驱动程序运行时子系统</td>
+</tr>
+<tr>
+<td>libkern</td>
+<td>内核主运行时库API</td>
+</tr>
+<tr>
+<td>osfmk</td>
+<td>内核的Mach组件</td>
+</tr>
+<tr>
+<td>pexpert</td>
+<td>平台相关的服务（PPC,i386）</td>
+</tr>
+<tr>
+<td>security</td>
+<td>BSD MAC框架</td>
+</tr>
+</tbody>
+</table>
+<h3 id="BSD子目录"><a href="#BSD子目录" class="headerlink" title="BSD子目录"></a>BSD子目录</h3><table>
+<thead>
+<tr>
+<th>子目录</th>
+<th>包含的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bsm/security</td>
+<td>Basic Security Module(审计子系统)</td>
+</tr>
+<tr>
+<td>conf</td>
+<td>机器相关的Makefile</td>
+</tr>
+<tr>
+<td>crypto</td>
+<td>对称加密算法和散列算法的实现</td>
+</tr>
+<tr>
+<td>dev</td>
+<td>BSD设备（/dev目录项）</td>
+</tr>
+<tr>
+<td>hfs</td>
+<td>macOS默认文件系统（HFS/HFS+）</td>
+</tr>
+<tr>
+<td>i386/machine</td>
+<td>Intel/PPC架构的私有头文件</td>
+</tr>
+<tr>
+<td>kern</td>
+<td>内核的主要代码</td>
+</tr>
+<tr>
+<td>libkern</td>
+<td>内核运行时导出的库（CRC,字符串函数等）</td>
+</tr>
+<tr>
+<td>man</td>
+<td>一些有用的man手册</td>
+</tr>
+<tr>
+<td>net*/netinet</td>
+<td>网络子系统（套接字）和IP协议栈</td>
+</tr>
+<tr>
+<td>nfs</td>
+<td>用于远程文件系统的NFSv3协议栈</td>
+</tr>
+<tr>
+<td>sys</td>
+<td>内核头文件</td>
+</tr>
+<tr>
+<td>vfs</td>
+<td>虚拟文件系统交换（Virtual Filesystem Switch）</td>
+</tr>
+<tr>
+<td>vm</td>
+<td>BSD的虚拟内存处理程序</td>
+</tr>
+</tbody>
+</table>
+<h3 id="osfmk子目录"><a href="#osfmk子目录" class="headerlink" title="osfmk子目录"></a>osfmk子目录</h3><table>
+<thead>
+<tr>
+<th>子目录</th>
+<th>包含的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> chud</td>
+<td>Computer Hardware Understanding                       Development(为macOS诊断工具提供内核支持)</td>
+</tr>
+<tr>
+<td> conf</td>
+<td>机器相关的Makefile</td>
+</tr>
+<tr>
+<td> console</td>
+<td>控制台初始化,串口,引导视频和内核崩溃</td>
+</tr>
+<tr>
+<td> ddb</td>
+<td>内核调试器（已弃用）</td>
+</tr>
+<tr>
+<td> default_pager</td>
+<td>VM分页器</td>
+</tr>
+<tr>
+<td> device</td>
+<td>Mach对I/OKit和设备的支持</td>
+</tr>
+<tr>
+<td> i386/ppc/x86_64</td>
+<td>CPU特定的实现</td>
+</tr>
+<tr>
+<td> ipc</td>
+<td>IPC,port和消息</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h3><ul>
+<li>Mach servers layer</li>
+<li>BSD primary systerm programming interface provide</li>
+<li>The I/OKit runtime environment for drivers</li>
+<li>libkernal in* kernel library</li>
+<li>libsaan in* kernel library that is normally used only during early systerm startup</li>
+<li>the platform expert hardware abstraction module</li>
+<li>kernel extension various I/OKit family,the majority of loadable device drivers,and some non* I/O Kit extention</li>
+</ul>
+<h2 id="Mach"><a href="#Mach" class="headerlink" title="Mach"></a>Mach</h2><p><strong>If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu</strong>.</p>
+<ul>
+<li>hardware abstraction to some extent</li>
+<li>processor management including symmetric mutiprocessing * and scheduling</li>
+<li>Preemptive multitasking, including support for tasks and threads</li>
+<li>Virtual memory management, including low-level paging, memory protection, sharing, and inheritance<br>$Low-level IPC mechanisms that are the basis for all messaging in the kernel</li>
+<li><p>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</p>
+</li>
+<li><p>Kernel debugging support</p>
+</li>
+<li>Console I/O</li>
+</ul>
+<h2 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h2><ul>
+<li>BSD-style process model</li>
+<li>Signals</li>
+<li>User IDs, permissions, and basic security policies</li>
+<li>POSIX APIs</li>
+<li>Asynchronous I/O APIs (AIO)</li>
+<li>BSD-style system calls</li>
+<li>TCP/IP stack, BSD sockets, and firewalling</li>
+<li>Network Kernel Extensions (NKEs), a type of kernel extension for making the BSD networking architecture fit into xnu[11]</li>
+<li>The virtual file system (VFS) layer and numerous file systems, including a file-system-independent VFS-level journaling mechanism</li>
+<li>System V and POSIX interprocess communication mechanisms</li>
+<li>In-kernel cryptographic framework</li>
+<li>A system notification mechanism based on FreeBSD’s kqueue/kevent mechanism, which is a system-wide service enabling notifications between applications, and from the kernel to applications</li>
+<li>The fsevents file system change notification mechanism that is used by the Spotlight search technology</li>
+<li>Access control lists (ACLs) and the kauth authorization framework</li>
+<li>Various synchronization primitives</li>
+</ul>
+<h2 id="The-I-O-Kit"><a href="#The-I-O-Kit" class="headerlink" title="The I/O Kit"></a>The I/O Kit</h2><ul>
+<li>Extensive programming interfaces, including interfaces for applications and user* space drivers to communicate with the I/O Kit</li>
+<li>Numerous device families such as ATA/ATAPI, FireWire, Graphics, HID, Network, PCI, and USB</li>
+<li>Object* oriented abstractions of devices</li>
+<li>Plug-and-play and dynamic device management (“hot-plugging”)</li>
+<li>Power management</li>
+<li>Preemptive multitasking, threading, symmetric multiprocessing, memory protection, and data management</li>
+<li>Dynamic matching and loading of drivers for multiple bus types</li>
+<li>A database for tracking and maintaining detailed information on instantiated objects (the I/O Registry)</li>
+<li>A database of all I/O Kit classes available on a system (the I/O Catalog)Interfaces for applications and user-space drivers to communicate with the I/O Kit</li>
+<li>Driver stacking</li>
+</ul>
+<h2 id="The-libkern-Library"><a href="#The-libkern-Library" class="headerlink" title="The libkern Library"></a>The libkern Library</h2><ul>
+<li>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</li>
+<li>Atomic operations and miscellaneous functions such as bcmp(), memcmp(), and strlen()</li>
+<li>Functions for byte-swapping</li>
+<li>Provisions for tracking the number of current instances for each class</li>
+<li>Mechanisms that help alleviate the C++ fragile base-class problem</li>
+</ul>
+<h2 id="The-libsa-Library"><a href="#The-libsa-Library" class="headerlink" title="The libsa Library"></a>The libsa Library</h2><p><strong>libsa is an in-kernel support library essentially an in* kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone,Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</strong></p>
+<ul>
+<li>Simple memory allocation</li>
+<li>Binary searching</li>
+<li>Sorting</li>
+<li>Miscellaneous string* handling functions  Symbol remangling</li>
+<li>A dependency graph package used while determining kernel extension dependencies</li>
+<li>Decompression of compressed kernels and verification of checksums</li>
+</ul>
+<h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
+<ul>
+<li>Constructing device trees</li>
+<li>Parsing certain boot arguments</li>
+<li>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</li>
+<li>Retrieving and setting system time</li>
+<li>Retrieving and setting console information</li>
+<li>Halting and restarting the machine</li>
+<li>Accessing the interrupt controller</li>
+<li>Creating the system serial number string</li>
+<li>Saving kernel panic information</li>
+<li>Initializing a “user interface” to be used in case of kernel panics</li>
+<li>Reading and writing the nonvolatile memory (NVRAM)</li>
+<li>Reading and writing the parameter memory (PRAM)</li>
+</ul>
+<h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>感谢我老铁$$<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">xnu</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2016/12/06/macOS内核架构-功能/macOS内核架构-功能/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="../../../../08/05/iOSCrackme/iOSCrackme/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">看雪iOSCrackme破解报告</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -208,8 +663,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
@@ -275,6 +730,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Crackme看雪</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
               </li>
             
             <div class="clearfix"></div>
