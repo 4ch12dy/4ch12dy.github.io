@@ -9,7 +9,7 @@
   <title>4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06 00:34:52
-tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+tags: xnumacOS内核架构&amp;amp;功能知识点整理
 XNU源码树
 
 
@@ -32,13 +32,17 @@ I/OKit驱动程序运行时子系统
 
 
 libkern
-内核主运行时库API">
+内核主运行时库API
+
+
+osfmk
+内核的Mac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4chendy">
 <meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/06/macOS内核架构-功能/macOS内核架构-功能/index.html">
 <meta property="og:site_name" content="4chendy">
 <meta property="og:description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06 00:34:52
-tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+tags: xnumacOS内核架构&amp;amp;功能知识点整理
 XNU源码树
 
 
@@ -61,12 +65,16 @@ I/OKit驱动程序运行时子系统
 
 
 libkern
-内核主运行时库API">
-<meta property="og:updated_time" content="2017-03-07T04:04:02.000Z">
+内核主运行时库API
+
+
+osfmk
+内核的Mac">
+<meta property="og:updated_time" content="2017-03-07T04:12:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="4chendy">
 <meta name="twitter:description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06 00:34:52
-tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+tags: xnumacOS内核架构&amp;amp;功能知识点整理
 XNU源码树
 
 
@@ -89,7 +97,11 @@ I/OKit驱动程序运行时子系统
 
 
 libkern
-内核主运行时库API">
+内核主运行时库API
+
+
+osfmk
+内核的Mac">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -232,7 +244,7 @@ libkern
       
         <hr>
 <p>title: macOS内核架构&amp;功能知识点整理<br>date: 2016-12-06 00:34:52</p>
-<h2 id="tags-macOS内核-xnu-BSD"><a href="#tags-macOS内核-xnu-BSD" class="headerlink" title="tags: macOS内核 xnu BSD"></a>tags: macOS内核 xnu BSD</h2><pre><code>macOS内核架构&amp;功能知识点整理
+<h2 id="tags-xnu"><a href="#tags-xnu" class="headerlink" title="tags: xnu"></a>tags: xnu</h2><pre><code>macOS内核架构&amp;功能知识点整理
 </code></pre><h3 id="XNU源码树"><a href="#XNU源码树" class="headerlink" title="XNU源码树"></a>XNU源码树</h3><table>
 <thead>
 <tr>
@@ -426,10 +438,8 @@ libkern
 <li>Preemptive multitasking, threading, symmetric multiprocessing, memory protection, and data management</li>
 <li>Dynamic matching and loading of drivers for multiple bus types</li>
 <li>A database for tracking and maintaining detailed information on instantiated objects (the I/O Registry)</li>
-<li>A database of all I/O Kit classes available on a system (the I/O Catalog)Interfaces for applications and user-space drivers to communicate with the I/O Kit<ul>
+<li>A database of all I/O Kit classes available on a system (the I/O Catalog)Interfaces for applications and user-space drivers to communicate with the I/O Kit</li>
 <li>Driver stacking</li>
-</ul>
-</li>
 </ul>
 <h2 id="The-libkern-Library"><a href="#The-libkern-Library" class="headerlink" title="The libkern Library"></a>The libkern Library</h2><ul>
 <li>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</li>
@@ -449,30 +459,18 @@ libkern
 </ul>
 <h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
 <ul>
-<li><p>Constructing device trees</p>
-</li>
-<li><p>Parsing certain boot arguments</p>
-</li>
-<li><p>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</p>
-</li>
-<li><p>Retrieving and setting system time</p>
-</li>
-<li><p>Retrieving and setting console information</p>
-</li>
-<li><p>Halting and restarting the machine</p>
-</li>
-<li><p>Accessing the interrupt controller</p>
-</li>
-<li><p>Creating the system serial number string</p>
-</li>
-<li><p>Saving kernel panic information</p>
-</li>
-<li><p>Initializing a “user interface” to be used in case of kernel panics</p>
-</li>
-<li><p>Reading and writing the nonvolatile memory (NVRAM)</p>
-</li>
-<li><p>Reading and writing the parameter memory (PRAM)</p>
-</li>
+<li>Constructing device trees</li>
+<li>Parsing certain boot arguments</li>
+<li>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</li>
+<li>Retrieving and setting system time</li>
+<li>Retrieving and setting console information</li>
+<li>Halting and restarting the machine</li>
+<li>Accessing the interrupt controller</li>
+<li>Creating the system serial number string</li>
+<li>Saving kernel panic information</li>
+<li>Initializing a “user interface” to be used in case of kernel panics</li>
+<li>Reading and writing the nonvolatile memory (NVRAM)</li>
+<li>Reading and writing the parameter memory (PRAM)</li>
 </ul>
 <h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
 
@@ -674,7 +672,7 @@ libkern
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Crackme 看雪</a>
+                <a href="javascript:void(0)" class="js-tag color5">Crackme看雪</a>
               </li>
             
             <div class="clearfix"></div>
