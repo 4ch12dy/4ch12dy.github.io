@@ -6,30 +6,90 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>macOS内核架构&amp;功能知识点整理 | 4chendy</title>
+  <title>4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="macOS内核架构&amp;amp;功能知识点整理the xnu Kernal of following component
-Mach servers layer
-BSD primary systerm programming interface provide
-The I/OKit runtime environment for drivers
-libkernal in* kernel library">
+  <meta name="description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06 00:34:52
+tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+XNU源码树
+
+
+目录
+包含的内容
+
+
+
+
+bsd
+内核的BSD组件
+
+
+config
+各种框架的导出符号
+
+
+iokit
+I/OKit驱动程序运行时子系统
+
+
+libkern
+内核主运行时库API">
 <meta property="og:type" content="article">
-<meta property="og:title" content="macOS内核架构&功能知识点整理">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2016/12/06/macOS内核架构-功能/macOS内核架构-功能.md/index.html">
+<meta property="og:title" content="4chendy">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/06/macOS内核架构-功能/macOS内核架构-功能/index.html">
 <meta property="og:site_name" content="4chendy">
-<meta property="og:description" content="macOS内核架构&amp;amp;功能知识点整理the xnu Kernal of following component
-Mach servers layer
-BSD primary systerm programming interface provide
-The I/OKit runtime environment for drivers
-libkernal in* kernel library">
-<meta property="og:updated_time" content="2017-03-06T13:02:09.000Z">
+<meta property="og:description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06 00:34:52
+tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+XNU源码树
+
+
+目录
+包含的内容
+
+
+
+
+bsd
+内核的BSD组件
+
+
+config
+各种框架的导出符号
+
+
+iokit
+I/OKit驱动程序运行时子系统
+
+
+libkern
+内核主运行时库API">
+<meta property="og:updated_time" content="2017-03-07T04:04:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="macOS内核架构&功能知识点整理">
-<meta name="twitter:description" content="macOS内核架构&amp;amp;功能知识点整理the xnu Kernal of following component
-Mach servers layer
-BSD primary systerm programming interface provide
-The I/OKit runtime environment for drivers
-libkernal in* kernel library">
+<meta name="twitter:title" content="4chendy">
+<meta name="twitter:description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06 00:34:52
+tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+XNU源码树
+
+
+目录
+包含的内容
+
+
+
+
+bsd
+内核的BSD组件
+
+
+config
+各种框架的导出符号
+
+
+iokit
+I/OKit驱动程序运行时子系统
+
+
+libkern
+内核主运行时库API">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -165,27 +225,161 @@ libkernal in* kernel library">
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-macOS内核架构-功能/macOS内核架构-功能.md" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-macOS内核架构-功能/macOS内核架构-功能" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      macOS内核架构&amp;功能知识点整理
-    </h1>
-  
-
-        
-        <a href="" class="archive-article-date">
-  	<time datetime="2016-12-05T17:51:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="macOS内核架构-amp-功能知识点整理"><a href="#macOS内核架构-amp-功能知识点整理" class="headerlink" title="macOS内核架构&amp;功能知识点整理"></a>macOS内核架构&amp;功能知识点整理</h1><h2 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h2><ul>
+        <hr>
+<p>title: macOS内核架构&amp;功能知识点整理<br>date: 2016-12-06 00:34:52</p>
+<h2 id="tags-macOS内核-xnu-BSD"><a href="#tags-macOS内核-xnu-BSD" class="headerlink" title="tags: macOS内核 xnu BSD"></a>tags: macOS内核 xnu BSD</h2><pre><code>macOS内核架构&amp;功能知识点整理
+</code></pre><h3 id="XNU源码树"><a href="#XNU源码树" class="headerlink" title="XNU源码树"></a>XNU源码树</h3><table>
+<thead>
+<tr>
+<th>目录</th>
+<th>包含的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bsd</td>
+<td>内核的BSD组件</td>
+</tr>
+<tr>
+<td>config</td>
+<td>各种框架的导出符号</td>
+</tr>
+<tr>
+<td>iokit</td>
+<td>I/OKit驱动程序运行时子系统</td>
+</tr>
+<tr>
+<td>libkern</td>
+<td>内核主运行时库API</td>
+</tr>
+<tr>
+<td>osfmk</td>
+<td>内核的Mach组件</td>
+</tr>
+<tr>
+<td>pexpert</td>
+<td>平台相关的服务（PPC,i386）</td>
+</tr>
+<tr>
+<td>security</td>
+<td>BSD MAC框架</td>
+</tr>
+</tbody>
+</table>
+<h3 id="BSD子目录"><a href="#BSD子目录" class="headerlink" title="BSD子目录"></a>BSD子目录</h3><table>
+<thead>
+<tr>
+<th>子目录</th>
+<th>包含的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bsm/security</td>
+<td>Basic Security Module(审计子系统)</td>
+</tr>
+<tr>
+<td>conf</td>
+<td>机器相关的Makefile</td>
+</tr>
+<tr>
+<td>crypto</td>
+<td>对称加密算法和散列算法的实现</td>
+</tr>
+<tr>
+<td>dev</td>
+<td>BSD设备（/dev目录项）</td>
+</tr>
+<tr>
+<td>hfs</td>
+<td>macOS默认文件系统（HFS/HFS+）</td>
+</tr>
+<tr>
+<td>i386/machine</td>
+<td>Intel/PPC架构的私有头文件</td>
+</tr>
+<tr>
+<td>kern</td>
+<td>内核的主要代码</td>
+</tr>
+<tr>
+<td>libkern</td>
+<td>内核运行时导出的库（CRC,字符串函数等）</td>
+</tr>
+<tr>
+<td>man</td>
+<td>一些有用的man手册</td>
+</tr>
+<tr>
+<td>net*/netinet</td>
+<td>网络子系统（套接字）和IP协议栈</td>
+</tr>
+<tr>
+<td>nfs</td>
+<td>用于远程文件系统的NFSv3协议栈</td>
+</tr>
+<tr>
+<td>sys</td>
+<td>内核头文件</td>
+</tr>
+<tr>
+<td>vfs</td>
+<td>虚拟文件系统交换（Virtual Filesystem Switch）</td>
+</tr>
+<tr>
+<td>vm</td>
+<td>BSD的虚拟内存处理程序</td>
+</tr>
+</tbody>
+</table>
+<h3 id="osfmk子目录"><a href="#osfmk子目录" class="headerlink" title="osfmk子目录"></a>osfmk子目录</h3><table>
+<thead>
+<tr>
+<th>子目录</th>
+<th>包含的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> chud</td>
+<td>Computer Hardware Understanding                       Development(为macOS诊断工具提供内核支持)</td>
+</tr>
+<tr>
+<td> conf</td>
+<td>机器相关的Makefile</td>
+</tr>
+<tr>
+<td> console</td>
+<td>控制台初始化,串口,引导视频和内核崩溃</td>
+</tr>
+<tr>
+<td> ddb</td>
+<td>内核调试器（已弃用）</td>
+</tr>
+<tr>
+<td> default_pager</td>
+<td>VM分页器</td>
+</tr>
+<tr>
+<td> device</td>
+<td>Mach对I/OKit和设备的支持</td>
+</tr>
+<tr>
+<td> i386/ppc/x86_64</td>
+<td>CPU特定的实现</td>
+</tr>
+<tr>
+<td> ipc</td>
+<td>IPC,port和消息</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h3><ul>
 <li>Mach servers layer</li>
 <li>BSD primary systerm programming interface provide</li>
 <li>The I/OKit runtime environment for drivers</li>
@@ -200,8 +394,10 @@ libkernal in* kernel library">
 <li>processor management including symmetric mutiprocessing * and scheduling</li>
 <li>Preemptive multitasking, including support for tasks and threads</li>
 <li>Virtual memory management, including low-level paging, memory protection, sharing, and inheritance<br>$Low-level IPC mechanisms that are the basis for all messaging in the kernel</li>
-<li>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</li>
-<li>Kernel debugging support</li>
+<li><p>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</p>
+</li>
+<li><p>Kernel debugging support</p>
+</li>
 <li>Console I/O</li>
 </ul>
 <h2 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h2><ul>
@@ -253,18 +449,30 @@ libkernal in* kernel library">
 </ul>
 <h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
 <ul>
-<li>Constructing device trees</li>
-<li>Parsing certain boot arguments</li>
-<li>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</li>
-<li>Retrieving and setting system time</li>
-<li>Retrieving and setting console information</li>
-<li>Halting and restarting the machine</li>
-<li>Accessing the interrupt controller</li>
-<li>Creating the system serial number string</li>
-<li>Saving kernel panic information</li>
-<li>Initializing a “user interface” to be used in case of kernel panics</li>
-<li>Reading and writing the nonvolatile memory (NVRAM)</li>
-<li>Reading and writing the parameter memory (PRAM)</li>
+<li><p>Constructing device trees</p>
+</li>
+<li><p>Parsing certain boot arguments</p>
+</li>
+<li><p>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</p>
+</li>
+<li><p>Retrieving and setting system time</p>
+</li>
+<li><p>Retrieving and setting console information</p>
+</li>
+<li><p>Halting and restarting the machine</p>
+</li>
+<li><p>Accessing the interrupt controller</p>
+</li>
+<li><p>Creating the system serial number string</p>
+</li>
+<li><p>Saving kernel panic information</p>
+</li>
+<li><p>Initializing a “user interface” to be used in case of kernel panics</p>
+</li>
+<li><p>Reading and writing the nonvolatile memory (NVRAM)</p>
+</li>
+<li><p>Reading and writing the parameter memory (PRAM)</p>
+</li>
 </ul>
 <h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
 
@@ -296,17 +504,6 @@ libkernal in* kernel library">
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -357,7 +554,7 @@ libkernal in* kernel library">
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2016/12/06/macOS内核架构-功能/macOS内核架构-功能.md/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/06/macOS内核架构-功能/macOS内核架构-功能/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -372,7 +569,7 @@ libkernal in* kernel library">
 <nav id="article-nav">
   
   
-    <a href="../../../../08/05/iOSCrackme/iOSCrackme/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="../../../../../2016/08/05/iOSCrackme/iOSCrackme/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">看雪iOSCrackme破解报告</div>
       <i class="icon-circle-right"></i>
     </a>
@@ -475,10 +672,6 @@ libkernal in* kernel library">
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Crackme 看雪</a>
