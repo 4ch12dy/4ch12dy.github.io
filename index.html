@@ -188,16 +188,22 @@
 <li>mach_vm_region<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_region(</div><div class="line">	<span class="keyword">vm_map_t</span>		 <span class="built_in">map</span>,</div><div class="line">	<span class="keyword">mach_vm_offset_t</span>	*address,		<span class="comment">/* IN/OUT */</span></div><div class="line">	<span class="keyword">mach_vm_size_t</span>	*size,			<span class="comment">/* OUT */</span></div><div class="line">	<span class="keyword">vm_region_flavor_t</span>	 flavor,		<span class="comment">/* IN */</span></div><div class="line">	<span class="keyword">vm_region_info_t</span>	 info,			<span class="comment">/* OUT */</span></div><div class="line">	<span class="keyword">mach_msg_type_number_t</span>	*count,			<span class="comment">/* IN/OUT */</span></div><div class="line">	<span class="keyword">mach_port_t</span>		*object_name)		<span class="comment">/* OUT */</span></div></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>获取map指向的任务内，address地址起始的VM region（虚拟内存区域）的信息。目前标记为flavor只有<code>VM_BASIC_INFO_64</code>。<br>获得的info的数据结构如下。<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">struct vm_region_basic_info_64 &#123;</div><div class="line">	vm_prot_t		protection<span class="comment">;</span></div><div class="line">	vm_prot_t		max_protection<span class="comment">;</span></div><div class="line">	vm_inherit_t		inheritance<span class="comment">;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	<span class="keyword">shared;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	reserved<span class="comment">;</span></div><div class="line">	memory_object_offset_t	offset<span class="comment">;</span></div><div class="line">	vm_behavior_t		<span class="keyword">behavior;</span></div><div class="line">	unsigned <span class="keyword">short	</span>	user_wired_count<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p>获取map指向的任务内，address地址起始的VM region（虚拟内存区域）的信息。目前标记为flavor只有<code>VM_BASIC_INFO_64</code>。<br>获得的info的数据结构如下。<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">struct vm_region_basic_info_64 &#123;</div><div class="line">	vm_prot_t 	protection<span class="comment">;</span></div><div class="line">	vm_prot_t		max_protection<span class="comment">;</span></div><div class="line">	vm_inherit_t		inheritance<span class="comment">;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	<span class="keyword">shared;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	reserved<span class="comment">;</span></div><div class="line">	memory_object_offset_t	offset<span class="comment">;</span></div><div class="line">	vm_behavior_t		<span class="keyword">behavior;</span></div><div class="line">	unsigned <span class="keyword">short	</span>	user_wired_count<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure></p>
 <ul>
-<li>mach_vm_protect<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_protect(</div><div class="line">	<span class="keyword">mach_port_name_t</span> task,</div><div class="line">	<span class="keyword">mach_vm_address_t</span> address,</div><div class="line">	<span class="keyword">mach_vm_size_t</span> size,</div><div class="line">	<span class="keyword">boolean_t</span> set_maximum,</div><div class="line">	<span class="keyword">vm_prot_t</span> new_protection)</div></pre></td></tr></table></figure>
+<li>mach_vm_protect<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_protect(</div><div class="line">	<span class="keyword">mach_port_name_t</span> 	task,</div><div class="line">	<span class="keyword">mach_vm_address_t</span> 	address,</div><div class="line">	<span class="keyword">mach_vm_size_t</span> 	size,</div><div class="line">	<span class="keyword">boolean_t</span> 	set_maximum,</div><div class="line">	<span class="keyword">vm_prot_t</span> 	new_protection)</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>对address到address+size这一段的内存设置内存保护策略,new_protection就是最后设置成为的保护机制。</p>
 <ul>
-<li>mach_vm_write<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_write(</div><div class="line">	<span class="keyword">vm_map_t</span>			<span class="built_in">map</span>,</div><div class="line">	<span class="keyword">mach_vm_address_t</span>		address,</div><div class="line">	<span class="keyword">pointer_t</span>			data,</div><div class="line">	__unused <span class="keyword">mach_msg_type_number_t</span>	size)</div></pre></td></tr></table></figure>
+<li>mach_vm_write<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_write(</div><div class="line">	<span class="keyword">vm_map_t</span>		<span class="built_in">map</span>,</div><div class="line">	<span class="keyword">mach_vm_address_t</span>		address,</div><div class="line">	<span class="keyword">pointer_t</span>			data,</div><div class="line">	__unused <span class="keyword">mach_msg_type_number_t</span>	size)</div></pre></td></tr></table></figure>
 </li>
 </ul>
+<p>对address指向的内存改写内容。</p>
+<ul>
+<li>mach_vm_read<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_vm_read(</div><div class="line">	<span class="keyword">vm_map_t</span> 	target_task, </div><div class="line">	<span class="keyword">mach_vm_address_t</span> 	address, </div><div class="line">	<span class="keyword">mach_vm_size_t</span> 	size, </div><div class="line">	<span class="keyword">vm_offset_t</span> 	*data,   </div><div class="line">	<span class="keyword">mach_msg_type_number_t</span> 	*dataCnt);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对address指向的内存读取内容.</p>
 
       
 
@@ -765,18 +771,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">xnu</a>
               </li>
              
@@ -786,6 +780,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">BSD</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
               </li>
             
             <div class="clearfix"></div>
