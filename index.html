@@ -208,10 +208,7 @@
 <li>mach_port_allocate<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_port_allocate(</div><div class="line">	<span class="keyword">ipc_space_t</span> 	task, </div><div class="line">	<span class="keyword">mach_port_right_t</span> 	right,</div><div class="line">	<span class="keyword">mach_port_name_t</span> 	*name);</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>task指要分配端口的任务(<code>mach_task_self()</code>)，right指分配给该端口的权限</p>
-<pre><code>* Ports有如下权限，Ports可以在不同的task之间传递，通过传递可以赋予其他task对ports的操作权限。例如POC中使用的就是在父进程与子进程之间传递Port得到了对内存操作的权限。
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">	#define MACH_PORT_RIGHT_SEND		((<span class="name">mach_port_right_t</span>) <span class="number">0</span>)</div><div class="line">#define MACH_PORT_RIGHT_RECEIVE		((<span class="name">mach_port_right_t</span>) <span class="number">1</span>)</div><div class="line">#define MACH_PORT_RIGHT_SEND_ONCE	((<span class="name">mach_port_right_t</span>) <span class="number">2</span>)</div><div class="line">#define MACH_PORT_RIGHT_PORT_SET	((<span class="name">mach_port_right_t</span>) <span class="number">3</span>)</div><div class="line">#define MACH_PORT_RIGHT_DEAD_NAME	((<span class="name">mach_port_right_t</span>) <span class="number">4</span>)</div><div class="line">#define MACH_PORT_RIGHT_LABELH	        ((<span class="name">mach_port_right_t</span>) <span class="number">5</span>)</div><div class="line">#define MACH_PORT_RIGHT_NUMBER		((<span class="name">mach_port_right_t</span>) <span class="number">6</span>)</div></pre></td></tr></table></figure>
-</code></pre><p>name指代分配端口名的地址</p>
+<p>task指要分配端口的任务(<code>mach_task_self()</code>)，right指分配给该端口的权限，name指代分配端口名的地址<br><code>Ports有如下权限，Ports可以在不同的task之间传递，通过传递可以赋予其他task对ports的操作权限。例如POC中使用的就是在父进程与子进程之间传递Port得到了对内存操作的权限。</code><br>    <figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#define MACH_PORT_RIGHT_SEND		((<span class="name">mach_port_right_t</span>) <span class="number">0</span>)</div><div class="line">#define MACH_PORT_RIGHT_RECEIVE		((<span class="name">mach_port_right_t</span>) <span class="number">1</span>)</div><div class="line">#define MACH_PORT_RIGHT_SEND_ONCE	((<span class="name">mach_port_right_t</span>) <span class="number">2</span>)</div><div class="line">#define MACH_PORT_RIGHT_PORT_SET	((<span class="name">mach_port_right_t</span>) <span class="number">3</span>)</div><div class="line">#define MACH_PORT_RIGHT_DEAD_NAME	((<span class="name">mach_port_right_t</span>) <span class="number">4</span>)</div><div class="line">#define MACH_PORT_RIGHT_LABELH	        ((<span class="name">mach_port_right_t</span>) <span class="number">5</span>)</div><div class="line">#define MACH_PORT_RIGHT_NUMBER		((<span class="name">mach_port_right_t</span>) <span class="number">6</span>)</div></pre></td></tr></table></figure></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/" target="_blank" rel="external">http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/</a></li>
 <li><a href="https://developer.apple.com/reference/kernel/1578704-mach_port_allocate" target="_blank" rel="external">https://developer.apple.com</a></li>
@@ -783,18 +780,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">xnu</a>
               </li>
              
@@ -804,6 +789,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">BSD</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
               </li>
             
             <div class="clearfix"></div>
