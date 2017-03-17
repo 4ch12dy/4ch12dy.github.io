@@ -201,15 +201,11 @@
 <p>下面，我将分别说明“无覆盖”和“有覆盖”时的虚函数表的样子。没有覆盖父类的虚函数是毫无意义的。我之所以要讲述没有覆盖的情况，主要目的是为了给一个对比。在比较之下，我们可以更加清楚地知道其内部的具体实现。</p>
 <h3 id="一般继承（无虚函数覆盖）"><a href="#一般继承（无虚函数覆盖）" class="headerlink" title="一般继承（无虚函数覆盖）"></a>一般继承（无虚函数覆盖）</h3><p>下面，再让我们来看看继承时的虚函数表是什么样的。假设有如下所示的一个继承关系：</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/2.png?raw=true" alt="2"></p>
-<p>请注意，在这个继承关系中，子类没有重载任何父类的函数。那么，在派生类的实例中，其虚函数表如下所示：</p>
-<p>对于实例：Derive d; 的虚函数表如下：</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/3.png?raw=true" alt="3"></p>
-<p>我们可以看到下面几点：</p>
+<p>请注意，在这个继承关系中，子类没有重载任何父类的函数。那么，在派生类的实例中，其虚函数表如下所示：<br>对于实例：Derive d; 的虚函数表如下：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/3.png?raw=true" alt="3"><br>我们可以看到下面几点：</p>
 <ol>
 <li>虚函数按照其声明顺序放于表中。</li>
-<li>父类的虚函数在子类的虚函数前面。</li>
+<li>父类的虚函数在子类的虚函数前面。<br>我相信聪明的你一定可以参考前面的那个程序，来编写一段程序来验证。</li>
 </ol>
-<p>我相信聪明的你一定可以参考前面的那个程序，来编写一段程序来验证。</p>
 <h3 id="一般继承（有虚函数覆盖）"><a href="#一般继承（有虚函数覆盖）" class="headerlink" title="一般继承（有虚函数覆盖）"></a>一般继承（有虚函数覆盖）</h3><p>覆盖父类的虚函数是很显然的事情，不然，虚函数就变得毫无意义。下面，我们来看一下，如果子类中有虚函数重载了父类的虚函数，会是一个什么样子？假设，我们有下面这样的一个继承关系。</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/4.png?raw=true" alt="4"></p>
 <p>为了让大家看到被继承过后的效果，在这个类的设计中，我只覆盖了父类的一个函数：f()。那么，对于派生类的实例，其虚函数表会是下面的一个样子：</p>
@@ -218,17 +214,15 @@
 <ol>
 <li><p>覆盖的f()函数被放到了虚表中原来父类虚函数的位置。</p>
 </li>
-<li><p>没有被覆盖的函数依旧。</p>
+<li><p>没有被覆盖的函数依旧。<br>这样，我们就可以看到对于下面这样的程序，</p>
 </li>
 </ol>
-<p>这样，我们就可以看到对于下面这样的程序，</p>
 <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Base </span>*<span class="keyword">b </span>= new Derive()<span class="comment">;</span></div><div class="line"></div><div class="line"><span class="keyword">b-&gt;f();</span></div></pre></td></tr></table></figure>
 <p>由b所指的内存中的虚函数表的<code>f()</code>的位置已经被<code>Derive::f()</code>函数地址所取代，于是在实际调用发生时，是<code>Derive::f()</code>被调用了。这就实现了多态。</p>
 <h3 id="多重继承（无虚函数覆盖）"><a href="#多重继承（无虚函数覆盖）" class="headerlink" title="多重继承（无虚函数覆盖）"></a>多重继承（无虚函数覆盖）</h3><p>下面，再让我们来看看多重继承中的情况，假设有下面这样一个类的继承关系。注意：子类并没有覆盖父类的函数。</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/6.png?raw=true" alt="6"></p>
 <p>对于子类实例中的虚函数表，是下面这个样子：</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/7.png?raw=true" alt="7"></p>
-<p>我们可以看到：</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/7.png?raw=true" alt="7"><br>我们可以看到：</p>
 <ol>
 <li><p>每个父类都有自己的虚表。</p>
 </li>
@@ -914,14 +908,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
               </li>
              
@@ -931,6 +917,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
