@@ -6,38 +6,31 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>mach基础知识 | 4chendy</title>
+  <title>详解virtual table | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="exec函数流程
-mach_vm_*
-mach_vm_cllocate
-1mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);
-
-
-在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
+  <meta name="description" content="详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
+关于虚函数的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mach基础知识">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/05/Mach内核基础知识/exec函数流程/index.html">
+<meta property="og:title" content="详解virtual table">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/07/C++ Virtual table/详解virtual table/index.html">
 <meta property="og:site_name" content="4chendy">
-<meta property="og:description" content="exec函数流程
-mach_vm_*
-mach_vm_cllocate
-1mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);
-
-
-在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
-<meta property="og:image" content="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png">
-<meta property="og:updated_time" content="2017-03-09T07:24:43.000Z">
+<meta property="og:description" content="详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
+关于虚函数的">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/2.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/3.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/4.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/5.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/6.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/7.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/8.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/9.png?raw=true">
+<meta property="og:updated_time" content="2017-03-17T02:49:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mach基础知识">
-<meta name="twitter:description" content="exec函数流程
-mach_vm_*
-mach_vm_cllocate
-1mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);
-
-
-在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png">
+<meta name="twitter:title" content="详解virtual table">
+<meta name="twitter:description" content="详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
+关于虚函数的">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -179,66 +172,102 @@ mach_vm_cllocate
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Mach内核基础知识/exec函数流程" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-C++ Virtual table/详解virtual table" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      mach基础知识
+      详解virtual table
     </h1>
   
 
         
         <a href="" class="archive-article-date">
-  	<time datetime="2017-03-04T17:51:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-05</time>
+  	<time datetime="2017-03-06T17:51:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="exec函数流程"><a href="#exec函数流程" class="headerlink" title="exec函数流程"></a>exec函数流程</h2><p><img src="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png" alt="exec函数流程"></p>
-<h2 id="mach-vm"><a href="#mach-vm" class="headerlink" title="mach_vm_*"></a><code>mach_vm_*</code></h2><ul>
-<li><p>mach_vm_cllocate</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mach_vm_allocate(<span class="keyword">vm_map_t</span> <span class="built_in">map</span>,<span class="keyword">mach_vm_address_t</span>  *address,<span class="keyword">mach_vm_size_t</span> size,<span class="keyword">int</span> flags);</div></pre></td></tr></table></figure>
+        <h2 id="详解virtual-table"><a href="#详解virtual-table" class="headerlink" title="详解virtual table"></a>详解virtual table</h2><p>C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。</p>
+<p>关于虚函数的使用方法，我在这里不做过多的阐述。大家可以看看相关的C++的书籍。在这篇文章中，我只想从虚函数的实现机制上面为大家 一个清晰的剖析。</p>
+<p>当然，相同的文章在网上也出现过一些了，但我总感觉这些文章不是很容易阅读，大段大段的代码，没有图片，没有详细的说明，没有比较，没有举一反三。不利于学习和阅读，所以这是我想写下这篇文章的原因。也希望大家多给我提意见。</p>
+<p>言归正传，让我们一起进入虚函数的世界。</p>
+<p>虚函数表</p>
+<p>对C++ 了解的人都应该知道虚函数（Virtual Function）是通过一张虚函数表（Virtual Table）来实现的。简称为V-Table。 在这个表中，主是要一个类的虚函数的地址表，这张表解决了继承、覆盖的问题，保证其容真实反应实际的函数。这样，在有虚函数的类的实例中这个表被分配在了 这个实例的内存中，所以，当我们用父类的指针来操作一个子类的时候，这张虚函数表就显得由为重要了，它就像一个地图一样，指明了实际所应该调用的函数。</p>
+<p>这里我们着重看一下这张虚函数表。在C++的标准规格说明书中说到，编译器必需要保证虚函数表的指针存在于对象实例中最前面的位置（这是为了保证正确取到虚函数的偏移量）。 这意味着我们通过对象实例的地址得到这张虚函数表，然后就可以遍历其中函数指针，并调用相应的函数。</p>
+<p>听我扯了那么多，我可以感觉出来你现在可能比以前更加晕头转向了。 没关系，下面就是实际的例子，相信聪明的你一看就明白了。</p>
+<p>假设我们有这样的一个类：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Base &#123;</div><div class="line"></div><div class="line"><span class="keyword">public</span>:</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"Base::f"</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span> </span>&#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"Base::g"</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">h</span><span class="params">()</span> </span>&#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"Base::h"</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>按照上面的说法，我们可以通过Base的实例来得到虚函数表。 下面是实际例程：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span><span class="params">(*Fun)</span><span class="params">(<span class="keyword">void</span>)</span></span>;</div><div class="line"></div><div class="line">Base b;</div><div class="line"></div><div class="line">Fun pFun = <span class="literal">NULL</span>;</div><div class="line"></div><div class="line"><span class="built_in">cout</span> &lt;&lt; <span class="string">"虚函数表地址："</span> &lt;&lt; (<span class="keyword">int</span>*)(&amp;b) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line"></div><div class="line"><span class="built_in">cout</span> &lt;&lt; <span class="string">"虚函数表 — 第一个函数地址："</span> &lt;&lt; (<span class="keyword">int</span>*)*(<span class="keyword">int</span>*)(&amp;b) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line"></div><div class="line"><span class="comment">// Invoke the first virtual function</span></div><div class="line"></div><div class="line">pFun = (Fun)*((<span class="keyword">int</span>*)*(<span class="keyword">int</span>*)(&amp;b));</div><div class="line"></div><div class="line">pFun();</div></pre></td></tr></table></figure>
+<p>实际运行经果如下：<code>(Windows XP+VS2003, Linux 2.6.22 + GCC 4.1.3)</code></p>
+<p>虚函数表地址：<code>0012FED4</code></p>
+<p>虚函数表 — 第一个函数地址：<code>0044F148</code></p>
+<p><code>Base::f</code></p>
+<p>通过这个示例，我们可以看到，我们可以通过强行把&amp;b转成<code>int *</code>，取得虚函数表的地址，然后，再次取址就可以得到第一个虚函数的地址了，也就是<code>Base::f()</code>，这在上面的程序中得到了验证（把<code>int*</code> 强制转成了函数指针）。通过这个示例，我们就可以知道如果要调用<code>Base::g()</code>和<code>Base::h()</code>，其代码如下：</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">(Fun)</span>*<span class="comment">((int*)</span>*<span class="comment">(int*)</span><span class="comment">(&amp;b)</span><span class="number">+0</span>); <span class="comment">// Base::f()</span></div><div class="line"></div><div class="line"><span class="comment">(Fun)</span>*<span class="comment">((int*)</span>*<span class="comment">(int*)</span><span class="comment">(&amp;b)</span><span class="number">+1</span>); <span class="comment">// Base::g()</span></div><div class="line"></div><div class="line"><span class="comment">(Fun)</span>*<span class="comment">((int*)</span>*<span class="comment">(int*)</span><span class="comment">(&amp;b)</span><span class="number">+2</span>); <span class="comment">// Base::h()</span></div></pre></td></tr></table></figure>
+<p>这个时候你应该懂了吧。什么？还是有点晕。也是，这样的代码看着太乱了。没问题，让我画个图解释一下。如下所示：</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true" alt="1"></p>
+<p>注意：在上面这个图中，我在虚函数表的最后多加了一个结点，这是虚函数表的结束结点，就像字符串的结束符“\0”一样，其标志了虚函数表的结束。这个结束标志的值在不同的编译器下是不同的。在<code>WinXP+VS2003</code>下，这个值是NULL。而在<code>Ubuntu 7.10 + Linux 2.6.22 + GCC 4.1.3</code>下，这个值是如果1，表示还有下一个虚函数表，如果值是0，表示是最后一个虚函数表。</p>
+<p>下面，我将分别说明“无覆盖”和“有覆盖”时的虚函数表的样子。没有覆盖父类的虚函数是毫无意义的。我之所以要讲述没有覆盖的情况，主要目的是为了给一个对比。在比较之下，我们可以更加清楚地知道其内部的具体实现。</p>
+<h3 id="一般继承（无虚函数覆盖）"><a href="#一般继承（无虚函数覆盖）" class="headerlink" title="一般继承（无虚函数覆盖）"></a>一般继承（无虚函数覆盖）</h3><p>下面，再让我们来看看继承时的虚函数表是什么样的。假设有如下所示的一个继承关系：</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/2.png?raw=true" alt="2"></p>
+<p>请注意，在这个继承关系中，子类没有重载任何父类的函数。那么，在派生类的实例中，其虚函数表如下所示：</p>
+<p>对于实例：Derive d; 的虚函数表如下：</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/3.png?raw=true" alt="3"></p>
+<p>我们可以看到下面几点：</p>
+<ol>
+<li>虚函数按照其声明顺序放于表中。</li>
+<li>父类的虚函数在子类的虚函数前面。</li>
+</ol>
+<p>我相信聪明的你一定可以参考前面的那个程序，来编写一段程序来验证。</p>
+<h3 id="一般继承（有虚函数覆盖）"><a href="#一般继承（有虚函数覆盖）" class="headerlink" title="一般继承（有虚函数覆盖）"></a>一般继承（有虚函数覆盖）</h3><p>覆盖父类的虚函数是很显然的事情，不然，虚函数就变得毫无意义。下面，我们来看一下，如果子类中有虚函数重载了父类的虚函数，会是一个什么样子？假设，我们有下面这样的一个继承关系。</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/4.png?raw=true" alt="4"></p>
+<p>为了让大家看到被继承过后的效果，在这个类的设计中，我只覆盖了父类的一个函数：f()。那么，对于派生类的实例，其虚函数表会是下面的一个样子：</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/5.png?raw=true" alt="5"></p>
+<p>我们从表中可以看到下面几点，</p>
+<ol>
+<li><p>覆盖的f()函数被放到了虚表中原来父类虚函数的位置。</p>
 </li>
-</ul>
-<p>在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是<code>VM_FLAGS_ANYWHERE</code>，那么内存将被分配到address指向的地址。</p>
-<ul>
-<li>mach_vm_region<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_region(</div><div class="line">	<span class="keyword">vm_map_t</span>		 <span class="built_in">map</span>,</div><div class="line">	<span class="keyword">mach_vm_offset_t</span>	*address,		<span class="comment">/* IN/OUT */</span></div><div class="line">	<span class="keyword">mach_vm_size_t</span>	*size,			<span class="comment">/* OUT */</span></div><div class="line">	<span class="keyword">vm_region_flavor_t</span>	 flavor,		<span class="comment">/* IN */</span></div><div class="line">	<span class="keyword">vm_region_info_t</span>	 info,			<span class="comment">/* OUT */</span></div><div class="line">	<span class="keyword">mach_msg_type_number_t</span>	*count,			<span class="comment">/* IN/OUT */</span></div><div class="line">	<span class="keyword">mach_port_t</span>		*object_name)		<span class="comment">/* OUT */</span></div></pre></td></tr></table></figure>
+<li><p>没有被覆盖的函数依旧。</p>
 </li>
-</ul>
-<p>获取map指向的任务内，address地址起始的VM region（虚拟内存区域）的信息。目前标记为flavor只有<code>VM_BASIC_INFO_64</code>。<br>获得的info的数据结构如下。<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">struct vm_region_basic_info_64 &#123;</div><div class="line">	vm_prot_t 	protection<span class="comment">;</span></div><div class="line">	vm_prot_t		max_protection<span class="comment">;</span></div><div class="line">	vm_inherit_t		inheritance<span class="comment">;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	<span class="keyword">shared;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	reserved<span class="comment">;</span></div><div class="line">	memory_object_offset_t	offset<span class="comment">;</span></div><div class="line">	vm_behavior_t		<span class="keyword">behavior;</span></div><div class="line">	unsigned <span class="keyword">short	</span>	user_wired_count<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure></p>
-<ul>
-<li>mach_vm_protect<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_protect(</div><div class="line">	<span class="keyword">mach_port_name_t</span> 	task,</div><div class="line">	<span class="keyword">mach_vm_address_t</span> 	address,</div><div class="line">	<span class="keyword">mach_vm_size_t</span> 	size,</div><div class="line">	<span class="keyword">boolean_t</span> 	set_maximum,</div><div class="line">	<span class="keyword">vm_prot_t</span> 	new_protection)</div></pre></td></tr></table></figure>
+</ol>
+<p>这样，我们就可以看到对于下面这样的程序，</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Base </span>*<span class="keyword">b </span>= new Derive()<span class="comment">;</span></div><div class="line"></div><div class="line"><span class="keyword">b-&gt;f();</span></div></pre></td></tr></table></figure>
+<p>由b所指的内存中的虚函数表的<code>f()</code>的位置已经被<code>Derive::f()</code>函数地址所取代，于是在实际调用发生时，是<code>Derive::f()</code>被调用了。这就实现了多态。</p>
+<h3 id="多重继承（无虚函数覆盖）"><a href="#多重继承（无虚函数覆盖）" class="headerlink" title="多重继承（无虚函数覆盖）"></a>多重继承（无虚函数覆盖）</h3><p>下面，再让我们来看看多重继承中的情况，假设有下面这样一个类的继承关系。注意：子类并没有覆盖父类的函数。</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/6.png?raw=true" alt="6"></p>
+<p>对于子类实例中的虚函数表，是下面这个样子：</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/7.png?raw=true" alt="7"></p>
+<p>我们可以看到：</p>
+<ol>
+<li><p>每个父类都有自己的虚表。</p>
 </li>
-</ul>
-<p>对address到address+size这一段的内存设置内存保护策略,new_protection就是最后设置成为的保护机制。</p>
-<ul>
-<li>mach_vm_write<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_write(</div><div class="line">	<span class="keyword">vm_map_t</span>		<span class="built_in">map</span>,</div><div class="line">	<span class="keyword">mach_vm_address_t</span>		address,</div><div class="line">	<span class="keyword">pointer_t</span>			data,</div><div class="line">	__unused <span class="keyword">mach_msg_type_number_t</span>	size)</div></pre></td></tr></table></figure>
+<li><p>子类的成员函数被放到了第一个父类的表中。（所谓的第一个父类是按照声明顺序来判断的）</p>
 </li>
-</ul>
-<p>对address指向的内存改写内容。</p>
-<ul>
-<li>mach_vm_read<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_vm_read(</div><div class="line">	<span class="keyword">vm_map_t</span> 	target_task, </div><div class="line">	<span class="keyword">mach_vm_address_t</span> 	address, </div><div class="line">	<span class="keyword">mach_vm_size_t</span> 	size, </div><div class="line">	<span class="keyword">vm_offset_t</span> 	*data,   </div><div class="line">	<span class="keyword">mach_msg_type_number_t</span> 	*dataCnt);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>对address指向的内存读取内容.</p>
-<h2 id="mach-port"><a href="#mach-port" class="headerlink" title="mach_port_*"></a><code>mach_port_*</code></h2><ul>
-<li>mach_port_allocate<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_port_allocate(</div><div class="line">	<span class="keyword">ipc_space_t</span> 	task, </div><div class="line">	<span class="keyword">mach_port_right_t</span> 	right,</div><div class="line">	<span class="keyword">mach_port_name_t</span> 	*name);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>task指要分配端口的任务(<code>mach_task_self()</code>)，right指分配给该端口的权限，name指代分配端口名的地址<br><code>Ports有如下权限，Ports可以在不同的task之间传递，通过传递可以赋予其他task对ports的操作权限。例如POC中使用的就是在父进程与子进程之间传递Port得到了对内存操作的权限。</code><br>    <figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#define MACH_PORT_RIGHT_SEND		((<span class="name">mach_port_right_t</span>) <span class="number">0</span>)</div><div class="line">#define MACH_PORT_RIGHT_RECEIVE		((<span class="name">mach_port_right_t</span>) <span class="number">1</span>)</div><div class="line">#define MACH_PORT_RIGHT_SEND_ONCE	((<span class="name">mach_port_right_t</span>) <span class="number">2</span>)</div><div class="line">#define MACH_PORT_RIGHT_PORT_SET	((<span class="name">mach_port_right_t</span>) <span class="number">3</span>)</div><div class="line">#define MACH_PORT_RIGHT_DEAD_NAME	((<span class="name">mach_port_right_t</span>) <span class="number">4</span>)</div><div class="line">#define MACH_PORT_RIGHT_LABELH	        ((<span class="name">mach_port_right_t</span>) <span class="number">5</span>)</div><div class="line">#define MACH_PORT_RIGHT_NUMBER		((<span class="name">mach_port_right_t</span>) <span class="number">6</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>mach_port_insert_right<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_port_insert_right(</div><div class="line">	<span class="keyword">ipc_space_t</span>		task, </div><div class="line">	<span class="keyword">mach_port_name_t</span> 		name, </div><div class="line">	<span class="keyword">mach_port_t</span> 		poly, </div><div class="line">	<span class="keyword">mach_msg_type_name_t</span>	 polyPoly);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/" target="_blank" rel="external">http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/</a></li>
-<li><a href="https://developer.apple.com/reference/kernel/1578704-mach_port_allocate" target="_blank" rel="external">https://developer.apple.com</a></li>
-</ul>
+</ol>
+<p>这样做就是为了解决不同的父类类型的指针指向同一个子类实例，而能够调用到实际的函数。</p>
+<p>多重继承（有虚函数覆盖）</p>
+<p>下面我们再来看看，如果发生虚函数覆盖的情况。</p>
+<p>下图中，我们在子类中覆盖了父类的f()函数。</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/8.png?raw=true" alt="8"></p>
+<p>下面是对于子类实例中的虚函数表的图：</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/9.png?raw=true" alt="9"></p>
+<p>我们可以看见，三个父类虚函数表中的f()的位置被替换成了子类的函数指针。这样，我们就可以任一静态类型的父类来指向子类，并调用子类的f()了。如：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Derive d;</div><div class="line"></div><div class="line">Base1 *b1 = &amp;d;</div><div class="line"></div><div class="line">Base2 *b2 = &amp;d;</div><div class="line"></div><div class="line">Base3 *b3 = &amp;d;</div><div class="line"></div><div class="line">b1-&gt;f(); <span class="regexp">//</span><span class="symbol">Derive:</span><span class="symbol">:f</span>()</div><div class="line"></div><div class="line">b2-&gt;f(); <span class="regexp">//</span><span class="symbol">Derive:</span><span class="symbol">:f</span>()</div><div class="line"></div><div class="line">b3-&gt;f(); <span class="regexp">//</span><span class="symbol">Derive:</span><span class="symbol">:f</span>()</div><div class="line"></div><div class="line">b1-&gt;g(); <span class="regexp">//</span><span class="symbol">Base1:</span><span class="symbol">:g</span>()</div><div class="line"></div><div class="line">b2-&gt;g(); <span class="regexp">//</span><span class="symbol">Base2:</span><span class="symbol">:g</span>()</div><div class="line"></div><div class="line">b3-&gt;g(); <span class="regexp">//</span><span class="symbol">Base3:</span><span class="symbol">:g</span>()</div></pre></td></tr></table></figure>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>每次写C++的文章，总免不了要批判一下C++。这篇文章也不例外。通过上面的讲述，相信我们对虚函数表有一个比较细致的了解了。水可载舟，亦可覆舟。下面，让我们来看看我们可以用虚函数表来干点什么坏事吧。</p>
+<h4 id="一、通过父类型的指针访问子类自己的虚函数"><a href="#一、通过父类型的指针访问子类自己的虚函数" class="headerlink" title="一、通过父类型的指针访问子类自己的虚函数"></a>一、通过父类型的指针访问子类自己的虚函数</h4><p>我们知道，子类没有重载父类的虚函数是一件毫无意义的事情。因为多态也是要基于函数重载的。虽然在上面的图中我们可以看到Base1的虚表中有Derive的虚函数，但我们根本不可能使用下面的语句来调用子类的自有虚函数：</p>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="type">Base1</span> *b1 = <span class="function"><span class="keyword">new</span> <span class="title">Derive</span>();</span></div><div class="line"></div><div class="line"><span class="title">b1</span>-&gt;<span class="title">f1</span>(); <span class="comment">//编译出错</span></div></pre></td></tr></table></figure>
+<p>任何妄图使用父类指针想调用子类中的未覆盖父类的成员函数的行为都会被编译器视为非法，所以，这样的程序根本无法编译通过。但在运行时，我们可以通过指针的方式访问虚函数表来达到违反C++语义的行为。（关于这方面的尝试，通过阅读后面附录的代码，相信你可以做到这一点）</p>
+<h4 id="二、访问non-public的虚函数"><a href="#二、访问non-public的虚函数" class="headerlink" title="二、访问non-public的虚函数"></a>二、访问non-public的虚函数</h4><p>另外，如果父类的虚函数是<code>private</code>或是<code>protected</code>的，但这些非<code>public</code>的虚函数同样会存在于虚函数表中，所以，我们同样可以使用访问虚函数表的方式来访问这些<code>non-public</code>的虚函数，这是很容易做到的。</p>
+<p>如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Base &#123;</div><div class="line"></div><div class="line"><span class="keyword">private</span>:</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"Base::f"</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">class</span> Derive : <span class="keyword">public</span> Base&#123;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span><span class="params">(*Fun)</span><span class="params">(<span class="keyword">void</span>)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">Derive d;</div><div class="line"></div><div class="line">Fun pFun = (Fun)*((<span class="keyword">int</span>*)*(<span class="keyword">int</span>*)(&amp;d)+<span class="number">0</span>);</div><div class="line"></div><div class="line">pFun();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h3><p>C++这门语言是一门Magic的语言，对于程序员来说，我们似乎永远摸不清楚这门语言背着我们在干了什么。需要熟悉这门语言，我们就必需要了解C++里面的那些东西，需要去了解C++中那些危险的东西。不然，这是一种搬起石头砸自己脚的编程语言。</p>
+<p>文章转载：<a href="http://www.cppblog.com/dawnbreak/archive/2009/03/10/76084.aspx" target="_blank" rel="external">http://www.cppblog.com/dawnbreak/archive/2009/03/10/76084.aspx</a></p>
 
       
 
@@ -278,15 +307,11 @@ mach_vm_cllocate
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mach</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">vtable</a>
         		</li>
       		
 		</ul>
@@ -342,7 +367,7 @@ mach_vm_cllocate
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/05/Mach内核基础知识/exec函数流程/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/07/C++ Virtual table/详解virtual table/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -356,18 +381,9 @@ mach_vm_cllocate
   
 <nav id="article-nav">
   
-    <a href="../../../07/C++ Virtual table/详解virtual table/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          详解virtual table
-        
-      </div>
-    </a>
   
-  
-    <a href="../../../../../2016/12/06/macOS内核/macOS内核架构-功能/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">macOS内核知识点整理</div>
+    <a href="../../../05/Mach内核基础知识/exec函数流程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mach基础知识</div>
       <i class="icon-circle-right"></i>
     </a>
   
