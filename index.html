@@ -215,7 +215,7 @@
 </ul>
 <h2 id="0x06-command命令"><a href="#0x06-command命令" class="headerlink" title="0x06 command命令"></a>0x06 command命令</h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(gdb) break func</div><div class="line">Breakpoint <span class="number">1</span> <span class="keyword">at</span> <span class="number">0x3475678</span>: <span class="built_in">file</span> test.c, <span class="built_in">line</span> <span class="number">12.</span></div><div class="line">(gdb) <span class="keyword">command</span> <span class="title">1</span></div><div class="line">Type commands <span class="keyword">for</span> when <span class="built_in">breakpoint</span> <span class="number">1</span> is hit, <span class="literal">one</span> per <span class="built_in">line</span>.</div><div class="line">End <span class="keyword">with</span> <span class="keyword">a</span> <span class="built_in">line</span> saying just <span class="string">"end"</span>.</div><div class="line">&gt;print arg1</div><div class="line">&gt;print arg2</div><div class="line">&gt;print arg3</div><div class="line">&gt;<span class="function"><span class="keyword">end</span></span></div><div class="line">(<span class="title">gdb</span>)</div></pre></td></tr></table></figure></p>
 <p>当我们的断点到达时，自动执行command中的三个命令，把func的三个参数值打出来。</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<h2 id="0x07-其他"><a href="#0x07-其他" class="headerlink" title="0x07 其他"></a>0x07 其他</h2><ul>
 <li>step /  s  下一步，直接执行下一条程序</li>
 <li>continue / cont 下一段，如果遇到函数，不会进入函数，逐过程，有点类似VS里面的F10</li>
 <li>run 运行</li>
@@ -224,6 +224,7 @@
 <li>p *array@len 输出数组</li>
 <li>p i 输出i的值</li>
 </ul>
+<h2 id="0x08-附表"><a href="#0x08-附表" class="headerlink" title="0x08 附表"></a>0x08 附表</h2><p><strong>寄存器宽度表</strong><br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">|<span class="number">63.</span><span class="number">.32</span>|<span class="number">31.</span><span class="number">.16</span>|<span class="number">15</span><span class="number">-8</span>|<span class="number">7</span><span class="number">-0</span>|</div><div class="line">               |AH.|AL.|</div><div class="line">               |AX.....|</div><div class="line">       |EAX............|</div><div class="line">|RAX...................|</div></pre></td></tr></table></figure></p>
 
       
 
@@ -1056,18 +1057,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">xnu</a>
               </li>
              
@@ -1077,6 +1066,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">BSD</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
               </li>
             
             <div class="clearfix"></div>
