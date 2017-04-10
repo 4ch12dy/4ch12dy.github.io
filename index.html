@@ -182,8 +182,8 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"first printf"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"second printf"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>对应的汇编代码</p>
 <figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-&gt;  <span class="number">0x100000f40</span> &lt;+<span class="number">0</span>&gt;:  pushq  %rbp</div><div class="line">    <span class="number">0x100000f41</span> &lt;+<span class="number">1</span>&gt;:  movq   %rsp, %rbp</div><div class="line">    <span class="number">0x100000f44</span> &lt;+<span class="number">4</span>&gt;:  subq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f48</span> &lt;+<span class="number">8</span>&gt;:  leaq   <span class="number">0x4b</span>(%rip), %rax          ; <span class="string">"first printf"</span></div><div class="line">    <span class="number">0x100000f4f</span> &lt;+<span class="number">15</span>&gt;: movl   %edi, -<span class="number">0x4</span>(%rbp)</div><div class="line">    <span class="number">0x100000f52</span> &lt;+<span class="number">18</span>&gt;: movq   %rsi, -<span class="number">0x10</span>(%rbp)</div><div class="line">    <span class="number">0x100000f56</span> &lt;+<span class="number">22</span>&gt;: movq   %rax, %rdi</div><div class="line">    <span class="number">0x100000f59</span> &lt;+<span class="number">25</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f5b</span> &lt;+<span class="number">27</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f60</span> &lt;+<span class="number">32</span>&gt;: leaq   <span class="number">0x40</span>(%rip), %rdi          ; <span class="string">"second printf"</span></div><div class="line">    <span class="number">0x100000f67</span> &lt;+<span class="number">39</span>&gt;: movl   %eax, -<span class="number">0x14</span>(%rbp)</div><div class="line">    <span class="number">0x100000f6a</span> &lt;+<span class="number">42</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f6c</span> &lt;+<span class="number">44</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f71</span> &lt;+<span class="number">49</span>&gt;: movl   %eax, -<span class="number">0x18</span>(%rbp)</div><div class="line">    <span class="number">0x100000f74</span> &lt;+<span class="number">52</span>&gt;: addq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f78</span> &lt;+<span class="number">56</span>&gt;: popq   %rbp</div><div class="line">    <span class="number">0x100000f79</span> &lt;+<span class="number">57</span>&gt;: retq</div></pre></td></tr></table></figure>
-<p><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/mach-o动态链接/mach-o动态链接/" alt="汇编代码"></p>
-<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区</p>
+<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区<br><img src="https://raw.githubusercontent.com/NULL-ME/NULL-ME.github.io/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/2.png" alt="stub区"></p>
+<p>进入lldb调试观察这个地址值</p>
 
       
 
@@ -518,15 +518,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">cve</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IPC</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
         		</li>
       		
 		</ul>
@@ -627,15 +627,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mach</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
         		</li>
       		
 		</ul>
@@ -1170,6 +1170,18 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gdb</a>
               </li>
              
@@ -1182,18 +1194,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
@@ -1202,7 +1202,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1218,11 +1222,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1235,14 +1243,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
             
             <div class="clearfix"></div>
