@@ -1104,6 +1104,101 @@
 
 
   
+    <article id="post-Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">Protostar-栈溢出系列学习-Stack 0</a>
+    </h1>
+  
+
+        
+        <a href="2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" class="archive-article-date">
+  	<time datetime="2016-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x01-序"><a href="#0x01-序" class="headerlink" title="0x01 序"></a>0x01 序</h2><p>为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始吧！</p>
+<h2 id="0x01-Protostar虚拟机环境搭建"><a href="#0x01-Protostar虚拟机环境搭建" class="headerlink" title="0x01 Protostar虚拟机环境搭建"></a>0x01 Protostar虚拟机环境搭建</h2><p><a href="https : //exploit-exercises.com/download/">虚拟机下载地址</a></p>
+<p><a href="https://youtu.be/Y-4WHf0of6Y" target="_blank" rel="external">虚拟机环境搭建视频教程</a></p>
+<p><strong>默认用户名和密码:</strong></p>
+<ul>
+<li><code>user:user</code> </li>
+<li><code>root:godmode</code></li>
+</ul>
+<p>虚拟机启动后，输入bash进入终端界面</p>
+<p>漏洞程序在<code>/opt/protostar/bin</code>目录下</p>
+<h2 id="0x01-Protostar-Stack-0"><a href="#0x01-Protostar-Stack-0" class="headerlink" title="0x01 Protostar/Stack 0"></a>0x01 Protostar/Stack 0</h2><p>This level introduces the concept that memory can be accessed outside of its allocated region, <strong>how the stack variables are laid out, and that modifying outside of the allocated memory can modify program execution</strong>.</p>
+<p>This level is at <code>/opt/protostar/bin/stack0</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">volatile</span> <span class="keyword">int</span> modified;</div><div class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</div><div class="line"></div><div class="line">  modified = <span class="number">0</span>;</div><div class="line">  gets(buffer);</div><div class="line"></div><div class="line">  <span class="keyword">if</span>(modified != <span class="number">0</span>) &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"you have changed the 'modified' variable\n"</span>);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"Try again?\n"</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-思路-amp-分析"><a href="#0x02-思路-amp-分析" class="headerlink" title="0x02 思路&amp;分析"></a>0x02 思路&amp;分析</h2><p>这个栈溢出很简单，首先在栈上分配了64字节大小的空间，然后根据modified的值来决定执行流程，但modified始终等于0。所以我们需要利用栈溢出去修改modified的值。</p>
+<h2 id="0x03-调试-amp-利用"><a href="#0x03-调试-amp-利用" class="headerlink" title="0x03 调试&amp;利用"></a>0x03 调试&amp;利用</h2><ol>
+<li>gdb连接到stack0，下<code>break *main</code>在main函数上下断点，然后<code>set disassembly-flavor intel</code>设置intel汇编指令格式,在<code>0x08048411</code>出下个断点</li>
+</ol>
+<p><img src="/NULL-ME/NULL-ME.github.io.git/2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-1.png" alt="0-1"></p>
+<ol>
+<li><p>利用define hook-stop在断点触发时观察栈变量和寄存器的值</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="meta">info</span> registers </div><div class="line">&gt;x/<span class="number">24</span>wx $esp</div><div class="line">&gt;<span class="meta">end</span></div></pre></td></tr></table></figure>
+<p><img src="/NULL-ME/NULL-ME.github.io.git/2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-2.png" alt="0-2"><br>由上图可以发现，当我们输入几个A后，<code>0xbffff762</code>地址已经被写入了0x41,<br>然后我们再查看modified的值发现没有变化，通过计算发现为buffer偏移4+16*3+12字节出。</p>
+</li>
+<li><p>利用Python写入4+16*3+14字节数的A，发现成功修改modified的值，改变其执行流程。<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-3.png" alt="0-3"></p>
+</li>
+</ol>
+<h2 id="0x4"><a href="#0x4" class="headerlink" title="0x4"></a>0x4</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
   
 
 
@@ -1193,18 +1288,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
@@ -1217,11 +1300,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1237,6 +1320,30 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -1249,11 +1356,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
