@@ -541,15 +541,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">cve</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IPC</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
         		</li>
       		
 		</ul>
@@ -650,15 +650,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mach</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
         		</li>
       		
 		</ul>
@@ -1141,13 +1141,13 @@
 <h2 id="0x03-调试-amp-利用"><a href="#0x03-调试-amp-利用" class="headerlink" title="0x03 调试&amp;利用"></a>0x03 调试&amp;利用</h2><ol>
 <li>gdb连接到stack0，下<code>break *main</code>在main函数上下断点，然后<code>set disassembly-flavor intel</code>设置intel汇编指令格式,在<code>0x08048411</code>出下个断点</li>
 </ol>
-<p><img src="/NULL-ME/NULL-ME.github.io.git/2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-1.png" alt="0-1"></p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true" alt="0-1"></p>
 <ol>
 <li><p>利用define hook-stop在断点触发时观察栈变量和寄存器的值</p>
 <figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="meta">info</span> registers </div><div class="line">&gt;x/<span class="number">24</span>wx $esp</div><div class="line">&gt;<span class="meta">end</span></div></pre></td></tr></table></figure>
-<p><img src="/NULL-ME/NULL-ME.github.io.git/2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-2.png" alt="0-2"><br>由上图可以发现，当我们输入几个A后，<code>0xbffff762</code>地址已经被写入了0x41,<br>然后我们再查看modified的值发现没有变化，通过计算发现为buffer偏移4+16*3+12字节出。</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-2.png?raw=true" alt="0-2"><br>由上图可以发现，当我们输入几个A后，<code>0xbffff762</code>地址已经被写入了0x41,<br>然后我们再查看modified的值发现没有变化，通过计算发现为buffer偏移4+16*3+12字节出。</p>
 </li>
-<li><p>利用Python写入4+16*3+14字节数的A，发现成功修改modified的值，改变其执行流程。<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/04/10/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-3.png" alt="0-3"></p>
+<li><p>利用Python写入4+16*3+14字节数的A，发现成功修改modified的值，改变其执行流程。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-3.png?raw=true" alt="0-3"></p>
 </li>
 </ol>
 <h2 id="0x4"><a href="#0x4" class="headerlink" title="0x4"></a>0x4</h2>
@@ -1288,11 +1288,23 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1300,11 +1312,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1320,14 +1336,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
               </li>
              
@@ -1340,15 +1348,19 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1361,18 +1373,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
             
             <div class="clearfix"></div>
