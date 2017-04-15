@@ -28,7 +28,7 @@ gdb环境中 set args命令
 show args查看程序参数
 
 0x">
-<meta property="og:updated_time" content="2017-03-27T06:08:02.000Z">
+<meta property="og:updated_time" content="2017-04-15T06:48:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gdb常用调试命令总结">
 <meta name="twitter:description" content="0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
@@ -240,6 +240,12 @@ show args查看程序参数
 <p>当我们的断点到达时，自动执行command中的三个命令，把func的三个参数值打出来。</p>
 <h2 id="0x07-其他"><a href="#0x07-其他" class="headerlink" title="0x07 其他"></a>0x07 其他</h2><ul>
 <li>step /  s  下一步，直接执行下一条程序</li>
+<li><code>set disassembly-flavor intel 设置为intel汇编指令</code></li>
+<li>info proc mappings </li>
+<li>`define stop-hook 设置断点触发后自动执行命令<blockquote>
+<p>info registers<br>x/24wx $esp<br>x/2i $eip<br>end`</p>
+</blockquote>
+</li>
 <li>continue / cont 下一段，如果遇到函数，不会进入函数，逐过程，有点类似VS里面的F10</li>
 <li>run 运行</li>
 <li>finish 结束调试</li>
@@ -365,11 +371,11 @@ show args查看程序参数
   
 <nav id="article-nav">
   
-    <a href="../../../../04/10/mach-o动态链接/mach-o动态链接/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="../../../../04/10/Protostar-栈溢出系列学习-Stack 7/Protostar-栈溢出系列学习-Stack 0/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Mach-o动态链接
+          Protostar-栈溢出系列学习-Stack 0
         
       </div>
     </a>
@@ -492,6 +498,18 @@ show args查看程序参数
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
@@ -508,18 +526,6 @@ show args查看程序参数
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gdb</a>
               </li>
              
@@ -532,15 +538,15 @@ show args查看程序参数
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -553,6 +559,18 @@ show args查看程序参数
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
             
             <div class="clearfix"></div>
