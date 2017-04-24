@@ -18,7 +18,7 @@
 <meta property="og:description" content="0x00 序当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。
 0x01 目录1.DLMalloc2.内存Chunk3.Bin4.molloc源码分析
 0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个">
-<meta property="og:updated_time" content="2017-04-24T17:33:53.000Z">
+<meta property="og:updated_time" content="2017-04-24T17:37:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Linux堆分配器-DLMalloc">
 <meta name="twitter:description" content="0x00 序当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。
@@ -413,8 +413,8 @@ if (! have_lock) {
 </code></pre><p>  }<br>  /<em><br>    If the chunk was allocated via mmap, release via munmap().
   </em>/</p>
 <p>  else {<br>    munmap_chunk (p);<br>  }<br>}</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这里重点看看<span class="selector-tag">unlink</span>()宏定义</div></pre></td></tr></table></figure>
-<p>#define unlink( P, BK, FD ) {<br>    BK = P-&gt;bk;<br>    FD = P-&gt;fd;<br>    FD-&gt;bk = BK;  //可能会造成任意写<br>    BK-&gt;fd = FD;<br>}</p>
+<pre><code><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这里重点看看<span class="selector-tag">unlink</span>()宏定义</div></pre></td></tr></table></figure>
+</code></pre><p>#define unlink( P, BK, FD ) {<br>    BK = P-&gt;bk;<br>    FD = P-&gt;fd;<br>    FD-&gt;bk = BK;  //可能会造成任意写<br>    BK-&gt;fd = FD;<br>}</p>
 <p>```</p>
 <p><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#__libc_free" target="_blank" rel="external">glibc/malloc.c源码</a></p>
 <h2 id="0x06-参考"><a href="#0x06-参考" class="headerlink" title="0x06 参考"></a>0x06 参考</h2><ol>
@@ -667,6 +667,34 @@ if (! have_lock) {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -680,18 +708,6 @@ if (! have_lock) {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">free</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -764,22 +780,6 @@ if (! have_lock) {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
             
             <div class="clearfix"></div>
