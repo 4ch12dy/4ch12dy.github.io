@@ -9,21 +9,21 @@
   <title>深入理解Linux堆分配器-DLMalloc | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="0x00 序当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。
-0x01 目录1231.DLMalloc2.内存Chunk3.Bin
-0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个GNU C库的内存">
+0x01 目录1.DLMalloc2.内存Chunk3.Bin
+0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解Linux堆分配器-DLMalloc">
 <meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/24/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/index.html">
 <meta property="og:site_name" content="4chendy">
 <meta property="og:description" content="0x00 序当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。
-0x01 目录1231.DLMalloc2.内存Chunk3.Bin
-0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个GNU C库的内存">
-<meta property="og:updated_time" content="2017-04-24T17:08:57.000Z">
+0x01 目录1.DLMalloc2.内存Chunk3.Bin
+0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器">
+<meta property="og:updated_time" content="2017-04-24T17:18:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Linux堆分配器-DLMalloc">
 <meta name="twitter:description" content="0x00 序当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。
-0x01 目录1231.DLMalloc2.内存Chunk3.Bin
-0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个GNU C库的内存">
+0x01 目录1.DLMalloc2.内存Chunk3.Bin
+0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
   
@@ -186,7 +186,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。</p>
-<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.</span>DLMalloc</div><div class="line"><span class="number">2.</span>内存Chunk</div><div class="line"><span class="number">3.</span>Bin</div></pre></td></tr></table></figure>
+<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><p>1.DLMalloc<br>2.内存Chunk<br>3.Bin</p>
 <h2 id="0x02-DLMalloc"><a href="#0x02-DLMalloc" class="headerlink" title="0x02 DLMalloc"></a>0x02 DLMalloc</h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。</p>
 <p>明显内存分配器在操作系统中是相当重要的，主要在需要满足下列的特点：</p>
 <ul>
@@ -663,11 +663,19 @@ if (! have_lock) {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+                <a href="javascript:void(0)" class="js-tag color5">heap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">malloc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">free</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -683,19 +691,11 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">heap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">malloc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">free</a>
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -715,15 +715,23 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -747,11 +755,15 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -764,18 +776,6 @@ if (! have_lock) {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
             
             <div class="clearfix"></div>
