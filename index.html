@@ -195,8 +195,10 @@
 <ul>
 <li>allocate chunk</li>
 </ul>
-<figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">chunk   --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div><div class="line">           |     当前chunk大小                 |<span class="type">A</span>|<span class="type">M</span>|<span class="type">P</span>|</div><div class="line"> <span class="type">mem</span>    --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">malloc</span>返回用户的开始地址，储存用户数据  |</div><div class="line">           <span class="type">.                                       .</span></div><div class="line">           .                                       .</div><div class="line">           .                                       .</div><div class="line">nextchunk-&gt;+---------------------------------------+</div><div class="line">		    |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div></pre></td></tr></table></figure>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="bullet">*  </span>freed chunk</div></pre></td></tr></table></figure>
+<pre><code><figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">chunk   --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div><div class="line">           |     当前chunk大小                 |<span class="type">A</span>|<span class="type">M</span>|<span class="type">P</span>|</div><div class="line"> <span class="type">mem</span>    --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">malloc</span>返回用户的开始地址，储存用户数据  |</div><div class="line">           <span class="type">.                                       .</span></div><div class="line">           .                                       .</div><div class="line">           .                                       .</div><div class="line">nextchunk-&gt;+---------------------------------------+</div><div class="line">		    |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div></pre></td></tr></table></figure>
+</code></pre><ul>
+<li>freed chunk</li>
+</ul>
 <figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">chunk   <span class="comment">--&gt;+---------------------------------------+</span></div><div class="line">           |     前一个chunk大小                     |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">           |     当前chunk大小                |A| |P|</div><div class="line"> mem    <span class="comment">--&gt;+---------------------------------------+</span></div><div class="line">           |     fd指向free list中下一个chunk        |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">           |     bk指向free list中后一个chunk        |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">           .     用户数据 可能为<span class="number">0</span>                    .</div><div class="line">           .                                       .</div><div class="line">nextchunk-&gt;+<span class="comment">---------------------------------------+</span></div><div class="line">           |     前一个chunk大小                     |</div><div class="line">           +<span class="comment">---------------------------------------+</span></div><div class="line">                   </div><div class="line"></div><div class="line"></div><div class="line">```   </div><div class="line"></div><div class="line">    </div><div class="line"><span class="number">3.</span>更多细节</div><div class="line">因为chunk是按照<span class="number">8</span>字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？</div><div class="line">然后可以想到有一个最小chunk的存在，其大小为<span class="number">16</span>字节()。</div><div class="line"></div><div class="line"><span class="number">4.</span>特殊chunk</div><div class="line"></div><div class="line">top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</div><div class="line"></div><div class="line">last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is <span class="keyword">the</span> <span class="built_in">result</span> <span class="keyword">of</span> allocation requests <span class="keyword">for</span> small chunks that have no exact fit <span class="keyword">in</span> <span class="keyword">any</span> <span class="keyword">of</span> <span class="keyword">the</span> bins. If <span class="keyword">the</span> request is larger than <span class="keyword">the</span> last_remainder chunk but smaller than <span class="keyword">a</span> block <span class="keyword">in</span> <span class="keyword">a</span> bin, <span class="keyword">then</span> <span class="keyword">the</span> chunk is <span class="built_in">split</span> again. The last_remainder chunk is <span class="keyword">the</span> <span class="built_in">result</span> <span class="keyword">of</span> having <span class="built_in">to</span> <span class="built_in">split</span> <span class="keyword">a</span> larger chunk <span class="keyword">into</span> <span class="literal">two</span>, <span class="literal">one</span> part <span class="keyword">of</span> <span class="keyword">it</span> is handed out <span class="built_in">from</span> <span class="keyword">the</span> allocation, <span class="keyword">and</span> <span class="keyword">the</span> other because <span class="keyword">the</span> last_remainder chunk.</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 0x04 Bin</span></div><div class="line"></div><div class="line">chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。</div><div class="line"></div><div class="line">这里我主要介绍fsatbin和normalbin</div><div class="line"></div><div class="line">(<span class="number">1</span>)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。</div><div class="line"></div><div class="line">(<span class="number">2</span>)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 0x05 free()源代码分析及相关细节</span></div><div class="line"></div><div class="line"></div><div class="line">`free(void *mem)<span class="comment">--&gt;__libc_free(void *mem)`</span></div></pre></td></tr></table></figure>
 <p>void<br>__libc_free (void <em>mem)<br>{<br>  mstate ar_ptr;<br>  mchunkptr p;                          /</em> chunk corresponding to mem */</p>
 <p>  void (<em>hook) (void </em>, const void <em>)<br>    = atomic_forced_read (<strong>free_hook);<br>  if (</strong>builtin_expect (hook != NULL, 0))<br>    {<br>      (</em>hook)(mem, RETURN_ADDRESS (0));<br>      return;<br>    }</p>
@@ -540,99 +542,6 @@ if (! have_lock) {
 
 
   
-    <article id="post-mach-o动态链接/mach-o动态链接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2017/04/10/mach-o动态链接/mach-o动态链接/">Mach-o动态链接</a>
-    </h1>
-  
-
-        
-        <a href="2017/04/10/mach-o动态链接/mach-o动态链接/" class="archive-article-date">
-  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。<br>所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。<br>macOS中是内核执行<code>LC_DYLINKER</code>加载命令时启动的，通常为<code>/usr/lib/dyld</code>接管刚创建进程的控制权。<br>本文就来分析其符号的动态链接过程。</p>
-<h2 id="0x01-符号的加载过程"><a href="#0x01-符号的加载过程" class="headerlink" title="0x01 符号的加载过程"></a>0x01 符号的加载过程</h2><p>以下面这个简单的C语言程序为例。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"first printf"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"second printf"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>对应的汇编代码</p>
-<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-&gt;  <span class="number">0x100000f40</span> &lt;+<span class="number">0</span>&gt;:  pushq  %rbp</div><div class="line">    <span class="number">0x100000f41</span> &lt;+<span class="number">1</span>&gt;:  movq   %rsp, %rbp</div><div class="line">    <span class="number">0x100000f44</span> &lt;+<span class="number">4</span>&gt;:  subq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f48</span> &lt;+<span class="number">8</span>&gt;:  leaq   <span class="number">0x4b</span>(%rip), %rax          ; <span class="string">"first printf"</span></div><div class="line">    <span class="number">0x100000f4f</span> &lt;+<span class="number">15</span>&gt;: movl   %edi, -<span class="number">0x4</span>(%rbp)</div><div class="line">    <span class="number">0x100000f52</span> &lt;+<span class="number">18</span>&gt;: movq   %rsi, -<span class="number">0x10</span>(%rbp)</div><div class="line">    <span class="number">0x100000f56</span> &lt;+<span class="number">22</span>&gt;: movq   %rax, %rdi</div><div class="line">    <span class="number">0x100000f59</span> &lt;+<span class="number">25</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f5b</span> &lt;+<span class="number">27</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f60</span> &lt;+<span class="number">32</span>&gt;: leaq   <span class="number">0x40</span>(%rip), %rdi          ; <span class="string">"second printf"</span></div><div class="line">    <span class="number">0x100000f67</span> &lt;+<span class="number">39</span>&gt;: movl   %eax, -<span class="number">0x14</span>(%rbp)</div><div class="line">    <span class="number">0x100000f6a</span> &lt;+<span class="number">42</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f6c</span> &lt;+<span class="number">44</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f71</span> &lt;+<span class="number">49</span>&gt;: movl   %eax, -<span class="number">0x18</span>(%rbp)</div><div class="line">    <span class="number">0x100000f74</span> &lt;+<span class="number">52</span>&gt;: addq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f78</span> &lt;+<span class="number">56</span>&gt;: popq   %rbp</div><div class="line">    <span class="number">0x100000f79</span> &lt;+<span class="number">57</span>&gt;: retq</div></pre></td></tr></table></figure>
-<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true" alt="stub区"></p>
-<ul>
-<li>第一次printf会先进入<code>dyld_stub_binder</code>区去找到<code>printf</code>函数的地址，我们用lldb调试观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E8%B7%B3%E8%BD%AC%E8%BF%87%E7%A8%8B.png?raw=true" alt="stub跳转过程"><br>会发现正好地址在<code>dyld_stub_binder</code>区</p>
-<p>验证:</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%811.png?raw=true" alt="验证1"></p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%812.png?raw=true" alt="验证1"></p>
-<ul>
-<li>第二次<code>printf</code>我们在观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/%E7%AC%AC%E4%BA%8C%E6%AC%A1printf%E9%AA%8C%E8%AF%81.png?raw=true" alt="第二次"></p>
-<p>我们会发现当第二次再次调用<code>printf</code>函数时，还是会先跳转到stub区，但此时<code>la_symbol_ptr</code>中的值却变为了<code>printf</code>的真实地址，而不是<code>dyld_stub_binder</code>。这样就完成了一次延时绑定，后面就直接调用。</p>
-<h2 id="0x02-stub桩机制总结"><a href="#0x02-stub桩机制总结" class="headerlink" title="0x02 stub桩机制总结"></a>0x02 stub桩机制总结</h2><p>综上分析，我们可以发现所有的外部函数引用都会在<code>DATA</code>段<code>la_symbol_ptr</code>区中产生一个占位符，其初始值为<code>dyld_stub_binder</code>区中对应的编号地址。当第一个调用时，就会进入符号的动态链接过程，一旦找到其地址后，就会将<code>DATA</code>段<code>la_symbol_ptr</code>区中的占位符改为找到后的地址。这样就完成了只需要一个符号绑定。</p>
-<p>stub桩机制的巧妙之处也在此，首先当产生一个外部符号调用时，直接跳到对应的stub桩位置，然后由里面保存的地址来判断是第一次调用还是已经找到符号的地址。就像桩这个名字含义一样，一个占位符的思想。</p>
-<h2 id="0x03-参考"><a href="#0x03-参考" class="headerlink" title="0x03 参考"></a>0x03 参考</h2><p><a href="http://turingh.github.io/2016/03/10/Mach-O%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" target="_blank" rel="external">Mach-O的动态链接相关知识</a></p>
-<p><a href="http://timetobleed.com/dynamic-linking-elf-vs-mach-o/" target="_blank" rel="external">Dynamic Linking: ELF vs. Mach-O</a></p>
-<p><a href="http://timetobleed.com/dynamic-symbol-table-duel-elf-vs-mach-o-round-2/" target="_blank" rel="external">Dynamic symbol table duel: ELF vs Mach-O, round 2</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">mach-o</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">dyld</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">stub</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2017/04/10/mach-o动态链接/mach-o动态链接/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -817,6 +726,99 @@ if (! have_lock) {
       
         <p class="article-more-link">
           <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-mach-o动态链接/mach-o动态链接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2017/04/10/mach-o动态链接/mach-o动态链接/">Mach-o动态链接</a>
+    </h1>
+  
+
+        
+        <a href="2017/04/10/mach-o动态链接/mach-o动态链接/" class="archive-article-date">
+  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。<br>所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。<br>macOS中是内核执行<code>LC_DYLINKER</code>加载命令时启动的，通常为<code>/usr/lib/dyld</code>接管刚创建进程的控制权。<br>本文就来分析其符号的动态链接过程。</p>
+<h2 id="0x01-符号的加载过程"><a href="#0x01-符号的加载过程" class="headerlink" title="0x01 符号的加载过程"></a>0x01 符号的加载过程</h2><p>以下面这个简单的C语言程序为例。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"first printf"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"second printf"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对应的汇编代码</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-&gt;  <span class="number">0x100000f40</span> &lt;+<span class="number">0</span>&gt;:  pushq  %rbp</div><div class="line">    <span class="number">0x100000f41</span> &lt;+<span class="number">1</span>&gt;:  movq   %rsp, %rbp</div><div class="line">    <span class="number">0x100000f44</span> &lt;+<span class="number">4</span>&gt;:  subq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f48</span> &lt;+<span class="number">8</span>&gt;:  leaq   <span class="number">0x4b</span>(%rip), %rax          ; <span class="string">"first printf"</span></div><div class="line">    <span class="number">0x100000f4f</span> &lt;+<span class="number">15</span>&gt;: movl   %edi, -<span class="number">0x4</span>(%rbp)</div><div class="line">    <span class="number">0x100000f52</span> &lt;+<span class="number">18</span>&gt;: movq   %rsi, -<span class="number">0x10</span>(%rbp)</div><div class="line">    <span class="number">0x100000f56</span> &lt;+<span class="number">22</span>&gt;: movq   %rax, %rdi</div><div class="line">    <span class="number">0x100000f59</span> &lt;+<span class="number">25</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f5b</span> &lt;+<span class="number">27</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f60</span> &lt;+<span class="number">32</span>&gt;: leaq   <span class="number">0x40</span>(%rip), %rdi          ; <span class="string">"second printf"</span></div><div class="line">    <span class="number">0x100000f67</span> &lt;+<span class="number">39</span>&gt;: movl   %eax, -<span class="number">0x14</span>(%rbp)</div><div class="line">    <span class="number">0x100000f6a</span> &lt;+<span class="number">42</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f6c</span> &lt;+<span class="number">44</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f71</span> &lt;+<span class="number">49</span>&gt;: movl   %eax, -<span class="number">0x18</span>(%rbp)</div><div class="line">    <span class="number">0x100000f74</span> &lt;+<span class="number">52</span>&gt;: addq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f78</span> &lt;+<span class="number">56</span>&gt;: popq   %rbp</div><div class="line">    <span class="number">0x100000f79</span> &lt;+<span class="number">57</span>&gt;: retq</div></pre></td></tr></table></figure>
+<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true" alt="stub区"></p>
+<ul>
+<li>第一次printf会先进入<code>dyld_stub_binder</code>区去找到<code>printf</code>函数的地址，我们用lldb调试观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
+</ul>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E8%B7%B3%E8%BD%AC%E8%BF%87%E7%A8%8B.png?raw=true" alt="stub跳转过程"><br>会发现正好地址在<code>dyld_stub_binder</code>区</p>
+<p>验证:</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%811.png?raw=true" alt="验证1"></p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%812.png?raw=true" alt="验证1"></p>
+<ul>
+<li>第二次<code>printf</code>我们在观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
+</ul>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/%E7%AC%AC%E4%BA%8C%E6%AC%A1printf%E9%AA%8C%E8%AF%81.png?raw=true" alt="第二次"></p>
+<p>我们会发现当第二次再次调用<code>printf</code>函数时，还是会先跳转到stub区，但此时<code>la_symbol_ptr</code>中的值却变为了<code>printf</code>的真实地址，而不是<code>dyld_stub_binder</code>。这样就完成了一次延时绑定，后面就直接调用。</p>
+<h2 id="0x02-stub桩机制总结"><a href="#0x02-stub桩机制总结" class="headerlink" title="0x02 stub桩机制总结"></a>0x02 stub桩机制总结</h2><p>综上分析，我们可以发现所有的外部函数引用都会在<code>DATA</code>段<code>la_symbol_ptr</code>区中产生一个占位符，其初始值为<code>dyld_stub_binder</code>区中对应的编号地址。当第一个调用时，就会进入符号的动态链接过程，一旦找到其地址后，就会将<code>DATA</code>段<code>la_symbol_ptr</code>区中的占位符改为找到后的地址。这样就完成了只需要一个符号绑定。</p>
+<p>stub桩机制的巧妙之处也在此，首先当产生一个外部符号调用时，直接跳到对应的stub桩位置，然后由里面保存的地址来判断是第一次调用还是已经找到符号的地址。就像桩这个名字含义一样，一个占位符的思想。</p>
+<h2 id="0x03-参考"><a href="#0x03-参考" class="headerlink" title="0x03 参考"></a>0x03 参考</h2><p><a href="http://turingh.github.io/2016/03/10/Mach-O%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" target="_blank" rel="external">Mach-O的动态链接相关知识</a></p>
+<p><a href="http://timetobleed.com/dynamic-linking-elf-vs-mach-o/" target="_blank" rel="external">Dynamic Linking: ELF vs. Mach-O</a></p>
+<p><a href="http://timetobleed.com/dynamic-symbol-table-duel-elf-vs-mach-o-round-2/" target="_blank" rel="external">Dynamic symbol table duel: ELF vs Mach-O, round 2</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">mach-o</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">dyld</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">stub</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2017/04/10/mach-o动态链接/mach-o动态链接/">展开全文 >></a>
         </p>
       
 
@@ -1125,15 +1127,15 @@ if (! have_lock) {
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">cve</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">IPC</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
         		</li>
       		
 		</ul>
@@ -1234,15 +1236,15 @@ if (! have_lock) {
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">macOS内核</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mach</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
         		</li>
       		
 		</ul>
@@ -1686,34 +1688,6 @@ if (! have_lock) {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -1727,6 +1701,18 @@ if (! have_lock) {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">free</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1747,6 +1733,14 @@ if (! have_lock) {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">format</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1794,11 +1788,19 @@ if (! have_lock) {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">format</a>
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
             
             <div class="clearfix"></div>
