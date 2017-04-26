@@ -9,26 +9,26 @@
   <title>深入理解Linux堆分配器-DLMalloc | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="0x00 序
- 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有一篇中文文章来介绍相关内容，通过自己的深入学习和实践，得到了本文的分析，若有不对，请指出。
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-0x01 目录1.DLMalloc2.内存Chunk">
+0x01 目录1.DLMalloc2.内存Chu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解Linux堆分配器-DLMalloc">
 <meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/24/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/index.html">
 <meta property="og:site_name" content="4chendy">
 <meta property="og:description" content="0x00 序
- 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有一篇中文文章来介绍相关内容，通过自己的深入学习和实践，得到了本文的分析，若有不对，请指出。
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-0x01 目录1.DLMalloc2.内存Chunk">
+0x01 目录1.DLMalloc2.内存Chu">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true">
-<meta property="og:updated_time" content="2017-04-26T06:16:40.000Z">
+<meta property="og:updated_time" content="2017-04-26T06:28:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Linux堆分配器-DLMalloc">
 <meta name="twitter:description" content="0x00 序
- 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有一篇中文文章来介绍相关内容，通过自己的深入学习和实践，得到了本文的分析，若有不对，请指出。
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-0x01 目录1.DLMalloc2.内存Chunk">
+0x01 目录1.DLMalloc2.内存Chu">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
@@ -192,7 +192,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
-<p> 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有一篇中文文章来介绍相关内容，通过自己的深入学习和实践，得到了本文的分析，若有不对，请指出。</p>
+<p> 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。</p>
 </blockquote>
 <h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><p>1.DLMalloc<br>2.内存Chunk<br>3.Bin<br>4.malloc源码free()函数分析</p>
 <h2 id="0x02-DLMalloc"><a href="#0x02-DLMalloc" class="headerlink" title="0x02 DLMalloc"></a>0x02 DLMalloc</h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。<br>明显内存分配器在操作系统中是相当重要的，主要在需要满足下列的特点：</p>
@@ -207,13 +207,11 @@
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> &#123;</div><div class="line">	INTERNAL_SIZE_T prev_size; <span class="comment">//当前chunk前一个chunk的大小，仅在前一个为freed才使用</span></div><div class="line">	INTERNAL_SIZE_T size;      <span class="comment">//当前chunk的大小</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> * fd;  <span class="comment">//如果当前为释放chunk，指向双向free list中前一个chunk</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> * bk;  <span class="comment">//如果当前为释放chunk，指向双向free list中后一个chunk</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>根据上面的描述我们可以知道，chunk在分配时和释放时数据结构是不同的，看下面的图例:</p>
 <ul>
-<li>allocate chunk</li>
+<li>allocate chunk<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true" alt="0-0"></li>
 </ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true" alt="0-0"></p>
 <ul>
-<li>freed chunk</li>
+<li>freed chunk<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true" alt="0-1"></li>
 </ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true" alt="0-1"></p>
 <p>3.更多细节<br>因为chunk是按照8字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？<br>然后可以想到有一个最小chunk的存在，其大小为16字节()。  </p>
 <p>4.特殊chunk<br>top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</p>
 <p>last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is the result of allocation requests for small chunks that have no exact fit in any of the bins. If the request is larger than the last_remainder chunk but smaller than a block in a bin, then the chunk is split again. The last_remainder chunk is the result of having to split a larger chunk into two, one part of it is handed out from the allocation, and the other because the last_remainder chunk.</p>
@@ -478,14 +476,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
@@ -495,6 +485,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -514,6 +512,14 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
@@ -526,19 +532,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -558,18 +556,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
               </li>
              
@@ -579,6 +565,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
              
               <li class="article-tag-list-item">
