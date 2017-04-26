@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
+  <title>深入理解Linux堆分配器-DLMalloc | 4chendy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0x00 序
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
+
+0x01 目录1.DLMalloc2.内存Chu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Linux堆分配器-DLMalloc">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/index.html">
+<meta property="og:site_name" content="4chendy">
+<meta property="og:description" content="0x00 序
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
+
+0x01 目录1.DLMalloc2.内存Chu">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true">
+<meta property="og:updated_time" content="2017-04-26T07:16:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Linux堆分配器-DLMalloc">
+<meta name="twitter:description" content="0x00 序
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
+
+0x01 目录1.DLMalloc2.内存Chu">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
+  
+    <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" type="text/css" href="/./main.2d7529.css">
+  <style type="text/css">
+  
+    #container.show {
+      background: linear-gradient(200deg,#a0cfe4,#007d65);
+    }
+  </style>
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      
+<div class="overlay" style="background: #4d4d4d"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="/uploads/header.jpg" class="js-avatar">
+		</a>
+		<hgroup>
+		  <h1 class="header-author"><a href="/">4chendy</a></h1>
+		</hgroup>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="../../../../../index.html">Home</a></li>
+	        
+				<li><a href="../../../../../archives">Archives</a></li>
+	        
+				<li><a href="../../../../../fuckshit">f**k-shit</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+    		
+    			
+    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/NULL-ME" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/eee-face/activities" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:939529983@qq.com" title="mail"><i class="icon-mail"></i></a>
+		        
+					<a class="twitter" target="_blank" href="https://twitter.com/4chendy" title="twitter"><i class="icon-twitter"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      
+<nav id="mobile-nav">
+  	<div class="overlay js-overlay" style="background: #4d4d4d"></div>
+	<div class="btnctn js-mobile-btnctn">
+  		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
+	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="/uploads/header.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author js-header-author">4chendy</h1>
+			</hgroup>
+			
+			
+			
+				
+			
+				
+			
+				
+			
+			
+			
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/NULL-ME" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/eee-face/activities" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:939529983@qq.com" title="mail"><i class="icon-mail"></i></a>
+			        
+						<a class="twitter" target="_blank" href="https://twitter.com/4chendy" title="twitter"><i class="icon-twitter"></i></a>
+			        
+				</div>
+			</nav>
+
+			<nav class="header-menu js-header-menu">
+				<ul style="width: 70%">
+				
+				
+					<li style="width: 33.333333333333336%"><a href="../../../../../index.html">Home</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="../../../../../archives">Archives</a></li>
+		        
+					<li style="width: 33.333333333333336%"><a href="../../../../../fuckshit">f**k-shit</a></li>
+		        
+				</ul>
+			</nav>
+		</header>				
+	</div>
+	<div class="mobile-mask" style="display:none" q-show="isShow"></div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入理解Linux堆分配器-DLMalloc
+    </h1>
+  
+
+        
+        <a href="" class="archive-article-date">
+  	<time datetime="2017-04-23T04:16:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
+<p> 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。</p>
+</blockquote>
+<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><p>1.DLMalloc<br>2.内存Chunk<br>3.Bin<br>4.malloc源码free()函数分析</p>
+<h2 id="0x02-DLMalloc"><a href="#0x02-DLMalloc" class="headerlink" title="0x02 DLMalloc"></a>0x02 DLMalloc</h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。<br>明显内存分配器在操作系统中是相当重要的，主要在需要满足下列的特点：</p>
+<ul>
+<li>稳定性(stability)</li>
+<li>性能(performance)</li>
+<li>避免碎片化(avoidance of fragmentation)</li>
+<li>低空间开销(low space overhead）<br>根据上面的内存特点，将有助于后面对chunk以及Bin等的理解。</li>
+</ul>
+<h2 id="0x03-内存chunk"><a href="#0x03-内存chunk" class="headerlink" title="0x03 内存chunk"></a>0x03 内存chunk</h2><p>1.什么是chunk？<br>chunk是堆中一些连续的内存块，可以用作分配，释放，拆分，合并。不存在两个连续的释放chunk，这是在于相邻的chunk会合并。</p>
+<p>2.数据结构</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> &#123;</div><div class="line">	INTERNAL_SIZE_T prev_size; <span class="comment">//当前chunk前一个chunk的大小，仅在前一个为freed才使用</span></div><div class="line">	INTERNAL_SIZE_T size;      <span class="comment">//当前chunk的大小</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> * fd;  <span class="comment">//如果当前为释放chunk，指向双向free list中前一个chunk</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> * bk;  <span class="comment">//如果当前为释放chunk，指向双向free list中后一个chunk</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>根据上面的描述我们可以知道，chunk在分配时和释放时数据结构是不同的，看下面的图例:</p>
+<ul>
+<li>allocate chunk<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true" alt="0-0"></li>
+</ul>
+<ul>
+<li>freed chunk<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true" alt="0-1"></li>
+</ul>
+<p>3.更多细节<br>因为chunk是按照8字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？<br>然后可以想到有一个最小chunk的存在，其大小为16字节()。  </p>
+<p>4.特殊chunk<br>top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</p>
+<p>last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is the result of allocation requests for small chunks that have no exact fit in any of the bins. If the request is larger than the last_remainder chunk but smaller than a block in a bin, then the chunk is split again. The last_remainder chunk is the result of having to split a larger chunk into two, one part of it is handed out from the allocation, and the other because the last_remainder chunk.</p>
+<h2 id="0x04-Bin"><a href="#0x04-Bin" class="headerlink" title="0x04 Bin"></a>0x04 Bin</h2><p>chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。<br>这里我主要介绍fsatbin和normalbin</p>
+<p>(1)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。<br>(2)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</p>
+<h2 id="0x05-free-源代码分析及相关细节"><a href="#0x05-free-源代码分析及相关细节" class="headerlink" title="0x05 free()源代码分析及相关细节"></a>0x05 free()源代码分析及相关细节</h2><p><code>free(void *mem)--&gt;__libc_free(void *mem)</code></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">void</div><div class="line">__libc_free (void *mem)</div><div class="line">&#123;</div><div class="line">  mstate ar_ptr<span class="comment">;</span></div><div class="line">  mchunkptr p<span class="comment">;                          /* chunk corresponding to mem */</span></div><div class="line"></div><div class="line">  void (*hook) (void *, const void *)</div><div class="line">    = atomic_forced_read (__free_hook)<span class="comment">;</span></div><div class="line">  if (__builtin_expect (hook != NULL, <span class="number">0</span>))</div><div class="line">    &#123;</div><div class="line">      (*hook)(mem, RETURN_ADDRESS (<span class="number">0</span>))<span class="comment">;</span></div><div class="line">      return<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">  if (mem == <span class="number">0</span>)                              <span class="comment">/* free(0) has no effect */</span></div><div class="line">    return<span class="comment">;</span></div><div class="line"></div><div class="line">  p = mem2chunk (mem)<span class="comment">;</span></div><div class="line"></div><div class="line">  if (chunk_is_mmapped (p))                       <span class="comment">/* release mmapped memory. */</span></div><div class="line">    &#123;</div><div class="line">      <span class="comment">/* See if the dynamic brk/mmap threshold needs adjusting.</span></div><div class="line">         Dumped fake mmapped chunks do not affect the threshold.  */</div><div class="line">      if (!mp_.no_dyn_threshold</div><div class="line">          &amp;&amp; <span class="keyword">chunksize_nomask </span>(p) &gt; mp_.mmap_threshold</div><div class="line">          &amp;&amp; <span class="keyword">chunksize_nomask </span>(p) &lt;= DEFAULT_MMAP_THRESHOLD_MAX</div><div class="line">          &amp;&amp; !DUMPED_MAIN_ARENA_CHUNK (p))</div><div class="line">        &#123;</div><div class="line">          mp_.mmap_threshold = <span class="keyword">chunksize </span>(p)<span class="comment">;</span></div><div class="line">          mp_.trim_threshold = <span class="number">2</span> * mp_.mmap_threshold<span class="comment">;</span></div><div class="line">          LIBC_PROBE (memory_mallopt_free_dyn_thresholds, <span class="number">2</span>,</div><div class="line">                      mp_.mmap_threshold, mp_.trim_threshold)<span class="comment">;</span></div><div class="line">        &#125;</div><div class="line">      munmap_chunk (p)<span class="comment">;</span></div><div class="line">      return<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">  ar_ptr = arena_for_chunk (p)<span class="comment">;</span></div><div class="line">  _int_free (ar_ptr, p, <span class="number">0</span>)<span class="comment">; //跳转到_int_free</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们先不关注其他的，只需要知道会调用_int_free就就可以了</p>
+<p><code>__libc_free(void *mem)--&gt;_int_free (mstate av, mchunkptr p, int have_lock)</code></p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div></pre></td><td class="code"><pre><div class="line">static void</div><div class="line"><span class="variable">_int_free</span> (mstate av, mchunkptr p, int have_lock)</div><div class="line">&#123;</div><div class="line">  INTERNAL_SIZE_T <span class="built_in">size</span>;        <span class="comment">/* 当前chunk的大小 */</span></div><div class="line">  mfastbinptr *fb;             <span class="comment">/* 相关的fastbin */</span></div><div class="line">  mchunkptr nextchunk;         <span class="comment">/* 下一个相邻的chunk */</span></div><div class="line">  INTERNAL_SIZE_T nextsize;    <span class="comment">/* 下一个chunk的大小 */</span></div><div class="line">  int nextinuse;               <span class="comment">/* 下一个chunk正在使用时为真 */</span></div><div class="line">  INTERNAL_SIZE_T prevsize;    <span class="comment">/* 前一个chunk的大小 */</span></div><div class="line">  mchunkptr bck;               <span class="comment">/* 指向free链表中向后一个chunk */</span></div><div class="line">  mchunkptr fwd;               <span class="comment">/* 指向free链表中向前一个chunk */</span></div><div class="line"></div><div class="line">  const char *errstr = NULL;</div><div class="line">  int <span class="built_in">locked</span> = <span class="number">0</span>;</div><div class="line"></div><div class="line">  <span class="built_in">size</span> = chunksize (p);</div><div class="line"></div><div class="line">  <span class="comment">/* Little security check which won't hurt performance: the</span></div><div class="line">     allocator never wrapps around at the end of the address space.</div><div class="line">     Therefore we can exclude some size values which might appear</div><div class="line">     here by accident or by "design" from some intruder.  */</div><div class="line">  <span class="comment">//一些安全检查</span></div><div class="line">  <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> ((uintptr_t) p &gt; (uintptr_t) -<span class="built_in">size</span>, <span class="number">0</span>)</div><div class="line">      || <span class="variable">__builtin_expect</span> (misaligned_chunk (p), <span class="number">0</span>))</div><div class="line">    &#123;</div><div class="line">      errstr = <span class="string">"free(): invalid pointer"</span>;</div><div class="line">    errout:</div><div class="line">      <span class="keyword">if</span> (!have_lock &amp;&amp; <span class="built_in">locked</span>)</div><div class="line">        <span class="variable">__libc_lock_unlock</span> (av-&gt;mutex);</div><div class="line">      malloc_printerr (check_action, errstr, chunk2mem (p), av);</div><div class="line">      return;</div><div class="line">    &#125;</div><div class="line">  <span class="comment">/* We know that each chunk is at least MINSIZE bytes in size or a multiple of MALLOC_ALIGNMENT.  */</span></div><div class="line">   <span class="comment">//检查是否满足大于等于最小大小</span></div><div class="line">  <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (<span class="built_in">size</span> &lt; MINSIZE || !aligned_OK (<span class="built_in">size</span>)))</div><div class="line">    &#123;</div><div class="line">      errstr = <span class="string">"free(): invalid size"</span>;</div><div class="line">      <span class="built_in">goto</span> errout;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  check_inuse_chunk(av, p); <span class="comment">//检查当前chunk是否在使用</span></div><div class="line"></div><div class="line">  <span class="comment">/*</span></div><div class="line">    如果满足，则将该chunk放入fastbin以便malloc时能够快速找到和使用</div><div class="line">  */</div><div class="line">  <span class="keyword">if</span> ((unsigned long)(<span class="built_in">size</span>) &lt;= (unsigned long)(get_max_fast ())</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> TRIM_FASTBINS</span></div><div class="line">      <span class="comment">/*</span></div><div class="line">        If TRIM_FASTBINS set, don't place chunks</div><div class="line">        bordering top into fastbins</div><div class="line">      */</div><div class="line">      &amp;&amp; (chunk_at_offset(p, <span class="built_in">size</span>) != av-&gt;top)</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">      ) &#123;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (chunksize_nomask (chunk_at_offset (p, <span class="built_in">size</span>))</div><div class="line">                          &lt;= <span class="number">2</span> * SIZE_SZ, <span class="number">0</span>)</div><div class="line">        || <span class="variable">__builtin_expect</span> (chunksize (chunk_at_offset (p, <span class="built_in">size</span>))</div><div class="line">                             &gt;= av-&gt;system_mem, <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        <span class="comment">/* We might not have a lock at this point and concurrent modifications</span></div><div class="line">           of system_mem might have let to a false positive.  Redo the test</div><div class="line">           after getting the lock.  */</div><div class="line">        <span class="keyword">if</span> (have_lock</div><div class="line">            || (&#123; <span class="built_in">assert</span> (<span class="built_in">locked</span> == <span class="number">0</span>);</div><div class="line">                  <span class="variable">__libc_lock_lock</span> (av-&gt;mutex);</div><div class="line">                  <span class="built_in">locked</span> = <span class="number">1</span>;</div><div class="line">                  chunksize_nomask (chunk_at_offset (p, <span class="built_in">size</span>)) &lt;= <span class="number">2</span> * SIZE_SZ</div><div class="line">                    || chunksize (chunk_at_offset (p, <span class="built_in">size</span>)) &gt;= av-&gt;system_mem;</div><div class="line">              &#125;))</div><div class="line">          &#123;</div><div class="line">            errstr = <span class="string">"free(): invalid next size (fast)"</span>;</div><div class="line">            <span class="built_in">goto</span> errout;</div><div class="line">          &#125;</div><div class="line">        <span class="keyword">if</span> (! have_lock)</div><div class="line">          &#123;</div><div class="line">            <span class="variable">__libc_lock_unlock</span> (av-&gt;mutex);</div><div class="line">            <span class="built_in">locked</span> = <span class="number">0</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">    free_perturb (chunk2mem(p), <span class="built_in">size</span> - <span class="number">2</span> * SIZE_SZ);</div><div class="line"></div><div class="line">    set_fastchunks(av);</div><div class="line">    unsigned int idx = fastbin_index(<span class="built_in">size</span>);</div><div class="line">    fb = &amp;fastbin (av, idx);</div><div class="line"></div><div class="line">    <span class="comment">/* Atomically link P to its fastbin: P-&gt;FD = *FB; *FB = P;  */</span></div><div class="line">    mchunkptr old = *fb, old2;</div><div class="line">    unsigned int old_idx = ~<span class="number">0</span>u;</div><div class="line">    <span class="keyword">do</span></div><div class="line">      &#123;</div><div class="line">        <span class="comment">/* Check that the top of the bin is not the record we are going to add</span></div><div class="line">           (i.e., double free).  */</div><div class="line">        <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (old == p, <span class="number">0</span>))</div><div class="line">          &#123;</div><div class="line">            errstr = <span class="string">"double free or corruption (fasttop)"</span>;</div><div class="line">            <span class="built_in">goto</span> errout;</div><div class="line">          &#125;</div><div class="line">        <span class="comment">/* Check that size of fastbin chunk at the top is the same as</span></div><div class="line">           size of the chunk that we are adding.  We can dereference OLD</div><div class="line">           only if we have the lock, otherwise it might have already been</div><div class="line">           deallocated.  See use of OLD_IDX below for the actual check.  */</div><div class="line">        <span class="keyword">if</span> (have_lock &amp;&amp; old != NULL)</div><div class="line">          old_idx = fastbin_index(chunksize(old));</div><div class="line">        p-&gt;fd = old2 = old;</div><div class="line">      &#125;</div><div class="line">    <span class="keyword">while</span> ((old = catomic_compare_and_exchange_val_rel (fb, p, old2)) != old2);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (have_lock &amp;&amp; old != NULL &amp;&amp; <span class="variable">__builtin_expect</span> (old_idx != idx, <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"invalid fastbin entry (free)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">/*</span></div><div class="line">    Consolidate other non-mmapped chunks as they arrive.</div><div class="line">  */</div><div class="line">  <span class="comment">//检查是否是通过mmap()分配的内存</span></div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (!chunk_is_mmapped(p)) &#123;</div><div class="line">    <span class="keyword">if</span> (! have_lock) &#123;</div><div class="line">      <span class="variable">__libc_lock_lock</span> (av-&gt;mutex);</div><div class="line">      <span class="built_in">locked</span> = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    nextchunk = chunk_at_offset(p, <span class="built_in">size</span>);<span class="comment">//返回下一个chunk的地址</span></div><div class="line"></div><div class="line">    <span class="comment">/* Lightweight tests: check whether the block is already the</span></div><div class="line">       top block.  */</div><div class="line">    <span class="comment">//检查下一个是否为top-chunk</span></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (p == av-&gt;top))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"double free or corruption (top)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line">    <span class="comment">/* Or whether the next chunk is beyond the boundaries of the arena.  */</span></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (contiguous (av)</div><div class="line">                          &amp;&amp; (char *) nextchunk</div><div class="line">                          &gt;= ((char *) av-&gt;top + chunksize(av-&gt;top)), <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"double free or corruption (out)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line">    <span class="comment">/* Or whether the block is actually not marked used.  */</span></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (!prev_inuse(nextchunk)))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"double free or corruption (!prev)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">    nextsize = chunksize(nextchunk);</div><div class="line">    <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (chunksize_nomask (nextchunk) &lt;= <span class="number">2</span> * SIZE_SZ, <span class="number">0</span>)</div><div class="line">        || <span class="variable">__builtin_expect</span> (nextsize &gt;= av-&gt;system_mem, <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"free(): invalid next size (normal)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">    free_perturb (chunk2mem(p), <span class="built_in">size</span> - <span class="number">2</span> * SIZE_SZ);</div><div class="line"></div><div class="line">    <span class="comment">/* 与后面chunk一个合并 */</span></div><div class="line">    <span class="keyword">if</span> (!prev_inuse(p)) &#123;</div><div class="line">      prevsize = prev_size (p);</div><div class="line">      <span class="built_in">size</span> += prevsize;</div><div class="line">      p = chunk_at_offset(p, -((long) prevsize));</div><div class="line">      unlink(av, p, bck, fwd);<span class="comment">//将后一个chunk从双向链表上取下来</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (nextchunk != av-&gt;top) &#123;</div><div class="line">      <span class="comment">/* get and clear inuse bit */</span></div><div class="line">      nextinuse = inuse_bit_at_offset(nextchunk, nextsize);</div><div class="line"></div><div class="line">      <span class="comment">/* 与前面chunk一个合并*/</span></div><div class="line">      <span class="keyword">if</span> (!nextinuse) &#123;</div><div class="line">        unlink(av, nextchunk, bck, fwd);<span class="comment">//将前一个chunk从双向链表上取下来</span></div><div class="line">        <span class="built_in">size</span> += nextsize;</div><div class="line">      &#125; <span class="keyword">else</span></div><div class="line">        clear_inuse_bit_at_offset(nextchunk, <span class="number">0</span>);</div><div class="line"></div><div class="line">      <span class="comment">/*</span></div><div class="line">        Place the chunk in unsorted chunk list. Chunks are</div><div class="line">        not placed into regular bins until after they have</div><div class="line">        been given one chance to be used in malloc.</div><div class="line">      */</div><div class="line"></div><div class="line">      bck = unsorted_chunks(av);</div><div class="line">      fwd = bck-&gt;fd;</div><div class="line">      <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (fwd-&gt;bk != bck))</div><div class="line">        &#123;</div><div class="line">          errstr = <span class="string">"free(): corrupted unsorted chunks"</span>;</div><div class="line">          <span class="built_in">goto</span> errout;</div><div class="line">        &#125;</div><div class="line">      p-&gt;fd = fwd;</div><div class="line">      p-&gt;bk = bck;</div><div class="line">      <span class="keyword">if</span> (!in_smallbin_range(<span class="built_in">size</span>))</div><div class="line">        &#123;</div><div class="line">          p-&gt;fd_nextsize = NULL;</div><div class="line">          p-&gt;bk_nextsize = NULL;</div><div class="line">        &#125;</div><div class="line">      bck-&gt;fd = p;</div><div class="line">      fwd-&gt;bk = p;</div><div class="line"></div><div class="line">      set_head(p, <span class="built_in">size</span> | PREV_INUSE);</div><div class="line">      set_foot(p, <span class="built_in">size</span>);</div><div class="line"></div><div class="line">      check_free_chunk(av, p);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/*</span></div><div class="line">      如果当前chunk正好与topchunk相邻，则合并到topchunk</div><div class="line">    */</div><div class="line"></div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">size</span> += nextsize;</div><div class="line">      set_head(p, <span class="built_in">size</span> | PREV_INUSE);</div><div class="line">      av-&gt;top = p;</div><div class="line">      check_chunk(av, p);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/*</span></div><div class="line">      If freeing a large space, consolidate possibly-surrounding</div><div class="line">      chunks. Then, if the total unused topmost memory exceeds trim</div><div class="line">      threshold, ask malloc_trim to reduce top.</div><div class="line"></div><div class="line">      Unless max_fast is 0, we don't know if there are fastbins</div><div class="line">      bordering top, so we cannot tell for sure whether threshold</div><div class="line">      has been reached unless fastbins are consolidated.  But we</div><div class="line">      don't want to consolidate on each free.  As a compromise,</div><div class="line">      consolidation is performed if FASTBIN_CONSOLIDATION_THRESHOLD</div><div class="line">      is reached.</div><div class="line">    */</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((unsigned long)(<span class="built_in">size</span>) &gt;= FASTBIN_CONSOLIDATION_THRESHOLD) &#123;</div><div class="line">      <span class="keyword">if</span> (have_fastchunks(av))</div><div class="line">        malloc_consolidate(av);</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (av == &amp;main_arena) &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MORECORE_CANNOT_TRIM</span></div><div class="line">        <span class="keyword">if</span> ((unsigned long)(chunksize(av-&gt;top)) &gt;=</div><div class="line">            (unsigned long)(mp_.trim_threshold))</div><div class="line">          systrim(mp_.top_pad, av);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">/* Always try heap_trim(), even if the top chunk is not</span></div><div class="line">           large, because the corresponding heap might go away.  */</div><div class="line">        heap_info *heap = heap_for_ptr(top(av));</div><div class="line"></div><div class="line">        <span class="built_in">assert</span>(heap-&gt;ar_ptr == av);</div><div class="line">        heap_trim(heap, mp_.top_pad);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (! have_lock) &#123;</div><div class="line">      <span class="built_in">assert</span> (<span class="built_in">locked</span>);</div><div class="line">      <span class="variable">__libc_lock_unlock</span> (av-&gt;mutex);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">/*</span></div><div class="line">    If the chunk was allocated via mmap, release via munmap().</div><div class="line">  */</div><div class="line"></div><div class="line">  <span class="keyword">else</span> &#123;</div><div class="line">    munmap_chunk (p);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里看看<code>unlink()</code>宏定义</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">#define</span> unlink( P, <span class="keyword">BK, </span>FD ) &#123;            </div><div class="line">    <span class="keyword">BK </span>= P-&gt;<span class="keyword">bk; </span>                         </div><div class="line">    FD = P-&gt;fd<span class="comment">;                          </span></div><div class="line">    FD-&gt;<span class="keyword">bk </span>= <span class="keyword">BK; </span> //可能会造成任意写                       </div><div class="line">    <span class="keyword">BK-&gt;fd </span>= FD<span class="comment">;                         </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在我们重点放在<code>unlink()</code>，当两个相邻chunk需要合并的时候，势必需要将临近的chunk从原来的双链表上取下来，然后与当前chunk合并成一个更大的块。等等！怎么取下来的呢？如果这里存在一个恶意的chunk即fd和bk都是一些恶意地址指针，则会出现任意地址写的一个漏洞。在这里我们就先不去讨论进一步的利用过程，只需知道存在一个这样的漏洞即可，后面会根据这个分析去漏洞利用。</p>
+<p><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#__libc_free" target="_blank" rel="external">glibc/malloc.c源码</a></p>
+<h2 id="0x06-参考"><a href="#0x06-参考" class="headerlink" title="0x06 参考"></a>0x06 参考</h2><ol>
+<li><a href="http://phrack.org/issues/57/8.html#article" target="_blank" rel="external">Vudo malloc tricks</a></li>
+<li><a href="http://gee.cs.oswego.edu/dl/html/malloc.html" target="_blank" rel="external">A Memory Allocator</a></li>
+<li><a href="http://phrack.org/issues/57/9.html#article" target="_blank" rel="external">Once upon a free()</a></li>
+</ol>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>感谢你的支持<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/uploads/weixin.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">heap</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">malloc</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">free</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="../../../21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Protostar-堆溢出学习-UAF(use after free)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc" data-title="深入理解Linux堆分配器-DLMalloc" data-url="https://github.com/NULL-ME/NULL-ME.github.io.git"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+  
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 4chendy
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true,
+		showTags: true
+	}
+</script>
+
+<script>!function(t){function n(r){if(e[r])return e[r].exports;var o=e[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,n),o.loaded=!0,o.exports}var e={};return n.m=t,n.c=e,n.p="./",n(0)}([function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}function o(t,n){var e=/\/|index.html/g;return t.replace(e,"")===n.replace(e,"")}function i(){for(var t=document.querySelectorAll(".js-header-menu li a"),n=window.location.pathname,e=0,r=t.length;e<r;e++){var i=t[e];o(n,i.getAttribute("href"))&&(0,d.default)(i,"active")}}function u(t){for(var n=t.offsetLeft,e=t.offsetParent;null!==e;)n+=e.offsetLeft,e=e.offsetParent;return n}function f(t){for(var n=t.offsetTop,e=t.offsetParent;null!==e;)n+=e.offsetTop,e=e.offsetParent;return n}function c(t,n,e,r,o){var i=u(t),c=f(t)-n;if(c-e<=o){var a=t.$newDom;a||(a=t.cloneNode(!0),(0,h.default)(t,a),t.$newDom=a,a.style.position="fixed",a.style.top=(e||c)+"px",a.style.left=i+"px",a.style.zIndex=r||2,a.style.width="100%",a.style.color="#fff"),a.style.visibility="visible",t.style.visibility="hidden"}else{t.style.visibility="visible";var s=t.$newDom;s&&(s.style.visibility="hidden")}}function a(){var t=document.querySelector(".js-overlay"),n=document.querySelector(".js-header-menu");c(t,document.body.scrollTop,-63,2,0),c(n,document.body.scrollTop,1,3,0)}function s(){document.querySelector("#container").addEventListener("scroll",function(t){a()}),window.addEventListener("scroll",function(t){a()}),a()}function l(){x.default.versions.mobile&&window.screen.width<800&&(i(),s())}var p=e(71),d=r(p),v=e(72),y=(r(v),e(84)),h=r(y),b=e(69),x=r(b),m=e(75),g=r(m),w=e(70);l(),(0,w.addLoadEvent)(function(){g.default.init()}),t.exports={}},function(t,n){var e=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=e)},function(t,n){var e={}.hasOwnProperty;t.exports=function(t,n){return e.call(t,n)}},function(t,n,e){var r=e(49),o=e(15);t.exports=function(t){return r(o(t))}},function(t,n,e){t.exports=!e(8)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n,e){var r=e(6),o=e(12);t.exports=e(4)?function(t,n,e){return r.f(t,n,o(1,e))}:function(t,n,e){return t[n]=e,t}},function(t,n,e){var r=e(10),o=e(30),i=e(24),u=Object.defineProperty;n.f=e(4)?Object.defineProperty:function(t,n,e){if(r(t),n=i(n,!0),r(e),o)try{return u(t,n,e)}catch(t){}if("get"in e||"set"in e)throw TypeError("Accessors not supported!");return"value"in e&&(t[n]=e.value),t}},function(t,n,e){var r=e(22)("wks"),o=e(13),i=e(1).Symbol,u="function"==typeof i,f=t.exports=function(t){return r[t]||(r[t]=u&&i[t]||(u?i:o)("Symbol."+t))};f.store=r},function(t,n){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,n,e){var r=e(35),o=e(16);t.exports=Object.keys||function(t){return r(t,o)}},function(t,n,e){var r=e(11);t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n){var e=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++e+r).toString(36))}},function(t,n){var e=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=e)},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,n){t.exports={}},function(t,n){t.exports=!0},function(t,n){n.f={}.propertyIsEnumerable},function(t,n,e){var r=e(6).f,o=e(2),i=e(7)("toStringTag");t.exports=function(t,n,e){t&&!o(t=e?t:t.prototype,i)&&r(t,i,{configurable:!0,value:n})}},function(t,n,e){var r=e(22)("keys"),o=e(13);t.exports=function(t){return r[t]||(r[t]=o(t))}},function(t,n,e){var r=e(1),o="__core-js_shared__",i=r[o]||(r[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,n){var e=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:e)(t)}},function(t,n,e){var r=e(11);t.exports=function(t,n){if(!r(t))return t;var e,o;if(n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;if("function"==typeof(e=t.valueOf)&&!r(o=e.call(t)))return o;if(!n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,n,e){var r=e(1),o=e(14),i=e(18),u=e(26),f=e(6).f;t.exports=function(t){var n=o.Symbol||(o.Symbol=i?{}:r.Symbol||{});"_"==t.charAt(0)||t in n||f(n,t,{value:u.f(t)})}},function(t,n,e){n.f=e(7)},function(t,n,e){var r=e(1),o=e(14),i=e(46),u=e(5),f="prototype",c=function(t,n,e){var a,s,l,p=t&c.F,d=t&c.G,v=t&c.S,y=t&c.P,h=t&c.B,b=t&c.W,x=d?o:o[n]||(o[n]={}),m=x[f],g=d?r:v?r[n]:(r[n]||{})[f];d&&(e=n);for(a in e)s=!p&&g&&void 0!==g[a],s&&a in x||(l=s?g[a]:e[a],x[a]=d&&"function"!=typeof g[a]?e[a]:h&&s?i(l,r):b&&g[a]==l?function(t){var n=function(n,e,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(n);case 2:return new t(n,e)}return new t(n,e,r)}return t.apply(this,arguments)};return n[f]=t[f],n}(l):y&&"function"==typeof l?i(Function.call,l):l,y&&((x.virtual||(x.virtual={}))[a]=l,t&c.R&&m&&!m[a]&&u(m,a,l)))};c.F=1,c.G=2,c.S=4,c.P=8,c.B=16,c.W=32,c.U=64,c.R=128,t.exports=c},function(t,n){var e={}.toString;t.exports=function(t){return e.call(t).slice(8,-1)}},function(t,n,e){var r=e(11),o=e(1).document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,n,e){t.exports=!e(4)&&!e(8)(function(){return 7!=Object.defineProperty(e(29)("div"),"a",{get:function(){return 7}}).a})},function(t,n,e){"use strict";var r=e(18),o=e(27),i=e(36),u=e(5),f=e(2),c=e(17),a=e(51),s=e(20),l=e(58),p=e(7)("iterator"),d=!([].keys&&"next"in[].keys()),v="@@iterator",y="keys",h="values",b=function(){return this};t.exports=function(t,n,e,x,m,g,w){a(e,n,x);var O,S,_,j=function(t){if(!d&&t in A)return A[t];switch(t){case y:return function(){return new e(this,t)};case h:return function(){return new e(this,t)}}return function(){return new e(this,t)}},P=n+" Iterator",E=m==h,M=!1,A=t.prototype,T=A[p]||A[v]||m&&A[m],L=T||j(m),N=m?E?j("entries"):L:void 0,C="Array"==n?A.entries||T:T;if(C&&(_=l(C.call(new t)),_!==Object.prototype&&(s(_,P,!0),r||f(_,p)||u(_,p,b))),E&&T&&T.name!==h&&(M=!0,L=function(){return T.call(this)}),r&&!w||!d&&!M&&A[p]||u(A,p,L),c[n]=L,c[P]=b,m)if(O={values:E?L:j(h),keys:g?L:j(y),entries:N},w)for(S in O)S in A||i(A,S,O[S]);else o(o.P+o.F*(d||M),n,O);return O}},function(t,n,e){var r=e(10),o=e(55),i=e(16),u=e(21)("IE_PROTO"),f=function(){},c="prototype",a=function(){var t,n=e(29)("iframe"),r=i.length,o="<",u=">";for(n.style.display="none",e(48).appendChild(n),n.src="javascript:",t=n.contentWindow.document,t.open(),t.write(o+"script"+u+"document.F=Object"+o+"/script"+u),t.close(),a=t.F;r--;)delete a[c][i[r]];return a()};t.exports=Object.create||function(t,n){var e;return null!==t?(f[c]=r(t),e=new f,f[c]=null,e[u]=t):e=a(),void 0===n?e:o(e,n)}},function(t,n,e){var r=e(35),o=e(16).concat("length","prototype");n.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},function(t,n){n.f=Object.getOwnPropertySymbols},function(t,n,e){var r=e(2),o=e(3),i=e(45)(!1),u=e(21)("IE_PROTO");t.exports=function(t,n){var e,f=o(t),c=0,a=[];for(e in f)e!=u&&r(f,e)&&a.push(e);for(;n.length>c;)r(f,e=n[c++])&&(~i(a,e)||a.push(e));return a}},function(t,n,e){t.exports=e(5)},function(t,n,e){var r=e(15);t.exports=function(t){return Object(r(t))}},function(t,n,e){t.exports={default:e(41),__esModule:!0}},function(t,n,e){t.exports={default:e(42),__esModule:!0}},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}n.__esModule=!0;var o=e(39),i=r(o),u=e(38),f=r(u),c="function"==typeof f.default&&"symbol"==typeof i.default?function(t){return typeof t}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":typeof t};n.default="function"==typeof f.default&&"symbol"===c(i.default)?function(t){return"undefined"==typeof t?"undefined":c(t)}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":"undefined"==typeof t?"undefined":c(t)}},function(t,n,e){e(65),e(63),e(66),e(67),t.exports=e(14).Symbol},function(t,n,e){e(64),e(68),t.exports=e(26).f("iterator")},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n){t.exports=function(){}},function(t,n,e){var r=e(3),o=e(61),i=e(60);t.exports=function(t){return function(n,e,u){var f,c=r(n),a=o(c.length),s=i(u,a);if(t&&e!=e){for(;a>s;)if(f=c[s++],f!=f)return!0}else for(;a>s;s++)if((t||s in c)&&c[s]===e)return t||s||0;return!t&&-1}}},function(t,n,e){var r=e(43);t.exports=function(t,n,e){if(r(t),void 0===n)return t;switch(e){case 1:return function(e){return t.call(n,e)};case 2:return function(e,r){return t.call(n,e,r)};case 3:return function(e,r,o){return t.call(n,e,r,o)}}return function(){return t.apply(n,arguments)}}},function(t,n,e){var r=e(9),o=e(34),i=e(19);t.exports=function(t){var n=r(t),e=o.f;if(e)for(var u,f=e(t),c=i.f,a=0;f.length>a;)c.call(t,u=f[a++])&&n.push(u);return n}},function(t,n,e){t.exports=e(1).document&&document.documentElement},function(t,n,e){var r=e(28);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},function(t,n,e){var r=e(28);t.exports=Array.isArray||function(t){return"Array"==r(t)}},function(t,n,e){"use strict";var r=e(32),o=e(12),i=e(20),u={};e(5)(u,e(7)("iterator"),function(){return this}),t.exports=function(t,n,e){t.prototype=r(u,{next:o(1,e)}),i(t,n+" Iterator")}},function(t,n){t.exports=function(t,n){return{value:n,done:!!t}}},function(t,n,e){var r=e(9),o=e(3);t.exports=function(t,n){for(var e,i=o(t),u=r(i),f=u.length,c=0;f>c;)if(i[e=u[c++]]===n)return e}},function(t,n,e){var r=e(13)("meta"),o=e(11),i=e(2),u=e(6).f,f=0,c=Object.isExtensible||function(){return!0},a=!e(8)(function(){return c(Object.preventExtensions({}))}),s=function(t){u(t,r,{value:{i:"O"+ ++f,w:{}}})},l=function(t,n){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,r)){if(!c(t))return"F";if(!n)return"E";s(t)}return t[r].i},p=function(t,n){if(!i(t,r)){if(!c(t))return!0;if(!n)return!1;s(t)}return t[r].w},d=function(t){return a&&v.NEED&&c(t)&&!i(t,r)&&s(t),t},v=t.exports={KEY:r,NEED:!1,fastKey:l,getWeak:p,onFreeze:d}},function(t,n,e){var r=e(6),o=e(10),i=e(9);t.exports=e(4)?Object.defineProperties:function(t,n){o(t);for(var e,u=i(n),f=u.length,c=0;f>c;)r.f(t,e=u[c++],n[e]);return t}},function(t,n,e){var r=e(19),o=e(12),i=e(3),u=e(24),f=e(2),c=e(30),a=Object.getOwnPropertyDescriptor;n.f=e(4)?a:function(t,n){if(t=i(t),n=u(n,!0),c)try{return a(t,n)}catch(t){}if(f(t,n))return o(!r.f.call(t,n),t[n])}},function(t,n,e){var r=e(3),o=e(33).f,i={}.toString,u="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],f=function(t){try{return o(t)}catch(t){return u.slice()}};t.exports.f=function(t){return u&&"[object Window]"==i.call(t)?f(t):o(r(t))}},function(t,n,e){var r=e(2),o=e(37),i=e(21)("IE_PROTO"),u=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?u:null}},function(t,n,e){var r=e(23),o=e(15);t.exports=function(t){return function(n,e){var i,u,f=String(o(n)),c=r(e),a=f.length;return c<0||c>=a?t?"":void 0:(i=f.charCodeAt(c),i<55296||i>56319||c+1===a||(u=f.charCodeAt(c+1))<56320||u>57343?t?f.charAt(c):i:t?f.slice(c,c+2):(i-55296<<10)+(u-56320)+65536)}}},function(t,n,e){var r=e(23),o=Math.max,i=Math.min;t.exports=function(t,n){return t=r(t),t<0?o(t+n,0):i(t,n)}},function(t,n,e){var r=e(23),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},function(t,n,e){"use strict";var r=e(44),o=e(52),i=e(17),u=e(3);t.exports=e(31)(Array,"Array",function(t,n){this._t=u(t),this._i=0,this._k=n},function(){var t=this._t,n=this._k,e=this._i++;return!t||e>=t.length?(this._t=void 0,o(1)):"keys"==n?o(0,e):"values"==n?o(0,t[e]):o(0,[e,t[e]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},function(t,n){},function(t,n,e){"use strict";var r=e(59)(!0);e(31)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,n=this._t,e=this._i;return e>=n.length?{value:void 0,done:!0}:(t=r(n,e),this._i+=t.length,{value:t,done:!1})})},function(t,n,e){"use strict";var r=e(1),o=e(2),i=e(4),u=e(27),f=e(36),c=e(54).KEY,a=e(8),s=e(22),l=e(20),p=e(13),d=e(7),v=e(26),y=e(25),h=e(53),b=e(47),x=e(50),m=e(10),g=e(3),w=e(24),O=e(12),S=e(32),_=e(57),j=e(56),P=e(6),E=e(9),M=j.f,A=P.f,T=_.f,L=r.Symbol,N=r.JSON,C=N&&N.stringify,k="prototype",F=d("_hidden"),q=d("toPrimitive"),I={}.propertyIsEnumerable,B=s("symbol-registry"),D=s("symbols"),W=s("op-symbols"),H=Object[k],K="function"==typeof L,R=r.QObject,J=!R||!R[k]||!R[k].findChild,U=i&&a(function(){return 7!=S(A({},"a",{get:function(){return A(this,"a",{value:7}).a}})).a})?function(t,n,e){var r=M(H,n);r&&delete H[n],A(t,n,e),r&&t!==H&&A(H,n,r)}:A,G=function(t){var n=D[t]=S(L[k]);return n._k=t,n},$=K&&"symbol"==typeof L.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof L},z=function(t,n,e){return t===H&&z(W,n,e),m(t),n=w(n,!0),m(e),o(D,n)?(e.enumerable?(o(t,F)&&t[F][n]&&(t[F][n]=!1),e=S(e,{enumerable:O(0,!1)})):(o(t,F)||A(t,F,O(1,{})),t[F][n]=!0),U(t,n,e)):A(t,n,e)},Y=function(t,n){m(t);for(var e,r=b(n=g(n)),o=0,i=r.length;i>o;)z(t,e=r[o++],n[e]);return t},Q=function(t,n){return void 0===n?S(t):Y(S(t),n)},X=function(t){var n=I.call(this,t=w(t,!0));return!(this===H&&o(D,t)&&!o(W,t))&&(!(n||!o(this,t)||!o(D,t)||o(this,F)&&this[F][t])||n)},V=function(t,n){if(t=g(t),n=w(n,!0),t!==H||!o(D,n)||o(W,n)){var e=M(t,n);return!e||!o(D,n)||o(t,F)&&t[F][n]||(e.enumerable=!0),e}},Z=function(t){for(var n,e=T(g(t)),r=[],i=0;e.length>i;)o(D,n=e[i++])||n==F||n==c||r.push(n);return r},tt=function(t){for(var n,e=t===H,r=T(e?W:g(t)),i=[],u=0;r.length>u;)!o(D,n=r[u++])||e&&!o(H,n)||i.push(D[n]);return i};K||(L=function(){if(this instanceof L)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),n=function(e){this===H&&n.call(W,e),o(this,F)&&o(this[F],t)&&(this[F][t]=!1),U(this,t,O(1,e))};return i&&J&&U(H,t,{configurable:!0,set:n}),G(t)},f(L[k],"toString",function(){return this._k}),j.f=V,P.f=z,e(33).f=_.f=Z,e(19).f=X,e(34).f=tt,i&&!e(18)&&f(H,"propertyIsEnumerable",X,!0),v.f=function(t){return G(d(t))}),u(u.G+u.W+u.F*!K,{Symbol:L});for(var nt="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),et=0;nt.length>et;)d(nt[et++]);for(var nt=E(d.store),et=0;nt.length>et;)y(nt[et++]);u(u.S+u.F*!K,"Symbol",{for:function(t){return o(B,t+="")?B[t]:B[t]=L(t)},keyFor:function(t){if($(t))return h(B,t);throw TypeError(t+" is not a symbol!")},useSetter:function(){J=!0},useSimple:function(){J=!1}}),u(u.S+u.F*!K,"Object",{create:Q,defineProperty:z,defineProperties:Y,getOwnPropertyDescriptor:V,getOwnPropertyNames:Z,getOwnPropertySymbols:tt}),N&&u(u.S+u.F*(!K||a(function(){var t=L();return"[null]"!=C([t])||"{}"!=C({a:t})||"{}"!=C(Object(t))})),"JSON",{stringify:function(t){if(void 0!==t&&!$(t)){for(var n,e,r=[t],o=1;arguments.length>o;)r.push(arguments[o++]);return n=r[1],"function"==typeof n&&(e=n),!e&&x(n)||(n=function(t,n){if(e&&(n=e.call(this,t,n)),!$(n))return n}),r[1]=n,C.apply(N,r)}}}),L[k][q]||e(5)(L[k],q,L[k].valueOf),l(L,"Symbol"),l(Math,"Math",!0),l(r.JSON,"JSON",!0)},function(t,n,e){e(25)("asyncIterator")},function(t,n,e){e(25)("observable")},function(t,n,e){e(62);for(var r=e(1),o=e(5),i=e(17),u=e(7)("toStringTag"),f=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],c=0;c<5;c++){var a=f[c],s=r[a],l=s&&s.prototype;l&&!l[u]&&o(l,u,a),i[a]=i.Array}},function(t,n){"use strict";var e={versions:function(){var t=window.navigator.userAgent;return{trident:t.indexOf("Trident")>-1,presto:t.indexOf("Presto")>-1,webKit:t.indexOf("AppleWebKit")>-1,gecko:t.indexOf("Gecko")>-1&&t.indexOf("KHTML")==-1,mobile:!!t.match(/AppleWebKit.*Mobile.*/),ios:!!t.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),android:t.indexOf("Android")>-1||t.indexOf("Linux")>-1,iPhone:t.indexOf("iPhone")>-1||t.indexOf("Mac")>-1,iPad:t.indexOf("iPad")>-1,webApp:t.indexOf("Safari")==-1,weixin:t.indexOf("MicroMessenger")==-1}}()};t.exports=e},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}var o=e(40),i=r(o),u=function(){function t(t,n,e){return n||e?String.fromCharCode(n||e):o[t]||t}function n(t){return l[t]}var e=/&quot;|&lt;|&gt;|&amp;|&nbsp;|&apos;|&#(\d+);|&#(\d+)/g,r=/['<> "&]/g,o={"&quot;":'"',"&lt;":"<","&gt;":">","&amp;":"&","&nbsp;":" "},f=/\u00a0/g,c=/<br\s*\/?>/gi,a=/\r?\n/g,s=/\s/g,l={};for(var p in o)l[o[p]]=p;return o["&apos;"]="'",l["'"]="&#39;",{encode:function(t){return t?(""+t).replace(r,n).replace(a,"<br/>").replace(s,"&nbsp;"):""},decode:function(n){return n?(""+n).replace(c,"\n").replace(e,t).replace(f," "):""},encodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},encodeBase16forJSON:function(t){if(!t)return t;t=t.replace(/[\u4E00-\u9FBF]/gi,function(t){return escape(t).replace("%u","\\u")});for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},decodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e+=2)n.push(String.fromCharCode("0x"+t.slice(e,e+2)));return n.join("")},encodeObject:function(t){if(t instanceof Array)for(var n=0,e=t.length;e>n;n++)t[n]=u.encodeObject(t[n]);else if("object"==("undefined"==typeof t?"undefined":(0,i.default)(t)))for(var r in t)t[r]=u.encodeObject(t[r]);else if("string"==typeof t)return u.encode(t);return t},loadScript:function(t){var n=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(n),n.setAttribute("src",t)},addLoadEvent:function(t){var n=window.onload;"function"!=typeof window.onload?window.onload=t:window.onload=function(){n(),t()}}}}();t.exports=u},function(t,n){function e(t,n){t.classList?t.classList.add(n):t.className+=" "+n}t.exports=e},function(t,n){function e(t,n){if(t.classList)t.classList.remove(n);else{var e=new RegExp("(^|\\b)"+n.split(" ").join("|")+"(\\b|$)","gi");t.className=t.className.replace(e," ")}}t.exports=e},,,function(t,n){"use strict";function e(){var t=document.querySelector("#page-nav");if(t&&!document.querySelector("#page-nav .extend.prev")&&(t.innerHTML='<a class="extend prev disabled" rel="prev">&laquo; Prev</a>'+t.innerHTML),t&&!document.querySelector("#page-nav .extend.next")&&(t.innerHTML=t.innerHTML+'<a class="extend next disabled" rel="next">Next &raquo;</a>'),yiliaConfig&&yiliaConfig.open_in_new){var n=document.querySelectorAll(".article-entry a:not(.article-more-a)");n.forEach(function(t){t.setAttribute("target","_blank")})}var e=document.querySelector("#js-aboutme");e&&0!==e.length&&(e.innerHTML=e.innerText)}t.exports={init:e}},,,,,,,,,function(t,n){function e(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var e=t.nextSibling;return e?t.parentNode.insertBefore(n,e):t.parentNode.appendChild(n)}t.exports=e}])</script><script src="/./main.2d7529.js"></script><script>!function(){var e=function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)};e("/slider.885efe.js")}()</script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-nav header-menu">
+    
+    
+      
+      
+      
+    
+      
+      
+      
+    
+      
+      
+      
+    
+    
+
+    <ul style="width: 70%">
+    
+    
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友链</a></li>
+      
+        
+      
+      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      
+        
+    </ul>
+  </div>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">heap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">malloc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">free</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">format</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://turingh.github.io/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>mrh</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">我试过销声匿迹，最终也无人问津。</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
