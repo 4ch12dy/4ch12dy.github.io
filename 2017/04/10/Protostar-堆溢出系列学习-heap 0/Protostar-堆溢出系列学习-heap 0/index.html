@@ -6,26 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/NULL-ME/NULL-ME.github.io.git">
-  <title>Protostar-堆溢出系列学习-heap 0 | 4chendy</title>
+  <title>Protostar-堆溢出学习-覆盖堆函数指针劫持代码流 | 4chendy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-0x01 heap0C代码
-12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
+0x01 C语言源代码C代码
+12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;uni">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Protostar-堆溢出系列学习-heap 0">
+<meta property="og:title" content="Protostar-堆溢出学习-覆盖堆函数指针劫持代码流">
 <meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/index.html">
 <meta property="og:site_name" content="4chendy">
 <meta property="og:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-0x01 heap0C代码
-12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
+0x01 C语言源代码C代码
+12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;uni">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true">
-<meta property="og:updated_time" content="2017-04-20T13:53:24.000Z">
+<meta property="og:updated_time" content="2017-04-26T07:00:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Protostar-堆溢出系列学习-heap 0">
+<meta name="twitter:title" content="Protostar-堆溢出学习-覆盖堆函数指针劫持代码流">
 <meta name="twitter:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-0x01 heap0C代码
-12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unis">
+0x01 C语言源代码C代码
+12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;uni">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true">
   
     <link rel="alternative" href="/atom.xml" title="4chendy" type="application/atom+xml">
@@ -175,7 +175,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Protostar-堆溢出系列学习-heap 0
+      Protostar-堆溢出学习-覆盖堆函数指针劫持代码流
     </h1>
   
 
@@ -189,7 +189,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
-<h2 id="0x01-heap0"><a href="#0x01-heap0" class="headerlink" title="0x01 heap0"></a>0x01 heap0</h2><p><code>C代码</code></p>
+<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><p><code>C代码</code></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> data &#123;</div><div class="line">  <span class="keyword">char</span> name[<span class="number">64</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> fp &#123;</div><div class="line">  <span class="keyword">int</span> (*fp)();</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">nowinner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level has not been passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> data *d;</div><div class="line">  <span class="keyword">struct</span> fp *f;</div><div class="line"></div><div class="line">  d = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> data));</div><div class="line">  f = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> fp));</div><div class="line">  f-&gt;fp = nowinner;</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"data is at %p, fp is at %p\n"</span>, d, f);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(d-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  </div><div class="line">  f-&gt;fp();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
 <p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
@@ -358,18 +358,18 @@
   
 <nav id="article-nav">
   
-    <a href="../../mach-o动态链接/mach-o动态链接/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="../../../13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Mach-o动态链接
+          Protostar-堆溢出学习-UAF(use after free)
         
       </div>
     </a>
   
   
     <a href="../../Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Protostar-堆溢出系列学习-heap 1</div>
+      <div class="article-nav-title">Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -383,7 +383,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" data-title="Protostar-堆溢出系列学习-heap 0" data-url="https://github.com/NULL-ME/NULL-ME.github.io.git"></div>
+	<div class="ds-thread" data-thread-key="Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" data-title="Protostar-堆溢出学习-覆盖堆函数指针劫持代码流" data-url="https://github.com/NULL-ME/NULL-ME.github.io.git"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -491,6 +491,14 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
@@ -516,14 +524,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">free</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -583,18 +583,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -604,6 +592,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
             
             <div class="clearfix"></div>

