@@ -18,7 +18,7 @@
 <meta property="og:description" content="0x00 序当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。
 0x01 目录1.DLMalloc2.内存Chunk3.Bin4.molloc源码分析
 0x02 DLMallocDoug Lea’s Malloc (dlmalloc)是一个">
-<meta property="og:updated_time" content="2017-04-25T04:32:39.000Z">
+<meta property="og:updated_time" content="2017-04-26T05:56:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Linux堆分配器-DLMalloc">
 <meta name="twitter:description" content="0x00 序当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。
@@ -203,15 +203,11 @@
 <ul>
 <li>allocate chunk</li>
 </ul>
-<p>`</p>
-<p>chunk   –&gt;+—————————————+<br>           |     前一个chunk大小                     |<br>           +—————————————+<br>           |     当前chunk大小                 |A|M|P|<br> mem    –&gt;+—————————————+<br>           |     malloc返回用户的开始地址，储存用户数据  |<br>           .                                       .<br>           .                                       .<br>           .                                       .<br>nextchunk-&gt;+—————————————+<br>            |     前一个chunk大小                     |<br>           +—————————————+</p>
-<p>`</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">chunk   --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div><div class="line">           |     当前chunk大小                 |<span class="type">A</span>|<span class="type">M</span>|<span class="type">P</span>|</div><div class="line"> <span class="type">mem</span>    --&gt;+---------------------------------------+</div><div class="line">           |     <span class="type">malloc</span>返回用户的开始地址，储存用户数据  |</div><div class="line">           <span class="type">.                                       .</span></div><div class="line">           .                                       .</div><div class="line">           .                                       .</div><div class="line">nextchunk-&gt;+---------------------------------------+</div><div class="line">		    |     <span class="type">前一个chunk</span>大小                     |</div><div class="line">           <span class="type">+---------------------------------------+</span></div><div class="line">						...</div></pre></td></tr></table></figure>
 <ul>
 <li>freed chunk</li>
 </ul>
-<p>`</p>
-<p>chunk   –&gt;+—————————————+<br>           |     前一个chunk大小                     |<br>           +—————————————+<br>           |     当前chunk大小                |A| |P|<br> mem    –&gt;+—————————————+<br>           |     fd指向free list中下一个chunk        |<br>           +—————————————+<br>           |     bk指向free list中后一个chunk        |<br>           +—————————————+<br>           .     用户数据 可能为0                    .<br>           .                                       .<br>nextchunk-&gt;+—————————————+<br>           |     前一个chunk大小                     |<br>           +—————————————+</p>
-<p>` </p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">chunk   --&gt;+---------------------------------------+</div><div class="line">           |<span class="string">     前一个chunk大小                     </span>|</div><div class="line">           +---------------------------------------+</div><div class="line">           |<span class="string">     当前chunk大小                </span>|<span class="string">A</span>|<span class="string"> </span>|<span class="string">P</span>|</div><div class="line"> mem    --&gt;+---------------------------------------+</div><div class="line">           |<span class="string">     fd指向free list中下一个chunk        </span>|</div><div class="line">           +---------------------------------------+</div><div class="line">           |<span class="string">     bk指向free list中后一个chunk        </span>|</div><div class="line">           +---------------------------------------+</div><div class="line">           .     用户数据 可能为0                    .</div><div class="line">           .                                       .</div><div class="line">nextchunk-&gt;+---------------------------------------+</div><div class="line">           |<span class="string">     前一个chunk大小                     </span>|</div><div class="line">           +---------------------------------------+</div><div class="line">                     ...</div></pre></td></tr></table></figure>
 <p>3.更多细节<br>因为chunk是按照8字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？<br>然后可以想到有一个最小chunk的存在，其大小为16字节()。  </p>
 <p>4.特殊chunk<br>top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</p>
 <p>last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is the result of allocation requests for small chunks that have no exact fit in any of the bins. If the request is larger than the last_remainder chunk but smaller than a block in a bin, then the chunk is split again. The last_remainder chunk is the result of having to split a larger chunk into two, one part of it is handed out from the allocation, and the other because the last_remainder chunk.</p>
@@ -475,14 +471,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -499,23 +487,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -531,19 +507,39 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UAF</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">format</a>
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -559,11 +555,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+                <a href="javascript:void(0)" class="js-tag color2">printf</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+                <a href="javascript:void(0)" class="js-tag color2">format</a>
               </li>
              
               <li class="article-tag-list-item">
