@@ -157,6 +157,97 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/">Protostar-堆溢出学习-滥用堆metadata重定向程序执行</a>
+    </h1>
+  
+
+        
+        <a href="2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/" class="archive-article-date">
+  	<time datetime="2017-04-26T13:24:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
+<p> 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对<a href="https://null-me.github.io/2017/04/23/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/" target="_blank" rel="external">linux堆管理DLMalloc的分析</a>这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析</p>
+</blockquote>
+<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">winner</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">printf</span>(<span class="string">"that wasn't too bad now, was it? @ %d\n"</span>, time(<span class="literal">NULL</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">char</span> *a, *b, *c;</div><div class="line"></div><div class="line">  a = <span class="built_in">malloc</span>(<span class="number">32</span>);</div><div class="line">  b = <span class="built_in">malloc</span>(<span class="number">32</span>);</div><div class="line">  c = <span class="built_in">malloc</span>(<span class="number">32</span>);</div><div class="line"></div><div class="line">  <span class="built_in">strcpy</span>(a, argv[<span class="number">1</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(b, argv[<span class="number">2</span>]);</div><div class="line">  <span class="built_in">strcpy</span>(c, argv[<span class="number">3</span>]);</div><div class="line"></div><div class="line">  <span class="built_in">free</span>(c);</div><div class="line">  <span class="built_in">free</span>(b);</div><div class="line">  <span class="built_in">free</span>(a);</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"dynamite failed?\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>在这个程序中虽然我们知道有堆溢出的问题，可是堆上并没有什么逻辑上的漏洞，没有可利用的指针？没有UAF漏洞？那怎么才能执行到<code>winner()</code>函数呢？似乎是不可能的事。但通过之前对linux堆管理的分析，可知<code>free()</code>函数中的<code>unlink()</code>函数能够造成一个任意地址写的可能，再像之前那样来修改GOT表，不就是可以执行<code>winner()</code>函数了吗？所以要执行unlink()函数就需要构造两个chunk合并的过程，继而将一个chunk从原来的双链表中unlink下来。<br>就照着这个思路来一步步实现这个过程。</p>
+<h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.输入<code>AAAA</code> <code>BBBB</code> <code>CCCC</code>然后free前后后观察堆结构<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-0.png" alt="0-0"><br>由上图可得，一共有三个分配的chunk，大小都为29(101001)末位表示前一个chunk正在使用。可以看到最后还有一个很大的chunk，这就是上文所指的topchunk。<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-1.png" alt="0-1"><br>因为chunk的大小<80字节，所以free后存在单链表的fastbin中，`1-->2–&gt;3–&gt;null`的方式连接  </80字节，所以free后存在单链表的fastbin中，`1--></p>
+<p>2.因为需要unlink一个chunk到双链表bin，所以先覆盖掉第三个chunk让其大小为64字节。<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-2.png" alt="0-2"><br>因为我们准备向前合并，所以将preinuse位设为1，即64+1=65</p>
+<p>3.然后还需要构造一个假的chunk让其unlink，这个chunk将精心构造，首先fd=GoT地址 bk=winner地址？等等，这里存在一个问题在于：GoT=winner地址，但winner=GoT在会发生段错误，所以这里有个小技巧在于bk=堆地址，GoT-12=堆地址，然后堆中填上shellcode，去调用winner。<br>构造字符串：<br><code>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\xfc\xff\xff\xff\xfc\xff\xff\xff\x1c\xb1\x04\x08\x0c\xc0\x04\x08</code><br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-3.png" alt="0-3"></p>
+<p>4.现在我们需要构造shellcode，因为堆地址+16字节出会写入GoT地址，所以我们的shellcode要足够小，正好我们仅仅需要调用winner而已。<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-4.png" alt="0-4"><br>这里我们用在线的转换工具下面的汇编转化为x86指令字符串</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mov</span> <span class="built_in">eax</span>,<span class="number">0x8048864</span></div><div class="line"><span class="keyword">call</span> <span class="built_in">eax</span></div></pre></td></tr></table></figure>
+<p><code>0x8048864</code>为winner()函数地址</p>
+<p>5.将上面的shellcode写入第一个chunk那里，here we hack！<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-5.png" alt="0-5"><br>下图可以看到shellcode后面就被填入了GoT地址，也说明了shellcode只能为8字节大小。<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-6.png" alt="0-6"><br>GoT地址已经修改，下面可以看到已经执行了winnwe()函数<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 3/0-7.png" alt="0-7"></p>
+<h2 id="0x04-一点补充"><a href="#0x04-一点补充" class="headerlink" title="0x04 一点补充"></a>0x04 一点补充</h2><p>在上面构造chunk中，也许你已经发现了chunk大小为<code>0xfffffffc</code>，这是一个什么巧妙的方法去绕过free()里面的检查等。具体的细节可以看<br><a href="http://phrack.org/issues/57/9.html#article" target="_blank" rel="external">Once upon a free()</a>这篇文章，简单的说就是当某个数加上<code>0xfffffffc</code>时会造成溢出相当于减4从而使其向前偏移4个字节，绕过检查，避免崩溃。</p>
+<h2 id="0x05-堆漏洞学习总结"><a href="#0x05-堆漏洞学习总结" class="headerlink" title="0x05 堆漏洞学习总结"></a>0x05 堆漏洞学习总结</h2><p>目前可能这是最后一个堆漏洞的学习，这个堆漏洞的学习理解到动手前后花费了大量时间，不过这都是值得的，如果能够坚持下来，将会对堆漏洞有一个清晰的认识。以后再遇到漏洞或者别人的分析能够快速准确的理解。虽然现在堆管理代码经过了很多改善和patch，但基本和关键的技术还是没变。所以keep hacking!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Protostar</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆溢出</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">metadata</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DLMalloc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1061,99 +1152,6 @@
 
 
   
-    <article id="post-mach-o动态链接/mach-o动态链接" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2017/04/10/mach-o动态链接/mach-o动态链接/">Mach-o动态链接</a>
-    </h1>
-  
-
-        
-        <a href="2017/04/10/mach-o动态链接/mach-o动态链接/" class="archive-article-date">
-  	<time datetime="2017-04-10T03:12:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。<br>所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。<br>macOS中是内核执行<code>LC_DYLINKER</code>加载命令时启动的，通常为<code>/usr/lib/dyld</code>接管刚创建进程的控制权。<br>本文就来分析其符号的动态链接过程。</p>
-<h2 id="0x01-符号的加载过程"><a href="#0x01-符号的加载过程" class="headerlink" title="0x01 符号的加载过程"></a>0x01 符号的加载过程</h2><p>以下面这个简单的C语言程序为例。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="built_in">printf</span>(<span class="string">"first printf"</span>);</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"second printf"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>对应的汇编代码</p>
-<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-&gt;  <span class="number">0x100000f40</span> &lt;+<span class="number">0</span>&gt;:  pushq  %rbp</div><div class="line">    <span class="number">0x100000f41</span> &lt;+<span class="number">1</span>&gt;:  movq   %rsp, %rbp</div><div class="line">    <span class="number">0x100000f44</span> &lt;+<span class="number">4</span>&gt;:  subq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f48</span> &lt;+<span class="number">8</span>&gt;:  leaq   <span class="number">0x4b</span>(%rip), %rax          ; <span class="string">"first printf"</span></div><div class="line">    <span class="number">0x100000f4f</span> &lt;+<span class="number">15</span>&gt;: movl   %edi, -<span class="number">0x4</span>(%rbp)</div><div class="line">    <span class="number">0x100000f52</span> &lt;+<span class="number">18</span>&gt;: movq   %rsi, -<span class="number">0x10</span>(%rbp)</div><div class="line">    <span class="number">0x100000f56</span> &lt;+<span class="number">22</span>&gt;: movq   %rax, %rdi</div><div class="line">    <span class="number">0x100000f59</span> &lt;+<span class="number">25</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f5b</span> &lt;+<span class="number">27</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f60</span> &lt;+<span class="number">32</span>&gt;: leaq   <span class="number">0x40</span>(%rip), %rdi          ; <span class="string">"second printf"</span></div><div class="line">    <span class="number">0x100000f67</span> &lt;+<span class="number">39</span>&gt;: movl   %eax, -<span class="number">0x14</span>(%rbp)</div><div class="line">    <span class="number">0x100000f6a</span> &lt;+<span class="number">42</span>&gt;: movb   $0<span class="keyword">x</span><span class="number">0</span>, %al</div><div class="line">    <span class="number">0x100000f6c</span> &lt;+<span class="number">44</span>&gt;: callq  <span class="number">0x100000f7a</span>               ; symbol stub <span class="keyword">for</span>: <span class="keyword">printf</span></div><div class="line">    <span class="number">0x100000f71</span> &lt;+<span class="number">49</span>&gt;: movl   %eax, -<span class="number">0x18</span>(%rbp)</div><div class="line">    <span class="number">0x100000f74</span> &lt;+<span class="number">52</span>&gt;: addq   $0x2<span class="number">0</span>, %rsp</div><div class="line">    <span class="number">0x100000f78</span> &lt;+<span class="number">56</span>&gt;: popq   %rbp</div><div class="line">    <span class="number">0x100000f79</span> &lt;+<span class="number">57</span>&gt;: retq</div></pre></td></tr></table></figure>
-<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true" alt="stub区"></p>
-<ul>
-<li>第一次printf会先进入<code>dyld_stub_binder</code>区去找到<code>printf</code>函数的地址，我们用lldb调试观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E8%B7%B3%E8%BD%AC%E8%BF%87%E7%A8%8B.png?raw=true" alt="stub跳转过程"><br>会发现正好地址在<code>dyld_stub_binder</code>区</p>
-<p>验证:</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%811.png?raw=true" alt="验证1"></p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%812.png?raw=true" alt="验证1"></p>
-<ul>
-<li>第二次<code>printf</code>我们在观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/%E7%AC%AC%E4%BA%8C%E6%AC%A1printf%E9%AA%8C%E8%AF%81.png?raw=true" alt="第二次"></p>
-<p>我们会发现当第二次再次调用<code>printf</code>函数时，还是会先跳转到stub区，但此时<code>la_symbol_ptr</code>中的值却变为了<code>printf</code>的真实地址，而不是<code>dyld_stub_binder</code>。这样就完成了一次延时绑定，后面就直接调用。</p>
-<h2 id="0x02-stub桩机制总结"><a href="#0x02-stub桩机制总结" class="headerlink" title="0x02 stub桩机制总结"></a>0x02 stub桩机制总结</h2><p>综上分析，我们可以发现所有的外部函数引用都会在<code>DATA</code>段<code>la_symbol_ptr</code>区中产生一个占位符，其初始值为<code>dyld_stub_binder</code>区中对应的编号地址。当第一个调用时，就会进入符号的动态链接过程，一旦找到其地址后，就会将<code>DATA</code>段<code>la_symbol_ptr</code>区中的占位符改为找到后的地址。这样就完成了只需要一个符号绑定。</p>
-<p>stub桩机制的巧妙之处也在此，首先当产生一个外部符号调用时，直接跳到对应的stub桩位置，然后由里面保存的地址来判断是第一次调用还是已经找到符号的地址。就像桩这个名字含义一样，一个占位符的思想。</p>
-<h2 id="0x03-参考"><a href="#0x03-参考" class="headerlink" title="0x03 参考"></a>0x03 参考</h2><p><a href="http://turingh.github.io/2016/03/10/Mach-O%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" target="_blank" rel="external">Mach-O的动态链接相关知识</a></p>
-<p><a href="http://timetobleed.com/dynamic-linking-elf-vs-mach-o/" target="_blank" rel="external">Dynamic Linking: ELF vs. Mach-O</a></p>
-<p><a href="http://timetobleed.com/dynamic-symbol-table-duel-elf-vs-mach-o-round-2/" target="_blank" rel="external">Dynamic symbol table duel: ELF vs Mach-O, round 2</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">mach-o</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">dyld</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">stub</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2017/04/10/mach-o动态链接/mach-o动态链接/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
@@ -1255,26 +1253,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -1303,6 +1281,26 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">metadata</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">DLMalloc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">strcpy</a>
               </li>
              
@@ -1311,11 +1309,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">栈溢出</a>
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1327,23 +1329,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UAF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">printf</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">format</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1368,6 +1362,18 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
             
             <div class="clearfix"></div>
