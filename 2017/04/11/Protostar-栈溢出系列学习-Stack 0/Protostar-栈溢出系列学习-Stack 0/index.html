@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
-<html>
+
+    <html lang="zh-Hans">
+  
 <head>
   <meta charset="utf-8">
   
@@ -21,68 +23,161 @@
     <meta property="og:image" content="undefined"/>
   
 
-  <link href="/favicon.png" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="4chendy" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-  <script>
-  $(document).ready(function() {
-    $('#sidebar').delay(400).animate({ width: '285px' }, 500, function() {
-      $('.personal-info').css({display: 'table'}).hide().fadeIn(500);
-    });
-  });
-  </script>
   
+    <meta http-equiv="Content-Language" content="zh-Hans"/>
+  
+
+  <link href="/img/favicon.png" rel="icon">
+  
+    <link rel="apple-touch-icon" href="/img/apple-icon.ico">
+    <link rel="apple-touch-icon-precomposed" href="/img/apple-icon.ico">
+    
+
+  <link rel="alternate" href="/dark-tech/atom.xml" title="4chendy" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+  
+  <!-- Chinese readability improment -->
+  <style type="text/css">
+    article {font-weight: 400;letter-spacing: .01rem;}
+    article .entry{line-height:2;}
+  </style>
+  
+  
+  <style type="text/css">
+  /* Tim Pietrusky advanced checkbox hack (Android <= 4.1.2) */
+body{ -webkit-animation: bugfix infinite 1s; }
+@-webkit-keyframes bugfix { from {padding:0;} to {padding:0;} }
+</style>
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48887175-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+  
+    <!-- 360 Font and Baidu CDN in China -->
+    
+      <link href='http://fonts.useso.com/css?family=Open+Sans:300,400|Playball' rel='stylesheet' type='text/css'>
+    
+  <link href='http://apps.bdimg.com/libs/fontawesome/4.1.0/css/font-awesome.css' rel='stylesheet' type='text/css'>
+  <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+  
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 </head>
 
 
 <body>
-  <header id="header" class="inner"><!-- <div class="alignleft">
-  <h1><a href="/">4chendy</a></h1>
-  <h2><a href="/"></a></h2>
+  <header id="header" class="inner"><div class="padding">
+	<div class="alignleft logo">
+	  <h1><a href="/">4chendy</a></h1>
+	</div>
+	<nav id="main-nav" class="alignright">
+		<input type="checkbox" id="toggle" />
+		<label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu" onclick><i class="fa fa-bars"></i></label>
+	  <ul class="menu">
+	    
+	      <li><a href="/dark-tech/">Home</a></li>
+	    
+	      <li><a href="/dark-tech/archives">Archives</a></li>
+	    
+	      <li><a href="/about">About</a></li>
+	    
+	      <li><a href="/guestbook">GuestBook</a></li>
+	    
+	    
+	    	<li><a href="/dark-tech/atom.xml" target="_blank" title="bruce tan blog rss" class="rss-top"><i class="fa fa-rss"></i></a></li>
+	    
+	  </ul>
+	</nav>
+	<div class="clearfix"></div>
 </div>
- --><!-- <nav id="main-nav" class="alignright">
-  <ul>
-    
-      <li><a href="/">Home</a></li>
-    
-      <li><a href="/archives">Archives</a></li>
-    
-  </ul>
-  <div class="clearfix"></div>
-</nav>
- --></header>
-  <div id="content" class="inner">
-    <div id="main-col" class="alignright"><div id="wrapper"><article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon depth"></div>
-        <time class="depth" datetime="2017-04-11T03:12:19.000Z"><a href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">2017-04-11</a></time>
-      
-      
-  
-    <h1 class="depth title">Protostar-栈溢出学习-简单栈溢出修改局部变量值</h1>
-  
+</header>
+  <div id="page-heading-wrap">
+  	<div class="inner">
+      <div class="padding">
+    		
+          <h1>Protostar-栈溢出学习-简单栈溢出修改局部变量值</h1>
+          <ul>
+            <li>
+              <span class="heading-span">Posted on: </span>
+              <time datetime="2017-04-11T03:12:19.000Z">2017-04-11</time>
+            </li>
+            
+              <li>
+                <span class="heading-span">By: </span>
 
-    </header>
-    <div class="entry depth">
+                
+                  <a href="/" target="_blank">4chendy</a>
+
+                
+
+              </li>
+            
+            <li>
+              <span class="heading-span">With: </span>
+              
+
+                <a href="#ds-thread"><span class="ds-thread-count" data-thread-key="2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" data-count-type="comments"></span></a>
+              
+            </li>
+          </ul>
+        
+      </div>
+  	</div>
+  </div>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper" class="padding"><article class="post">
+  
+  
+    <div class="post-content">
+  
       
-        <h2 id="0x01-序"><a href="#0x01-序" class="headerlink" title="0x01 序"></a>0x01 序</h2><blockquote>
+      <div class="entry">
+        
+          <h2 id="0x01-序"><a href="#0x01-序" class="headerlink" title="0x01 序"></a>0x01 序</h2><blockquote>
 <p> 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始吧！</p>
 </blockquote>
 <h2 id="0x01-Protostar虚拟机环境搭建"><a href="#0x01-Protostar虚拟机环境搭建" class="headerlink" title="0x01 Protostar虚拟机环境搭建"></a>0x01 Protostar虚拟机环境搭建</h2><p><a href="https : //exploit-exercises.com/download/">虚拟机下载地址</a></p>
@@ -111,182 +206,207 @@
 </li>
 </ol>
 
-      
-    </div>
-    <footer>
-      
         
+      </div>
+      <footer>
         
+          
+          
   
   <div class="tags">
     <a href="/tags/Linux/">Linux</a>, <a href="/tags/Protostar/">Protostar</a>, <a href="/tags/栈溢出/">栈溢出</a>
   </div>
 
-        
-  <div class="addthis addthis_toolbox addthis_default_style">
-    
-      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-    
-    
-      <a class="addthis_button_tweet"></a>
-    
-    
-      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
-    
-    
-      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
-    
-    <a class="addthis_counter addthis_pill_style"></a>
-  </div>
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+          <div class="share">
+  
 
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
+    
+      <div class="bdsharebuttonbox"><a href="#" class="bds_twi" data-cmd="twi" title="Share to Twitter"></a><a href="#" class="bds_fbook" data-cmd="fbook" title="Share to Facebook"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="Share to Wechat"></a><a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a><a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="Share to QQ Friends"></a><a href="#" class="bds_linkedin" data-cmd="linkedin" title="Share to linkedin"></a><a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a></div>
+	  <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","bdysc","tqq","bdxc","kaixin001","tqf","tieba","douban","tsohu","bdhome","sqq","thx","qq","ibaidu","taobao","hi","baidu","sohu","t163","qy","meilishuo","mogujie","diandian","huaban","leho","share189","duitang","hx","tfh","fx","youdao","sdo","qingbiji","ifeng","people","xinhua","ff","mail","kanshou","isohu","yaolan","wealink","xg","ty","iguba","fbook","twi","deli","s51","s139","linkedin","copy","print"],"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{},"image":{"viewList":["twi","fbook","tsina","weixin","mail","copy","sqq","linkedin","youdao","qzone","renren","douban"],"viewText":"Share to","viewSize":"24"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+    
+
+    
+
+    
+  
+</div>
+          
+
+        
+        <div class="clearfix"></div>
+      </footer>
+    </div>
 </article>
 
-</div></div>
-    <aside id="sidebar" class="alignleft"><!-- 
-  
+
+
+<nav id="pagination" >
+    
+    <a href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/" class="alignleft prev" >Anterior</a>
+    
+    
+    <a href="/2017/04/10/mach-o动态链接/mach-o动态链接/" class="alignright next" >Siguiente</a>
+    
+    <div class="clearfix"></div>
+</nav>
+
+<section id="comment">
+  <h2 class="title">Comentarios</h2>
 
   
-<div class="widget tag">
-  <h3 class="title">標籤</h3>
+
+  <!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="请将此处替换成文章在你的站点中的ID" data-title="请替换成文章的标题" data-url="请替换成文章的网址"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"datablog"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+  </script>
+  <!-- 多说公共JS代码 end -->
+
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright"><div class="padding">
+	
+	  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" autocomplete="off" name="q" maxlength="20" results="0" placeholder="Buscar">
+    <input type="hidden" name="q" value="site:github.com/NULL-ME/NULL-ME.github.io.git">
+  </form>
+</div>
+	
+	  
+	
+	  
+<div class="widget recent-post">
+  <h3 class="title">Entradas Recientes</h3>
   <ul class="entry">
-  
-    <li><a href="/tags/BSD/">BSD</a><small>1</small></li>
-  
-    <li><a href="/tags/C/">C++</a><small>1</small></li>
-  
-    <li><a href="/tags/Crackme/">Crackme</a><small>1</small></li>
-  
-    <li><a href="/tags/DLMalloc/">DLMalloc</a><small>1</small></li>
-  
-    <li><a href="/tags/GOT表/">GOT表</a><small>1</small></li>
-  
-    <li><a href="/tags/IPC/">IPC</a><small>1</small></li>
-  
-    <li><a href="/tags/Linux/">Linux</a><small>9</small></li>
-  
-    <li><a href="/tags/Protostar/">Protostar</a><small>9</small></li>
-  
-    <li><a href="/tags/UAF/">UAF</a><small>1</small></li>
-  
-    <li><a href="/tags/cve/">cve</a><small>1</small></li>
-  
-    <li><a href="/tags/dyld/">dyld</a><small>1</small></li>
-  
-    <li><a href="/tags/format/">format</a><small>1</small></li>
-  
-    <li><a href="/tags/free/">free</a><small>1</small></li>
-  
-    <li><a href="/tags/gdb/">gdb</a><small>1</small></li>
-  
-    <li><a href="/tags/heap/">heap</a><small>1</small></li>
-  
-    <li><a href="/tags/iOS/">iOS</a><small>1</small></li>
-  
-    <li><a href="/tags/linux/">linux</a><small>2</small></li>
-  
-    <li><a href="/tags/macOS内核/">macOS内核</a><small>1</small></li>
-  
-    <li><a href="/tags/mach/">mach</a><small>1</small></li>
-  
-    <li><a href="/tags/mach-o/">mach-o</a><small>1</small></li>
-  
-    <li><a href="/tags/macos内核/">macos内核</a><small>1</small></li>
-  
-    <li><a href="/tags/malloc/">malloc</a><small>1</small></li>
-  
-    <li><a href="/tags/metadata/">metadata</a><small>1</small></li>
-  
-    <li><a href="/tags/printf/">printf</a><small>1</small></li>
-  
-    <li><a href="/tags/strcpy/">strcpy</a><small>1</small></li>
-  
-    <li><a href="/tags/stub/">stub</a><small>1</small></li>
-  
-    <li><a href="/tags/vm/">vm</a><small>2</small></li>
-  
-    <li><a href="/tags/vtable/">vtable</a><small>1</small></li>
-  
-    <li><a href="/tags/xnu/">xnu</a><small>1</small></li>
-  
-    <li><a href="/tags/堆溢出/">堆溢出</a><small>4</small></li>
-  
-    <li><a href="/tags/栈溢出/">栈溢出</a><small>4</small></li>
-  
-    <li><a href="/tags/看雪/">看雪</a><small>1</small></li>
-  
-    <li><a href="/tags/调试/">调试</a><small>1</small></li>
-  
+    
+      <li>
+        <a href="/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/">Protostar-堆溢出学习-滥用堆metadata重定向程序执行</a>
+      </li>
+    
+      <li>
+        <a href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/">深入理解Linux堆分配器-DLMalloc</a>
+      </li>
+    
+      <li>
+        <a href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">Protostar-堆溢出学习-UAF(use after free)</a>
+      </li>
+    
+      <li>
+        <a href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</a>
+      </li>
+    
+      <li>
+        <a href="/2017/04/18/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">Protostar-堆溢出学习-覆盖堆函数指针劫持代码流</a>
+      </li>
+    
   </ul>
 </div>
 
-
-  
-<div class="widget twitter">
-  <h3 class="title">推文</h3>
-  <ul id="tweets"></ul>
+	
+	  
+<div class="widget tagcloud">
+  <h3 class="title">Nube de Etiquetas</h3>
+  <div class="entry">
+    <a href="../../../../../tags/BSD/" style="font-size: 10px;">BSD</a> <a href="../../../../../tags/C/" style="font-size: 10px;">C++</a> <a href="../../../../../tags/Crackme/" style="font-size: 10px;">Crackme</a> <a href="../../../../../tags/DLMalloc/" style="font-size: 10px;">DLMalloc</a> <a href="../../../../../tags/GOT表/" style="font-size: 10px;">GOT表</a> <a href="../../../../../tags/IPC/" style="font-size: 10px;">IPC</a> <a href="../../../../../tags/Linux/" style="font-size: 20px;">Linux</a> <a href="../../../../../tags/Protostar/" style="font-size: 20px;">Protostar</a> <a href="../../../../../tags/UAF/" style="font-size: 10px;">UAF</a> <a href="../../../../../tags/cve/" style="font-size: 10px;">cve</a> <a href="../../../../../tags/dyld/" style="font-size: 10px;">dyld</a> <a href="../../../../../tags/format/" style="font-size: 10px;">format</a> <a href="../../../../../tags/free/" style="font-size: 10px;">free</a> <a href="../../../../../tags/gdb/" style="font-size: 10px;">gdb</a> <a href="../../../../../tags/heap/" style="font-size: 10px;">heap</a> <a href="../../../../../tags/iOS/" style="font-size: 10px;">iOS</a> <a href="../../../../../tags/linux/" style="font-size: 13.33px;">linux</a> <a href="../../../../../tags/macOS内核/" style="font-size: 10px;">macOS内核</a> <a href="../../../../../tags/mach/" style="font-size: 10px;">mach</a> <a href="../../../../../tags/mach-o/" style="font-size: 10px;">mach-o</a> <a href="../../../../../tags/macos内核/" style="font-size: 10px;">macos内核</a> <a href="../../../../../tags/malloc/" style="font-size: 10px;">malloc</a> <a href="../../../../../tags/metadata/" style="font-size: 10px;">metadata</a> <a href="../../../../../tags/printf/" style="font-size: 10px;">printf</a> <a href="../../../../../tags/strcpy/" style="font-size: 10px;">strcpy</a> <a href="../../../../../tags/stub/" style="font-size: 10px;">stub</a> <a href="../../../../../tags/vm/" style="font-size: 13.33px;">vm</a> <a href="../../../../../tags/vtable/" style="font-size: 10px;">vtable</a> <a href="../../../../../tags/xnu/" style="font-size: 10px;">xnu</a> <a href="../../../../../tags/堆溢出/" style="font-size: 16.67px;">堆溢出</a> <a href="../../../../../tags/栈溢出/" style="font-size: 16.67px;">栈溢出</a> <a href="../../../../../tags/看雪/" style="font-size: 10px;">看雪</a> <a href="../../../../../tags/调试/" style="font-size: 10px;">调试</a>
+  </div>
 </div>
 
-<script type="text/javascript">
-var twitter_stream = ['thiagopnts', 5, false];
-var moment_js_path = '/js/moment.min.js';
-</script>
-<script src="/js/twitter.js"></script>
-
-
- -->
-<div class="personal-info">
-  <figure>
-    
-      <a href="/">
-        <img class="personal-photo" src="https://2.gravatar.com/avatar/dfdcc7fdb4b631ae9c30acd5ac6c2cbe?r=x&s=440" alt="4chendy">
-      </a>
-    
-    <figcaption>
-      <h3 class=>4chendy</h3>
-      <p>Something about you here</p>
-    </figcaption>
-  </figure>
-  <section class="social">
-    
-      <a target="_blank" class="icon twitter depth" href="http://twitter.com/thiagopnts"></a>
-    
-    
-      <a target="_blank" class="icon facebook depth" href="http://fb.com/your facebook url"></a> 
-    
-    
-      <a target="_blank" class="icon github depth" href="http://github.com/thiagopnts"></a>
-    
-    
-      <a target="_blank" class="icon email depth" href="mailto:email"></a>
-    
-  </section>
+	
+	  <iframe width="100%" height="120" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=10&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5594792135&verifier=676ff25e&dpc=1"></iframe>
+	
+	  <div class="widget category">
+	<h3 class="title">Link</h3>
+	<ul class="entry">
+		
+        	<li><a href="https://www.google.com/">Google</a></li>
+      	
+        	<li><a href="https://github.com/">Github</a></li>
+      	
+        	<li><a href="http://hijiangtao.github.io/">hijiangtao</a></li>
+      	
+	</ul>
 </div>
-</aside>
+	
+</div></aside>
     <div class="clearfix"></div>
   </div>
-  <footer id="footer" class="inner"><div class="alignright depth">
-  <a href="http://github.com/thiagopnts/hexo-persona-dark" style="text-decoration: underline;">Persona Dark Theme</a> 
-  &copy; - 2017 4chendy
-  
+  <footer id="footer" class="inner"><div class="padding">
+	<div class="alignleft">
+	  
+	  Copyright&copy;2013-2017 <a href=" / ">4chendy</a>
+	  
+	  | Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  and Theme by <a href="https://github.com/hijiangtao/dark-tech/" target="_blank">Dark-Tech</a> | <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1000257487'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/z_stat.php%3Fid%3D1000257487' type='text/javascript'%3E%3C/script%3E"));</script>
+	</div>
+
+	<div class="alignright">
+		
+		
+			<a href="https://github.com/https://github.com/hijiangtao" target="_blank" title="4chendy Github"><i class="fa fa-github-square"></i></a>	
+		
+		
+		
+			<a href="http://www.weibo.com/http://weibo.com/hijiangtao" target="_blank" title="4chendy Weibo"><i class="fa fa-weibo"></i></a>	
+		
+		
+		
+		
+			<a href="/dark-tech/atom.xml" target="_blank" title="4chendy RSS"><i class="fa fa-rss-square"></i></a>
+		
+	</div>
+
+	<div class="clearfix"></div>
 </div>
-<div class="clearfix"></div></footer>
-  <script src="/js/jquery.imagesloaded.min.js"></script>
+
+<div class="scroll-top"><i class="fa fa-arrow-circle-up"></i></div>
+</footer>
+  
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"datablog"};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.0.4/jquery.imagesloaded.js"></script>
 <script src="/js/gallery.js"></script>
 
 
 
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
+$(window).scroll(function() {
+
+    if($(this).scrollTop() > 400) {
+        $('.scroll-top').fadeIn(200);
+    } else {
+        $('.scroll-top').fadeOut(200);
+    }
+});
+
+$('.scroll-top').bind('click', function(e) {
+    e.preventDefault();
+    $('body,html').animate({scrollTop:0},200);
+});
 </script>
 
 </body>
