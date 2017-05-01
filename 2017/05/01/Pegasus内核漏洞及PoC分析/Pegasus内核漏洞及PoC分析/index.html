@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="4chendy">
 <meta property="og:description" content="0x00 写在前面
  不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
-<meta property="og:updated_time" content="2017-05-01T12:44:58.000Z">
+<meta property="og:updated_time" content="2017-05-01T12:46:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pegasus内核漏洞及PoC分析">
 <meta name="twitter:description" content="0x00 写在前面
@@ -277,7 +277,9 @@ var _hmt = _hmt || [];
 <h2 id="0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656"><a href="#0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656" class="headerlink" title="0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656"></a>0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656</h2><p>这里将介绍两个漏洞：1，CVE-2016-4655-infoleak漏洞；2，CVE-2016-4656-UAF漏洞</p>
 <h3 id="CVE-2016-4655-infoleak"><a href="#CVE-2016-4655-infoleak" class="headerlink" title="CVE-2016-4655-infoleak"></a>CVE-2016-4655-infoleak</h3><p>和我们之前分析的linux中printf格式漏洞类似，利用这个漏洞我们可以获取到内核栈中的地址信息，这些信息对于绕过KASLR内核地址空间随机偏移非常有用，因为系统每次启动时内核地址都偏移了一随机数，一旦确定了KSALR，我们就可以进一步做ROP等攻击。</p>
 <p>下面看漏洞点，回顾之前<code>kOSSerializeNumber</code>这个case内容</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> kOSSerializeNumber:</div><div class="line">    bufferPos += sizeof(long long);</div><div class="line">    <span class="keyword">if</span> (bufferPos &gt; bufferSize) break;</div><div class="line">    value = next[<span class="number">1</span>];</div><div class="line">    value &lt;&lt;= <span class="number">32</span>;</div><div class="line">    value |= next[<span class="number">0</span>];</div><div class="line">    o = OSNumber::withNumber(value, len);</div><div class="line">    next += <span class="number">2</span>;</div><div class="line">    break;</div><div class="line"></div><div class="line"></div><div class="line">这里存在什么问题呢？这里没有检查`OSNumber`的长度，也就是说我们可以创建一个任意长度的`OSNumber`，进而在内核读取的时候越界，然后泄漏内核地址信息。</div><div class="line"></div><div class="line">### CVE<span class="number">-2016</span><span class="number">-4656</span>-UAF漏洞</div><div class="line">UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。  </div><div class="line">来看下漏洞点，下面的代码是序列化字典dic将`OSString`这个键转化为`OSSymbol`，见下</div></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> kOSSerializeNumber:</div><div class="line">    bufferPos += sizeof(<span class="keyword">long</span> <span class="keyword">long</span>);</div><div class="line">    <span class="keyword">if</span> (bufferPos &gt; bufferSize) <span class="keyword">break</span>;</div><div class="line">    value = <span class="keyword">next</span>[<span class="number">1</span>];</div><div class="line">    value &lt;&lt;= <span class="number">32</span>;</div><div class="line">    value |= <span class="keyword">next</span>[<span class="number">0</span>];</div><div class="line">    o = OSNumber::withNumber(value, len);</div><div class="line">    <span class="keyword">next</span> += <span class="number">2</span>;</div><div class="line">    <span class="keyword">break</span>;</div></pre></td></tr></table></figure>
+<p>这里存在什么问题呢？这里没有检查<code>OSNumber</code>的长度，也就是说我们可以创建一个任意长度的<code>OSNumber</code>，进而在内核读取的时候越界，然后泄漏内核地址信息。</p>
+<h3 id="CVE-2016-4656-UAF漏洞"><a href="#CVE-2016-4656-UAF漏洞" class="headerlink" title="CVE-2016-4656-UAF漏洞"></a>CVE-2016-4656-UAF漏洞</h3><p>UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。<br>来看下漏洞点，下面的代码是序列化字典dic将<code>OSString</code>这个键转化为<code>OSSymbol</code>，见下</p>
 <p>if (dict)<br>{<br>        if (sym)<br>        {<br>            …<br>        }<br>        else<br>        {<br>            sym = OSDynamicCast(OSSymbol, o);<br>            if (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))<br>            {<br>                sym = (OSSymbol *) OSSymbol::withString(str);<br>                o-&gt;release();<br>                o = 0;<br>            }<br>            ok = (sym != 0);<br>        }<br>    }<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">这里`o-&gt;release()`有什么问题呢?还记得`objsArray`吧，用来存储所有的对象，但是用`setAtIndex`这个宏来将所有的对象`o`存在里面，而宏不实现任何类型的引用计数机制，所以存储在其中的引用不会被删除。这在我们不引用其他对象的时候是没有什么问题的，但如果是一个引用对象的话，看下面`kOSSerializeObject`中的`switchcase`。</div></pre></td></tr></table></figure></p>
 <p>case kOSSerializeObject:<br>    if (len &gt;= objsIdx) break;<br>    o = objsArray[len];<br>    o-&gt;retain();<br>    isRef = true;<br>    break;<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">此时之前存储在之前的`objsArray`的`OSString`已经free，而 `o = objsArray[len]; o-&gt;retain();`由对其进行了`retain`引用，好的一个完美的UAF漏洞。  </div><div class="line">所以我们可以构造一个字典`dic`，其中`OSString`包含一些配对的值，然后序列化一个`kOSSerializeObject`引用对象，`OSString`将调用`retain`，但却是一个被释放的对象。  </div><div class="line"></div><div class="line">## <span class="number">0x04</span> 漏洞利用-PoC分析</div><div class="line">同样分为两个漏洞利用：<span class="number">1</span>，CVE<span class="number">-2016</span><span class="number">-4655</span>-infoleak漏洞利用；<span class="number">2</span>，CVE<span class="number">-2016</span><span class="number">-4656</span>-UAF漏洞利用</div><div class="line"></div><div class="line">### CVE<span class="number">-2016</span><span class="number">-4655</span>-infoleak漏洞利用</div><div class="line">infoleak漏洞利用步骤：</div><div class="line"></div><div class="line"> * 构造一个包含过长的`OSNumber`dic字典</div><div class="line"> * 用这个序列化字典去设置userclient对象的属性</div><div class="line"> * 读回设置的`OSNumber`属性，造成infoleak</div><div class="line"> * 利用读取回来的内核地址信息计算KASLR    </div><div class="line"></div><div class="line">完整的代码。</div></pre></td></tr></table></figure></p>
 <p>uint64_t kslide_infoleak(void)<br>{<br>    kern_return_t kr = 0, err = 0;<br>    mach_port_t res = MACH_PORT_NULL, master = MACH_PORT_NULL;</p>
@@ -771,18 +773,6 @@ if (kr != KERN_SUCCESS)
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">cve</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
@@ -807,11 +797,39 @@ if (kr != KERN_SUCCESS)
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">cve</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">IPC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">mach</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Pegasus</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CVE-2016-4655</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CVE-2016-4656</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">PoC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -832,22 +850,6 @@ if (kr != KERN_SUCCESS)
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">GOT表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Pegasus</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CVE-2016-4655</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CVE-2016-4656</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PoC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -895,18 +897,6 @@ if (kr != KERN_SUCCESS)
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">stub</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">xnu</a>
               </li>
              
@@ -916,6 +906,18 @@ if (kr != KERN_SUCCESS)
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">BSD</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">dyld</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">stub</a>
               </li>
             
             <div class="clearfix"></div>
