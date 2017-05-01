@@ -26,7 +26,7 @@
 
 2017.03.13 学习内核虚拟内存vm
 看了a system approch对应章节的内容，对整个vm有一个整体认识。今天又涉及到该部分的知识的时候，总是模棱">
-<meta property="og:updated_time" content="2017-04-26T06:45:17.000Z">
+<meta property="og:updated_time" content="2017-05-01T13:03:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="吐槽">
 <meta name="twitter:description" content="仅仅代表自己的感受，总结，心得以及灵感
@@ -252,6 +252,10 @@ var _hmt = _hmt || [];
 <h2 id="2017-4-22-24-学习linux堆管理有感"><a href="#2017-4-22-24-学习linux堆管理有感" class="headerlink" title="2017.4.22-24 学习linux堆管理有感"></a>2017.4.22-24 学习linux堆管理有感</h2><ul>
 <li>翻阅查找了大量的英文文章去理解堆管理的细节，刚开始发现几篇文章对于chunk free后的处理方式相互矛盾，一直以为是自己理解不够，还没清楚内部细节，后面有对相关源代码进行了阅读，以及真机上实践验证。发现了问题是因为这几篇文章的介绍堆管理的版本不一致，因为每个代码版本或者系统的不同，在具体的实现过程中也不尽相同，很多以前的漏洞也再后来的时候进行了修改，原来如此。</li>
 <li>另一个感悟在于书写自己的理解时候，突然意识到一个整体框架是多么的难以具象化，想要介绍的东西自己好像都能理解，但真正让我分一个先后次序，主次之分，以及细致程度却不知从何开始写，怎么写？这也让我再以后的文章分析时候得到启示，应该先想好自己要介绍什么，具体的步骤是怎样，以及分析的程度等等。以上。</li>
+</ul>
+<h2 id="2017-4-25-5-1-Pegasus内核漏洞及PoC分析"><a href="#2017-4-25-5-1-Pegasus内核漏洞及PoC分析" class="headerlink" title="2017.4.25-5.1 Pegasus内核漏洞及PoC分析"></a>2017.4.25-5.1 Pegasus内核漏洞及PoC分析</h2><ul>
+<li>终于写完了这篇分析，如果认真的一步步分析过来，相信你一定有很多收获和感悟。谁不一样呢？当我一步步的咬着英文看了太多资料和别人的分析，当不熟悉一个领域的时候，会感到害怕，烦躁，困惑。当然在这之中，特别感谢看雪iOS安全小组的<a href="http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/" target="_blank" rel="external">黄大大</a>和<a href="http://blog.imjun.net/posts/restore-symbol-of-iOS-app/" target="_blank" rel="external">杨君大大</a>，给我了解答了很多困惑，很是感动。从准备分析到写完这篇文章，连续花了7天时间，庆幸自己坚持下来，学到了很多之前都不了解的技术。在分析这个漏洞及利用的时候，我才发现把之前学的linux堆栈漏洞的各个知识点都串了起来，包括-堆管理原理，ROP，Vtable等等等等。也印证了今天在微博上看到教主的那句话：<br><strong>学好书不求甚解，爱技术不论用处</strong>，当我去用之前所学去理解一个个知识点的时候才体会到后半句：<strong>没有会意便欣然忘食</strong></li>
+<li>虽然差不多都分析了，但还是有些技术得更进一步的深入学习，毕竟只有自己才知道自己真正懂了没有</li>
 </ul>
 <p><strong>待续…</strong></p>
 
@@ -486,14 +490,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -507,18 +503,6 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">free</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -538,11 +522,31 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Protostar</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆溢出</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">strcpy</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">GOT表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -562,19 +566,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">printf</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">format</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gdb</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">printf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">format</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -590,18 +594,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">mach-o</a>
               </li>
              
@@ -611,6 +603,18 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xnu</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macos内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BSD</a>
               </li>
             
             <div class="clearfix"></div>
