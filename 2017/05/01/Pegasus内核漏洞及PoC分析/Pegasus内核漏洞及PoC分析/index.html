@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-1.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-2.png?raw=true">
-<meta property="og:updated_time" content="2017-05-01T12:49:22.000Z">
+<meta property="og:updated_time" content="2017-05-01T12:53:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pegasus内核漏洞及PoC分析">
 <meta name="twitter:description" content="0x00 写在前面
@@ -276,7 +276,7 @@ var _hmt = _hmt || [];
 <p>看着很复杂，但简单来说就是如果数组大小不够的话就增加大小，然后就将其之前的o指向的对象放到<code>objs</code>数组中对应的位置。</p>
 <figure class="highlight xl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (dict)</div><div class="line">&#123;</div><div class="line">        <span class="keyword">if</span> (sym)</div><div class="line">        &#123;</div><div class="line">            <span class="function"><span class="title">if</span> (o != dict) ok = dict-&gt;</span>setObject(sym, o, <span class="literal">true</span>);</div><div class="line">            <span class="function"><span class="title">o</span>-&gt;</span>release();</div><div class="line">            <span class="function"><span class="title">sym</span>-&gt;</span>release();</div><div class="line">            sym = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            sym = OSDynamicCast(OSSymbol, o);</div><div class="line">            <span class="keyword">if</span> (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))</div><div class="line">            &#123;</div><div class="line">                sym = (OSSymbol *) OSSymbol::withString(str);</div><div class="line">                <span class="function"><span class="title">o</span>-&gt;</span>release();</div><div class="line">                o = <span class="number">0</span>;</div><div class="line">            &#125;</div><div class="line">            ok = (sym != <span class="number">0</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (array)</div><div class="line">    &#123;</div><div class="line">        <span class="function"><span class="title">ok</span> = array-&gt;</span>setObject(o);</div><div class="line">        <span class="function"><span class="title">o</span>-&gt;</span>release();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (set)</div><div class="line">    &#123;</div><div class="line">        <span class="function"><span class="title">ok</span> = set-&gt;</span>setObject(o);</div><div class="line">       <span class="function"><span class="title">o</span>-&gt;</span>release();</div><div class="line">   &#125;</div><div class="line">    <span class="keyword">else</span></div><div class="line">    &#123;</div><div class="line">        assert(!parent);</div><div class="line">        result = o;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>对解析出来的当前的集合做对应处理，比如这里的如果<code>dic</code>为真，因为<code>dic</code>字典数据结构需要<code>key-&gt;value</code>键值对的形式，所以先判断<code>sym</code>，若没设置，则代表当前<code>o</code>对象为key，则将其转化为<code>OSSymbol</code>类型，设置<code>sym</code>为true并将<code>o</code>free，那么下一次的<code>o</code>代表的对象一定是值，然后就将<code>sym</code>和<code>o</code>以键值对的形式存储在<code>dic</code>字典中，如此交替。<br>后面的代码对漏洞来说不是很重要了  </p>
-<figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="built_in"></span></div><div class="line">if (newCollect)</div><div class="line">&#123;</div><div class="line"><span class="built_in">	if </span>(!end)</div><div class="line">	&#123;</div><div class="line">		stackIdx++;</div><div class="line">		setAtIndex(stack, stackIdx, parent);</div><div class="line">	<span class="built_in">	if </span>(!ok) break;</div><div class="line">	&#125;</div><div class="line">	DEBG(<span class="string">"++stack[%d] %p\n"</span>, stackIdx, parent);</div><div class="line">	parent = o;</div><div class="line">	dict   = newDict;</div><div class="line"><span class="built_in">	array </span> = newArray;</div><div class="line">	set    = newSet;</div><div class="line">	end    = false;</div><div class="line">&#125;</div><div class="line"><span class="built_in"></span></div><div class="line">if (end)</div><div class="line">&#123;</div><div class="line"><span class="built_in">	if </span>(!stackIdx) break;</div><div class="line">	parent = stackArray[stackIdx];</div><div class="line">	DEBG(<span class="string">"--stack[%d] %p\n"</span>, stackIdx, parent);</div><div class="line">	stackIdx--;</div><div class="line">	set   = 0; </div><div class="line">	dict  = 0; </div><div class="line"><span class="built_in">	array </span>= 0;</div><div class="line"><span class="built_in">	if </span>(!(dict = OSDynamicCast(OSDictionary, parent)))</div><div class="line">	&#123;</div><div class="line">	<span class="built_in">	if </span>(!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">if (newCollect)</div><div class="line">&#123;</div><div class="line">	<span class="built_in">	if </span>(!end)</div><div class="line">			&#123;</div><div class="line">				stackIdx++;</div><div class="line">				setAtIndex(stack, stackIdx, parent);</div><div class="line">			<span class="built_in">	if </span>(!ok) break;</div><div class="line">			&#125;</div><div class="line">			DEBG(<span class="string">"++stack[%d] %p\n"</span>, stackIdx, parent);</div><div class="line">			parent = o;</div><div class="line">			dict   = newDict;</div><div class="line">		<span class="built_in">	array </span> = newArray;</div><div class="line">			set    = newSet;</div><div class="line">			end    = false;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	<span class="built_in">	if </span>(end)</div><div class="line">		&#123;</div><div class="line">		<span class="built_in">	if </span>(!stackIdx) break;</div><div class="line">			parent = stackArray[stackIdx];</div><div class="line">			DEBG(<span class="string">"--stack[%d] %p\n"</span>, stackIdx, parent);</div><div class="line">			stackIdx--;</div><div class="line">			set   = 0; </div><div class="line">			dict  = 0; </div><div class="line">		<span class="built_in">	array </span>= 0;</div><div class="line">		<span class="built_in">	if </span>(!(dict = OSDynamicCast(OSDictionary, parent)))</div><div class="line">			&#123;</div><div class="line">			<span class="built_in">	if </span>(!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));</div><div class="line">			&#125;</div><div class="line">		&#125;</div></pre></td></tr></table></figure>
 <p>简单来说就是判断是否有新集合，如有的话，就将其压入栈中，那么后面的元素都放到新集合中，当<code>end</code>时就将整个新集合放入之前的<code>dic</code>。</p>
 <h2 id="0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656"><a href="#0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656" class="headerlink" title="0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656"></a>0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656</h2><p>这里将介绍两个漏洞：1，CVE-2016-4655-infoleak漏洞；2，CVE-2016-4656-UAF漏洞</p>
 <h3 id="CVE-2016-4655-infoleak"><a href="#CVE-2016-4655-infoleak" class="headerlink" title="CVE-2016-4655-infoleak"></a>CVE-2016-4655-infoleak</h3><p>和我们之前分析的linux中printf格式漏洞类似，利用这个漏洞我们可以获取到内核栈中的地址信息，这些信息对于绕过KASLR内核地址空间随机偏移非常有用，因为系统每次启动时内核地址都偏移了一随机数，一旦确定了KSALR，我们就可以进一步做ROP等攻击。</p>
@@ -284,7 +284,7 @@ var _hmt = _hmt || [];
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> kOSSerializeNumber:</div><div class="line">    bufferPos += sizeof(<span class="keyword">long</span> <span class="keyword">long</span>);</div><div class="line">    <span class="keyword">if</span> (bufferPos &gt; bufferSize) <span class="keyword">break</span>;</div><div class="line">    value = <span class="keyword">next</span>[<span class="number">1</span>];</div><div class="line">    value &lt;&lt;= <span class="number">32</span>;</div><div class="line">    value |= <span class="keyword">next</span>[<span class="number">0</span>];</div><div class="line">    o = OSNumber::withNumber(value, len);</div><div class="line">    <span class="keyword">next</span> += <span class="number">2</span>;</div><div class="line">    <span class="keyword">break</span>;</div></pre></td></tr></table></figure>
 <p>这里存在什么问题呢？这里没有检查<code>OSNumber</code>的长度，也就是说我们可以创建一个任意长度的<code>OSNumber</code>，进而在内核读取的时候越界，然后泄漏内核地址信息。</p>
 <h3 id="CVE-2016-4656-UAF漏洞"><a href="#CVE-2016-4656-UAF漏洞" class="headerlink" title="CVE-2016-4656-UAF漏洞"></a>CVE-2016-4656-UAF漏洞</h3><p>UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。<br>来看下漏洞点，下面的代码是序列化字典dic将<code>OSString</code>这个键转化为<code>OSSymbol</code>，见下</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (dict)</div><div class="line">&#123;</div><div class="line">        <span class="keyword">if</span> (sym)</div><div class="line">        &#123;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            <span class="attr">sym</span> = OSDynamicCast(OSSymbol, o);</div><div class="line">            <span class="keyword">if</span> (!sym &amp;&amp; (<span class="attr">str</span> = OSDynamicCast(OSString, o)))</div><div class="line">            &#123;</div><div class="line">                <span class="attr">sym</span> = (OSSymbol *) OSSymbol::withString(str);</div><div class="line">                o-&gt;release();</div><div class="line">                <span class="attr">o</span> = <span class="number">0</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="attr">ok</span> = (sym != <span class="number">0</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (dict)</div><div class="line">&#123;</div><div class="line">        <span class="keyword">if</span> (sym)</div><div class="line">        &#123;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            sym = OSDynamicCast(OSSymbol, o);</div><div class="line">            <span class="keyword">if</span> (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))</div><div class="line">            &#123;</div><div class="line">                sym = (OSSymbol *) OSSymbol::withString(str);</div><div class="line">                o-&gt;release();</div><div class="line">                o = <span class="number">0</span>;</div><div class="line">            &#125;</div><div class="line">            ok = (sym != <span class="number">0</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>这里<code>o-&gt;release()</code>有什么问题呢?还记得<code>objsArray</code>吧，用来存储所有的对象，但是用<code>setAtIndex</code>这个宏来将所有的对象<code>o</code>存在里面，而宏不实现任何类型的引用计数机制，所以存储在其中的引用不会被删除。这在我们不引用其他对象的时候是没有什么问题的，但如果是一个引用对象的话，看下面<code>kOSSerializeObject</code>中的<code>switchcase</code>。 </p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> kOSSerializeObject:</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">len</span> &gt;= objsIdx) <span class="keyword">break</span>;</div><div class="line">    o = objsArray[<span class="built_in">len</span>];</div><div class="line">    o-&gt;retain();</div><div class="line">    isRef = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">break</span>;</div></pre></td></tr></table></figure>
 <p>此时之前存储在之前的<code>objsArray</code>的<code>OSString</code>已经free，而 <code>o = objsArray[len]; o-&gt;retain();</code>由对其进行了<code>retain</code>引用，好的一个完美的UAF漏洞。<br>所以我们可以构造一个字典<code>dic</code>，其中<code>OSString</code>包含一些配对的值，然后序列化一个<code>kOSSerializeObject</code>引用对象，<code>OSString</code>将调用<code>retain</code>，但却是一个被释放的对象。  </p>
@@ -636,22 +636,6 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">mach</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
@@ -665,6 +649,14 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">free</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">macOS内核</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mach</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -720,19 +712,19 @@ var _hmt = _hmt || [];
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">调试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">printf</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">format</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">gdb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">调试</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -769,6 +761,14 @@ var _hmt = _hmt || [];
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">stub</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vtable</a>
               </li>
             
             <div class="clearfix"></div>
