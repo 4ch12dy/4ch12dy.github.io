@@ -38,31 +38,16 @@
   <link rel="shorticon icon" type="image/x-icon" href="../favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="项目经验看雪iOS安全小组资格题CrackMe(2016.08)题目描述:该crackme为一个ipa的iOS应用程序，需要完成逆向,破解其算法分析编写注册机。
-解题思路:
-
-dumpdecrypted对crackme程序脱壳，classdump其所有类的头文件，拉入IDA分析，转到check函数。
-先静态直接在一条跳转指令上修改到该地址，顺利弹出成功界面。
-利用debugserver,lldb结">
+<meta name="description" content="关于我95后，宅，执迷于iOS安全">
 <meta property="og:type" content="website">
-<meta property="og:title" content="关于我">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/about/index.html">
+<meta property="og:title" content="tags">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/tags/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="项目经验看雪iOS安全小组资格题CrackMe(2016.08)题目描述:该crackme为一个ipa的iOS应用程序，需要完成逆向,破解其算法分析编写注册机。
-解题思路:
-
-dumpdecrypted对crackme程序脱壳，classdump其所有类的头文件，拉入IDA分析，转到check函数。
-先静态直接在一条跳转指令上修改到该地址，顺利弹出成功界面。
-利用debugserver,lldb结">
-<meta property="og:updated_time" content="2017-04-30T03:33:07.000Z">
+<meta property="og:description" content="关于我95后，宅，执迷于iOS安全">
+<meta property="og:updated_time" content="2017-05-02T02:29:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于我">
-<meta name="twitter:description" content="项目经验看雪iOS安全小组资格题CrackMe(2016.08)题目描述:该crackme为一个ipa的iOS应用程序，需要完成逆向,破解其算法分析编写注册机。
-解题思路:
-
-dumpdecrypted对crackme程序脱壳，classdump其所有类的头文件，拉入IDA分析，转到check函数。
-先静态直接在一条跳转指令上修改到该地址，顺利弹出成功界面。
-利用debugserver,lldb结">
+<meta name="twitter:title" content="tags">
+<meta name="twitter:description" content="关于我95后，宅，执迷于iOS安全">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -76,7 +61,7 @@ dumpdecrypted对crackme程序脱壳，classdump其所有类的头文件，拉入
   
 
   
-    关于我 | 4ch12dy
+    标签 | 4ch12dy
   
 </title>
 </head>
@@ -183,49 +168,17 @@ dumpdecrypted对crackme程序脱壳，classdump其所有类的头文件，拉入
   <div id="posts" class="posts-expand">
     
     
-      <h2 id="项目经验"><a href="#项目经验" class="headerlink" title="项目经验"></a>项目经验</h2><h3 id="看雪iOS安全小组资格题CrackMe-2016-08"><a href="#看雪iOS安全小组资格题CrackMe-2016-08" class="headerlink" title="看雪iOS安全小组资格题CrackMe(2016.08)"></a>看雪iOS安全小组资格题CrackMe(2016.08)</h3><p><strong>题目描述:</strong>该crackme为一个ipa的iOS应用程序，需要完成逆向,破解其算法分析编写注册机。</p>
-<p><strong>解题思路:</strong></p>
-<ol>
-<li>dumpdecrypted对crackme程序脱壳，classdump其所有类的头文件，拉入IDA分析，转到check函数。</li>
-<li>先静态直接在一条跳转指令上修改到该地址，顺利弹出成功界面。</li>
-<li>利用debugserver,lldb结合IDA的静态汇编代码分析其之间的加密过程。</li>
-<li>修复内存访问错误，先动态修改，后对其进行静态修改，绕过花指令。</li>
-<li>最后分析出其算法并编写了对应的注册机程序，真机测试通过。</li>
-</ol>
-<p><strong>一点感受:</strong>这次实战收获很大，题目难度较大，无论成功与否，对与自己来说已经算成功了，熟悉调试命令，扎实了逆向基本功。</p>
-<h3 id="短信防钓鱼插件SMSAnti-2016-10"><a href="#短信防钓鱼插件SMSAnti-2016-10" class="headerlink" title="短信防钓鱼插件SMSAnti(2016.10)"></a>短信防钓鱼插件SMSAnti(2016.10)</h3><p><strong>项目描述:</strong>这是一个iPhone短信系统应用的插件，能在用户点击钓鱼链接时检测网址并弹窗提醒用户。</p>
-<p><strong>主要技术:</strong></p>
-<ol>
-<li>MobileSMS为系统应用，可直接classdump拿到所有头文件</li>
-<li>利用logify跟踪SMSApplication所有方法，发现可疑函数openURL</li>
-<li>debugserver+lldb动态调试，验证<code>SMSApplication</code>的<code>openURL</code>能在跳转到Safari前拿到URL。</li>
-<li>基于钓鱼网址与原网址相近，编写字符串匹配算法判断其是否为钓鱼链接。</li>
-<li>弹窗方式提醒用户，用户可选择转到正确网址或继续前往。</li>
-</ol>
-<p><strong>一点问题：</strong>在提醒弹窗<code>alertView</code>上出了一点小问题，始终不能很好地中断跳转过程，经过一番查找和咨询，后来通过新增一个<code>UIWindow</code>解决了问题。后面准备再优化下算法以及增加在线检测等功能。</p>
-<h3 id="基于Console的简单内存修改器-2016-12"><a href="#基于Console的简单内存修改器-2016-12" class="headerlink" title="基于Console的简单内存修改器(2016.12)"></a>基于Console的简单内存修改器(2016.12)</h3><p><strong>项目描述:</strong>该内存修改器扫描通过进程id附加进程,并对其数据进行更改</p>
-<p><strong>主要技术:</strong></p>
-<ol>
-<li>通过给定的进程id获取task(<code>task_for_pid()</code>)</li>
-<li>搜索需要更改的数据值(<code>mach_vm_region()``mach_vm_read()</code>)</li>
-<li>列出搜索结果，选择并修改其内存值(<code>mach_vm_write()</code>)</li>
-</ol>
-<h2 id="专业技能"><a href="#专业技能" class="headerlink" title="专业技能"></a>专业技能</h2><ul>
-<li>掌握java、C、Object-C编程语言</li>
-<li>熟悉Hopper、IDA Pro、lldb等常用逆向分析工具,熟悉ARM,x86/64等指令集</li>
-<li>具备一定的英文读写能力，能熟练阅读英文技术文档</li>
-<li>具有较强的逆向分析能力并具有软件破解经验 </li>
-<li>了解OSX内核调试，熟悉iOS越狱过程及原理</li>
-<li>了解常见的app的加固措施(代码混淆,mach-O文件restrict字段加固等)</li>
-</ul>
-<h2 id="自我评价"><a href="#自我评价" class="headerlink" title="自我评价"></a>自我评价</h2><ul>
-<li>搜索自学能力较强，英语专业书籍阅读流畅，阅读了大量英文 macOS内核，越狱原理，iOS安全相关的文章和书籍</li>
-<li>乐于思考，善于总结学习能力较高,有自制力,做事情始终坚持有始终。</li>
-<li>对整个计算机体系有着自己的理解和认识。在学习macOS内核的过程中尤其兴奋，有着浓厚的兴趣。</li>
-<li>专业课成绩均分87+，获国家单项奖学金，英语四六级证书</li>
-<li>有问题不逃避,愿意虚心向他人学习,不以自我为中心;愿意以谦虚态度接纳他人,会用 100%的热情和精力投入到工作中。</li>
-</ul>
-
+      <div class="tag-cloud">
+        <div class="tag-cloud-title">
+            目前共计 37 个标签
+        </div>
+        <div class="tag-cloud-tags">
+          <!--
+          <a href="BSD/" style="font-size: 12px; color: #ccc">BSD</a> <a href="C/" style="font-size: 12px; color: #ccc">C++</a> <a href="CVE-2016-4655/" style="font-size: 12px; color: #ccc">CVE-2016-4655</a> <a href="CVE-2016-4656/" style="font-size: 12px; color: #ccc">CVE-2016-4656</a> <a href="Crackme/" style="font-size: 12px; color: #ccc">Crackme</a> <a href="DLMalloc/" style="font-size: 12px; color: #ccc">DLMalloc</a> <a href="GOT表/" style="font-size: 12px; color: #ccc">GOT表</a> <a href="IPC/" style="font-size: 12px; color: #ccc">IPC</a> <a href="Linux/" style="font-size: 30px; color: #111">Linux</a> <a href="Pegasus/" style="font-size: 12px; color: #ccc">Pegasus</a> <a href="PoC/" style="font-size: 12px; color: #ccc">PoC</a> <a href="Protostar/" style="font-size: 30px; color: #111">Protostar</a> <a href="UAF/" style="font-size: 12px; color: #ccc">UAF</a> <a href="cve/" style="font-size: 18px; color: #8e8e8e">cve</a> <a href="dyld/" style="font-size: 12px; color: #ccc">dyld</a> <a href="format/" style="font-size: 12px; color: #ccc">format</a> <a href="free/" style="font-size: 12px; color: #ccc">free</a> <a href="gdb/" style="font-size: 12px; color: #ccc">gdb</a> <a href="heap/" style="font-size: 12px; color: #ccc">heap</a> <a href="iOS/" style="font-size: 12px; color: #ccc">iOS</a> <a href="linux/" style="font-size: 18px; color: #8e8e8e">linux</a> <a href="macOS内核/" style="font-size: 12px; color: #ccc">macOS内核</a> <a href="mach/" style="font-size: 12px; color: #ccc">mach</a> <a href="mach-o/" style="font-size: 12px; color: #ccc">mach-o</a> <a href="macos内核/" style="font-size: 12px; color: #ccc">macos内核</a> <a href="malloc/" style="font-size: 12px; color: #ccc">malloc</a> <a href="metadata/" style="font-size: 12px; color: #ccc">metadata</a> <a href="printf/" style="font-size: 12px; color: #ccc">printf</a> <a href="strcpy/" style="font-size: 12px; color: #ccc">strcpy</a> <a href="stub/" style="font-size: 12px; color: #ccc">stub</a> <a href="vm/" style="font-size: 18px; color: #8e8e8e">vm</a> <a href="vtable/" style="font-size: 12px; color: #ccc">vtable</a> <a href="xnu/" style="font-size: 12px; color: #ccc">xnu</a> <a href="堆溢出/" style="font-size: 24px; color: #4f4f4f">堆溢出</a> <a href="栈溢出/" style="font-size: 24px; color: #4f4f4f">栈溢出</a> <a href="看雪/" style="font-size: 12px; color: #ccc">看雪</a> <a href="调试/" style="font-size: 12px; color: #ccc">调试</a>
+          -->
+          <a href="BSD/" style="font-size: 12px; color: #999">BSD</a> <a href="C/" style="font-size: 12px; color: #999">C++</a> <a href="CVE-2016-4655/" style="font-size: 12px; color: #999">CVE-2016-4655</a> <a href="CVE-2016-4656/" style="font-size: 12px; color: #999">CVE-2016-4656</a> <a href="Crackme/" style="font-size: 12px; color: #999">Crackme</a> <a href="DLMalloc/" style="font-size: 12px; color: #999">DLMalloc</a> <a href="GOT表/" style="font-size: 12px; color: #999">GOT表</a> <a href="IPC/" style="font-size: 12px; color: #999">IPC</a> <a href="Linux/" style="font-size: 30px; color: #fff">Linux</a> <a href="Pegasus/" style="font-size: 12px; color: #999">Pegasus</a> <a href="PoC/" style="font-size: 12px; color: #999">PoC</a> <a href="Protostar/" style="font-size: 30px; color: #fff">Protostar</a> <a href="UAF/" style="font-size: 12px; color: #999">UAF</a> <a href="cve/" style="font-size: 18px; color: #bbb">cve</a> <a href="dyld/" style="font-size: 12px; color: #999">dyld</a> <a href="format/" style="font-size: 12px; color: #999">format</a> <a href="free/" style="font-size: 12px; color: #999">free</a> <a href="gdb/" style="font-size: 12px; color: #999">gdb</a> <a href="heap/" style="font-size: 12px; color: #999">heap</a> <a href="iOS/" style="font-size: 12px; color: #999">iOS</a> <a href="linux/" style="font-size: 18px; color: #bbb">linux</a> <a href="macOS内核/" style="font-size: 12px; color: #999">macOS内核</a> <a href="mach/" style="font-size: 12px; color: #999">mach</a> <a href="mach-o/" style="font-size: 12px; color: #999">mach-o</a> <a href="macos内核/" style="font-size: 12px; color: #999">macos内核</a> <a href="malloc/" style="font-size: 12px; color: #999">malloc</a> <a href="metadata/" style="font-size: 12px; color: #999">metadata</a> <a href="printf/" style="font-size: 12px; color: #999">printf</a> <a href="strcpy/" style="font-size: 12px; color: #999">strcpy</a> <a href="stub/" style="font-size: 12px; color: #999">stub</a> <a href="vm/" style="font-size: 18px; color: #bbb">vm</a> <a href="vtable/" style="font-size: 12px; color: #999">vtable</a> <a href="xnu/" style="font-size: 12px; color: #999">xnu</a> <a href="堆溢出/" style="font-size: 24px; color: #ddd">堆溢出</a> <a href="栈溢出/" style="font-size: 24px; color: #ddd">栈溢出</a> <a href="看雪/" style="font-size: 12px; color: #999">看雪</a> <a href="调试/" style="font-size: 12px; color: #999">调试</a>
+        </div>
+      </div>
     
   </div>
 
