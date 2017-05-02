@@ -372,6 +372,25 @@
   
   
     
+
+  <script type="text/javascript">
+    var disqus_shortname = 'your-disqus-shortname';
+    var disqus_identifier = '/404.html';
+    var disqus_title = '';
+    var disqus_url = 'https://github.com/NULL-ME/NULL-ME.github.io.git//404.html';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+  </script>
+
   
   
   <script type="text/javascript" src="vendors/fancybox/source/jquery.fancybox.pack.js"></script>
