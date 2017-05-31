@@ -1,0 +1,770 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../../css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="不仅仅是兴趣" />
+
+
+
+  <meta name="keywords" content="linux,heap,malloc,free," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../../favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="0x00 序
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
+
+0x01 目录1.DLMalloc2.内存Chu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Linux堆分配器-DLMalloc">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/index.html">
+<meta property="og:site_name" content="4ch12dy">
+<meta property="og:description" content="0x00 序
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
+
+0x01 目录1.DLMalloc2.内存Chu">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true">
+<meta property="og:updated_time" content="2017-05-02T14:36:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Linux堆分配器-DLMalloc">
+<meta name="twitter:description" content="0x00 序
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
+
+0x01 目录1.DLMalloc2.内存Chu">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 深入理解Linux堆分配器-DLMalloc | 4ch12dy </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">路漫漫其修远兮</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fuckshit">
+          <a href="/fuckshit" rel="section">
+            <i class="menu-item-icon icon-next-fuckshit"></i> <br />
+            历程
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-iosre">
+          <a href="/iOSRERESOURCE" rel="section">
+            <i class="menu-item-icon icon-next-iosre"></i> <br />
+            iOSRE相关资料
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-aboutme">
+          <a href="/aboutme" rel="section">
+            <i class="menu-item-icon icon-next-aboutme"></i> <br />
+            关于我
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              深入理解Linux堆分配器-DLMalloc
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2017-04-23T12:16:00+08:00" content="2017-04-23">
+            2017-04-23
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="../../../../../categories/Linux堆栈漏洞学习系列/" itemprop="url" rel="index">
+                  <span itemprop="name">Linux堆栈漏洞学习系列</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
+<p> 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。</p>
+</blockquote>
+<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><p>1.DLMalloc<br>2.内存Chunk<br>3.Bin<br>4.malloc源码free()函数分析</p>
+<h2 id="0x02-DLMalloc"><a href="#0x02-DLMalloc" class="headerlink" title="0x02 DLMalloc"></a>0x02 DLMalloc</h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。<br>明显内存分配器在操作系统中是相当重要的，主要在需要满足下列的特点：</p>
+<ul>
+<li>稳定性(stability)</li>
+<li>性能(performance)</li>
+<li>避免碎片化(avoidance of fragmentation)</li>
+<li>低空间开销(low space overhead）<br>根据上面的内存特点，将有助于后面对chunk以及Bin等的理解。</li>
+</ul>
+<h2 id="0x03-内存chunk"><a href="#0x03-内存chunk" class="headerlink" title="0x03 内存chunk"></a>0x03 内存chunk</h2><p>1.什么是chunk？<br>chunk是堆中一些连续的内存块，可以用作分配，释放，拆分，合并。不存在两个连续的释放chunk，这是在于相邻的chunk会合并。</p>
+<p>2.数据结构</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> &#123;</div><div class="line">	INTERNAL_SIZE_T prev_size; <span class="comment">//当前chunk前一个chunk的大小，仅在前一个为freed才使用</span></div><div class="line">	INTERNAL_SIZE_T size;      <span class="comment">//当前chunk的大小</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> * fd;  <span class="comment">//如果当前为释放chunk，指向双向free list中前一个chunk</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">malloc_chunk</span></span> * bk;  <span class="comment">//如果当前为释放chunk，指向双向free list中后一个chunk</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>根据上面的描述我们可以知道，chunk在分配时和释放时数据结构是不同的，看下面的图例:</p>
+<ul>
+<li>allocate chunk<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true" alt="0-0"></li>
+</ul>
+<ul>
+<li>freed chunk<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true" alt="0-1"></li>
+</ul>
+<p>3.更多细节<br>因为chunk是按照8字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？<br>然后可以想到有一个最小chunk的存在，其大小为16字节()。  </p>
+<p>4.特殊chunk<br>top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</p>
+<p>last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is the result of allocation requests for small chunks that have no exact fit in any of the bins. If the request is larger than the last_remainder chunk but smaller than a block in a bin, then the chunk is split again. The last_remainder chunk is the result of having to split a larger chunk into two, one part of it is handed out from the allocation, and the other because the last_remainder chunk.</p>
+<h2 id="0x04-Bin"><a href="#0x04-Bin" class="headerlink" title="0x04 Bin"></a>0x04 Bin</h2><p>chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。<br>这里我主要介绍fsatbin和normalbin</p>
+<p>(1)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。<br>(2)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</p>
+<h2 id="0x05-free-源代码分析及相关细节"><a href="#0x05-free-源代码分析及相关细节" class="headerlink" title="0x05 free()源代码分析及相关细节"></a>0x05 free()源代码分析及相关细节</h2><p><code>free(void *mem)--&gt;__libc_free(void *mem)</code></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">void</div><div class="line">__libc_free (void *mem)</div><div class="line">&#123;</div><div class="line">  mstate ar_ptr<span class="comment">;</span></div><div class="line">  mchunkptr p<span class="comment">;                          /* chunk corresponding to mem */</span></div><div class="line"></div><div class="line">  void (*hook) (void *, const void *)</div><div class="line">    = atomic_forced_read (__free_hook)<span class="comment">;</span></div><div class="line">  if (__builtin_expect (hook != NULL, <span class="number">0</span>))</div><div class="line">    &#123;</div><div class="line">      (*hook)(mem, RETURN_ADDRESS (<span class="number">0</span>))<span class="comment">;</span></div><div class="line">      return<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">  if (mem == <span class="number">0</span>)                              <span class="comment">/* free(0) has no effect */</span></div><div class="line">    return<span class="comment">;</span></div><div class="line"></div><div class="line">  p = mem2chunk (mem)<span class="comment">;</span></div><div class="line"></div><div class="line">  if (chunk_is_mmapped (p))                       <span class="comment">/* release mmapped memory. */</span></div><div class="line">    &#123;</div><div class="line">      <span class="comment">/* See if the dynamic brk/mmap threshold needs adjusting.</span></div><div class="line">         Dumped fake mmapped chunks do not affect the threshold.  */</div><div class="line">      if (!mp_.no_dyn_threshold</div><div class="line">          &amp;&amp; <span class="keyword">chunksize_nomask </span>(p) &gt; mp_.mmap_threshold</div><div class="line">          &amp;&amp; <span class="keyword">chunksize_nomask </span>(p) &lt;= DEFAULT_MMAP_THRESHOLD_MAX</div><div class="line">          &amp;&amp; !DUMPED_MAIN_ARENA_CHUNK (p))</div><div class="line">        &#123;</div><div class="line">          mp_.mmap_threshold = <span class="keyword">chunksize </span>(p)<span class="comment">;</span></div><div class="line">          mp_.trim_threshold = <span class="number">2</span> * mp_.mmap_threshold<span class="comment">;</span></div><div class="line">          LIBC_PROBE (memory_mallopt_free_dyn_thresholds, <span class="number">2</span>,</div><div class="line">                      mp_.mmap_threshold, mp_.trim_threshold)<span class="comment">;</span></div><div class="line">        &#125;</div><div class="line">      munmap_chunk (p)<span class="comment">;</span></div><div class="line">      return<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">  ar_ptr = arena_for_chunk (p)<span class="comment">;</span></div><div class="line">  _int_free (ar_ptr, p, <span class="number">0</span>)<span class="comment">; //跳转到_int_free</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们先不关注其他的，只需要知道会调用_int_free就就可以了</p>
+<p><code>__libc_free(void *mem)--&gt;_int_free (mstate av, mchunkptr p, int have_lock)</code></p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div></pre></td><td class="code"><pre><div class="line">static void</div><div class="line"><span class="variable">_int_free</span> (mstate av, mchunkptr p, int have_lock)</div><div class="line">&#123;</div><div class="line">  INTERNAL_SIZE_T <span class="built_in">size</span>;        <span class="comment">/* 当前chunk的大小 */</span></div><div class="line">  mfastbinptr *fb;             <span class="comment">/* 相关的fastbin */</span></div><div class="line">  mchunkptr nextchunk;         <span class="comment">/* 下一个相邻的chunk */</span></div><div class="line">  INTERNAL_SIZE_T nextsize;    <span class="comment">/* 下一个chunk的大小 */</span></div><div class="line">  int nextinuse;               <span class="comment">/* 下一个chunk正在使用时为真 */</span></div><div class="line">  INTERNAL_SIZE_T prevsize;    <span class="comment">/* 前一个chunk的大小 */</span></div><div class="line">  mchunkptr bck;               <span class="comment">/* 指向free链表中向后一个chunk */</span></div><div class="line">  mchunkptr fwd;               <span class="comment">/* 指向free链表中向前一个chunk */</span></div><div class="line"></div><div class="line">  const char *errstr = NULL;</div><div class="line">  int <span class="built_in">locked</span> = <span class="number">0</span>;</div><div class="line"></div><div class="line">  <span class="built_in">size</span> = chunksize (p);</div><div class="line"></div><div class="line">  <span class="comment">/* Little security check which won't hurt performance: the</span></div><div class="line">     allocator never wrapps around at the end of the address space.</div><div class="line">     Therefore we can exclude some size values which might appear</div><div class="line">     here by accident or by "design" from some intruder.  */</div><div class="line">  <span class="comment">//一些安全检查</span></div><div class="line">  <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> ((uintptr_t) p &gt; (uintptr_t) -<span class="built_in">size</span>, <span class="number">0</span>)</div><div class="line">      || <span class="variable">__builtin_expect</span> (misaligned_chunk (p), <span class="number">0</span>))</div><div class="line">    &#123;</div><div class="line">      errstr = <span class="string">"free(): invalid pointer"</span>;</div><div class="line">    errout:</div><div class="line">      <span class="keyword">if</span> (!have_lock &amp;&amp; <span class="built_in">locked</span>)</div><div class="line">        <span class="variable">__libc_lock_unlock</span> (av-&gt;mutex);</div><div class="line">      malloc_printerr (check_action, errstr, chunk2mem (p), av);</div><div class="line">      return;</div><div class="line">    &#125;</div><div class="line">  <span class="comment">/* We know that each chunk is at least MINSIZE bytes in size or a multiple of MALLOC_ALIGNMENT.  */</span></div><div class="line">   <span class="comment">//检查是否满足大于等于最小大小</span></div><div class="line">  <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (<span class="built_in">size</span> &lt; MINSIZE || !aligned_OK (<span class="built_in">size</span>)))</div><div class="line">    &#123;</div><div class="line">      errstr = <span class="string">"free(): invalid size"</span>;</div><div class="line">      <span class="built_in">goto</span> errout;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  check_inuse_chunk(av, p); <span class="comment">//检查当前chunk是否在使用</span></div><div class="line"></div><div class="line">  <span class="comment">/*</span></div><div class="line">    如果满足，则将该chunk放入fastbin以便malloc时能够快速找到和使用</div><div class="line">  */</div><div class="line">  <span class="keyword">if</span> ((unsigned long)(<span class="built_in">size</span>) &lt;= (unsigned long)(get_max_fast ())</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> TRIM_FASTBINS</span></div><div class="line">      <span class="comment">/*</span></div><div class="line">        If TRIM_FASTBINS set, don't place chunks</div><div class="line">        bordering top into fastbins</div><div class="line">      */</div><div class="line">      &amp;&amp; (chunk_at_offset(p, <span class="built_in">size</span>) != av-&gt;top)</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">      ) &#123;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (chunksize_nomask (chunk_at_offset (p, <span class="built_in">size</span>))</div><div class="line">                          &lt;= <span class="number">2</span> * SIZE_SZ, <span class="number">0</span>)</div><div class="line">        || <span class="variable">__builtin_expect</span> (chunksize (chunk_at_offset (p, <span class="built_in">size</span>))</div><div class="line">                             &gt;= av-&gt;system_mem, <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        <span class="comment">/* We might not have a lock at this point and concurrent modifications</span></div><div class="line">           of system_mem might have let to a false positive.  Redo the test</div><div class="line">           after getting the lock.  */</div><div class="line">        <span class="keyword">if</span> (have_lock</div><div class="line">            || (&#123; <span class="built_in">assert</span> (<span class="built_in">locked</span> == <span class="number">0</span>);</div><div class="line">                  <span class="variable">__libc_lock_lock</span> (av-&gt;mutex);</div><div class="line">                  <span class="built_in">locked</span> = <span class="number">1</span>;</div><div class="line">                  chunksize_nomask (chunk_at_offset (p, <span class="built_in">size</span>)) &lt;= <span class="number">2</span> * SIZE_SZ</div><div class="line">                    || chunksize (chunk_at_offset (p, <span class="built_in">size</span>)) &gt;= av-&gt;system_mem;</div><div class="line">              &#125;))</div><div class="line">          &#123;</div><div class="line">            errstr = <span class="string">"free(): invalid next size (fast)"</span>;</div><div class="line">            <span class="built_in">goto</span> errout;</div><div class="line">          &#125;</div><div class="line">        <span class="keyword">if</span> (! have_lock)</div><div class="line">          &#123;</div><div class="line">            <span class="variable">__libc_lock_unlock</span> (av-&gt;mutex);</div><div class="line">            <span class="built_in">locked</span> = <span class="number">0</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">    free_perturb (chunk2mem(p), <span class="built_in">size</span> - <span class="number">2</span> * SIZE_SZ);</div><div class="line"></div><div class="line">    set_fastchunks(av);</div><div class="line">    unsigned int idx = fastbin_index(<span class="built_in">size</span>);</div><div class="line">    fb = &amp;fastbin (av, idx);</div><div class="line"></div><div class="line">    <span class="comment">/* Atomically link P to its fastbin: P-&gt;FD = *FB; *FB = P;  */</span></div><div class="line">    mchunkptr old = *fb, old2;</div><div class="line">    unsigned int old_idx = ~<span class="number">0</span>u;</div><div class="line">    <span class="keyword">do</span></div><div class="line">      &#123;</div><div class="line">        <span class="comment">/* Check that the top of the bin is not the record we are going to add</span></div><div class="line">           (i.e., double free).  */</div><div class="line">        <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (old == p, <span class="number">0</span>))</div><div class="line">          &#123;</div><div class="line">            errstr = <span class="string">"double free or corruption (fasttop)"</span>;</div><div class="line">            <span class="built_in">goto</span> errout;</div><div class="line">          &#125;</div><div class="line">        <span class="comment">/* Check that size of fastbin chunk at the top is the same as</span></div><div class="line">           size of the chunk that we are adding.  We can dereference OLD</div><div class="line">           only if we have the lock, otherwise it might have already been</div><div class="line">           deallocated.  See use of OLD_IDX below for the actual check.  */</div><div class="line">        <span class="keyword">if</span> (have_lock &amp;&amp; old != NULL)</div><div class="line">          old_idx = fastbin_index(chunksize(old));</div><div class="line">        p-&gt;fd = old2 = old;</div><div class="line">      &#125;</div><div class="line">    <span class="keyword">while</span> ((old = catomic_compare_and_exchange_val_rel (fb, p, old2)) != old2);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (have_lock &amp;&amp; old != NULL &amp;&amp; <span class="variable">__builtin_expect</span> (old_idx != idx, <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"invalid fastbin entry (free)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">/*</span></div><div class="line">    Consolidate other non-mmapped chunks as they arrive.</div><div class="line">  */</div><div class="line">  <span class="comment">//检查是否是通过mmap()分配的内存</span></div><div class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (!chunk_is_mmapped(p)) &#123;</div><div class="line">    <span class="keyword">if</span> (! have_lock) &#123;</div><div class="line">      <span class="variable">__libc_lock_lock</span> (av-&gt;mutex);</div><div class="line">      <span class="built_in">locked</span> = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    nextchunk = chunk_at_offset(p, <span class="built_in">size</span>);<span class="comment">//返回下一个chunk的地址</span></div><div class="line"></div><div class="line">    <span class="comment">/* Lightweight tests: check whether the block is already the</span></div><div class="line">       top block.  */</div><div class="line">    <span class="comment">//检查下一个是否为top-chunk</span></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (p == av-&gt;top))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"double free or corruption (top)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line">    <span class="comment">/* Or whether the next chunk is beyond the boundaries of the arena.  */</span></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (contiguous (av)</div><div class="line">                          &amp;&amp; (char *) nextchunk</div><div class="line">                          &gt;= ((char *) av-&gt;top + chunksize(av-&gt;top)), <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"double free or corruption (out)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line">    <span class="comment">/* Or whether the block is actually not marked used.  */</span></div><div class="line">    <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (!prev_inuse(nextchunk)))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"double free or corruption (!prev)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">    nextsize = chunksize(nextchunk);</div><div class="line">    <span class="keyword">if</span> (<span class="variable">__builtin_expect</span> (chunksize_nomask (nextchunk) &lt;= <span class="number">2</span> * SIZE_SZ, <span class="number">0</span>)</div><div class="line">        || <span class="variable">__builtin_expect</span> (nextsize &gt;= av-&gt;system_mem, <span class="number">0</span>))</div><div class="line">      &#123;</div><div class="line">        errstr = <span class="string">"free(): invalid next size (normal)"</span>;</div><div class="line">        <span class="built_in">goto</span> errout;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">    free_perturb (chunk2mem(p), <span class="built_in">size</span> - <span class="number">2</span> * SIZE_SZ);</div><div class="line"></div><div class="line">    <span class="comment">/* 与后面chunk一个合并 */</span></div><div class="line">    <span class="keyword">if</span> (!prev_inuse(p)) &#123;</div><div class="line">      prevsize = prev_size (p);</div><div class="line">      <span class="built_in">size</span> += prevsize;</div><div class="line">      p = chunk_at_offset(p, -((long) prevsize));</div><div class="line">      unlink(av, p, bck, fwd);<span class="comment">//将后一个chunk从双向链表上取下来</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (nextchunk != av-&gt;top) &#123;</div><div class="line">      <span class="comment">/* get and clear inuse bit */</span></div><div class="line">      nextinuse = inuse_bit_at_offset(nextchunk, nextsize);</div><div class="line"></div><div class="line">      <span class="comment">/* 与前面chunk一个合并*/</span></div><div class="line">      <span class="keyword">if</span> (!nextinuse) &#123;</div><div class="line">        unlink(av, nextchunk, bck, fwd);<span class="comment">//将前一个chunk从双向链表上取下来</span></div><div class="line">        <span class="built_in">size</span> += nextsize;</div><div class="line">      &#125; <span class="keyword">else</span></div><div class="line">        clear_inuse_bit_at_offset(nextchunk, <span class="number">0</span>);</div><div class="line"></div><div class="line">      <span class="comment">/*</span></div><div class="line">        Place the chunk in unsorted chunk list. Chunks are</div><div class="line">        not placed into regular bins until after they have</div><div class="line">        been given one chance to be used in malloc.</div><div class="line">      */</div><div class="line"></div><div class="line">      bck = unsorted_chunks(av);</div><div class="line">      fwd = bck-&gt;fd;</div><div class="line">      <span class="keyword">if</span> (<span class="variable">__glibc_unlikely</span> (fwd-&gt;bk != bck))</div><div class="line">        &#123;</div><div class="line">          errstr = <span class="string">"free(): corrupted unsorted chunks"</span>;</div><div class="line">          <span class="built_in">goto</span> errout;</div><div class="line">        &#125;</div><div class="line">      p-&gt;fd = fwd;</div><div class="line">      p-&gt;bk = bck;</div><div class="line">      <span class="keyword">if</span> (!in_smallbin_range(<span class="built_in">size</span>))</div><div class="line">        &#123;</div><div class="line">          p-&gt;fd_nextsize = NULL;</div><div class="line">          p-&gt;bk_nextsize = NULL;</div><div class="line">        &#125;</div><div class="line">      bck-&gt;fd = p;</div><div class="line">      fwd-&gt;bk = p;</div><div class="line"></div><div class="line">      set_head(p, <span class="built_in">size</span> | PREV_INUSE);</div><div class="line">      set_foot(p, <span class="built_in">size</span>);</div><div class="line"></div><div class="line">      check_free_chunk(av, p);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/*</span></div><div class="line">      如果当前chunk正好与topchunk相邻，则合并到topchunk</div><div class="line">    */</div><div class="line"></div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">size</span> += nextsize;</div><div class="line">      set_head(p, <span class="built_in">size</span> | PREV_INUSE);</div><div class="line">      av-&gt;top = p;</div><div class="line">      check_chunk(av, p);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/*</span></div><div class="line">      If freeing a large space, consolidate possibly-surrounding</div><div class="line">      chunks. Then, if the total unused topmost memory exceeds trim</div><div class="line">      threshold, ask malloc_trim to reduce top.</div><div class="line"></div><div class="line">      Unless max_fast is 0, we don't know if there are fastbins</div><div class="line">      bordering top, so we cannot tell for sure whether threshold</div><div class="line">      has been reached unless fastbins are consolidated.  But we</div><div class="line">      don't want to consolidate on each free.  As a compromise,</div><div class="line">      consolidation is performed if FASTBIN_CONSOLIDATION_THRESHOLD</div><div class="line">      is reached.</div><div class="line">    */</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((unsigned long)(<span class="built_in">size</span>) &gt;= FASTBIN_CONSOLIDATION_THRESHOLD) &#123;</div><div class="line">      <span class="keyword">if</span> (have_fastchunks(av))</div><div class="line">        malloc_consolidate(av);</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (av == &amp;main_arena) &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MORECORE_CANNOT_TRIM</span></div><div class="line">        <span class="keyword">if</span> ((unsigned long)(chunksize(av-&gt;top)) &gt;=</div><div class="line">            (unsigned long)(mp_.trim_threshold))</div><div class="line">          systrim(mp_.top_pad, av);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">/* Always try heap_trim(), even if the top chunk is not</span></div><div class="line">           large, because the corresponding heap might go away.  */</div><div class="line">        heap_info *heap = heap_for_ptr(top(av));</div><div class="line"></div><div class="line">        <span class="built_in">assert</span>(heap-&gt;ar_ptr == av);</div><div class="line">        heap_trim(heap, mp_.top_pad);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (! have_lock) &#123;</div><div class="line">      <span class="built_in">assert</span> (<span class="built_in">locked</span>);</div><div class="line">      <span class="variable">__libc_lock_unlock</span> (av-&gt;mutex);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">/*</span></div><div class="line">    If the chunk was allocated via mmap, release via munmap().</div><div class="line">  */</div><div class="line"></div><div class="line">  <span class="keyword">else</span> &#123;</div><div class="line">    munmap_chunk (p);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里看看<code>unlink()</code>宏定义</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">#define</span> unlink( P, <span class="keyword">BK, </span>FD ) &#123;            </div><div class="line">    <span class="keyword">BK </span>= P-&gt;<span class="keyword">bk; </span>                         </div><div class="line">    FD = P-&gt;fd<span class="comment">;                          </span></div><div class="line">    FD-&gt;<span class="keyword">bk </span>= <span class="keyword">BK; </span> //可能会造成任意写                       </div><div class="line">    <span class="keyword">BK-&gt;fd </span>= FD<span class="comment">;                         </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在我们重点放在<code>unlink()</code>，当两个相邻chunk需要合并的时候，势必需要将临近的chunk从原来的双链表上取下来，然后与当前chunk合并成一个更大的块。等等！怎么取下来的呢？如果这里存在一个恶意的chunk即fd和bk都是一些恶意地址指针，则会出现任意地址写的一个漏洞。在这里我们就先不去讨论进一步的利用过程，只需知道存在一个这样的漏洞即可，后面会根据这个分析去漏洞利用。</p>
+<p><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#__libc_free" target="_blank" rel="external">glibc/malloc.c源码</a></p>
+<h2 id="0x06-参考"><a href="#0x06-参考" class="headerlink" title="0x06 参考"></a>0x06 参考</h2><ol>
+<li><a href="http://phrack.org/issues/57/8.html#article" target="_blank" rel="external">Vudo malloc tricks</a></li>
+<li><a href="http://gee.cs.oswego.edu/dl/html/malloc.html" target="_blank" rel="external">A Memory Allocator</a></li>
+<li><a href="http://phrack.org/issues/57/9.html#article" target="_blank" rel="external">Once upon a free()</a></li>
+</ol>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../../../../tags/linux/" rel="tag">#linux</a>
+          
+            <a href="../../../../../tags/heap/" rel="tag">#heap</a>
+          
+            <a href="../../../../../tags/malloc/" rel="tag">#malloc</a>
+          
+            <a href="../../../../../tags/free/" rel="tag">#free</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="../../../26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/" rel="prev">Protostar-堆溢出学习-滥用堆metadata重定向程序执行</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="../../../21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/" rel="next">Protostar-堆溢出学习-UAF(use after free)</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+    </div>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">4ch12dy</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不仅仅是兴趣</p>
+
+       <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=300 height=86 src="//music.163.com/outchain/player?type=2&id=1212320&auto=0&height=66"></iframe>
+
+       
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../../../../../archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">归档</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../../../../../categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../../../../../tags">
+              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/NULL-ME" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/eee-face/activities" target="_blank">知乎</a>
+              </span>
+            
+          
+        </div>
+
+     
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">技术分享</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://turingh.github.io/" target="_blank">mrh</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-序"><span class="nav-number">1.</span> <span class="nav-text">0x00 序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-目录"><span class="nav-number">2.</span> <span class="nav-text">0x01 目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-DLMalloc"><span class="nav-number">3.</span> <span class="nav-text">0x02 DLMalloc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-内存chunk"><span class="nav-number">4.</span> <span class="nav-text">0x03 内存chunk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-Bin"><span class="nav-number">5.</span> <span class="nav-text">0x04 Bin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-free-源代码分析及相关细节"><span class="nav-number">6.</span> <span class="nav-text">0x05 free()源代码分析及相关细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-参考"><span class="nav-number">7.</span> <span class="nav-text">0x06 参考</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2017
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ch12dy
+  </span>
+</div>
+
+<div class="powered-by">
+  当梦想全都被take away
+</div>
+<div class="theme-info">
+  keep hacking!
+</div>
+
+
+<!-- busuanzi -->
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../../../../../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = '4ch12dy';
+    var disqus_identifier = '2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/';
+    var disqus_title = '深入理解Linux堆分配器-DLMalloc';
+    var disqus_url = 'https://github.com/NULL-ME/NULL-ME.github.io.git/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="../../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="../../../../../js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="../../../../../js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="../../../../../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="../../../../../js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="../../../../../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="../../../../../js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "../../../../../images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

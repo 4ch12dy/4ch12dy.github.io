@@ -1,0 +1,491 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="../css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="不仅仅是兴趣" />
+
+
+
+  <meta name="keywords" content="Hexo,Mala" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="仅仅代表自己的感受，总结，心得以及灵感
+
+
+2017.03.09 学习IPC机制
+看了相关的内核源码，也仔细阅读了几篇别人的博客，对IPC端口机制有了一定的了解，在这过程中，好多东西都不能够完全理解。让人很容易迷失，只有move了。
+
+2017.03.13 学习内核虚拟内存vm
+看了a system approch对应章节的内容，对整个vm有一个整体认识。今天又涉及到该部分的知识的时候，总是模">
+<meta property="og:type" content="website">
+<meta property="og:title" content="吐槽">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/fuckshit/index.html">
+<meta property="og:site_name" content="4ch12dy">
+<meta property="og:description" content="仅仅代表自己的感受，总结，心得以及灵感
+
+
+2017.03.09 学习IPC机制
+看了相关的内核源码，也仔细阅读了几篇别人的博客，对IPC端口机制有了一定的了解，在这过程中，好多东西都不能够完全理解。让人很容易迷失，只有move了。
+
+2017.03.13 学习内核虚拟内存vm
+看了a system approch对应章节的内容，对整个vm有一个整体认识。今天又涉及到该部分的知识的时候，总是模">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/other/pro.jpg?raw=true">
+<meta property="og:updated_time" content="2017-05-02T11:40:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="吐槽">
+<meta name="twitter:description" content="仅仅代表自己的感受，总结，心得以及灵感
+
+
+2017.03.09 学习IPC机制
+看了相关的内核源码，也仔细阅读了几篇别人的博客，对IPC端口机制有了一定的了解，在这过程中，好多东西都不能够完全理解。让人很容易迷失，只有move了。
+
+2017.03.13 学习内核虚拟内存vm
+看了a system approch对应章节的内容，对整个vm有一个整体认识。今天又涉及到该部分的知识的时候，总是模">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/other/pro.jpg?raw=true">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title>
+  
+
+  
+    吐槽 | 4ch12dy
+  
+</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">路漫漫其修远兮</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fuckshit">
+          <a href="/fuckshit" rel="section">
+            <i class="menu-item-icon icon-next-fuckshit"></i> <br />
+            历程
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-iosre">
+          <a href="/iOSRERESOURCE" rel="section">
+            <i class="menu-item-icon icon-next-iosre"></i> <br />
+            iOSRE相关资料
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-aboutme">
+          <a href="/aboutme" rel="section">
+            <i class="menu-item-icon icon-next-aboutme"></i> <br />
+            关于我
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+    
+      <blockquote>
+<p> 仅仅代表自己的感受，总结，心得以及灵感</p>
+</blockquote>
+<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/other/pro.jpg?raw=true" alt="pro"></p>
+<h2 id="2017-03-09-学习IPC机制"><a href="#2017-03-09-学习IPC机制" class="headerlink" title="2017.03.09 学习IPC机制"></a>2017.03.09 学习IPC机制</h2><ul>
+<li>看了相关的内核源码，也仔细阅读了几篇别人的博客，对IPC端口机制有了一定的了解，在这过程中，好多东西都不能够完全理解。让人很容易迷失，只有move了。</li>
+</ul>
+<h2 id="2017-03-13-学习内核虚拟内存vm"><a href="#2017-03-13-学习内核虚拟内存vm" class="headerlink" title="2017.03.13 学习内核虚拟内存vm"></a>2017.03.13 学习内核虚拟内存vm</h2><ul>
+<li>看了a system approch对应章节的内容，对整个vm有一个整体认识。今天又涉及到该部分的知识的时候，总是模棱两可。有必要回去再仔细读一遍。越看得多越觉得自己很菜，路漫漫其修远兮，吾将上下而求索。</li>
+</ul>
+<h2 id="2017-03-23-一些思考"><a href="#2017-03-23-一些思考" class="headerlink" title="2017.03.23 一些思考"></a>2017.03.23 一些思考</h2><ul>
+<li>很多事情都是相通的，还记得大一刚学C语言的时候，很迷茫。不知道C语言究竟意味着什么，在计算机中处于哪个层次。学习计算机科学(其他科学不清楚)一定是在广度和深度之间选择，大多数人先选择了深度。诚然，深度更能得到所谓的认可，但广度我认为是更为重要。开始的时候，应该在广度和深度之间做一个折中，当你发现了你所感兴趣的方向后，再深度。而以后当你遇到需要解决某个问题的时候，因为你的广度，你知道问题所处在的维度，在整个计算机体系中的位置，你能够很快速较清晰的解决问题。</li>
+<li>回到作为一个人的本身，一个人之所以为人。最重要的是人会思考，有思想。一个人在做一件事的时候，要思考这件事处在的维度，这样才不会迷茫，麻痹，甚至被人牵着鼻子走，不会人云亦云。再者，人需要对自身有充分的认识，知道自己所处在的维度，不断学习，训练，思考，反馈。循环反复，变成大师。这种想法类似于常说的一个人的目光，目光的短浅便是广度的大小。而以上，同是我的一点思考。</li>
+<li>最后 think different！</li>
+</ul>
+<h2 id="2017-4-10-复习Mach-o动态链接"><a href="#2017-4-10-复习Mach-o动态链接" class="headerlink" title="2017.4.10 复习Mach-o动态链接"></a>2017.4.10 复习Mach-o动态链接</h2><ul>
+<li>为什么是复习呢？这个知识点其实去年就学过，但是现在却说不出个所以然，于是乎，准备沉下心来去弄清楚来龙去脉。很多时候不就是这样吗？看别人的分析以为看懂了很简单，自己没动手实践，总是有问题的。</li>
+<li>这次在分析得过程中，始终没能理解<code>0x100000f7a: ff 25 90 00 00 00     jmpq   *0x90(%rip)</code>,为什么同一条指令，却在符号绑定后就跳转到不同的地址，一直以为是rip相对寻址的问题，后来才恍然大悟，原来是jmpq后面有一个*号，指的是跳转到<code>0x90(%rip)</code>里面的地址即<code>rip+0x90+6(该指令的长度)</code>然后观察<code>0x90(%rip)</code>里面的值确实在符号绑定后发生了改变。</li>
+<li>写一篇这样的博客分析无疑会很耗时间，但收获同样是很大的。 </li>
+</ul>
+<h2 id="2017-4-22-24-学习linux堆管理有感"><a href="#2017-4-22-24-学习linux堆管理有感" class="headerlink" title="2017.4.22-24 学习linux堆管理有感"></a>2017.4.22-24 学习linux堆管理有感</h2><ul>
+<li>翻阅查找了大量的英文文章去理解堆管理的细节，刚开始发现几篇文章对于chunk free后的处理方式相互矛盾，一直以为是自己理解不够，还没清楚内部细节，后面有对相关源代码进行了阅读，以及真机上实践验证。发现了问题是因为这几篇文章的介绍堆管理的版本不一致，因为每个代码版本或者系统的不同，在具体的实现过程中也不尽相同，很多以前的漏洞也再后来的时候进行了修改，原来如此。</li>
+<li>另一个感悟在于书写自己的理解时候，突然意识到一个整体框架是多么的难以具象化，想要介绍的东西自己好像都能理解，但真正让我分一个先后次序，主次之分，以及细致程度却不知从何开始写，怎么写？这也让我再以后的文章分析时候得到启示，应该先想好自己要介绍什么，具体的步骤是怎样，以及分析的程度等等。以上。</li>
+</ul>
+<h2 id="2017-4-25-5-1-Pegasus内核漏洞及PoC分析"><a href="#2017-4-25-5-1-Pegasus内核漏洞及PoC分析" class="headerlink" title="2017.4.25-5.1 Pegasus内核漏洞及PoC分析"></a>2017.4.25-5.1 Pegasus内核漏洞及PoC分析</h2><ul>
+<li>终于写完了这篇分析，历时8小时写博客，共7天的理解分析等等，如果跟着我认真的一步步分析过来，相信你一定有很多收获和感悟。谁不一样呢？当我一步步的咬着英文看了太多资料和别人的分析，当不熟悉一个领域的时候，也会感到害怕，烦躁，困惑，主要坚持下来了，一切都是值得的。当然在这之中，特别感谢看雪iOS安全小组的<a href="http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/" target="_blank" rel="external">黄大大</a>和<a href="http://blog.imjun.net/posts/restore-symbol-of-iOS-app/" target="_blank" rel="external">杨君大大</a>，给我了解答了很多困惑，很是感动。从准备分析到写完这篇文章，连续花了7天时间，庆幸自己坚持下来，学到了很多之前都不了解的技术。在分析这个漏洞及利用的时候，我才发现把之前学的linux堆栈漏洞的各个知识点都串了起来，包括-堆管理原理，ROP，UAF,Vtable等等等等。也印证了今天在微博上看到教主的那句话：<br><strong>学好书不求甚解，爱技术不论用处</strong>，当我去用之前所学去理解一个个知识点的时候才体会到后半句：<strong>每有会意便欣然忘食</strong></li>
+<li>虽然差不多都分析了，但还是有些技术得更进一步的深入学习，毕竟只有自己才知道自己真正懂了没有</li>
+</ul>
+<p><strong>待续…</strong></p>
+
+    
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">4ch12dy</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不仅仅是兴趣</p>
+
+       <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=300 height=86 src="//music.163.com/outchain/player?type=2&id=1212320&auto=0&height=66"></iframe>
+
+       
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">归档</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../tags">
+              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/NULL-ME" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/eee-face/activities" target="_blank">知乎</a>
+              </span>
+            
+          
+        </div>
+
+     
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">技术分享</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://turingh.github.io/" target="_blank">mrh</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2017
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ch12dy
+  </span>
+</div>
+
+<div class="powered-by">
+  当梦想全都被take away
+</div>
+<div class="theme-info">
+  keep hacking!
+</div>
+
+
+<!-- busuanzi -->
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = '4ch12dy';
+    var disqus_identifier = 'fuckshit/index.html';
+    var disqus_title = '吐槽';
+    var disqus_url = 'https://github.com/NULL-ME/NULL-ME.github.io.git/fuckshit/index.html';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="../js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="../js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="../js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="../js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "../images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

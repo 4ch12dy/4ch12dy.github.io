@@ -1,0 +1,748 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../../css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="不仅仅是兴趣" />
+
+
+
+  <meta name="keywords" content="数学," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../../favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="0x00 写在前面
+ 突然在邮件中收到Quora中这样一个问题”What does X equal in $\sqrt{x+15} + \sqrt{x} = 15$? “ 凭着曾经对数学的热爱，我点了进去。顺便学习了点知识。
+
+0x01 你会怎么解决？不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都知道，同时平方带来就是可能会升高次数，有时候拿到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一道高中数学题的思考？">
+<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/05/04/math/math/index.html">
+<meta property="og:site_name" content="4ch12dy">
+<meta property="og:description" content="0x00 写在前面
+ 突然在邮件中收到Quora中这样一个问题”What does X equal in $\sqrt{x+15} + \sqrt{x} = 15$? “ 凭着曾经对数学的热爱，我点了进去。顺便学习了点知识。
+
+0x01 你会怎么解决？不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都知道，同时平方带来就是可能会升高次数，有时候拿到">
+<meta property="og:updated_time" content="2017-05-04T15:09:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一道高中数学题的思考？">
+<meta name="twitter:description" content="0x00 写在前面
+ 突然在邮件中收到Quora中这样一个问题”What does X equal in $\sqrt{x+15} + \sqrt{x} = 15$? “ 凭着曾经对数学的热爱，我点了进去。顺便学习了点知识。
+
+0x01 你会怎么解决？不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都知道，同时平方带来就是可能会升高次数，有时候拿到">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 一道高中数学题的思考？ | 4ch12dy </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">路漫漫其修远兮</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fuckshit">
+          <a href="/fuckshit" rel="section">
+            <i class="menu-item-icon icon-next-fuckshit"></i> <br />
+            历程
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-iosre">
+          <a href="/iOSRERESOURCE" rel="section">
+            <i class="menu-item-icon icon-next-iosre"></i> <br />
+            iOSRE相关资料
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-aboutme">
+          <a href="/aboutme" rel="section">
+            <i class="menu-item-icon icon-next-aboutme"></i> <br />
+            关于我
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              一道高中数学题的思考？
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2017-05-04T20:37:59+08:00" content="2017-05-04">
+            2017-05-04
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="../../../../../categories/关于数学/" itemprop="url" rel="index">
+                  <span itemprop="name">关于数学</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/04/math/math/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><blockquote>
+<p> 突然在邮件中收到Quora中这样一个问题”What does X equal in $\sqrt{x+15} + \sqrt{x} = 15$? “ 凭着曾经对数学的热爱，我点了进去。顺便学习了点知识。</p>
+</blockquote>
+<h2 id="0x01-你会怎么解决？"><a href="#0x01-你会怎么解决？" class="headerlink" title="0x01 你会怎么解决？"></a>0x01 你会怎么解决？</h2><p>不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都知道，同时平方带来就是可能会升高次数，有时候拿到答案还是挺繁琐的，至少计算上来说是这样的。</p>
+<h2 id="0x02-方法1-平方法"><a href="#0x02-方法1-平方法" class="headerlink" title="0x02 方法1 平方法"></a>0x02 方法1 平方法</h2><p>通常解决这个问题的方法是将方程的两边平方并简化，并保持平方，直到方程中没有平方根</p>
+<p>$\sqrt{x+15} + \sqrt{x} = 15$ </p>
+<p>$(\sqrt{x+15} + \sqrt{x})^2 = 15^2$ </p>
+<p>$x+15 + 2\sqrt{(x+15)x} + x = 225$ </p>
+<p>$2\sqrt{(x+15)x} = 210 - 2x$  </p>
+<p>$\sqrt{(x+15)x} = 105 - x$  </p>
+<p>$(\sqrt{(x+15)x})^2 = (105 - x)^2$  </p>
+<p>$x^2 + 15x = 11025 - 210x +x^2$  </p>
+<p>$225x = 11025$  </p>
+<p>$ x = 49$<br>思维过程很清楚，但明显计算上有点繁琐。  </p>
+<h2 id="0x03-方法2-拼凑法"><a href="#0x03-方法2-拼凑法" class="headerlink" title="0x03 方法2 拼凑法"></a>0x03 方法2 拼凑法</h2><p>不一定可靠，但一定最快。大多情况下，都是开方后是整数。所以每个完全平方数的序列（$1^22^23^3…6^27^28^2… =&gt; 1 4 9 16 25 36 49 64 …$）</p>
+<p>哪两个数相差15呢？很明显64 - 49 = 15，也许你觉得这很不靠谱，其实至少对于开方是整数的结果来说是很快的，觉得慢主要是你还不熟练。因为并不是一个一个的去试验，因为相邻之差是递增且快。类似二叉树来查找会很快得出结果。  </p>
+<p>$\sqrt{49 + 15} + \sqrt{49} = 15$  </p>
+<p>$7 + 8 = 15$<br>最快，但不一定可靠。</p>
+<h2 id="0x04-方法3-平方差法"><a href="#0x04-方法3-平方差法" class="headerlink" title="0x04 方法3 平方差法"></a>0x04 方法3 平方差法</h2><p>暂且称作平方差法吧，这个方法是我最推荐的，既快又准。<br>原式：$\sqrt{x+15} + \sqrt{x} = 15$  (1)</p>
+<p>设 $\sqrt{x+15} - \sqrt{x} = k$  </p>
+<p>又 $(\sqrt{x+15} - \sqrt{x})(\sqrt{x+15} + \sqrt{x})= 15k$ </p>
+<p>解得： $k = 1$    </p>
+<p>所以 $\sqrt{x+15} - \sqrt{x} = 1$ （2）</p>
+<p>然后<code>（1）+ (2)</code>:   $2\sqrt{x+15} = 16$  </p>
+<p>解得: $x = 49$  </p>
+<p>多么棒的一个方法 I love it！  </p>
+<h2 id="0x05-我与数学"><a href="#0x05-我与数学" class="headerlink" title="0x05 我与数学"></a>0x05 我与数学</h2><p>从小数学就比语文好的我，数学确实给了我很多自信，想破头皮的去思考一个一个的题。一如既往的热爱，以致于高考只填了一个专业–数学。由于种种原因，没能选上，去来到了计算机相关的专业。计算机科学同样是一个迷人的世界，那种理解本质，控制计算机的运行是让人着迷的。在反馈上来说，计算机比做数学得到的反馈更真实，快速。做数学题的时候总是找不到方向，得到的反馈少且慢，容易让人沮丧，想必这也是大多人讨厌数学的原因之一吧。虽然现在更热爱计算机，但心底里仍然有一个数学的种子。以至于很多时候看到感兴趣的题也会拿上纸笔算一算，知乎上也关注了相关话题，还有一个自己特别骄傲的回答，关于高中数列的，具体情况移步<a href="https://www.zhihu.com/question/30050677" target="_blank" rel="external">高考数学数列放缩总结技巧有哪些？</a><br>相信不管是现在还是将来，数学都是我最深处的支持。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../../../../tags/数学/" rel="tag">#数学</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="../../../31/pwnhub-CTF-re150/pwnhub-CTF-re150/" rel="prev">pwnhub-CTF re150</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="../../../01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/" rel="next">Pegasus内核漏洞及PoC分析</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+    </div>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">4ch12dy</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">不仅仅是兴趣</p>
+
+       <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=300 height=86 src="//music.163.com/outchain/player?type=2&id=1212320&auto=0&height=66"></iframe>
+
+       
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../../../../../archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">归档</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../../../../../categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../../../../../tags">
+              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/NULL-ME" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/eee-face/activities" target="_blank">知乎</a>
+              </span>
+            
+          
+        </div>
+
+     
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">技术分享</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://turingh.github.io/" target="_blank">mrh</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-写在前面"><span class="nav-number">1.</span> <span class="nav-text">0x00 写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-你会怎么解决？"><span class="nav-number">2.</span> <span class="nav-text">0x01 你会怎么解决？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-方法1-平方法"><span class="nav-number">3.</span> <span class="nav-text">0x02 方法1 平方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-方法2-拼凑法"><span class="nav-number">4.</span> <span class="nav-text">0x03 方法2 拼凑法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-方法3-平方差法"><span class="nav-number">5.</span> <span class="nav-text">0x04 方法3 平方差法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-我与数学"><span class="nav-number">6.</span> <span class="nav-text">0x05 我与数学</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2017
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ch12dy
+  </span>
+</div>
+
+<div class="powered-by">
+  当梦想全都被take away
+</div>
+<div class="theme-info">
+  keep hacking!
+</div>
+
+
+<!-- busuanzi -->
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../../../../../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = '4ch12dy';
+    var disqus_identifier = '2017/05/04/math/math/';
+    var disqus_title = '一道高中数学题的思考？';
+    var disqus_url = 'https://github.com/NULL-ME/NULL-ME.github.io.git/2017/05/04/math/math/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="../../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="../../../../../js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="../../../../../js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="../../../../../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="../../../../../js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="../../../../../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="../../../../../js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "../../../../../images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
