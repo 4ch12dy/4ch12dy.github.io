@@ -39,41 +39,50 @@
 
 
 <meta name="description" content="0x00 目录
+
+断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
+
+
+
 LLVM简介
 一个基于LLVM简单的代码混淆例子
 参考链接
 
-0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。LLVM的主要架构如下：
-
-前端：前端用来获取源代码然后将它转变为某种中间表示，我们">
+0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。L">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初-LLVM的代码混淆">
 <meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="0x00 目录
+
+断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
+
+
+
 LLVM简介
 一个基于LLVM简单的代码混淆例子
 参考链接
 
-0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。LLVM的主要架构如下：
-
-前端：前端用来获取源代码然后将它转变为某种中间表示，我们">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-0.png">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-1.png">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-2.png">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-3.png">
-<meta property="og:updated_time" content="2017-06-25T13:02:15.000Z">
+0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。L">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-1.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-2.png?raw=true">
+<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-3.png?raw=true">
+<meta property="og:updated_time" content="2017-06-25T13:11:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初-LLVM的代码混淆">
 <meta name="twitter:description" content="0x00 目录
+
+断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
+
+
+
 LLVM简介
 一个基于LLVM简单的代码混淆例子
 参考链接
 
-0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。LLVM的主要架构如下：
-
-前端：前端用来获取源代码然后将它转变为某种中间表示，我们">
-<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-0.png">
+0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。L">
+<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -271,7 +280,12 @@ LLVM简介
       
 
       
-        <span itemprop="articleBody"><h2 id="0x00-目录"><a href="#0x00-目录" class="headerlink" title="0x00 目录"></a>0x00 目录</h2><ul>
+        <span itemprop="articleBody"><h2 id="0x00-目录"><a href="#0x00-目录" class="headerlink" title="0x00 目录"></a>0x00 目录</h2><blockquote>
+<blockquote>
+<p>断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新</p>
+</blockquote>
+</blockquote>
+<ul>
 <li>LLVM简介</li>
 <li>一个基于LLVM简单的代码混淆例子</li>
 <li>参考链接</li>
@@ -282,7 +296,7 @@ LLVM简介
 <li>Pass：Pass是LLVM优化工作的一个节点，一个节点做些事，一起加起来就构成了LLVM完整的优化和转化。</li>
 <li>后端：后端用来生成实际的机器码，一般情况下不会关注这一部分。</li>
 </ul>
-<h3 id="LLVM框架："><a href="#LLVM框架：" class="headerlink" title="LLVM框架："></a>LLVM框架：</h3><p><img src="/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-0.png" alt="0-0"><br>这里与传统的编译器不同，LLVM采用了一种统一的中间表示：<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-1.png" alt="0-1"></p>
+<h3 id="LLVM框架："><a href="#LLVM框架：" class="headerlink" title="LLVM框架："></a>LLVM框架：</h3><p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true" alt="0-0"><br>这里与传统的编译器不同，LLVM采用了一种统一的中间表示：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-1.png?raw=true" alt="0-1"></p>
 <h3 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h3><p>首先下载LLVM  </p>
 <figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>cd where-you-want-llvm-to-live</div><div class="line"><span class="variable">$ </span>svn co <span class="symbol">http:</span>/<span class="regexp">/llvm.org/svn</span><span class="regexp">/llvm-project/llvm</span><span class="regexp">/trunk llvm</span></div></pre></td></tr></table></figure>
 <p>我们选择clang作为LLVM前端，然后下载clang  </p>
@@ -304,7 +318,7 @@ LLVM简介
 <li>LoopPass</li>
 <li>RegionPass</li>
 <li>BasicBlockPass</li>
-<li>MachineFunctionPass<br>下面这个例子来介绍一下pass的编写并达到简单的混淆。从这里下载这个模板<a href="">llvm-pass-skeleton</a></li>
+<li>MachineFunctionPass<br>下面这个例子来介绍一下pass的编写并达到简单的混淆。从这里下载这个模板<a href="https://github.com/NULL-ME/NULL-ME.github.io/tree/master/articlePic/LLVM/skeleton">llvm-pass-skeleton</a></li>
 </ul>
 <p>下面是完整代码：</p>
 <figure class="highlight zephir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#include "llvm/Pass.h"</span></div><div class="line"><span class="comment">#include "llvm/IR/Function.h"</span></div><div class="line"><span class="comment">#include "llvm/Support/raw_ostream.h"</span></div><div class="line"><span class="comment">#include "llvm/IR/LegacyPassManager.h"</span></div><div class="line"><span class="comment">#include "llvm/Transforms/IPO/PassManagerBuilder.h"</span></div><div class="line"><span class="comment">#include "llvm/IR/Intrinsics.h"</span></div><div class="line"><span class="comment">#include "llvm/IR/Instructions.h"</span></div><div class="line"></div><div class="line">using <span class="keyword">namespace</span> <span class="title">llvm</span>;</div><div class="line"></div><div class="line"><span class="keyword">namespace</span> &#123;</div><div class="line">  <span class="title">struct</span> <span class="title">SkeletonPass</span> : <span class="title">public</span> <span class="title">FunctionPass</span> &#123;</div><div class="line">    <span class="title">static</span> <span class="title">char</span> <span class="title">ID</span>;</div><div class="line">    SkeletonPass() : FunctionPass(ID) &#123;&#125;</div><div class="line"></div><div class="line">    <span class="comment">// virtual bool runOnFunction(Function &amp;F) &#123;</span></div><div class="line">    <span class="comment">//   errs() &lt;&lt; "I saw a function called " &lt;&lt; F.getName() &lt;&lt; "!\n";</span></div><div class="line">    <span class="comment">//   return false;</span></div><div class="line">    <span class="comment">// &#125;</span></div><div class="line">    <span class="keyword">bool</span> runOnFunction(<span class="function"><span class="keyword">Function</span> &amp;<span class="title">F</span>) <span class="title">override</span> </span>&#123;</div><div class="line">            <span class="function"><span class="keyword">Function</span> *<span class="title">tmp</span> = &amp;<span class="title">F</span></span>;</div><div class="line">            <span class="comment">// 遍历函数中的所有基本块</span></div><div class="line">            <span class="keyword">for</span> (<span class="function"><span class="keyword">Function</span>::<span class="title">iterator</span> <span class="title">bb</span> = <span class="title">tmp</span>-&gt;<span class="title">begin</span><span class="params">()</span></span>; bb != tmp-&gt;end(); ++bb) &#123;</div><div class="line">                <span class="comment">// 遍历基本块中的每条指令</span></div><div class="line">                <span class="keyword">for</span> (BasicBlock::iterator inst = bb-&gt;begin(); inst != bb-&gt;end(); ++inst) &#123;</div><div class="line">                    <span class="comment">// 是否是add指令</span></div><div class="line">                    <span class="keyword">if</span> (inst-&gt;isBinaryOp()) &#123;</div><div class="line">                        <span class="keyword">if</span> (inst-&gt;getOpcode() == Instruction::Add) &#123;</div><div class="line">                            ob_add(cast&lt;BinaryOperator&gt;(inst));</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="comment">// a+b === a-(-b)</span></div><div class="line">        <span class="keyword">bool</span> ob_add(BinaryOperator *bo) &#123;</div><div class="line">            BinaryOperator *op = <span class="keyword">NULL</span>;</div><div class="line">             </div><div class="line">            <span class="keyword">if</span> (bo-&gt;getOpcode() == Instruction::Add) &#123;</div><div class="line">                <span class="comment">// 生成 (－b)</span></div><div class="line">                op = BinaryOperator::CreateNeg(bo-&gt;getOperand(<span class="number">1</span>), <span class="string">""</span>, bo);</div><div class="line">                <span class="comment">// 生成 a-(-b)</span></div><div class="line">                op = BinaryOperator::Create(Instruction::Sub, bo-&gt;getOperand(<span class="number">0</span>), op, <span class="string">""</span>, bo);</div><div class="line">                 </div><div class="line">                op-&gt;setHasNoSignedWrap(bo-&gt;hasNoSignedWrap());</div><div class="line">                op-&gt;setHasNoUnsignedWrap(bo-&gt;hasNoUnsignedWrap());</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            <span class="comment">// 替换所有出现该指令的地方</span></div><div class="line">            bo-&gt;replaceAllUsesWith(op);</div><div class="line">        &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">char</span> SkeletonPass::ID = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="comment">// Automatically enable the pass.</span></div><div class="line"><span class="comment">// http://adriansampson.net/blog/clangpass.html</span></div><div class="line"><span class="keyword">static</span> void registerSkeletonPass(<span class="keyword">const</span> PassManagerBuilder &amp;,</div><div class="line">                         legacy::PassManagerBase &amp;PM) &#123;</div><div class="line">  PM.add(<span class="keyword">new</span> SkeletonPass());</div><div class="line">&#125;</div><div class="line"><span class="keyword">static</span> RegisterStandardPasses</div><div class="line">  RegisterMyPass(PassManagerBuilder::EP_EarlyAsPossible,</div><div class="line">                 registerSkeletonPass);</div></pre></td></tr></table></figure>
@@ -314,7 +328,7 @@ LLVM简介
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$clang</span> -Xclang -load -Xclang build<span class="regexp">/skeleton/</span>libSkeletonPass.* something.c</div></pre></td></tr></table></figure>
 <p>来运行这个pass编译成目标可执行文件<br>现在我们创建一个addTest.c文件来测试是否代码混淆</p>
 <figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="built_in">int</span> <span class="function"><span class="keyword">func</span><span class="params">(int a,int b)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">return</span> a + b<span class="comment">;</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">int</span> main()</div><div class="line">&#123;</div><div class="line">	<span class="built_in">int</span> c<span class="comment">;</span></div><div class="line">	c = <span class="function"><span class="keyword">func</span><span class="params">(<span class="number">6</span>,<span class="number">9</span>)</span>;</span></div><div class="line">	printf(<span class="string">"%d\n"</span>,c)<span class="comment">;</span></div><div class="line">	<span class="keyword">return</span> c<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>先按照一般的编译源代码，查看关键汇编代码：<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-2.png" alt="0-2"><br>然后运行我们的pass进行编译<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/king/4chendyBlog/blog/source/articlePic/LLVM/0-3.png" alt="0-3"></p>
+<p>先按照一般的编译源代码，查看关键汇编代码：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-2.png?raw=true" alt="0-2"><br>然后运行我们的pass进行编译<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-3.png?raw=true" alt="0-3"><br>很明显，汇编代码发生了改变，当然这里仅仅是一个简单的混淆，感兴趣的可以研究下<a href="https://github.com/obfuscator-llvm">obfuscator-llvm</a>这个项目。</p>
 <h2 id="0x03-参考链接"><a href="#0x03-参考链接" class="headerlink" title="0x03 参考链接"></a>0x03 参考链接</h2><p><a href="http://www.tuicool.com/articles/2meqIjq" target="_blank" rel="external">深入剖析 iOS 编译 Clang / LLVM</a><br><a href="http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/" target="_blank" rel="external">http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/</a></p>
 </span>
       
