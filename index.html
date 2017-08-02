@@ -196,6 +196,103 @@
           
           
             
+              <a class="post-title-link" href="2017/08/01/遍历自身加载的dylib获取载入地址和ASLR地址等/遍历自身加载的dylib获取载入地址和ASLR地址等/" itemprop="url">
+                遍历自身加载的dylib获取载入地址和ASLR地址
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2017-08-01T16:27:59+08:00" content="2017-08-01">
+            2017-08-01
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="categories/macho-dyld/" itemprop="url" rel="index">
+                  <span itemprop="name">macho/dyld</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2017/08/01/遍历自身加载的dylib获取载入地址和ASLR地址等/遍历自身加载的dylib获取载入地址和ASLR地址等/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/01/遍历自身加载的dylib获取载入地址和ASLR地址等/遍历自身加载的dylib获取载入地址和ASLR地址等/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            
+
+通过macho/dyld.h提供的函数，程序可以获取到自身加载的dylib信息，这里做个简单记录
+
+
+12345678910111213141516171819#include&lt;stdio.h&gt;#include &lt;mach-o/dyld.h&gt;void getDylibIn
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="2017/08/01/遍历自身加载的dylib获取载入地址和ASLR地址等/遍历自身加载的dylib获取载入地址和ASLR地址等/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/" itemprop="url">
                 初-LLVM的代码混淆
               </a>
@@ -1055,106 +1152,11 @@ LLVM简介
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/" itemprop="url">
-                Protostar-栈溢出学习-printf格式%n任意地址写
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2017-04-17T11:12:19+08:00" content="2017-04-17">
-            2017-04-17
-          </time>
-        </span>
-
-        
-          <span class="post-category" >
-            &nbsp; | &nbsp; 分类于
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="categories/Linux堆栈漏洞学习系列/" itemprop="url" rel="index">
-                  <span itemprop="name">Linux堆栈漏洞学习系列</span>
-                </a>
-              </span>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/#comments" itemprop="discussionUrl">
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/" itemprop="commentsCount"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-            0x00 序
-从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
-
-0x01 C语言源代码1234567891011121314151617181920#include &lt;stdlib.h&gt;#include &lt;unistd.
-            ...
-          </span>
-          <div class="post-more-link text-center">
-            <a class="btn" href="2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
   </nav>
 
  </div>
@@ -1190,21 +1192,21 @@ LLVM简介
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">归档</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
