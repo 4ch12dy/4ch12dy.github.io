@@ -12,6 +12,10 @@
 #ifndef JailbreakCheck_h
 #define JailbreakCheck_h
 
+
+
+
+
 #include <string.h>
 #import <mach-o/loader.h>
 #import <mach-o/dyld.h>
@@ -22,6 +26,14 @@
 #import <sys/stat.h>
 
 
+
+#if TARGET_IPHONE_SIMULATOR
+
+#define SIMULATOR_TEST
+
+#else
+
+#endif
 
 
 @interface JailbreakCheck : NSObject

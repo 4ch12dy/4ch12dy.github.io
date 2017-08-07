@@ -24,9 +24,13 @@
 - (BOOL)getJBPathByStat{
     struct stat stat_info;
     
+//只有在真机上时才会执行，因为在模拟器中dylib_info.dli_fname包含的路径不一致
+#ifndef SIMULATOR_TEST
     if (self.checkStatDylib) {
         return YES;
     }
+#endif
+    
     
     const char *cydiaPath = "/Applications/MobileSafari.app";
     if(0 == stat(cydiaPath, &stat_info)){
@@ -75,7 +79,13 @@
 
 - (BOOL)jailbroken{
     
-    BOOL condition = self.getJBPathByStat || self.getJBPathByNSFM || self.checkJBByEnv || self.checkDylib;
+    BOOL condition =
+    self.getJBPathByStat ||
+    self.getJBPathByNSFM ||
+    self.checkJBByEnv    ||
+    self.checkDylib;
+    
+    
     if (condition) {
         return YES;
     }

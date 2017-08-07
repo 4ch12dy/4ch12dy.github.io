@@ -35,7 +35,9 @@
     [view release];
     
     CGRect rect = CGRectMake(100, 100, 300, 100);
+//    CGRect rect2 = CGRectMake(0, 0, 500, 500);
     UILabel *textLabel = [[UILabel alloc] initWithFrame:rect];
+//    UITextField *textfield = [[UITextField alloc] initWithFrame:rect2];
     
     //check is JB
     
@@ -48,7 +50,10 @@
         textLabel.text = @"jailbreak=no";
     }
     
+//    textfield.text = [[JailbreakCheck alloc] checkStatDylib];
+    
     textLabel.textColor = [UIColor redColor];
+//    [self.view addSubview:textfield];
     [self.view addSubview:textLabel];
 }
 
