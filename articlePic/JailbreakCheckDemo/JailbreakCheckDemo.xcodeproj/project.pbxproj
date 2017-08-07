@@ -1,0 +1,303 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12EC38A41621D9130089B628 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12EC38A31621D9130089B628 /* UIKit.framework */; };
+		12EC38A61621D9130089B628 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12EC38A51621D9130089B628 /* Foundation.framework */; };
+		12EC38A81621D9130089B628 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12EC38A71621D9130089B628 /* CoreGraphics.framework */; };
+		12EC38AE1621D9130089B628 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12EC38AC1621D9130089B628 /* InfoPlist.strings */; };
+		12EC38B01621D9130089B628 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC38AF1621D9130089B628 /* main.m */; };
+		12EC38B41621D9130089B628 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC38B31621D9130089B628 /* AppDelegate.m */; };
+		12EC38B61621D9130089B628 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 12EC38B51621D9130089B628 /* Default.png */; };
+		12EC38B81621D9130089B628 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12EC38B71621D9130089B628 /* Default@2x.png */; };
+		12EC38BA1621D9130089B628 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 12EC38B91621D9130089B628 /* Default-568h@2x.png */; };
+		12EC38C21621D92A0089B628 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EC38C11621D92A0089B628 /* MainViewController.m */; };
+		3C6105561F385C30005E668E /* JailbreakCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C6105551F385C30005E668E /* JailbreakCheck.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		12EC389F1621D9130089B628 /* JailbreakCheckDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JailbreakCheckDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		12EC38A31621D9130089B628 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		12EC38A51621D9130089B628 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		12EC38A71621D9130089B628 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		12EC38AB1621D9130089B628 /* JailbreakCheckDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JailbreakCheckDemo-Info.plist"; sourceTree = "<group>"; };
+		12EC38AD1621D9130089B628 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		12EC38AF1621D9130089B628 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		12EC38B11621D9130089B628 /* JailbreakCheckDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JailbreakCheckDemo-Prefix.pch"; sourceTree = "<group>"; };
+		12EC38B21621D9130089B628 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		12EC38B31621D9130089B628 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		12EC38B51621D9130089B628 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		12EC38B71621D9130089B628 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		12EC38B91621D9130089B628 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		12EC38C01621D92A0089B628 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		12EC38C11621D92A0089B628 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		3C6105541F38594D005E668E /* JailbreakCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JailbreakCheck.h; sourceTree = "<group>"; };
+		3C6105551F385C30005E668E /* JailbreakCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JailbreakCheck.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		12EC389C1621D9130089B628 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12EC38A41621D9130089B628 /* UIKit.framework in Frameworks */,
+				12EC38A61621D9130089B628 /* Foundation.framework in Frameworks */,
+				12EC38A81621D9130089B628 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		12EC38941621D9130089B628 = {
+			isa = PBXGroup;
+			children = (
+				12EC38A91621D9130089B628 /* JailbreakCheckDemo */,
+				12EC38A21621D9130089B628 /* Frameworks */,
+				12EC38A01621D9130089B628 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		12EC38A01621D9130089B628 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				12EC389F1621D9130089B628 /* JailbreakCheckDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		12EC38A21621D9130089B628 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				12EC38A31621D9130089B628 /* UIKit.framework */,
+				12EC38A51621D9130089B628 /* Foundation.framework */,
+				12EC38A71621D9130089B628 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		12EC38A91621D9130089B628 /* JailbreakCheckDemo */ = {
+			isa = PBXGroup;
+			children = (
+				12EC38B21621D9130089B628 /* AppDelegate.h */,
+				12EC38B31621D9130089B628 /* AppDelegate.m */,
+				3C6105541F38594D005E668E /* JailbreakCheck.h */,
+				3C6105551F385C30005E668E /* JailbreakCheck.m */,
+				12EC38C01621D92A0089B628 /* MainViewController.h */,
+				12EC38C11621D92A0089B628 /* MainViewController.m */,
+				12EC38AA1621D9130089B628 /* Supporting Files */,
+			);
+			path = JailbreakCheckDemo;
+			sourceTree = "<group>";
+		};
+		12EC38AA1621D9130089B628 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				12EC38AB1621D9130089B628 /* JailbreakCheckDemo-Info.plist */,
+				12EC38AC1621D9130089B628 /* InfoPlist.strings */,
+				12EC38AF1621D9130089B628 /* main.m */,
+				12EC38B11621D9130089B628 /* JailbreakCheckDemo-Prefix.pch */,
+				12EC38B51621D9130089B628 /* Default.png */,
+				12EC38B71621D9130089B628 /* Default@2x.png */,
+				12EC38B91621D9130089B628 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		12EC389E1621D9130089B628 /* JailbreakCheckDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 12EC38BD1621D9130089B628 /* Build configuration list for PBXNativeTarget "JailbreakCheckDemo" */;
+			buildPhases = (
+				12EC389B1621D9130089B628 /* Sources */,
+				12EC389C1621D9130089B628 /* Frameworks */,
+				12EC389D1621D9130089B628 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JailbreakCheckDemo;
+			productName = CodeHelloWorld;
+			productReference = 12EC389F1621D9130089B628 /* JailbreakCheckDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		12EC38961621D9130089B628 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "wu bei";
+				TargetAttributes = {
+					12EC389E1621D9130089B628 = {
+						DevelopmentTeam = Z5GQV8LF4H;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 12EC38991621D9130089B628 /* Build configuration list for PBXProject "JailbreakCheckDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 12EC38941621D9130089B628;
+			productRefGroup = 12EC38A01621D9130089B628 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				12EC389E1621D9130089B628 /* JailbreakCheckDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		12EC389D1621D9130089B628 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12EC38AE1621D9130089B628 /* InfoPlist.strings in Resources */,
+				12EC38B61621D9130089B628 /* Default.png in Resources */,
+				12EC38B81621D9130089B628 /* Default@2x.png in Resources */,
+				12EC38BA1621D9130089B628 /* Default-568h@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		12EC389B1621D9130089B628 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12EC38B01621D9130089B628 /* main.m in Sources */,
+				12EC38B41621D9130089B628 /* AppDelegate.m in Sources */,
+				3C6105561F385C30005E668E /* JailbreakCheck.m in Sources */,
+				12EC38C21621D92A0089B628 /* MainViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		12EC38AC1621D9130089B628 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				12EC38AD1621D9130089B628 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		12EC38BB1621D9130089B628 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		12EC38BC1621D9130089B628 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		12EC38BE1621D9130089B628 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = Z5GQV8LF4H;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JailbreakCheckDemo/JailbreakCheckDemo-Prefix.pch";
+				INFOPLIST_FILE = "JailbreakCheckDemo/JailbreakCheckDemo-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = xxs.jailbreakcheck;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		12EC38BF1621D9130089B628 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = Z5GQV8LF4H;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "JailbreakCheckDemo/JailbreakCheckDemo-Prefix.pch";
+				INFOPLIST_FILE = "JailbreakCheckDemo/JailbreakCheckDemo-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = xxs.jailbreakcheck;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		12EC38991621D9130089B628 /* Build configuration list for PBXProject "JailbreakCheckDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12EC38BB1621D9130089B628 /* Debug */,
+				12EC38BC1621D9130089B628 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		12EC38BD1621D9130089B628 /* Build configuration list for PBXNativeTarget "JailbreakCheckDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12EC38BE1621D9130089B628 /* Debug */,
+				12EC38BF1621D9130089B628 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 12EC38961621D9130089B628 /* Project object */;
+}
