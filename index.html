@@ -196,6 +196,100 @@
           
           
             
+              <a class="post-title-link" href="2017/08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/" itemprop="url">
+                一种用户层与kext内核扩展交互方式
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2017-08-10T15:59:00+08:00" content="2017-08-10">
+            2017-08-10
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="categories/kext-iokit/" itemprop="url" rel="index">
+                  <span itemprop="name">kext/iokit</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2017/08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            
+
+最近在学习一个Mac平台上开源的rootKit框架，里面确实有很大干货，本文就来分析其中与用户层交互的部分。简单说下rootKit原理：利用kext驻留在内核，完成实际的各种功能：sys_ptrace过滤 PT_DENY_ATTACH反调试hook系统调用防止sys_kil（很强大有木有）隐藏自
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="2017/08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="2017/08/08/浅谈SSD与安全擦除/SSD与安全擦除/" itemprop="url">
                 浅谈SSD与安全擦除
               </a>
@@ -1035,101 +1129,6 @@ LLVM简介
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/" itemprop="url">
-                Protostar-堆溢出学习-滥用堆metadata重定向程序执行
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2017-04-26T21:24:19+08:00" content="2017-04-26">
-            2017-04-26
-          </time>
-        </span>
-
-        
-          <span class="post-category" >
-            &nbsp; | &nbsp; 分类于
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="categories/Linux堆栈漏洞学习系列/" itemprop="url" rel="index">
-                  <span itemprop="name">Linux堆栈漏洞学习系列</span>
-                </a>
-              </span>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/#comments" itemprop="discussionUrl">
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/" itemprop="commentsCount"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-            0x00 序
- 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
-
-0x01 C语言源代码12345678910111213141516171819202
-            ...
-          </span>
-          <div class="post-more-link text-center">
-            <a class="btn" href="2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1170,14 +1169,14 @@ LLVM简介
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">归档</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
