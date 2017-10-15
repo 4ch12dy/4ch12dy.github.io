@@ -46,14 +46,14 @@
 0x00 一点概念操作系统可以理解成硬件的抽象或者说提供服务，如下图所示，在xnu内核之中，由mach微内核，IOKit，BSD三大组件构成。作为内核的一部分IOKit起着想当重要的作用，抽象IO设备，采用C++编写的IOKit框架使得硬件驱动具有模块化，便于扩展。程序难免会和相应的硬件交互，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="内核扩展-驱动开发实例">
-<meta property="og:url" content="https://github.com/NULL-ME/NULL-ME.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="结合《OS X 内核编程》以及网上相关的学习，用一个例子来说明自己对macOS IOkit的理解
 
 
 0x00 一点概念操作系统可以理解成硬件的抽象或者说提供服务，如下图所示，在xnu内核之中，由mach微内核，IOKit，BSD三大组件构成。作为内核的一部分IOKit起着想当重要的作用，抽象IO设备，采用C++编写的IOKit框架使得硬件驱动具有模块化，便于扩展。程序难免会和相应的硬件交互，">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/macOS框架.png">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/driver.png">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/macOS框架.png">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/driver.png">
 <meta property="og:updated_time" content="2017-08-04T02:06:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="内核扩展-驱动开发实例">
@@ -61,7 +61,7 @@
 
 
 0x00 一点概念操作系统可以理解成硬件的抽象或者说提供服务，如下图所示，在xnu内核之中，由mach微内核，IOKit，BSD三大组件构成。作为内核的一部分IOKit起着想当重要的作用，抽象IO设备，采用C++编写的IOKit框架使得硬件驱动具有模块化，便于扩展。程序难免会和相应的硬件交互，">
-<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io.git/NULL-ME/NULL-ME.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/macOS框架.png">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/macOS框架.png">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -249,8 +249,8 @@
 <p>结合《OS X 内核编程》以及网上相关的学习，用一个例子来说明自己对macOS IOkit的理解</p>
 </blockquote>
 </blockquote>
-<h2 id="0x00-一点概念"><a href="#0x00-一点概念" class="headerlink" title="0x00 一点概念"></a>0x00 一点概念</h2><p>操作系统可以理解成硬件的抽象或者说提供服务，如下图所示，在xnu内核之中，由mach微内核，IOKit，BSD三大组件构成。作为内核的一部分IOKit起着想当重要的作用，抽象IO设备，采用C++编写的IOKit框架使得硬件驱动具有模块化，便于扩展。<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/macOS框架.png" alt="mac0s框架"><br>程序难免会和相应的硬件交互，苹果定义了IOKit.framework，这个框架定义了一些与公共的接口，可以让用户层通过这些接口与一些标准的驱动程序进行交互。而驱动与用户程序之间到底是如何交互的？本篇就来分析其中的细节。</p>
-<h2 id="0x01-驱动加载的过程"><a href="#0x01-驱动加载的过程" class="headerlink" title="0x01 驱动加载的过程"></a>0x01 驱动加载的过程</h2><p>当硬件插入电脑时，系统会根据硬件的类型创建一个Provider(提供者)的对象，并且这个Provider会在初使化的过程中去尝试匹配合适的驱动程序，如上图，我们开发一款适合于PCI声卡或USB音频设备的驱动程序，首先硬件载入后会去查找驱动程序Info.plist中的IOKitPersonalities的信息，如果IOProviderClass中定义了IOPCIDriver就表示可以为PCI做匹配，如果同时也有IOUSBDriver项就表示USB的设备也可以做匹配，同时如果有多个支持PCI或USB的驱动出现时，就会去调用驱动程序的probe方法，最终找到匹配度最高的驱动程序进行加载(实际的原理会更复杂)，然后该驱动程序就可以通过不同的Provider与硬件通信，并且通过标准的IOAudioDriver接口为系统提供音频的服务，从而用户程序就可以通过系统的标准方法最终让音频设备工作。<br><img src="/NULL-ME/NULL-ME.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/driver.png" alt="driver"></p>
+<h2 id="0x00-一点概念"><a href="#0x00-一点概念" class="headerlink" title="0x00 一点概念"></a>0x00 一点概念</h2><p>操作系统可以理解成硬件的抽象或者说提供服务，如下图所示，在xnu内核之中，由mach微内核，IOKit，BSD三大组件构成。作为内核的一部分IOKit起着想当重要的作用，抽象IO设备，采用C++编写的IOKit框架使得硬件驱动具有模块化，便于扩展。<br><img src="/4ch12dy/4ch12dy.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/macOS框架.png" alt="mac0s框架"><br>程序难免会和相应的硬件交互，苹果定义了IOKit.framework，这个框架定义了一些与公共的接口，可以让用户层通过这些接口与一些标准的驱动程序进行交互。而驱动与用户程序之间到底是如何交互的？本篇就来分析其中的细节。</p>
+<h2 id="0x01-驱动加载的过程"><a href="#0x01-驱动加载的过程" class="headerlink" title="0x01 驱动加载的过程"></a>0x01 驱动加载的过程</h2><p>当硬件插入电脑时，系统会根据硬件的类型创建一个Provider(提供者)的对象，并且这个Provider会在初使化的过程中去尝试匹配合适的驱动程序，如上图，我们开发一款适合于PCI声卡或USB音频设备的驱动程序，首先硬件载入后会去查找驱动程序Info.plist中的IOKitPersonalities的信息，如果IOProviderClass中定义了IOPCIDriver就表示可以为PCI做匹配，如果同时也有IOUSBDriver项就表示USB的设备也可以做匹配，同时如果有多个支持PCI或USB的驱动出现时，就会去调用驱动程序的probe方法，最终找到匹配度最高的驱动程序进行加载(实际的原理会更复杂)，然后该驱动程序就可以通过不同的Provider与硬件通信，并且通过标准的IOAudioDriver接口为系统提供音频的服务，从而用户程序就可以通过系统的标准方法最终让音频设备工作。<br><img src="/4ch12dy/4ch12dy.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/king/4chendyBlog/blog/source/articlePic/kext/driver.png" alt="driver"></p>
 <h2 id="0x02-创建驱动程序"><a href="#0x02-创建驱动程序" class="headerlink" title="0x02 创建驱动程序"></a>0x02 创建驱动程序</h2><p>打开Xcode，选择IOKit Driver模板，取名工程名IOKitTest，然后可以在工程中看到会自动创建两个文件，分别是IOKitTest.h和IOKitTest.cpp，但非常遗憾的是，模板并没有为我们在这两个文件中生成任何的内容。我们手动在IOKitTest.h中输入以下内容：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;IOKit/IOService.h&gt;</span></span></div><div class="line"><span class="keyword">class</span> com_osxkernel_driver_IOKitTest : <span class="keyword">public</span> IOService &#123;</div><div class="line">    </div><div class="line">    <span class="comment">//一个宏定义，会自动生成该类的构造方法、析构方法和运行时</span></div><div class="line">    OSDeclareDefaultStructors(com_osxkernel_driver_IOKitTest)</div><div class="line">    </div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="comment">//该方法与Cocoa中的init和C++中的构造方法类似</span></div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">init</span><span class="params">(OSDictionary* dictionary = <span class="literal">NULL</span>)</span></span>;</div><div class="line">    <span class="comment">//该方法与Cocoa中的dealloc和C++中的析构方法类似</span></div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">free</span><span class="params">(<span class="keyword">void</span>)</span></span>;</div><div class="line">    </div><div class="line">    <span class="comment">//进行驱动匹配时调用</span></div><div class="line">    <span class="function"><span class="keyword">virtual</span> IOService* <span class="title">probe</span><span class="params">(IOService* provider, SInt32* score)</span></span>;</div><div class="line">    <span class="comment">//当匹配成功后加载驱动</span></div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">start</span><span class="params">(IOService *provider)</span></span>;</div><div class="line">    <span class="comment">//当硬件移除时或卸载驱动</span></div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">(IOService *provider)</span></span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>在IOKitTest.cpp中输入以下的代码：</p>
@@ -490,7 +490,7 @@
     var disqus_shortname = '4ch12dy';
     var disqus_identifier = '2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/';
     var disqus_title = '内核扩展-驱动开发实例';
-    var disqus_url = 'https://github.com/NULL-ME/NULL-ME.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/';
+    var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/';
 
     function run_disqus_script(disqus_script){
       var dsq = document.createElement('script');
