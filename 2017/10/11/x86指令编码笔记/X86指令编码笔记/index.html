@@ -56,7 +56,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/operand_size_override.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/address_override.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/register_table.png?raw=true">
-<meta property="og:updated_time" content="2017-10-16T04:08:37.000Z">
+<meta property="og:updated_time" content="2017-10-16T04:09:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="X86指令编码笔记">
 <meta name="twitter:description" content="由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
@@ -275,6 +275,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 </li>
 <li><p><code>segment override</code>，<code>branch hints</code> 和 <code>bound</code></p>
 <p>其中，segment override prefix会在执行这条指令的时候将默认的段寄存器给换掉；branch hints prefix主要应用在条件跳转指令（Jcc）中，可以协助CPU进行指令的prefetch；而bound prefix主要是用intel MPX硬件特性上。</p>
+<p>​</p>
 <p>| 2E          | 3E          | 26          | 64          | 65          | 36          |<br>| ———– | ———– | ———– | ———– | ———– | ———– |<br>| CS register | DS register | ES register | FS register | GS register | SS register |</p>
 </li>
 </ul>
