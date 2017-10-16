@@ -52,18 +52,18 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 
 x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
 x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中一个最重要的复杂性在于在这个指令集中，指令是">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/指令编码格式.png">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/operand_size_override.png">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/address_override.png">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/register_table.png">
-<meta property="og:updated_time" content="2017-10-16T03:43:29.000Z">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/operand_size_override.png?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/address_override.png?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/register_table.png?raw=true">
+<meta property="og:updated_time" content="2017-10-16T04:04:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="X86指令编码笔记">
 <meta name="twitter:description" content="由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
 
 x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
 x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中一个最重要的复杂性在于在这个指令集中，指令是">
-<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/指令编码格式.png">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -258,7 +258,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 </blockquote>
 <h3 id="x86指令编码格式"><a href="#x86指令编码格式" class="headerlink" title="x86指令编码格式"></a>x86指令编码格式</h3><p>很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。</p>
 <p>x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中一个最重要的复杂性在于在这个指令集中，指令是不定长的，要使得CPU在这种不定长的指令集里面确定每一条指令的含义，就需要一种特定的指令格式，下图显示了<code>Intel 64</code>和<code>IA-32</code>架构下的指令格式，当然，这两种架构所采用的都是x86指令编码：</p>
-<p><img src="/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/指令编码格式.png" alt="指令编码格式"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true" alt="指令编码格式"></p>
 <p>从上面可以看出，x86指令格式中，由6部分组成，但在这之中只有opcode是必须的，其余都是可选。我们稍后就介绍这些组成部分。</p>
 <h3 id="指令prefix"><a href="#指令prefix" class="headerlink" title="指令prefix"></a>指令prefix</h3><p>prefix简单的说来就是调整内存操作数属性，增强指令的作用等。</p>
 <ul>
@@ -267,11 +267,11 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 </li>
 <li><p><code>operand-size override</code> （<strong>66H </strong>— 改变默认操作数大小）</p>
 <p>这个prefix主要是在解析指令的操作数的时候，可以在十六位或者三十二位的操作数大小间进行切换。</p>
-<p><img src="/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/operand_size_override.png" alt="operand_size_override"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/operand_size_override.png?raw=true" alt="operand_size_override"></p>
 </li>
 <li><p><code>address-size override</code> （<strong>67H</strong> — 改变默认操作数地址大小）</p>
 <p>这个prefix主要是在进行指令寻址的时候，可以在十六位或者三十二位的地址大小中进行切换。</p>
-<p><img src="/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/address_override.png" alt="address_override"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/address_override.png?raw=true" alt="address_override"></p>
 </li>
 <li><p><code>segment override</code>，<code>branch hints</code> 和 <code>bound</code></p>
 <p>其中，segment override prefix会在执行这条指令的时候将默认的段寄存器给换掉；branch hints prefix主要应用在条件跳转指令（Jcc）中，可以协助CPU进行指令的prefetch；而bound prefix主要是用intel MPX硬件特性上。</p>
@@ -311,7 +311,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 <li>X: 用来扩展 SIB.index 域</li>
 <li>B: 用来扩展 SIB.base, ModRM.r/m 以及 Opcode.reg</li>
 </ul>
-<h5 id="寄存器编码表"><a href="#寄存器编码表" class="headerlink" title="寄存器编码表"></a>寄存器编码表</h5><p><img src="/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/king/4chendyBlog/blog/source/articlePic/X86指令编码笔记/register_table.png" alt="register_table"></p>
+<h5 id="寄存器编码表"><a href="#寄存器编码表" class="headerlink" title="寄存器编码表"></a>寄存器编码表</h5><p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/register_table.png?raw=true" alt="register_table"></p>
 <p>下面来分析这条指令：</p>
 <p><code>mov eax,ebx</code></p>
 <p>正常编码为：<code>89 d8</code>  下面看看在不同的<code>REX.W</code>和<code>66H prefix</code>下的不同：</p>
