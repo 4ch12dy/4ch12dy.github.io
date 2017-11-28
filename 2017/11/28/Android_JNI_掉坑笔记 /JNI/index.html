@@ -1,0 +1,745 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../../css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="给我一点时间和power" />
+
+
+
+  <meta name="keywords" content="android," />
+
+
+
+  <link rel="alternate" href="../../../../../atom.xml" title="4ch12dy" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../../favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
+
+
+坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;equ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android JNI掉坑笔记">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/11/28/Android_JNI_掉坑笔记 /JNI/index.html">
+<meta property="og:site_name" content="4ch12dy">
+<meta property="og:description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
+
+
+坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;equ">
+<meta property="og:updated_time" content="2017-11-28T09:44:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android JNI掉坑笔记">
+<meta name="twitter:description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
+
+
+坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;equ">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> Android JNI掉坑笔记 | 4ch12dy </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">H31l0 OS w0r1d</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-iosre">
+          <a href="/iOSRERESOURCE" rel="section">
+            <i class="menu-item-icon icon-next-iosre"></i> <br />
+            iOSRE相关资料
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-aboutme">
+          <a href="/aboutme" rel="section">
+            <i class="menu-item-icon icon-next-aboutme"></i> <br />
+            关于我
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Android JNI掉坑笔记
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2017-11-28T17:00:20+08:00" content="2017-11-28">
+            2017-11-28
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/28/Android_JNI_掉坑笔记 /JNI/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><blockquote>
+<blockquote>
+<p>最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。</p>
+</blockquote>
+</blockquote>
+<h3 id="坑1–jni方法签名分号问题"><a href="#坑1–jni方法签名分号问题" class="headerlink" title="坑1–jni方法签名分号问题"></a>坑1–jni方法签名分号问题</h3><p>这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名<br><code>jmethodID equals_id = env-&gt;GetMethodID(string_c, &quot;equals&quot;, &quot;(Ljava/lang/Object;)Z&quot;);</code></p>
+<p>切记当参数或者返回值不是基本类型的时候一定要在末尾加上分号。</p>
+<p><code>jmethodID iterator_id = env-&gt;GetMethodID(list_c,&quot;iterator&quot;,&quot;()Ljava/util/Iterator;&quot;);</code></p>
+<p>这类错误常见描述为方法找不到错误。如果遇到类方法找不到切记先检查方法签名是否正确。</p>
+<h3 id="坑2–原生方法包含默认2个参数"><a href="#坑2–原生方法包含默认2个参数" class="headerlink" title="坑2–原生方法包含默认2个参数"></a>坑2–原生方法包含默认2个参数</h3><p>这个坑当然是对jni使用不熟练造成的，未了解其特性，所以对于初学者来说容易犯。看一个原生函数</p>
+<p><code>static jboolean nativeFunction(JNIEnv *env, jobject content, jobject someObj){...}</code></p>
+<p>第一个保留参数为<code>JNIEnv</code>虚拟机环境变量，第二个为调用该原生方法的java类对象即上下文。</p>
+<p>由于很多时候不声明这两个参数同样能正确运行（无其他参数时）导致忽略了第二个参数的存在，以为第二个上下文参数为传入的对象引用。</p>
+<p>这类错误常见描述为当你在某处调用这个对象的方法时，会提示找不到该方法。因为这个对象根本不是你传入的对象。</p>
+<h3 id="坑3—jni调用父类方法的正确姿势"><a href="#坑3—jni调用父类方法的正确姿势" class="headerlink" title="坑3—jni调用父类方法的正确姿势"></a>坑3—jni调用父类方法的正确姿势</h3><p>这里就以一个正确的调用父类方法的流程来讲，起因是当我在查找<code>Exception</code>这个类的<code>getStackTrace</code></p>
+<p>方法时提示方法找不到错误，调了会才发现这个方法是在其父类<code>Throwable</code>中，所以正确的写法为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">jclass exception_c = env-&gt;FindClass(<span class="string">"java/lang/Exception"</span>);</div><div class="line">jclass throwable_c = env-&gt;FindClass(<span class="string">"java/lang/Throwable"</span>);</div><div class="line">jmethodID getStackTrace_id = env-&gt;GetMethodID(throwable_c, <span class="string">"getStackTrace"</span>,<span class="string">"()[Ljava/lang/StackTraceElement;"</span>);</div></pre></td></tr></table></figure>
+<p>那么怎么调用呢？用<code>CallNonvirtual&lt;XXX&gt;Method</code>去调用父类中的方法，一个调用例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jobjectArray stes = (jobjectArray)env-&gt;CallNonvirtualObjectMethod(excep, throwable_c, getStackTrace_id);</div></pre></td></tr></table></figure>
+<p>这里需要传入三个参数，第一个为子类的对象引用，第二个为父类类引用，第三个为方法id。</p>
+<h3 id="坑4—其他小坑"><a href="#坑4—其他小坑" class="headerlink" title="坑4—其他小坑"></a>坑4—其他小坑</h3><p>写jni代码时最大的麻烦在于要写很多代码去定位java中的类和方法，java中一个很简单的调用，在jni层写时或许要写很大一堆，这也不奇怪，因为没有了Android虚拟机，这些本来由虚拟机做的事必须得手动去完成。在写jni层代码时，还有一些小的错误，比如<code>jstring</code>与<code>char*</code>的转换，<code>LOGE()</code>函数中参数为<code>char*</code>的字符串。当然还有一些java与C语言类型对应的问题就不多说了，自己翻下<code>jni.h</code>头文件就能找到。</p>
+<p>还有个AndroidStudio的bug在于不能正确的解析jni等头文件，虽然不影响编译，但没有了代码提示以及显示红色看着也挺难受的。网上找到一个解决办法，在对应的<code>build.gradle</code>文件中在<code>defaultConfig{}</code>加入下面的脚本：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sourceSets.main&#123;</div><div class="line">    jni.srcDirs  '/Users/king/Android/sdk/ndk-bundle/platforms/android-19/arch-mips/usr/include'</div><div class="line">    jniLibs.srcDir '/Users/king/Android/sdk/ndk-bundle/platforms/android-19/arch-arm/usr/lib'</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>无非是手动指定了jni相关的文件路径。</p>
+<p>关于下面两类写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jclass exception_c = env-&gt;FindClass(<span class="string">"java/lang/Exception"</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jclass exception_c = (*env)-&gt;FindClass(env, <span class="string">"java/lang/Exception"</span>);</div></pre></td></tr></table></figure>
+<p>原因在于C++和C的两种写法，可以在文件中宏定义为C++的即可。</p>
+<h3 id="完"><a href="#完" class="headerlink" title="完"></a>完</h3><p>说了这些坑，当然我都踩过，由于刚接触Android jni特性。所以踩了很多坑，尤其是Android不像iOS那样容易debug，多了一层虚拟机导致很多错误不好调式。说到这，还要吐槽下AndroidStudio的gradle这个项目管理器，各种版本或者莫名奇怪的错误，虽然Xcode同样不是很好用，但相比之下，Xcode省心多了。</p>
+<p>继续踩坑去了…</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../../../../tags/android/" rel="tag">#android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="../../../../10/11/x86指令编码笔记/X86指令编码笔记/" rel="next">X86指令编码笔记</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+    </div>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">4ch12dy</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">给我一点时间和power</p>
+
+        
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=27646205&auto=0&height=66">网易云音乐</iframe>
+       
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../../../../../archives">
+              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-name">归档</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../../../../../categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../../../../../tags">
+              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="../../../../../atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/NULL-ME" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/eee-face/activities" target="_blank">知乎</a>
+              </span>
+            
+          
+        </div>
+
+     
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">技术分享</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://turingh.github.io/" target="_blank">mrh</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weeklyalgo.codes/" target="_blank">hook</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://iyiyang.cnblogs.com/" target="_blank">yiyang</a>
+              </span>
+            
+          
+        </div>
+        
+
+        
+        
+        
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#坑1–jni方法签名分号问题"><span class="nav-number">1.</span> <span class="nav-text">坑1–jni方法签名分号问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坑2–原生方法包含默认2个参数"><span class="nav-number">2.</span> <span class="nav-text">坑2–原生方法包含默认2个参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坑3—jni调用父类方法的正确姿势"><span class="nav-number">3.</span> <span class="nav-text">坑3—jni调用父类方法的正确姿势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坑4—其他小坑"><span class="nav-number">4.</span> <span class="nav-text">坑4—其他小坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完"><span class="nav-number">5.</span> <span class="nav-text">完</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2017
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ch12dy
+  </span>
+</div>
+
+<div class="powered-by">
+  当梦想全都被take away
+</div>
+<div class="theme-info">
+  keep hacking!
+</div>
+
+
+<!-- busuanzi -->
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../../../../../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = '4ch12dy';
+    var disqus_identifier = '2017/11/28/Android_JNI_掉坑笔记 /JNI/';
+    var disqus_title = 'Android JNI掉坑笔记';
+    var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/11/28/Android_JNI_掉坑笔记 /JNI/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="../../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="../../../../../js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="../../../../../js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="../../../../../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="../../../../../js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="../../../../../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="../../../../../js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "../../../../../images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

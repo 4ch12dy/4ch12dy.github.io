@@ -281,7 +281,7 @@ show args查看程序参数
 <li>x/5i $pc  查看汇编代码</li>
 <li>x/4wx 0x000000 查看内存</li>
 </ul>
-<h2 id="0x06-command命令"><a href="#0x06-command命令" class="headerlink" title="0x06 command命令"></a>0x06 command命令</h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(gdb) break func</div><div class="line">Breakpoint <span class="number">1</span> <span class="keyword">at</span> <span class="number">0x3475678</span>: <span class="built_in">file</span> test.c, <span class="built_in">line</span> <span class="number">12.</span></div><div class="line">(gdb) <span class="keyword">command</span> <span class="title">1</span></div><div class="line">Type commands <span class="keyword">for</span> when <span class="built_in">breakpoint</span> <span class="number">1</span> is hit, <span class="literal">one</span> per <span class="built_in">line</span>.</div><div class="line">End <span class="keyword">with</span> <span class="keyword">a</span> <span class="built_in">line</span> saying just <span class="string">"end"</span>.</div><div class="line">&gt;print arg1</div><div class="line">&gt;print arg2</div><div class="line">&gt;print arg3</div><div class="line">&gt;<span class="function"><span class="keyword">end</span></span></div><div class="line">(<span class="title">gdb</span>)</div></pre></td></tr></table></figure></p>
+<h2 id="0x06-command命令"><a href="#0x06-command命令" class="headerlink" title="0x06 command命令"></a>0x06 command命令</h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(gdb) break func</div><div class="line">Breakpoint 1 at 0x3475678: file test.c, line 12.</div><div class="line">(gdb) command 1</div><div class="line">Type commands for when breakpoint 1 is hit, one per line.</div><div class="line">End with a line saying just &quot;end&quot;.</div><div class="line">&gt;print arg1</div><div class="line">&gt;print arg2</div><div class="line">&gt;print arg3</div><div class="line">&gt;end</div><div class="line">(gdb)</div></pre></td></tr></table></figure></p>
 <p>当我们的断点到达时，自动执行command中的三个命令，把func的三个参数值打出来。</p>
 <h2 id="0x07-其他"><a href="#0x07-其他" class="headerlink" title="0x07 其他"></a>0x07 其他</h2><ul>
 <li>step /  s  下一步，直接执行下一条程序</li>
@@ -298,7 +298,7 @@ show args查看程序参数
 <li>p *array@len 输出数组</li>
 <li>p i 输出i的值</li>
 </ul>
-<h2 id="0x08-附表"><a href="#0x08-附表" class="headerlink" title="0x08 附表"></a>0x08 附表</h2><p><strong>寄存器宽度表</strong><br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">|<span class="number">63.</span><span class="number">.32</span>|<span class="number">31.</span><span class="number">.16</span>|<span class="number">15</span><span class="number">-8</span>|<span class="number">7</span><span class="number">-0</span>|</div><div class="line">               |AH.|AL.|</div><div class="line">               |AX.....|</div><div class="line">       |EAX............|</div><div class="line">|RAX...................|</div></pre></td></tr></table></figure></p>
+<h2 id="0x08-附表"><a href="#0x08-附表" class="headerlink" title="0x08 附表"></a>0x08 附表</h2><p><strong>寄存器宽度表</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">|63..32|31..16|15-8|7-0|</div><div class="line">               |AH.|AL.|</div><div class="line">               |AX.....|</div><div class="line">       |EAX............|</div><div class="line">|RAX...................|</div></pre></td></tr></table></figure></p>
 </span>
       
     </div>
@@ -399,7 +399,7 @@ show args查看程序参数
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../../../archives">
-              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-count">28</span>
               <span class="site-state-item-name">归档</span>
             </a>
           </div>
@@ -413,7 +413,7 @@ show args查看程序参数
 
           <div class="site-state-item site-state-tags">
             <a href="../../../../../tags">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">48</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

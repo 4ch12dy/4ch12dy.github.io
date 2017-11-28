@@ -227,7 +227,7 @@ root:godmode
 <p>漏洞程序在<code>/opt/protostar/bin</code>目录下</p>
 <h2 id="0x01-Protostar-Stack-0"><a href="#0x01-Protostar-Stack-0" class="headerlink" title="0x01 Protostar/Stack 0"></a>0x01 Protostar/Stack 0</h2><p>This level introduces the concept that memory can be accessed outside of its allocated region, <strong>how the stack variables are laid out, and that modifying outside of the allocated memory can modify program execution</strong>.</p>
 <p>This level is at <code>/opt/protostar/bin/stack0</code></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">volatile</span> <span class="keyword">int</span> modified;</div><div class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</div><div class="line"></div><div class="line">  modified = <span class="number">0</span>;</div><div class="line">  gets(buffer);</div><div class="line"></div><div class="line">  <span class="keyword">if</span>(modified != <span class="number">0</span>) &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"you have changed the 'modified' variable\n"</span>);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">printf</span>(<span class="string">"Try again?\n"</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  volatile int modified;</div><div class="line">  char buffer[64];</div><div class="line"></div><div class="line">  modified = 0;</div><div class="line">  gets(buffer);</div><div class="line"></div><div class="line">  if(modified != 0) &#123;</div><div class="line">      printf(&quot;you have changed the &apos;modified&apos; variable\n&quot;);</div><div class="line">  &#125; else &#123;</div><div class="line">      printf(&quot;Try again?\n&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="0x02-思路-amp-分析"><a href="#0x02-思路-amp-分析" class="headerlink" title="0x02 思路&amp;分析"></a>0x02 思路&amp;分析</h2><p>这个栈溢出很简单，首先在栈上分配了64字节大小的空间，然后根据modified的值来决定执行流程，但modified始终等于0。所以我们需要利用栈溢出去修改modified的值。</p>
 <h2 id="0x03-调试-amp-利用"><a href="#0x03-调试-amp-利用" class="headerlink" title="0x03 调试&amp;利用"></a>0x03 调试&amp;利用</h2><ol>
 <li>gdb连接到stack0，下<code>break *main</code>在main函数上下断点，然后<code>set disassembly-flavor intel</code>设置intel汇编指令格式,在<code>0x08048411</code>出下个断点</li>
@@ -235,7 +235,7 @@ root:godmode
 <p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-1.png" alt="0-1"></p>
 <ol>
 <li><p>利用define hook-stop在断点触发时观察栈变量和寄存器的值</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="meta">info</span> registers </div><div class="line">&gt;x/<span class="number">24</span>wx $esp</div><div class="line">&gt;<span class="meta">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;info registers </div><div class="line">&gt;x/24wx $esp</div><div class="line">&gt;end</div></pre></td></tr></table></figure>
 <p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-2.png" alt="0-2"><br>由上图可以发现，当我们输入几个A后，<code>0xbffff762</code>地址已经被写入了0x41,<br>然后我们再查看modified的值发现没有变化，通过计算发现为buffer偏移4+16*3+12字节出。</p>
 </li>
 <li><p>利用Python写入4+16*3+14字节数的A，发现成功修改modified的值，改变其执行流程。<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 0/pic/0-3.png" alt="0-3"></p>
@@ -287,7 +287,7 @@ root:godmode
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../../archives">
-              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-count">28</span>
               <span class="site-state-item-name">归档</span>
             </a>
           </div>
@@ -301,7 +301,7 @@ root:godmode
 
           <div class="site-state-item site-state-tags">
             <a href="../../../../tags">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">48</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
