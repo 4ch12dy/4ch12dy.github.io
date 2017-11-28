@@ -1,0 +1,789 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../../css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="给我一点时间和power" />
+
+
+
+  <meta name="keywords" content="iOS,GPS," />
+
+
+
+  <link rel="alternate" href="../../../../../atom.xml" title="4ch12dy" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../../favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="深入理解CoreLocation.framework定位原理
+
+经过一周的逆向调试，终于把整个框架获取定位的来龙去脉梳理完成。下面主要从程序员开发的角度和底层实现两个去讨论这个问题
+
+
+写在前面从底层的实现来说，与之前我所理解的有所不同，之前认为是框架最终和内核交互获取定位信息；但后面发现，框架实际上并没有直接去从内核获取定位信息，而是通过XPC（苹果中进程通信框架）发送和接受消息去获取定位。而与">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解CoreLocation.framework定位原理">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/11/06/深入理解CoreLocation.framework定位原理/深入理解CoreLocation.framework定位原理/index.html">
+<meta property="og:site_name" content="4ch12dy">
+<meta property="og:description" content="深入理解CoreLocation.framework定位原理
+
+经过一周的逆向调试，终于把整个框架获取定位的来龙去脉梳理完成。下面主要从程序员开发的角度和底层实现两个去讨论这个问题
+
+
+写在前面从底层的实现来说，与之前我所理解的有所不同，之前认为是框架最终和内核交互获取定位信息；但后面发现，框架实际上并没有直接去从内核获取定位信息，而是通过XPC（苹果中进程通信框架）发送和接受消息去获取定位。而与">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3CoreLocation.framework%E5%AE%9A%E4%BD%8D%E5%8E%9F%E7%90%86/xpc.png?raw=true">
+<meta property="og:updated_time" content="2017-11-06T08:04:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解CoreLocation.framework定位原理">
+<meta name="twitter:description" content="深入理解CoreLocation.framework定位原理
+
+经过一周的逆向调试，终于把整个框架获取定位的来龙去脉梳理完成。下面主要从程序员开发的角度和底层实现两个去讨论这个问题
+
+
+写在前面从底层的实现来说，与之前我所理解的有所不同，之前认为是框架最终和内核交互获取定位信息；但后面发现，框架实际上并没有直接去从内核获取定位信息，而是通过XPC（苹果中进程通信框架）发送和接受消息去获取定位。而与">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3CoreLocation.framework%E5%AE%9A%E4%BD%8D%E5%8E%9F%E7%90%86/xpc.png?raw=true">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'always'
+  };
+</script>
+
+  <title> 深入理解CoreLocation.framework定位原理 | 4ch12dy </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">X1a0</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-iosre">
+          <a href="/iOSRERESOURCE" rel="section">
+            <i class="menu-item-icon icon-next-iosre"></i> <br />
+            iOSRE相关资料
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-aboutme">
+          <a href="/aboutme" rel="section">
+            <i class="menu-item-icon icon-next-aboutme"></i> <br />
+            关于我
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              深入理解CoreLocation.framework定位原理
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2017-11-06T15:12:19+08:00" content="2017-11-06">
+            2017-11-06
+          </time>
+        </span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="../../../../../categories/iOS攻防/" itemprop="url" rel="index">
+                  <span itemprop="name">iOS攻防</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/06/深入理解CoreLocation.framework定位原理/深入理解CoreLocation.framework定位原理/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h3 id="深入理解CoreLocation-framework定位原理"><a href="#深入理解CoreLocation-framework定位原理" class="headerlink" title="深入理解CoreLocation.framework定位原理"></a>深入理解CoreLocation.framework定位原理</h3><blockquote>
+<blockquote>
+<p>经过一周的逆向调试，终于把整个框架获取定位的来龙去脉梳理完成。下面主要从程序员开发的角度和底层实现两个去讨论这个问题</p>
+</blockquote>
+</blockquote>
+<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>从底层的实现来说，与之前我所理解的有所不同，之前认为是框架最终和内核交互获取定位信息；但后面发现，框架实际上并没有直接去从内核获取定位信息，而是通过XPC（苹果中进程通信框架）发送和接受消息去获取定位。而与其交互的是一个root权限的<code>/usr/libexec/locationd</code>deamon进程，这个守护进程负责与内核交互获取定位信息。所以如果说要去完全防止hook（框架中实际上很多api都能被hook拿到定位），可以去逆向他们之间的XPC交互协议，并通过这个协议应用去和<code>locationd</code>通信获取定位信息，下面就讨论我目前的研究发现。</p>
+<p><strong>一个通过XPC交互的例子</strong>（见文末）</p>
+<h4 id="从程序员角度看定位"><a href="#从程序员角度看定位" class="headerlink" title="从程序员角度看定位"></a>从程序员角度看定位</h4><p>苹果通过<code>CoreLocation.framework</code>这个框架封装了底层定位实现并暴露出一些api给程序员使用。这里讨论获取定位最简单的几个api </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">LocationManager * MyLocationManager = [[CLLocationManager alloc]init] //初始化一个定位管理器</div><div class="line">[MyLocationManager requestWhenInUseAuthorization]					  //获取定位请求</div><div class="line">[MyLocationManager startUpdatingLocation]                             //开始定位</div><div class="line">[MyLocationManager stopUpdatingLocation]                              //关闭定位</div></pre></td></tr></table></figure>
+<p>通过上面三个步骤就能实现一个定位的获取，当然还要传入一个回调函数，以便获取到定位信息后返回给程序员解析。</p>
+<p>一般的回调函数如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray&lt;CLLocation *&gt; *)locations&#123;&#125;</div></pre></td></tr></table></figure>
+<p>基于以上的api应用app就能够获取一个定位信息。</p>
+<h4 id="框架api进入XPC的内幕"><a href="#框架api进入XPC的内幕" class="headerlink" title="框架api进入XPC的内幕"></a>框架api进入XPC的内幕</h4><p>上面的每一步调用的api最终都会调用XPC的api发送消息，下面讨论之间的对应关系。</p>
+<p>先来看下XPC发送消息的函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xpc_connection_send_message(&lt;#<span class="keyword">xpc_connection_t</span>  _Nonnull connection#&gt;, &lt;#<span class="keyword">xpc_object_t</span>  _Nonnull message#&gt;)</div></pre></td></tr></table></figure>
+<p>参数有两个，分别是<code>xpc_connection_t</code>连接对象，<code>xpc_object_t</code>一个字典对象（包含了消息的内容）下面来看第一个对应关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> LocationManager * MyLocationManager = [[CLLocationManager alloc]init] //初始化一个定位管理器</div><div class="line"> |</div><div class="line"> |</div><div class="line"> |</div><div class="line"> +-----&gt;xpc_connection_send_message(conn,infoDic);</div><div class="line"> //参数解析</div><div class="line">conn:</div><div class="line">&lt;OS_xpc_connection: connection[0x100226500]: &#123; refcnt = 2, xrefcnt = 1, name = com.apple.locationd.registration, type = named, state = init-done, error = 0x0 mach = true, privileged = false, bssend = 0x4e0b, recv = 0x4913, send = 0x4f03, pid = 0, euid = 4294967295, egid = 4294967295, asid = 4294967295 &#125; &lt;connection: 0x100226500&gt; &#123; name = com.apple.locationd.registration, listener = false, pid = 0, euid = 4294967295, egid = 4294967295, asid = 4294967295 &#125;&gt;</div><div class="line">  </div><div class="line">infoDic:</div><div class="line">&lt;OS_xpc_dictionary: dictionary[0x1741615c0]: &#123; refcnt = 1, xrefcnt = 1, count = 2, dest port = 0x0 &#125; &lt;dictionary: 0x1741615c0&gt; &#123; count = 2, contents =</div><div class="line">	&quot;kCLConnectionMessageInfoKey&quot; =&gt; &lt;data: 0x174087d50&gt;: &#123; length = 367 bytes, contents = 0x62706c6973743030d40102030405061b1c58247665727369... &#125;</div><div class="line">	&quot;kCLConnectionMessageNameKey&quot; =&gt; &lt;string: 0x174077740&gt; &#123; length = 32, contents = &quot;kCLConnectionMessageRegistration&quot; &#125;</div><div class="line">&#125;&gt;</div></pre></td></tr></table></figure>
+<p>上面可以看出当在初始化一个定位管理器<code>LocationManager</code>的时候，实际上是发送了一条<code>kCLConnectionMessageRegistration</code>消息。这个字典的结构很固定，<code>kCLConnectionMessageInfoKey</code>和<code>kCLConnectionMessageNameKey</code>分别是实际通信数据和通信消息名字。比如现在从名字上就能看出来是注册消息，而数据内容实际上是客户端SDK的版本号，如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    kCLConnectionMessageClientSDKKey = 655872;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>完整分析了一遍第一个对应关系，后面同理，这里就简单列出对应关系即可(重点看infoDic里面的内容)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[MyLocationManager requestWhenInUseAuthorization]	//获取定位请求</div><div class="line"> |</div><div class="line"> |</div><div class="line"> |</div><div class="line"> +-----&gt;xpc_connection_send_message(conn,infoDic);</div><div class="line"> //参数解析</div><div class="line">conn:</div><div class="line">&lt;OS_xpc_connection: connection[0x100226500]: &#123; refcnt = 2, xrefcnt = 2, name = com.apple.locationd.registration, type = named, state = checked in, error = 0x0 mach = true, privileged = false, bssend = 0x4e0b, recv = 0x4913, send = 0x4f03, pid = 99, euid = 0, egid = 0, asid = 0 &#125; &lt;connection: 0x100226500&gt; &#123; name = com.apple.locationd.registration, listener = false, pid = 99, euid = 0, egid = 0, asid = 0 &#125;&gt;</div><div class="line">  </div><div class="line">infoDic:</div><div class="line">&lt;OS_xpc_dictionary: dictionary[0x174162040]: &#123; refcnt = 1, xrefcnt = 1, count = 2, dest port = 0x0 &#125; &lt;dictionary: 0x174162040&gt; &#123; count = 2, contents =</div><div class="line">	&quot;kCLConnectionMessageInfoKey&quot; =&gt; &lt;data: 0x174087e40&gt;: &#123; length = 361 bytes, contents = 0x62706c6973743030d40102030405061b1c58247665727369... &#125;</div><div class="line">	&quot;kCLConnectionMessageNameKey&quot; =&gt; &lt;string: 0x17406d1c0&gt; &#123; length = 40, contents = &quot;kCLConnectionMessageRequestAuthorization&quot; &#125;</div><div class="line">&#125;&gt;</div></pre></td></tr></table></figure>
+<p>这一步通过名字即可发现是获取请求授权的消息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[MyLocationManager startUpdatingLocation]      //开始定位</div><div class="line"> |</div><div class="line"> |</div><div class="line"> |</div><div class="line"> +-----&gt;xpc_connection_send_message(conn,infoDic);</div><div class="line"> //参数解析</div><div class="line">conn:</div><div class="line">&lt;OS_xpc_connection: connection[0x100226500]: &#123; refcnt = 2, xrefcnt = 3, name = com.apple.locationd.registration, type = named, state = checked in, error = 0x0 mach = true, privileged = false, bssend = 0x4e0b, recv = 0x4913, send = 0x4f03, pid = 99, euid = 0, egid = 0, asid = 0 &#125; &lt;connection: 0x100226500&gt; &#123; name = com.apple.locationd.registration, listener = false, pid = 99, euid = 0, egid = 0, asid = 0 &#125;&gt;</div><div class="line">  </div><div class="line">infoDic:</div><div class="line">&lt;OS_xpc_dictionary: dictionary[0x1701633c0]: &#123; refcnt = 1, xrefcnt = 1, count = 2, dest port = 0x0 &#125; &lt;dictionary: 0x1701633c0&gt; &#123; count = 2, contents =</div><div class="line">	&quot;kCLConnectionMessageInfoKey&quot; =&gt; &lt;data: 0x170088cf0&gt;: &#123; length = 618 bytes, contents = 0x62706c6973743030d40102030405062b2c58247665727369... &#125;</div><div class="line">	&quot;kCLConnectionMessageNameKey&quot; =&gt; &lt;string: 0x1700651c0&gt; &#123; length = 28, contents = &quot;kCLConnectionMessageLocation&quot; &#125;</div><div class="line">&#125;&gt;</div></pre></td></tr></table></figure>
+<p>这里<code>kCLConnectionMessageLocation</code>表示这个是定位信息的消息，所以实际定位信息都在<code>kCLConnectionMessageInfoKey</code>这个key对应的数据中。</p>
+<p>在这之中，还有两种特殊的消息，分别是<code>kCLConnectionMessagePausesLocationUpdatesAutomatically</code>和<code>kCLConnectionMessageWatchdog</code>涉及到超时重新连接相关。</p>
+<h4 id="获取定位时XPC通信过程"><a href="#获取定位时XPC通信过程" class="headerlink" title="获取定位时XPC通信过程"></a>获取定位时XPC通信过程</h4><p>分别从发送消息和接收消息来对应</p>
+<ul>
+<li>当发送一条<code>kCLConnectionMessageRegistration</code>注册消息时会收到同样的<code>kCLConnectionMessageRegistration</code>消息回复。</li>
+<li>当发送一条<code>kCLConnectionMessageRequestAuthorization</code>授权请求消息时会收到<code>kCLConnectionMessageAuthorizationStatus</code>消息回复，暗示授权的状态</li>
+<li>当发送一条<code>kCLConnectionMessageLocation</code>定位消息的时候会收到<code>kCLConnectionMessageLocation</code>消息</li>
+<li>当收到一条<code>xpc_error_connection_interrupted</code>消息的时候，会发送<code>kCLConnectionMessageWatchdog</code>消息然后重复之前的步骤。</li>
+</ul>
+<p>如下图所示：</p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3CoreLocation.framework%E5%AE%9A%E4%BD%8D%E5%8E%9F%E7%90%86/xpc.png?raw=true" alt="xpc"></p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>目前把整个的交互过程以及相关协议内容梳理了出来，但还有很多细节需要分析，下一步准备做代码测试，发送xpc消息给deamon进程，看能不能通过xpc拿到定位信息。待解决的问题有具体到每一条发送消息的内容还需解决，一些其他影响连接的事情还需要分析。（在这中还有遇到一个坑，在iOS上没有xpc头文件，需要将macOS上的xpc软连接到对应的iOSSDK才能编译通过）</p>
+<h4 id="一个XPC交互的例子"><a href="#一个XPC交互的例子" class="headerlink" title="一个XPC交互的例子"></a>一个XPC交互的例子</h4><p>这里分为服务端和客户端来说明，例子中客户端传入两个数发送消息给服务端计算后并返回结果。</p>
+<p>服务端：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;xpc/xpc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="comment">//bundle_id = "com.xpc.test"</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> *argv[])</span></span></div><div class="line">&#123;</div><div class="line">    xpc_main(xpc_event_handler);<span class="comment">//收到客户端发来的消息时调用</span></div><div class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">xpc_event_handler</span><span class="params">(<span class="keyword">xpc_connection_t</span> conn)</span></span>&#123;</div><div class="line">  	<span class="keyword">char</span> *queue_name = <span class="literal">NULL</span>;</div><div class="line">    <span class="comment">//打印连接情况</span></div><div class="line">    asprintf(&amp;queue_name, <span class="string">"%s-peer-%d"</span>, <span class="string">"com.xpc.test"</span>,xpc_connection_get_pid(conn));</div><div class="line">  	</div><div class="line">    <span class="keyword">dispatch_queue_t</span> conn_event_queue = 	</div><div class="line">      dispatch_queue_create(queue_name,DISPATCH_QUEUE_SERIAL);</div><div class="line">    <span class="comment">//给连接设置队列</span></div><div class="line">    xpc_connection_set_target_queue(conn, conn_event_queue);</div><div class="line">  	</div><div class="line">    <span class="comment">//设置回调事件处理函数</span></div><div class="line">  	xpc_connection_set_event_handler(conn, ^(<span class="keyword">xpc_object_t</span> event) &#123;</div><div class="line">        </div><div class="line">      		conn_event_handler(conn, event);</div><div class="line">    &#125;);</div><div class="line">  	<span class="comment">//永不返回</span></div><div class="line">   	xpc_connection_resume(conn);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">conn_event_handler</span><span class="params">(<span class="keyword">xpc_connection_t</span> conn, <span class="keyword">xpc_object_t</span> event)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">xpc_type_t</span> type = xpc_get_type(event);</div><div class="line">	<span class="keyword">if</span> (type == XPC_TYPE_ERROR)</div><div class="line">    &#123;</div><div class="line">		<span class="keyword">if</span> (event == XPC_ERROR_CONNECTION_INVALID)</div><div class="line">        &#123;</div><div class="line">            <span class="comment">//连接无效</span></div><div class="line">		&#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (event == XPC_ERROR_TERMINATION_IMMINENT)</div><div class="line">        &#123;</div><div class="line">			<span class="comment">//即将终止</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">//处理业务</span></div><div class="line">        <span class="keyword">double</span> value1 = xpc_dictionary_get_double(event, <span class="string">"value1"</span>);</div><div class="line">        <span class="keyword">double</span> value2 = xpc_dictionary_get_double(event, <span class="string">"value2"</span>);</div><div class="line">        <span class="keyword">xpc_object_t</span> dictionary = xpc_dictionary_create(<span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="number">0</span>);</div><div class="line">        xpc_dictionary_set_double(dictionary, <span class="string">"result"</span>, value1+value2);</div><div class="line">        xpc_connection_send_message(conn, dictionary);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>客户端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">#include &lt;xpc/xpc.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">- (void)applicationDidFinishLaunching:(NSNotification *)aNotification</div><div class="line">&#123;</div><div class="line">    const char *connectionName = &quot;com.xpc.test&quot;;</div><div class="line">  	//创建一个服务的连接</div><div class="line">    connection = xpc_connection_create(connectionName, NULL);</div><div class="line">  </div><div class="line">   //设置消息处理回调函数</div><div class="line">    xpc_connection_set_event_handler(connection, ^(xpc_object_t object)&#123;</div><div class="line">       //这里将计算结果打印出来</div><div class="line">        double result = xpc_dictionary_get_double(object, &quot;result&quot;);</div><div class="line">        NSLog(@&quot;%f&quot;,result);</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">   	xpc_connection_resume(connection);</div><div class="line">  </div><div class="line">   //设置发送的数据字典</div><div class="line">    xpc_object_t dictionary = xpc_dictionary_create(NULL, NULL, 0);</div><div class="line">    xpc_dictionary_set_double(dictionary, &quot;value1&quot;, 1.0);</div><div class="line">    xpc_dictionary_set_double(dictionary, &quot;value2&quot;, 2.0);</div><div class="line">  </div><div class="line">   //发送消息 </div><div class="line">    xpc_connection_send_message(connection, dictionary);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="http://www.tanhao.me/pieces/695.html/" target="_blank" rel="external">http://www.tanhao.me/pieces/695.html/</a></p>
+<p><a href="https://medium.com/@theninjaprawn/breaking-ios-xpc-cfe2c3083c87" target="_blank" rel="external">https://medium.com/@theninjaprawn/breaking-ios-xpc-cfe2c3083c87</a></p>
+<p><a href="https://developer.apple.com/library/content/samplecode/SandboxedFetch/Listings/fetch_service_fetch_service_c.html#//apple_ref/doc/uid/DTS40011117-fetch_service_fetch_service_c-DontLinkElementID_6" target="_blank" rel="external">https://developer.apple.com/library/content/samplecode/SandboxedFetch/Listings/fetch_service_fetch_service_c.html#//apple_ref/doc/uid/DTS40011117-fetch_service_fetch_service_c-DontLinkElementID_6</a></p>
+<p><a href="http://www.cocoachina.com/bbs/read.php?tid=110294" target="_blank" rel="external">http://www.cocoachina.com/bbs/read.php?tid=110294</a></p>
+<p><a href="https://github.com/KJCracks/Clutch/issues/23">https://github.com/KJCracks/Clutch/issues/23</a></p>
+<p><a href="http://bbs.iosre.com/t/topic/767" target="_blank" rel="external">http://bbs.iosre.com/t/topic/767</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../../../../tags/iOS/" rel="tag">#iOS</a>
+          
+            <a href="../../../../../tags/GPS/" rel="tag">#GPS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="../../../28/Android_JNI_掉坑笔记 /JNI/" rel="prev">Android JNI掉坑笔记</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="../../../../10/11/x86指令编码笔记/X86指令编码笔记/" rel="next">X86指令编码笔记</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+    </div>
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">4ch12dy</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">给我一点时间和power</p>
+
+        
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=27646205&auto=0&height=66">网易云音乐</iframe>
+       
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../../../../../archives">
+              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-name">归档</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../../../../../categories">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../../../../../tags">
+              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="../../../../../atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/NULL-ME" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/eee-face/activities" target="_blank">知乎</a>
+              </span>
+            
+          
+        </div>
+
+     
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">技术分享</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://turingh.github.io/" target="_blank">mrh</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weeklyalgo.codes/" target="_blank">hook</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://iyiyang.cnblogs.com/" target="_blank">yiyang</a>
+              </span>
+            
+          
+        </div>
+        
+
+        
+        
+        
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#深入理解CoreLocation-framework定位原理"><span class="nav-number">1.</span> <span class="nav-text">深入理解CoreLocation.framework定位原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#写在前面"><span class="nav-number">1.1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从程序员角度看定位"><span class="nav-number">1.2.</span> <span class="nav-text">从程序员角度看定位</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#框架api进入XPC的内幕"><span class="nav-number">1.3.</span> <span class="nav-text">框架api进入XPC的内幕</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取定位时XPC通信过程"><span class="nav-number">1.4.</span> <span class="nav-text">获取定位时XPC通信过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个XPC交互的例子"><span class="nav-number">1.6.</span> <span class="nav-text">一个XPC交互的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">1.7.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2017
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">4ch12dy
+  </span>
+</div>
+
+<div class="powered-by">
+  当梦想全都被take away
+</div>
+<div class="theme-info">
+  keep hacking!
+</div>
+
+
+<!-- busuanzi -->
+
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../../../../../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = '4ch12dy';
+    var disqus_identifier = '2017/11/06/深入理解CoreLocation.framework定位原理/深入理解CoreLocation.framework定位原理/';
+    var disqus_title = '深入理解CoreLocation.framework定位原理';
+    var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/11/06/深入理解CoreLocation.framework定位原理/深入理解CoreLocation.framework定位原理/';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="../../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="../../../../../js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="../../../../../js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="../../../../../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="../../../../../js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="../../../../../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="../../../../../js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "../../../../../images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
