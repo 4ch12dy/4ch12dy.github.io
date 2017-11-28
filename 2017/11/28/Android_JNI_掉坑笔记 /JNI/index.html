@@ -43,7 +43,8 @@
 <meta name="description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
 
 
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;equ">
+坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
+1jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &quot;equals">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android JNI掉坑笔记">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/11/28/Android_JNI_掉坑笔记 /JNI/index.html">
@@ -51,14 +52,16 @@
 <meta property="og:description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
 
 
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;equ">
-<meta property="og:updated_time" content="2017-11-28T09:44:51.000Z">
+坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
+1jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &quot;equals">
+<meta property="og:updated_time" content="2017-11-28T09:52:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android JNI掉坑笔记">
 <meta name="twitter:description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
 
 
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;equ">
+坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
+1jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &quot;equals">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -238,12 +241,13 @@
 <p>最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。</p>
 </blockquote>
 </blockquote>
-<h3 id="坑1–jni方法签名分号问题"><a href="#坑1–jni方法签名分号问题" class="headerlink" title="坑1–jni方法签名分号问题"></a>坑1–jni方法签名分号问题</h3><p>这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名<br><code>jmethodID equals_id = env-&gt;GetMethodID(string_c, &quot;equals&quot;, &quot;(Ljava/lang/Object;)Z&quot;);</code></p>
+<h3 id="坑1–jni方法签名分号问题"><a href="#坑1–jni方法签名分号问题" class="headerlink" title="坑1–jni方法签名分号问题"></a>坑1–jni方法签名分号问题</h3><p>这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmethodID equals_id = env-&gt;GetMethodID(string_c, <span class="string">"equals"</span>, <span class="string">"(Ljava/lang/Object;)Z"</span>);</div></pre></td></tr></table></figure>
 <p>切记当参数或者返回值不是基本类型的时候一定要在末尾加上分号。</p>
-<p><code>jmethodID iterator_id = env-&gt;GetMethodID(list_c,&quot;iterator&quot;,&quot;()Ljava/util/Iterator;&quot;);</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmethodID iterator_id = env-&gt;GetMethodID(list_c,<span class="string">"iterator"</span>,<span class="string">"()Ljava/util/Iterator;"</span>);</div></pre></td></tr></table></figure>
 <p>这类错误常见描述为方法找不到错误。如果遇到类方法找不到切记先检查方法签名是否正确。</p>
 <h3 id="坑2–原生方法包含默认2个参数"><a href="#坑2–原生方法包含默认2个参数" class="headerlink" title="坑2–原生方法包含默认2个参数"></a>坑2–原生方法包含默认2个参数</h3><p>这个坑当然是对jni使用不熟练造成的，未了解其特性，所以对于初学者来说容易犯。看一个原生函数</p>
-<p><code>static jboolean nativeFunction(JNIEnv *env, jobject content, jobject someObj){...}</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> jboolean <span class="title">nativeFunction</span><span class="params">(JNIEnv *env, jobject content, jobject someObj)</span></span>&#123;...&#125;</div></pre></td></tr></table></figure>
 <p>第一个保留参数为<code>JNIEnv</code>虚拟机环境变量，第二个为调用该原生方法的java类对象即上下文。</p>
 <p>由于很多时候不声明这两个参数同样能正确运行（无其他参数时）导致忽略了第二个参数的存在，以为第二个上下文参数为传入的对象引用。</p>
 <p>这类错误常见描述为当你在某处调用这个对象的方法时，会提示找不到该方法。因为这个对象根本不是你传入的对象。</p>
