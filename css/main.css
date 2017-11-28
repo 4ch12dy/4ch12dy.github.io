@@ -492,15 +492,15 @@ td {
   opacity: 0;
 }
 @font-face {
-  font-family: 'default';
-  src: url("../fonts/icon-default/icomoon.eot?-9394c0");
-  src: url("../fonts/icon-default/icomoon.eot?#iefix-9394c0") format('embedded-opentype'), url("../fonts/icon-default/icomoon.woff?-9394c0") format('woff'), url("../fonts/icon-default/icomoon.ttf?-9394c0") format('truetype'), url("../fonts/icon-default/icomoon.svg?-9394c0#default") format('svg');
+  font-family: 'feather';
+  src: url("../fonts/icon-feather/icomoon.eot?-9394c0");
+  src: url("../fonts/icon-feather/icomoon.eot?#iefix-9394c0") format('embedded-opentype'), url("../fonts/icon-feather/icomoon.woff?-9394c0") format('woff'), url("../fonts/icon-feather/icomoon.ttf?-9394c0") format('truetype'), url("../fonts/icon-feather/icomoon.svg?-9394c0#feather") format('svg');
   font-weight: normal;
   font-style: normal;
 }
 [class^="icon-"],
 [class*=" icon-"] {
-  font-family: 'default';
+  font-family: 'feather';
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -531,54 +531,57 @@ td {
 .icon-next-heart {
   font-size: 14px;
 }
-.icon-storage:before,
-.icon-next-categories:before {
-  content: "\e0bc";
+.menu-item-icon.menu-item-icon.menu-item-icon {
+  font-size: 18px;
 }
-.icon-insert_emoticon:before,
-.icon-next-about:before {
-  content: "\e0e8";
-}
-.icon-brightness_4:before,
-.icon-next-logo:before {
-  content: "\e13e";
-}
-.icon-whatshot:before,
-.icon-next-feed:before {
-  content: "\e25b";
-}
-.icon-bookmark:before,
+.icon-ribbon:before,
 .icon-next-tags:before {
-  content: "\e27b";
+  content: "\e009";
 }
-.icon-favorite_outline:before,
+.icon-signal:before,
+.icon-next-feed:before {
+  content: "\e011";
+}
+.icon-server:before,
+.icon-next-archives:before {
+  content: "\e022";
+}
+.icon-heart:before,
 .icon-next-heart:before {
-  content: "\e292";
+  content: "\e024";
 }
-.icon-home:before,
-.icon-next-home:before {
-  content: "\e29e";
-}
-.icon-open_in_new:before,
-.icon-next-external-link:before {
-  content: "\e2b2";
+.icon-layers:before,
+.icon-next-categories:before {
+  content: "\e031";
 }
 .icon-search:before,
 .icon-next-search:before {
-  content: "\e2ca";
+  content: "\e036";
 }
-.icon-view_carousel:before,
-.icon-next-archives:before {
-  content: "\e2fd";
+.icon-drop:before,
+.icon-next-logo:before {
+  content: "\e063";
+}
+.icon-head:before,
+.icon-next-about:before {
+  content: "\e074";
+}
+.icon-flag:before,
+.icon-next-home:before {
+  content: "\e108";
+}
+.icon-open:before,
+.icon-next-external-link:before {
+  content: "\e128";
 }
 .post pre,
 .post .highlight {
-  background: #002451;
+  background: #000;
   margin: 20px 0;
   padding: 15px;
   overflow: auto;
   font-size: 13px;
-  color: #fff;
+  color: #eaeaea;
   line-height: 1.2;
 }
 .post .highlight .gutter pre,
@@ -615,7 +618,7 @@ td {
 }
 .post .highlight figcaption {
   font-size: 0.85em;
-  color: #7285b7;
+  color: #969896;
   line-height: 1em;
   margin-bottom: 1em;
 }
@@ -642,7 +645,7 @@ td {
   border-style: solid;
   border-color: #ccc;
   border-width: 1px 0;
-  background: #002451;
+  background: #000;
   padding: 15px 40px 15px 15px;
 }
 .post .gist .gist-file {
@@ -668,8 +671,8 @@ td {
   border: none;
 }
 .post .gist .gist-file .gist-meta {
-  background: #002451;
-  color: #7285b7;
+  background: #000;
+  color: #969896;
   font: 13px Monda, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   text-shadow: 0 0;
   padding: 0;
@@ -684,7 +687,7 @@ td {
   text-decoration: underline;
 }
 pre .comment {
-  color: #7285b7;
+  color: #969896;
 }
 pre .variable,
 pre .attribute,
@@ -698,7 +701,7 @@ pre .html .doctype,
 pre .css .id,
 pre .css .class,
 pre .css .pseudo {
-  color: #ff9da4;
+  color: #d54e53;
 }
 pre .number,
 pre .preprocessor,
@@ -706,11 +709,11 @@ pre .built_in,
 pre .literal,
 pre .params,
 pre .constant {
-  color: #ffc58f;
+  color: #e78c45;
 }
 pre .ruby .class .title,
 pre .css .rules .attribute {
-  color: #d1f1a9;
+  color: #b9ca4a;
 }
 pre .string,
 pre .value,
@@ -718,11 +721,11 @@ pre .inheritance,
 pre .header,
 pre .ruby .symbol,
 pre .xml .cdata {
-  color: #d1f1a9;
+  color: #b9ca4a;
 }
 pre .title,
 pre .css .hexcolor {
-  color: #9ff;
+  color: #70c0b1;
 }
 pre .function,
 pre .python .decorator,
@@ -732,11 +735,11 @@ pre .ruby .title .keyword,
 pre .perl .sub,
 pre .javascript .title,
 pre .coffeescript .title {
-  color: #bbdaff;
+  color: #7aa6da;
 }
 pre .keyword,
 pre .javascript .function {
-  color: #ebbbff;
+  color: #c397d8;
 }
 html,
 body {
@@ -1069,7 +1072,7 @@ body {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c32912;
+  background: #e0ec1b;
 }
 .links-of-friendly a {
   display: inline-block;
@@ -1087,7 +1090,7 @@ body {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff1a0e;
+  background: #200eff;
 }
 .sidebar-nav {
   margin: 0;
