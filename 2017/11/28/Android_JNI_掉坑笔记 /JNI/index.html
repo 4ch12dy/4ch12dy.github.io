@@ -54,7 +54,7 @@
 
 坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
 1jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &quot;equals">
-<meta property="og:updated_time" content="2017-11-28T10:37:56.000Z">
+<meta property="og:updated_time" content="2017-11-29T03:29:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android JNI踩坑笔记">
 <meta name="twitter:description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
@@ -248,7 +248,7 @@
 <p>这类错误常见描述为方法找不到错误。如果遇到类方法找不到切记先检查方法签名是否正确。</p>
 <h3 id="坑2–原生方法包含默认2个参数"><a href="#坑2–原生方法包含默认2个参数" class="headerlink" title="坑2–原生方法包含默认2个参数"></a>坑2–原生方法包含默认2个参数</h3><p>这个坑当然是对jni使用不熟练造成的，未了解其特性，所以对于初学者来说容易犯。看一个原生函数</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> jboolean <span class="title">nativeFunction</span><span class="params">(JNIEnv *env, jobject content, jobject someObj)</span></span>&#123;...&#125;</div></pre></td></tr></table></figure>
-<p>第一个保留参数为<code>JNIEnv</code>虚拟机环境变量，第二个为调用该原生方法的java类对象即上下文。</p>
+<p>第一个保留参数为<code>JNIEnv</code>虚拟机环境变量，第二个为调用该原生方法的java类对象即上下文。这里多说一句，第二个参数的上下文需根据该方法为静态方法还是实例方法，若为静态方法，则这里上下文为类引用；若为实例方法，则上下文为该类的对象引用。若把类引用当做对象引用，在查找方法id时则会出现方法找不到错误。</p>
 <p>由于很多时候不声明这两个参数同样能正确运行（无其他参数时）导致忽略了第二个参数的存在，以为第二个上下文参数为传入的对象引用。</p>
 <p>这类错误常见描述为当你在某处调用这个对象的方法时，会提示找不到该方法。因为这个对象根本不是你传入的对象。</p>
 <h3 id="坑3—jni调用父类方法的正确姿势"><a href="#坑3—jni调用父类方法的正确姿势" class="headerlink" title="坑3—jni调用父类方法的正确姿势"></a>坑3—jni调用父类方法的正确姿势</h3><p>这里就以一个正确的调用父类方法的流程来讲，起因是当我在查找<code>Exception</code>这个类的<code>getStackTrace</code></p>
