@@ -46,16 +46,16 @@
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="强化你的lldb调试器Why?lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后才能定位到函数名。流程琐碎且都是重复工作，花费大">
-<meta property="og:image" content="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true">
-<meta property="og:image" content="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_sbt.jpg?raw=true">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">
-<meta property="og:updated_time" content="2018-10-03T06:05:37.464Z">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/b_bt.jpg?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/b_sbt.jpg?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/orig_bt.png?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/sbt-noblockfile.png?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/sbt-blockfile.png?raw=true">
+<meta property="og:updated_time" content="2018-10-03T06:19:35.955Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLDB调试器栈符号化">
 <meta name="twitter:description" content="强化你的lldb调试器Why?lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后才能定位到函数名。流程琐碎且都是重复工作，花费大">
-<meta name="twitter:image" content="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/b_bt.jpg?raw=true">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -235,12 +235,12 @@
 <p>正好lldb提供了python的接口，可以开发自定义的命令。</p>
 <h3 id="And-what"><a href="#And-what" class="headerlink" title="And what ?"></a>And what ?</h3><p>虽然有python接口，但是lldb里面集成了一个OC的解释器，其语法要求特别严格，按照通常开发的写法会有很多错误，经过不断的调试和修复bug，一个开发版基于lldb python栈符号恢复命令开发完成。git地址在<a href="https://git.xiaojukeji.com/zhangshun/xia0LLDB" target="_blank" rel="external">这里</a></p>
 <p>这里面还有的搜索算法以及异常处理还需要优化，以及对于block这类函数还不能恢复，不过对于大多数的场景目前还是可用。具体效果可以如下：</p>
-<p><img src="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true" alt="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true"></p>
-<p><img src="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_sbt.jpg?raw=true" alt="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_sbt.jpg?raw=true"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/b_bt.jpg?raw=true" alt="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/b_sbt.jpg?raw=true" alt="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_sbt.jpg?raw=true"></p>
 <h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><p>现已支持恢复block结构符号解析，通过提供的ida脚本，得到一个json格式的block符号文件，然后在lldb命令行中输入<code>sbt -f block-json-file-path</code>即可加载该文件。效果如下：</p>
-<h4 id="原始的bt命令结果"><a href="#原始的bt命令结果" class="headerlink" title="原始的bt命令结果"></a>原始的bt命令结果</h4><p><img src="/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/" alt="orig_bt"></p>
-<h4 id="sbt命令（没有加载block符号文件）"><a href="#sbt命令（没有加载block符号文件）" class="headerlink" title="sbt命令（没有加载block符号文件）"></a>sbt命令（没有加载block符号文件）</h4><p><img src="/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/" alt="sbt-noblockfile"></p>
-<h4 id="sbt命令（带有block符号文件）"><a href="#sbt命令（带有block符号文件）" class="headerlink" title="sbt命令（带有block符号文件）"></a>sbt命令（带有block符号文件）</h4><p><img src="/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/" alt="sbt-blockfile"></p>
+<h4 id="原始的bt命令结果"><a href="#原始的bt命令结果" class="headerlink" title="原始的bt命令结果"></a>原始的bt命令结果</h4><p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/orig_bt.png?raw=true" alt="orig_bt"></p>
+<h4 id="sbt命令（没有加载block符号文件）"><a href="#sbt命令（没有加载block符号文件）" class="headerlink" title="sbt命令（没有加载block符号文件）"></a>sbt命令（没有加载block符号文件）</h4><p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/sbt-noblockfile.png?raw=true" alt="sbt-noblockfile"></p>
+<h4 id="sbt命令（带有block符号文件）"><a href="#sbt命令（带有block符号文件）" class="headerlink" title="sbt命令（带有block符号文件）"></a>sbt命令（带有block符号文件）</h4><p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/sbt-blockfile.png?raw=true" alt="sbt-blockfile"></p>
 </span>
       
     </div>
