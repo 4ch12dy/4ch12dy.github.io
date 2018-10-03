@@ -29,7 +29,7 @@
 
 
 
-  <meta name="keywords" content="lldb,python," />
+  <meta name="keywords" content="LLDB,python," />
 
 
 
@@ -42,17 +42,20 @@
 
 <meta name="description" content="强化你的lldb调试器Why?lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后才能定位到函数名。流程琐碎且都是重复工作，花费大">
 <meta property="og:type" content="article">
-<meta property="og:title" content="lldb调试器栈符号化">
+<meta property="og:title" content="LLDB调试器栈符号化">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="强化你的lldb调试器Why?lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后才能定位到函数名。流程琐碎且都是重复工作，花费大">
-<meta property="og:image" content="https://git.xiaojukeji.com/zhangshun/xia0LLDB/blob/master/resource/b_bt.jpg">
-<meta property="og:image" content="https://git.xiaojukeji.com/zhangshun/xia0LLDB/raw/master/resource/b_sbt.jpg">
-<meta property="og:updated_time" content="2018-10-03T05:56:24.072Z">
+<meta property="og:image" content="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_sbt.jpg?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">
+<meta property="og:updated_time" content="2018-10-03T06:05:37.464Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lldb调试器栈符号化">
+<meta name="twitter:title" content="LLDB调试器栈符号化">
 <meta name="twitter:description" content="强化你的lldb调试器Why?lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后才能定位到函数名。流程琐碎且都是重复工作，花费大">
-<meta name="twitter:image" content="https://git.xiaojukeji.com/zhangshun/xia0LLDB/blob/master/resource/b_bt.jpg">
+<meta name="twitter:image" content="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -62,7 +65,7 @@
   };
 </script>
 
-  <title> lldb调试器栈符号化 | 4ch12dy </title>
+  <title> LLDB调试器栈符号化 | 4ch12dy </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -192,7 +195,7 @@
           
           
             
-              lldb调试器栈符号化
+              LLDB调试器栈符号化
             
           
         </h1>
@@ -232,8 +235,12 @@
 <p>正好lldb提供了python的接口，可以开发自定义的命令。</p>
 <h3 id="And-what"><a href="#And-what" class="headerlink" title="And what ?"></a>And what ?</h3><p>虽然有python接口，但是lldb里面集成了一个OC的解释器，其语法要求特别严格，按照通常开发的写法会有很多错误，经过不断的调试和修复bug，一个开发版基于lldb python栈符号恢复命令开发完成。git地址在<a href="https://git.xiaojukeji.com/zhangshun/xia0LLDB" target="_blank" rel="external">这里</a></p>
 <p>这里面还有的搜索算法以及异常处理还需要优化，以及对于block这类函数还不能恢复，不过对于大多数的场景目前还是可用。具体效果可以如下：</p>
-<p><img src="https://git.xiaojukeji.com/zhangshun/xia0LLDB/blob/master/resource/b_bt.jpg" alt="https://git.xiaojukeji.com/zhangshun/xia0LLDB/blob/master/resource/b_bt.jpg"></p>
-<p><img src="https://git.xiaojukeji.com/zhangshun/xia0LLDB/raw/master/resource/b_sbt.jpg" alt="https://git.xiaojukeji.com/zhangshun/xia0LLDB/raw/master/resource/b_sbt.jpg"></p>
+<p><img src="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true" alt="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_bt.jpg?raw=true"></p>
+<p><img src="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_sbt.jpg?raw=true" alt="https://github.com/4ch12dy/xia0LLDB/blob/master/resource/b_sbt.jpg?raw=true"></p>
+<h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><p>现已支持恢复block结构符号解析，通过提供的ida脚本，得到一个json格式的block符号文件，然后在lldb命令行中输入<code>sbt -f block-json-file-path</code>即可加载该文件。效果如下：</p>
+<h4 id="原始的bt命令结果"><a href="#原始的bt命令结果" class="headerlink" title="原始的bt命令结果"></a>原始的bt命令结果</h4><p><img src="/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/" alt="orig_bt"></p>
+<h4 id="sbt命令（没有加载block符号文件）"><a href="#sbt命令（没有加载block符号文件）" class="headerlink" title="sbt命令（没有加载block符号文件）"></a>sbt命令（没有加载block符号文件）</h4><p><img src="/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/" alt="sbt-noblockfile"></p>
+<h4 id="sbt命令（带有block符号文件）"><a href="#sbt命令（带有block符号文件）" class="headerlink" title="sbt命令（带有block符号文件）"></a>sbt命令（带有block符号文件）</h4><p><img src="/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/" alt="sbt-blockfile"></p>
 </span>
       
     </div>
@@ -242,7 +249,7 @@
       
         <div class="post-tags">
           
-            <a href="../../../../../tags/lldb/" rel="tag">#lldb</a>
+            <a href="../../../../../tags/LLDB/" rel="tag">#LLDB</a>
           
             <a href="../../../../../tags/python/" rel="tag">#python</a>
           
@@ -407,7 +414,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#强化你的lldb调试器"><span class="nav-number">1.</span> <span class="nav-text">强化你的lldb调试器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why"><span class="nav-number">2.</span> <span class="nav-text">Why?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How"><span class="nav-number">3.</span> <span class="nav-text">How?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#And-what"><span class="nav-number">4.</span> <span class="nav-text">And what ?</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#强化你的lldb调试器"><span class="nav-number">1.</span> <span class="nav-text">强化你的lldb调试器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why"><span class="nav-number">2.</span> <span class="nav-text">Why?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How"><span class="nav-number">3.</span> <span class="nav-text">How?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#And-what"><span class="nav-number">4.</span> <span class="nav-text">And what ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update"><span class="nav-number">5.</span> <span class="nav-text">update</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原始的bt命令结果"><span class="nav-number">5.1.</span> <span class="nav-text">原始的bt命令结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sbt命令（没有加载block符号文件）"><span class="nav-number">5.2.</span> <span class="nav-text">sbt命令（没有加载block符号文件）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sbt命令（带有block符号文件）"><span class="nav-number">5.3.</span> <span class="nav-text">sbt命令（带有block符号文件）</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -461,7 +468,7 @@
   <script type="text/javascript">
     var disqus_shortname = '4ch12dy';
     var disqus_identifier = '2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/';
-    var disqus_title = 'lldb调试器栈符号化';
+    var disqus_title = 'LLDB调试器栈符号化';
     var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/';
 
     function run_disqus_script(disqus_script){
