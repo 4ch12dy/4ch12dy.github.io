@@ -1,259 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
 
-<!doctype html>
-<html class="theme-next use-motion theme-next-mala">
+<!-- Head tag -->
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+  <meta name="description" content="给我一点时间和power">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <!--Author-->
+  
+  <meta name="author" content="4ch12dy">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="X86指令编码笔记"/>
+  
+  <!--Open Graph Description-->
+  
+      <meta property="og:description" content="给我一点时间和power" />
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="4ch12dy"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- 百度统计 -->
+    <script>
+	var _hmt = _hmt || [];
+	(function() {
+  	var hm = document.createElement("script");
+  	hm.src = "https://hm.baidu.com/hm.js?c0451e16533956173997b85f7a8de666";
+  	var s = document.getElementsByTagName("script")[0]; 
+  	s.parentNode.insertBefore(hm, s);
+	})();
+    </script>
+  <!-- Title -->
+  
+  <title>X86指令编码笔记 - 4ch12dy</title>
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="shortcut icon" href="../../../../../favicon.ico">
+    <!--font-awesome-->
+  <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="../../../../../css/style.css">
 
-
-
-
-
-
-  <link rel="stylesheet" type="text/css" href="../../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
-
-
-
-
-<link rel="stylesheet" type="text/css" href="../../../../../css/main.css?v=0.4.5.1"/>
-
-
-    <meta name="description" content="给我一点时间和power" />
-
-
-
-  <meta name="keywords" content="x86," />
-
-
-
-  <link rel="alternate" href="../../../../../atom.xml" title="4ch12dy" type="application/atom+xml" />
-
-
-
-  <link rel="shorticon icon" type="image/x-icon" href="../../../../../favicon.ico?v=0.4.5.1" />
-
-
-<meta name="description" content="由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
-
-x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
-x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中一个最重要的复杂性在于在这个指令集中，指令是">
-<meta property="og:type" content="article">
-<meta property="og:title" content="X86指令编码笔记">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/index.html">
-<meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
-
-x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
-x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中一个最重要的复杂性在于在这个指令集中，指令是">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/operand_size_override.png?raw=true">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/address_override.png?raw=true">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/register_table.png?raw=true">
-<meta property="og:updated_time" content="2017-10-16T04:09:00.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="X86指令编码笔记">
-<meta name="twitter:description" content="由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
-
-x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
-x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中一个最重要的复杂性在于在这个指令集中，指令是">
-<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true">
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var CONFIG = {
-    scheme: 'Mala',
-    sidebar: 'always'
-  };
-</script>
-
-  <title> X86指令编码笔记 | 4ch12dy </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-  <!--[if lte IE 8]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
-  
+<body>
 
-
-
-  <div class="container one-column page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
-  <a href="/" class="brand" rel="start">
-      <span class="logo">
-        <i class="icon-next-logo"></i>
-      </span>
-      <span class="site-title">X1a0</span>
-  </a>
-  <span class="logo-line-after"><i></i></span>
-</h1>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            <i class="menu-item-icon icon-next-home"></i> <br />
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            <i class="menu-item-icon icon-next-categories"></i> <br />
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            <i class="menu-item-icon icon-next-archives"></i> <br />
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            <i class="menu-item-icon icon-next-tags"></i> <br />
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-iosre">
-          <a href="/iOSRERESOURCE" rel="section">
-            <i class="menu-item-icon icon-next-iosre"></i> <br />
-            iOSRE相关资料
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-aboutme">
-          <a href="/aboutme" rel="section">
-            <i class="menu-item-icon icon-next-aboutme"></i> <br />
-            关于我
-          </a>
-        </li>
-      
-
-      
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
-    </header>
-
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
     
-      
-
-      
-
-    
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div id="content" class="content"> 
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              X86指令编码笔记
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2017-10-11T11:46:13+08:00" content="2017-10-11">
-            2017-10-11
-          </time>
-        </span>
-
+    <div class="logo">
+      <a href="../../../../../index.html" rel="home">
         
-          <span class="post-category" >
-            &nbsp; | &nbsp; 分类于
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="../../../../../categories/杂/" itemprop="url" rel="index">
-                  <span itemprop="name">杂</span>
-                </a>
-              </span>
-
-              
-              
-
-            
-          </span>
+        <img src="http://oct3pmpde.bkt.clouddn.com/timg.jpg" alt="4ch12dy" height="60">
         
-
-        
+      </a>
+    </div>
+    <a class="header-name" href="../../../../../index.html">
+            <span>4ch12dy</span>
+            的部落宅
+        </a>
+    <!-- navbar -->
+    <nav class="navbar">
+      <!--  nav links -->
+      <div class="collapse">
+        <ul class="navbar-nav">
           
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="#comments" itemprop="discussionUrl">
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/11/x86指令编码笔记/X86指令编码笔记/" itemprop="commentsCount"></span>
-            </a>
-          </span>
           
-        
+            <li>
+              <a href="../../../../../.">
+                
+                  <i class="fa fa-home "></i>
+                
+                首页
+              </a>
+            </li>
+          
+            <li>
+              <a href="../../../../../archives">
+                
+                  <i class="fa fa-archive "></i>
+                
+                归档
+              </a>
+            </li>
+          
+            <li>
+              <a href="../../../../../about">
+                
+                  <i class="fa fa-user "></i>
+                
+                关于
+              </a>
+            </li>
+          
+            <li>
+              <a href="../../../../../project">
+                
+                  <i class="fa fa-folder-open "></i>
+                
+                项目
+              </a>
+            </li>
+          
+            <li>
+              <a href="../../../../../photo">
+                
+                  <i class="fa fa-photo "></i>
+                
+                相册
+              </a>
+            </li>
+          
+            <li>
+              <a href="../../../../../guestbook">
+                
+                  <i class="fa fa-edit "></i>
+                
+                留言
+              </a>
+            </li>
+          
+            <li>
+              <a href="../../../../../atom.xml">
+                
+                  <i class="fa fa-send "></i>
+                
+                RSS
+              </a>
+            </li>
+          
+        </ul>
       </div>
-    </header>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
 
-    <div class="post-body">
 
-      
-      
-
-      
-        <span itemprop="articleBody"><blockquote>
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            X86指令编码笔记
+            
+          </h1>
+         
+        </div>
+         <p class="a-posted-on">
+          2017-10-11
+          </p>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <blockquote>
 <p>由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。</p>
 </blockquote>
 <h3 id="x86指令编码格式"><a href="#x86指令编码格式" class="headerlink" title="x86指令编码格式"></a>x86指令编码格式</h3><p>很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。</p>
@@ -403,477 +325,65 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 <p><a href="http://ytliu.info/blog/2016/12/10/x86zhi-ling-bian-ma-de-na-xie-shi-er/" target="_blank" rel="external">X86指令编码的那些事儿</a></p>
 <p><a href="http://subler.github.io/note/compiler/x86_instruction_encode.html" target="_blank" rel="external">http://subler.github.io/note/compiler/x86_instruction_encode.html</a></p>
 <p><a href="https://www.onlinedisassembler.com/odaweb/strcpy_x86" target="_blank" rel="external">onlineDisassembler</a></p>
-</span>
-      
-    </div>
 
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../../../../tags/x86/" rel="tag">#x86</a>
-          
         </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="../../../../11/28/Android_JNI_掉坑笔记 /JNI/" rel="prev">Android JNI踩坑笔记</a>
-            
-          </div>
-
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="../../../../08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/" rel="next">一种用户层与kext内核扩展交互方式</a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div>
-      
+      </article>
     </div>
-
-    <div class="post-spread">
+    <!-- Pre or Next -->
+    
+	<div class="container" >
+           <ul class="pager">
+    	     
+      	     <li class="previous">
+              <a href="/2017/11/28/Android_JNI_掉坑笔记 /JNI/" rel="prev">下一篇</a>
+             </li>
+           
+           
+              <li class="next">
+              <a href="/2017/08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/" rel="prev">上一篇</a>
+            </li>
+           
+          </ul>
+       </div>
+　　　　<!-- Comments -->
+    <div class="container">
       
-    </div>
-  </div>
+<section id="comment">
+  <!-- <h1 class="title">Comments</h1> -->
 
- </div>
-
-        
-          <div class="comments" id="comments">
-            
-              <div id="disqus_thread">
-                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-              </div>
-            <!--
-            
-            -->
-        
-      </div>
-
-      
   
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+</section>
+
+
     </div>
+   
+　　　　
   </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
-          <p class="site-author-name" itemprop="name">4ch12dy</p>
-        </div>
-        <p class="site-description motion-element" itemprop="description">给我一点时间和power</p>
-
-        
-		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=27646205&auto=0&height=66">网易云音乐</iframe>
-       
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="../../../../../archives">
-              <span class="site-state-item-count">30</span>
-              <span class="site-state-item-name">归档</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            <a href="../../../../../categories">
-              <span class="site-state-item-count">13</span>
-              <span class="site-state-item-name">分类</span>
-              </a>
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="../../../../../tags">
-              <span class="site-state-item-count">51</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="../../../../../atom.xml" rel="alternate">
-              <i class="menu-item-icon icon-next-feed"></i>
-              RSS
-            </a>
-          </div>
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
-              </span>
-            
-          
-        </div>
-
-     
-
-        <div class="links-of-friendly motion-element">
-          
-            <p class="site-author-name">技术分享</p>
-            
-              <span class="links-of-author-item">
-              <a href="http://turingh.github.io/" target="_blank">mrh</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://weeklyalgo.codes/" target="_blank">hook</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://iyiyang.cnblogs.com/" target="_blank">yiyang</a>
-              </span>
-            
-          
-        </div>
-        
-
-        
-        
-        
-      </section>
-
-      
-        <section class="post-toc-wrap sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator"></div>
-          <div class="post-toc">
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#x86指令编码格式"><span class="nav-number">1.</span> <span class="nav-text">x86指令编码格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指令prefix"><span class="nav-number">2.</span> <span class="nav-text">指令prefix</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#REX-prefix—开启-64-位计算的基石"><span class="nav-number">2.1.</span> <span class="nav-text">REX prefix—开启 64 位计算的基石</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#寄存器编码表"><span class="nav-number">2.1.1.</span> <span class="nav-text">寄存器编码表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opcode"><span class="nav-number">3.</span> <span class="nav-text">opcode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ModR-M"><span class="nav-number">4.</span> <span class="nav-text">ModR/M</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SIB"><span class="nav-number">5.</span> <span class="nav-text">SIB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Displacement-和-Immediate"><span class="nav-number">6.</span> <span class="nav-text">Displacement 和 Immediate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#综合起来，看下面的例子："><span class="nav-number">7.</span> <span class="nav-text">综合起来，看下面的例子：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考及索引"><span class="nav-number">8.</span> <span class="nav-text">参考及索引</span></a></li></ol></div>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner"> <div class="copyright" >
-  
-  &copy; &nbsp; 
-  <span itemprop="copyrightYear">2019
-  </span>
-  <span class="with-love">
-    <i class="icon-next-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">4ch12dy
-  </span>
-</div>
-
-<div class="powered-by">
-  当梦想全都被take away
-</div>
-<div class="theme-info">
-  keep hacking!
 </div>
 
 
-<!-- busuanzi -->
-
-
-
- </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  <script type="text/javascript" src="../../../../../vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  
-  
+  <!-- Footer -->
+  <!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>4ch12dy &copy; 2019</span>
     
-
-  <script type="text/javascript">
-    var disqus_shortname = '4ch12dy';
-    var disqus_identifier = '2017/10/11/x86指令编码笔记/X86指令编码笔记/';
-    var disqus_title = 'X86指令编码笔记';
-    var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/10/11/x86指令编码笔记/X86指令编码笔记/';
-
-    function run_disqus_script(disqus_script){
-      var dsq = document.createElement('script');
-      dsq.type = 'text/javascript';
-      dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }
-
-    run_disqus_script('count.js');
+      <span class="split">|</span>
+      <span>th是个小屁孩的技术小屋</span>
     
-      run_disqus_script('embed.js');
-    
-  </script>
-
-  
-  
-  <script type="text/javascript" src="../../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="../../../../../js/fancy-box.js?v=0.4.5.1"></script>
+  </p>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</footer>
 
 
-  <script type="text/javascript" src="../../../../../js/helpers.js?v=0.4.5.1"></script>
-  
-
-  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="../../../../../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="../../../../../js/app.js"></script>
 
 
 
-
-  <script type="text/javascript" src="../../../../../js/nav-toggle.js?v=0.4.5.1"></script>
-  <script type="text/javascript" src="../../../../../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  
-<script type="text/javascript" src="../../../../../js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
-
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.motion.complete', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      var $indicator = $(indicator);
-      var opacity = action === 'show' ? 0.4 : 0;
-      $indicator.velocity ?
-        $indicator.velocity('stop').velocity({
-          opacity: opacity
-        }, { duration: 100 }) :
-        $indicator.stop().animate({
-          opacity: opacity
-        }, 100);
-    }
-
-  });
-</script>
-
-<script type="text/javascript" id="sidebar.nav">
-  $(document).ready(function () {
-    var html = $('html');
-    var TAB_ANIMATE_DURATION = 200;
-    var hasVelocity = $.isFunction(html.velocity);
-
-    $('.sidebar-nav li').on('click', function () {
-      var item = $(this);
-      var activeTabClassName = 'sidebar-nav-active';
-      var activePanelClassName = 'sidebar-panel-active';
-      if (item.hasClass(activeTabClassName)) {
-        return;
-      }
-
-      var currentTarget = $('.' + activePanelClassName);
-      var target = $('.' + item.data('target'));
-
-      hasVelocity ?
-        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
-            .addClass(activePanelClassName);
-        }) :
-        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
-          currentTarget.hide();
-          target
-            .stop()
-            .css({'opacity': 0, 'display': 'block'})
-            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
-              currentTarget.removeClass(activePanelClassName);
-              target.addClass(activePanelClassName);
-            });
-        });
-
-      item.siblings().removeClass(activeTabClassName);
-      item.addClass(activeTabClassName);
-    });
-
-    $('.post-toc a').on('click', function (e) {
-      e.preventDefault();
-      var targetSelector = escapeSelector(this.getAttribute('href'));
-      var offset = $(targetSelector).offset().top;
-      hasVelocity ?
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        }) :
-        $('html, body').stop().animate({
-          scrollTop: offset
-        }, 500);
-    });
-
-    // Expand sidebar on post detail page by default, when post has a toc.
-    var $tocContent = $('.post-toc-content');
-    if (isDesktop() && CONFIG.sidebar === 'post') {
-      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-        displaySidebar();
-      }
-    }
-  });
-</script>
-
-
-
-  <script type="text/javascript">
-    $(document).ready(function () {
-      if (CONFIG.sidebar === 'always') {
-        displaySidebar();
-      }
-      if (isMobile()) {
-        FastClick.attach(document.body);
-      }
-    });
-  </script>
-
-  
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="../../../../../js/lazyload.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $("#posts").find('img').lazyload({
-        placeholder: "../../../../../images/loading.gif",
-        effect: "fadeIn"
-      });
-    });
-  </script>
 </body>
+
 </html>
