@@ -1,264 +1,112 @@
-
-<!doctype html>
-<html class="theme-next use-motion theme-next-mala">
+<!DOCTYPE html>
+<html>
 <head>
-  
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="keywords" content="hexo, autumn">
+    <title>
+        4ch12dy
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
+    
+    <link rel="stylesheet" href="../../../../../css/style.css">
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
+    <script>
+        infiniteScroll()
 
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-  <link rel="stylesheet" type="text/css" href="../../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
-
-
-
-
-<link rel="stylesheet" type="text/css" href="../../../../../css/main.css?v=0.4.5.1"/>
-
-
-    <meta name="description" content="给我一点时间和power" />
-
-
-
-  <meta name="keywords" content="Pegasus,cve,CVE-2016-4655,CVE-2016-4656,PoC," />
-
-
-
-  <link rel="alternate" href="../../../../../atom.xml" title="4ch12dy" type="application/atom+xml" />
-
-
-
-  <link rel="shorticon icon" type="image/x-icon" href="../../../../../favicon.ico?v=0.4.5.1" />
-
-
-<meta name="description" content="0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Pegasus内核漏洞及PoC分析">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/05/01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/index.html">
-<meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-0.png?raw=true">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-1.png?raw=true">
-<meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-2.png?raw=true">
-<meta property="og:updated_time" content="2017-05-02T14:38:06.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Pegasus内核漏洞及PoC分析">
-<meta name="twitter:description" content="0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
-<meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-0.png?raw=true">
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var CONFIG = {
-    scheme: 'Mala',
-    sidebar: 'always'
-  };
-</script>
-
-  <title> Pegasus内核漏洞及PoC分析 | 4ch12dy </title>
+        // for mobile menu
+        $(function () {
+            $('.social-button').click(function () {
+                if ($('.social-links').hasClass('hide-links')) {
+                    $('.social-links').removeClass('hide-links')
+                } else {
+                    $('.social-links').addClass('hide-links')
+                }
+            })
+        })
+    </script>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #595959">
+        <div class="container">
+            <header class="header">
+    <h1 class="title">
+        <a href="../../../../../index.html" class="logo">
+            4ch12dy
+        </a>
+    </h1>
+    <h2 class="desc">
+        当梦想全都被take away
+    </h2>
 
-  <!--[if lte IE 8]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
-  
-
-
-
-  <div class="container one-column page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
-  <a href="/" class="brand" rel="start">
-      <span class="logo">
-        <i class="icon-next-logo"></i>
-      </span>
-      <span class="site-title">当梦想全都被take away</span>
-  </a>
-  <span class="logo-line-after"><i></i></span>
-</h1>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            <i class="menu-item-icon icon-next-home"></i> <br />
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            <i class="menu-item-icon icon-next-categories"></i> <br />
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            <i class="menu-item-icon icon-next-archives"></i> <br />
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            <i class="menu-item-icon icon-next-tags"></i> <br />
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-iosre">
-          <a href="/iOSRERESOURCE" rel="section">
-            <i class="menu-item-icon icon-next-iosre"></i> <br />
-            iOSRE相关资料
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-aboutme">
-          <a href="/aboutme" rel="section">
-            <i class="menu-item-icon icon-next-aboutme"></i> <br />
-            关于我
-          </a>
-        </li>
-      
-
-      
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
-    </header>
-
-    
-      
-
-      
-
-    
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div id="content" class="content"> 
-
-  <div id="posts" class="posts-expand">
-    
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
+    <nav class="links">
+        <button class="social-button">
+            menu
+        </button>
+        <ul class="social-links hide-links">
             
-              Pegasus内核漏洞及PoC分析
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2017-05-01T14:52:45+08:00" content="2017-05-01">
+                <li>
+                    <a href="https://github.com/4ch12dy">
+                        Github
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="http://4ch12dy.site/aboutme/">
+                        About
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="http://4ch12dy.site/fuckshit/">
+                        Words
+                    </a>
+                </li>
+                
+        </ul>
+    </nav>
+</header>
+                <main class="main">
+                    <article class="post">
+    
+    
+    <h4 class="post-cat">
+        <a href="../../../../../categories/iOS-macOS内核漏洞分析/">
+            iOS&amp;macOS内核漏洞分析
+        </a>
+    </h4>
+    
+    <h4 class="post-cat">
+        <a href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">
+            PoC分析
+        </a>
+    </h4>
+    
+    
+    <h2 class="post-title">
+        Pegasus内核漏洞及PoC分析
+    </h2>
+    <ul class="post-date">
+        <li>
             2017-05-01
-          </time>
-        </span>
-
-        
-          <span class="post-category" >
-            &nbsp; | &nbsp; 分类于
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="../../../../../categories/iOS-macOS内核漏洞分析/" itemprop="url" rel="index">
-                  <span itemprop="name">iOS&macOS内核漏洞分析</span>
-                </a>
-              </span>
-
-              
-              
-                ， 
-              
-
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/" itemprop="url" rel="index">
-                  <span itemprop="name">PoC分析</span>
-                </a>
-              </span>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="#comments" itemprop="discussionUrl">
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/" itemprop="commentsCount"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <span itemprop="articleBody"><h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><blockquote>
+        </li>
+        <li>
+            4ch12dy
+        </li>
+    </ul>
+    <div class="post-content">
+        <h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><blockquote>
 <p> 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X<br> 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google<br> 1.<a href="http://www.freebuf.com/articles/terminal/113128.html" target="_blank" rel="external">iOS“远程越狱”间谍软件Pegasus技术分析</a><br> 2.<a href="http://bobao.360.cn/learning/detail/2996.html" target="_blank" rel="external">iOS三叉戟漏洞补丁分析、利用代码 公布（POC</a><br> 3.<a href="http://blog.pangu.io/pegasus-apt/" target="_blank" rel="external">Pegasus – 针对iOS设备的APT攻击分析</a></p>
 </blockquote>
 <h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><ol>
@@ -414,485 +262,35 @@
 <p><strong>参考</strong><br>1.<a href="https://developer.apple.com/library/content/samplecode/SimpleUserClient/Listings/User_Client_Info_txt.html" target="_blank" rel="external">User Client Info.txt</a><br>2.<a href="https://www.blackhat.com/docs/eu-15/materials/eu-15-Todesco-Attacking-The-XNU-Kernal-In-El-Capitain.pdf" target="_blank" rel="external">Attacking-The-XNU-Kernal-In-El-Capitain</a><br>3.<a href="https://bazad.github.io/2016/05/mac-os-x-use-after-free/" target="_blank" rel="external">Mac OS X Privilege Escalation via Use-After-Free: CVE-2016-1828</a><br>4.<a href="http://ho.ax/downloads/Defiling-Mac-OS-X-Ruxcon.pdf" target="_blank" rel="external">Defiling-Mac-OS-X-Ruxcon</a><br>5.<a href="https://www.exploit-db.com/exploits/39925/" target="_blank" rel="external">Apple Mac OSX Kernel - Exploitable NULL Dereference in CoreCaptureResponder Due to Unchecked Return Value</a><br>6.<a href="http://www.cnblogs.com/huxiao-tee/p/4660352.html" target="_blank" rel="external">认真分析mmap：是什么 为什么 怎么用</a><br>7.<a href="http://ho.ax/posts/2012/02/resolving-kernel-symbols/" target="_blank" rel="external">Resolving kernel symbols</a>  </p>
 <p><strong>OSUnserializeBinary源码</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div></pre></td><td class="code"><pre><div class="line">OSObject *</div><div class="line">OSUnserializeBinary(const char *buffer, size_t bufferSize, OSString **errorString)</div><div class="line">&#123;</div><div class="line">	OSObject ** objsArray;</div><div class="line">	uint32_t    objsCapacity;</div><div class="line">	uint32_t    objsIdx;</div><div class="line"></div><div class="line">	OSObject ** stackArray;</div><div class="line">	uint32_t    stackCapacity;</div><div class="line">	uint32_t    stackIdx;</div><div class="line"></div><div class="line">    OSObject     * result;</div><div class="line">    OSObject     * parent;</div><div class="line">    OSDictionary * dict;</div><div class="line">    OSArray      * array;</div><div class="line">    OSSet        * set;</div><div class="line">    OSDictionary * newDict;</div><div class="line">    OSArray      * newArray;</div><div class="line">    OSSet        * newSet;</div><div class="line">    OSObject     * o;</div><div class="line">    OSSymbol     * sym;</div><div class="line"></div><div class="line">    size_t           bufferPos;</div><div class="line">    const uint32_t * next;</div><div class="line">    uint32_t         key, len, wordLen;</div><div class="line">    bool             end, newCollect, isRef;</div><div class="line">    unsigned long long value;</div><div class="line">    bool ok;</div><div class="line"></div><div class="line">	if (errorString) *errorString = 0;</div><div class="line">	if (0 != strcmp(kOSSerializeBinarySignature, buffer)) return (NULL);</div><div class="line">	if (3 &amp; ((uintptr_t) buffer)) return (NULL);</div><div class="line">	if (bufferSize &lt; sizeof(kOSSerializeBinarySignature)) return (NULL);</div><div class="line">	bufferPos = sizeof(kOSSerializeBinarySignature);</div><div class="line">	next = (typeof(next)) (((uintptr_t) buffer) + bufferPos);</div><div class="line"></div><div class="line">	DEBG(&quot;---------OSUnserializeBinary(%p)\n&quot;, buffer);</div><div class="line"></div><div class="line">	objsArray = stackArray    = NULL;</div><div class="line">	objsIdx   = objsCapacity  = 0;</div><div class="line">	stackIdx  = stackCapacity = 0;</div><div class="line"></div><div class="line">    result   = 0;</div><div class="line">    parent   = 0;</div><div class="line">	dict     = 0;</div><div class="line">	array    = 0;</div><div class="line">	set      = 0;</div><div class="line">	sym      = 0;</div><div class="line"></div><div class="line">	ok = true;</div><div class="line">	while (ok)</div><div class="line">	&#123;</div><div class="line">		bufferPos += sizeof(*next);</div><div class="line">		if (!(ok = (bufferPos &lt;= bufferSize))) break;</div><div class="line">		key = *next++;</div><div class="line"></div><div class="line">        len = (key &amp; kOSSerializeDataMask);</div><div class="line">        wordLen = (len + 3) &gt;&gt; 2;</div><div class="line">		end = (0 != (kOSSerializeEndCollecton &amp; key));</div><div class="line">        DEBG(&quot;key 0x%08x: 0x%04x, %d\n&quot;, key, len, end);</div><div class="line"></div><div class="line">        newCollect = isRef = false;</div><div class="line">		o = 0; newDict = 0; newArray = 0; newSet = 0;</div><div class="line">		</div><div class="line">		switch (kOSSerializeTypeMask &amp; key)</div><div class="line">		&#123;</div><div class="line">		    case kOSSerializeDictionary:</div><div class="line">				o = newDict = OSDictionary::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line">		    case kOSSerializeArray:</div><div class="line">				o = newArray = OSArray::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line">		    case kOSSerializeSet:</div><div class="line">				o = newSet = OSSet::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeObject:</div><div class="line">				if (len &gt;= objsIdx) break;</div><div class="line">				o = objsArray[len];</div><div class="line">				o-&gt;retain();</div><div class="line">				isRef = true;</div><div class="line">				break;</div><div class="line"></div><div class="line">		    case kOSSerializeNumber:</div><div class="line">				bufferPos += sizeof(long long);</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		    	value = next[1];</div><div class="line">		    	value &lt;&lt;= 32;</div><div class="line">		    	value |= next[0];</div><div class="line">		    	o = OSNumber::withNumber(value, len);</div><div class="line">		    	next += 2;</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeSymbol:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize)           break;</div><div class="line">				if (0 != ((const char *)next)[len-1]) break;</div><div class="line">		        o = (OSObject *) OSSymbol::withCString((const char *) next);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeString:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		        o = OSString::withStringOfLength((const char *) next, len);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">    	    case kOSSerializeData:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		        o = OSData::withBytes(next, len);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">    	    case kOSSerializeBoolean:</div><div class="line">				o = (len ? kOSBooleanTrue : kOSBooleanFalse);</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    default:</div><div class="line">		        break;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (!(ok = (o != 0))) break;</div><div class="line"></div><div class="line">		if (!isRef)</div><div class="line">		&#123;</div><div class="line">			setAtIndex(objs, objsIdx, o);</div><div class="line">			if (!ok) break;</div><div class="line">			objsIdx++;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (dict)</div><div class="line">		&#123;</div><div class="line">			if (sym)</div><div class="line">			&#123;</div><div class="line">				DEBG(&quot;%s = %s\n&quot;, sym-&gt;getCStringNoCopy(), o-&gt;getMetaClass()-&gt;getClassName());</div><div class="line">				if (o != dict) ok = dict-&gt;setObject(sym, o);</div><div class="line">				o-&gt;release();</div><div class="line">				sym-&gt;release();</div><div class="line">				sym = 0;</div><div class="line">			&#125;</div><div class="line">			else </div><div class="line">			&#123;</div><div class="line">				sym = OSDynamicCast(OSSymbol, o);</div><div class="line">				ok = (sym != 0);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		else if (array) </div><div class="line">		&#123;</div><div class="line">			ok = array-&gt;setObject(o);</div><div class="line">		    o-&gt;release();</div><div class="line">		&#125;</div><div class="line">		else if (set)</div><div class="line">		&#123;</div><div class="line">		   ok = set-&gt;setObject(o);</div><div class="line">		   o-&gt;release();</div><div class="line">		&#125;</div><div class="line">		else</div><div class="line">		&#123;</div><div class="line">		    assert(!parent);</div><div class="line">		    result = o;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (!ok) break;</div><div class="line"></div><div class="line">		if (newCollect)</div><div class="line">		&#123;</div><div class="line">			if (!end)</div><div class="line">			&#123;</div><div class="line">				stackIdx++;</div><div class="line">				setAtIndex(stack, stackIdx, parent);</div><div class="line">				if (!ok) break;</div><div class="line">			&#125;</div><div class="line">			DEBG(&quot;++stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">			parent = o;</div><div class="line">			dict   = newDict;</div><div class="line">			array  = newArray;</div><div class="line">			set    = newSet;</div><div class="line">			end    = false;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (end)</div><div class="line">		&#123;</div><div class="line">			if (!stackIdx) break;</div><div class="line">			parent = stackArray[stackIdx];</div><div class="line">			DEBG(&quot;--stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">			stackIdx--;</div><div class="line">			set   = 0; </div><div class="line">			dict  = 0; </div><div class="line">			array = 0;</div><div class="line">			if (!(dict = OSDynamicCast(OSDictionary, parent)))</div><div class="line">			&#123;</div><div class="line">				if (!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	DEBG(&quot;ret %p\n&quot;, result);</div><div class="line"></div><div class="line">	if (objsCapacity)  kfree(objsArray,  objsCapacity  * sizeof(*objsArray));</div><div class="line">	if (stackCapacity) kfree(stackArray, stackCapacity * sizeof(*stackArray));</div><div class="line"></div><div class="line">	if (!ok &amp;&amp; result)</div><div class="line">	&#123;</div><div class="line">		result-&gt;release();</div><div class="line">		result = 0;</div><div class="line">	&#125;</div><div class="line">	return (result);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</span>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../../../../tags/Pegasus/" rel="tag">#Pegasus</a>
-          
-            <a href="../../../../../tags/cve/" rel="tag">#cve</a>
-          
-            <a href="../../../../../tags/CVE-2016-4655/" rel="tag">#CVE-2016-4655</a>
-          
-            <a href="../../../../../tags/CVE-2016-4656/" rel="tag">#CVE-2016-4656</a>
-          
-            <a href="../../../../../tags/PoC/" rel="tag">#PoC</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="../../../04/math/math/" rel="prev">一道高中数学题的思考？</a>
-            
-          </div>
-
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="../../../../04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/" rel="next">Protostar-堆溢出学习-滥用堆metadata重定向程序执行</a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div>
-      
-    </div>
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
- </div>
-
-        
-          <div class="comments" id="comments">
-            
-              <div id="disqus_thread">
-                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-              </div>
-            <!--
-            
-            -->
-        
-      </div>
-
-      
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
-          <p class="site-author-name" itemprop="name">4ch12dy</p>
-        </div>
-        <p class="site-description motion-element" itemprop="description">给我一点时间和power</p>
-
-        
-		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=27646205&auto=0&height=66">网易云音乐</iframe>
-       
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="../../../../../archives">
-              <span class="site-state-item-count">30</span>
-              <span class="site-state-item-name">归档</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            <a href="../../../../../categories">
-              <span class="site-state-item-count">13</span>
-              <span class="site-state-item-name">分类</span>
-              </a>
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="../../../../../tags">
-              <span class="site-state-item-count">51</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="../../../../../atom.xml" rel="alternate">
-              <i class="menu-item-icon icon-next-feed"></i>
-              RSS
-            </a>
-          </div>
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
-              </span>
-            
-          
-        </div>
-
-     
-
-        <div class="links-of-friendly motion-element">
-          
-            <p class="site-author-name">技术分享</p>
-            
-              <span class="links-of-author-item">
-              <a href="http://turingh.github.io/" target="_blank">mrh</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://weeklyalgo.codes/" target="_blank">hook</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://iyiyang.cnblogs.com/" target="_blank">yiyang</a>
-              </span>
-            
-          
-        </div>
-        
-
-        
-        
-        
-      </section>
-
-      
-        <section class="post-toc-wrap sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator"></div>
-          <div class="post-toc">
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-写在前面"><span class="nav-number">1.</span> <span class="nav-text">0x00 写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-目录"><span class="nav-number">2.</span> <span class="nav-text">0x01 目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-OSUnserializeBinary概述"><span class="nav-number">3.</span> <span class="nav-text">0x02 OSUnserializeBinary概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656"><span class="nav-number">4.</span> <span class="nav-text">0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CVE-2016-4655-infoleak"><span class="nav-number">4.1.</span> <span class="nav-text">CVE-2016-4655-infoleak</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CVE-2016-4656-UAF漏洞"><span class="nav-number">4.2.</span> <span class="nav-text">CVE-2016-4656-UAF漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-漏洞利用-PoC分析"><span class="nav-number">5.</span> <span class="nav-text">0x04 漏洞利用-PoC分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CVE-2016-4655-infoleak漏洞利用"><span class="nav-number">5.1.</span> <span class="nav-text">CVE-2016-4655-infoleak漏洞利用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造字典"><span class="nav-number">5.1.1.</span> <span class="nav-text">构造字典</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成UserClient设定属性"><span class="nav-number">5.1.2.</span> <span class="nav-text">生成UserClient设定属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读取属性，触发info-leak"><span class="nav-number">5.1.3.</span> <span class="nav-text">读取属性，触发info-leak</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算内核偏移"><span class="nav-number">5.1.4.</span> <span class="nav-text">计算内核偏移</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CVE-2016-4656-UAF漏洞利用"><span class="nav-number">5.2.</span> <span class="nav-text">CVE-2016-4656-UAF漏洞利用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造字典-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">构造字典</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Map-NULL"><span class="nav-number">5.2.2.</span> <span class="nav-text">Map NULL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pivoting-stack和ROP链"><span class="nav-number">5.3.</span> <span class="nav-text">Pivoting stack和ROP链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-总结"><span class="nav-number">6.</span> <span class="nav-text">0x04 总结</span></a></li></ol></div>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
-        </section>
-      
 
     </div>
-  </aside>
+</article>
+                </main>
+                <aside class="aside">
+                    <section class="aside-section">
+                        
+    <h1>Categories</h1>
+
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
+
+                    </section>
+                    <section class="aside-section">
+                        
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
 
 
-    </main>
+                    </section>
+                    <section class="aside-section tag">
+                        
+    <h1>Tags</h1>
 
-    <footer id="footer" class="footer">
-      <div class="footer-inner"> <div class="copyright" >
-  
-  &copy; &nbsp; 
-  <span itemprop="copyrightYear">2019
-  </span>
-  <span class="with-love">
-    <i class="icon-next-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">4ch12dy
-  </span>
-</div>
+    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
 
-<div class="powered-by">
-  当梦想全都被take away
-</div>
-<div class="theme-info">
-  keep hacking!
-</div>
+                    </section>
+                </aside>
+        </div>
+    </body>
 
-
-<!-- busuanzi -->
-
-
-
- </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  <script type="text/javascript" src="../../../../../vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  
-  
-    
-
-  <script type="text/javascript">
-    var disqus_shortname = '4ch12dy';
-    var disqus_identifier = '2017/05/01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/';
-    var disqus_title = 'Pegasus内核漏洞及PoC分析';
-    var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/05/01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/';
-
-    function run_disqus_script(disqus_script){
-      var dsq = document.createElement('script');
-      dsq.type = 'text/javascript';
-      dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }
-
-    run_disqus_script('count.js');
-    
-      run_disqus_script('embed.js');
-    
-  </script>
-
-  
-  
-  <script type="text/javascript" src="../../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="../../../../../js/fancy-box.js?v=0.4.5.1"></script>
-
-
-  <script type="text/javascript" src="../../../../../js/helpers.js?v=0.4.5.1"></script>
-  
-
-  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="../../../../../vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="../../../../../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
-
-
-
-
-  <script type="text/javascript" src="../../../../../js/nav-toggle.js?v=0.4.5.1"></script>
-  <script type="text/javascript" src="../../../../../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  
-<script type="text/javascript" src="../../../../../js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
-
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.motion.complete', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      var $indicator = $(indicator);
-      var opacity = action === 'show' ? 0.4 : 0;
-      $indicator.velocity ?
-        $indicator.velocity('stop').velocity({
-          opacity: opacity
-        }, { duration: 100 }) :
-        $indicator.stop().animate({
-          opacity: opacity
-        }, 100);
-    }
-
-  });
-</script>
-
-<script type="text/javascript" id="sidebar.nav">
-  $(document).ready(function () {
-    var html = $('html');
-    var TAB_ANIMATE_DURATION = 200;
-    var hasVelocity = $.isFunction(html.velocity);
-
-    $('.sidebar-nav li').on('click', function () {
-      var item = $(this);
-      var activeTabClassName = 'sidebar-nav-active';
-      var activePanelClassName = 'sidebar-panel-active';
-      if (item.hasClass(activeTabClassName)) {
-        return;
-      }
-
-      var currentTarget = $('.' + activePanelClassName);
-      var target = $('.' + item.data('target'));
-
-      hasVelocity ?
-        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
-            .addClass(activePanelClassName);
-        }) :
-        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
-          currentTarget.hide();
-          target
-            .stop()
-            .css({'opacity': 0, 'display': 'block'})
-            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
-              currentTarget.removeClass(activePanelClassName);
-              target.addClass(activePanelClassName);
-            });
-        });
-
-      item.siblings().removeClass(activeTabClassName);
-      item.addClass(activeTabClassName);
-    });
-
-    $('.post-toc a').on('click', function (e) {
-      e.preventDefault();
-      var targetSelector = escapeSelector(this.getAttribute('href'));
-      var offset = $(targetSelector).offset().top;
-      hasVelocity ?
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        }) :
-        $('html, body').stop().animate({
-          scrollTop: offset
-        }, 500);
-    });
-
-    // Expand sidebar on post detail page by default, when post has a toc.
-    var $tocContent = $('.post-toc-content');
-    if (isDesktop() && CONFIG.sidebar === 'post') {
-      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-        displaySidebar();
-      }
-    }
-  });
-</script>
-
-
-
-  <script type="text/javascript">
-    $(document).ready(function () {
-      if (CONFIG.sidebar === 'always') {
-        displaySidebar();
-      }
-      if (isMobile()) {
-        FastClick.attach(document.body);
-      }
-    });
-  </script>
-
-  
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="../../../../../js/lazyload.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $("#posts").find('img').lazyload({
-        placeholder: "../../../../../images/loading.gif",
-        effect: "fadeIn"
-      });
-    });
-  </script>
-</body>
 </html>

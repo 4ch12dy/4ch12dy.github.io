@@ -1,0 +1,333 @@
+@font-face {
+  font-family: Lora;
+  src: url("../font/Lora-Regular.ttf"), url("../font/Lora-Regular.eot");
+}
+@font-face {
+  font-family: Lora-Bold;
+  src: url("../font/Lora-Bold.ttf"), url("../font/Lora-Bold.eot");
+}
+@font-face {
+  font-family: Lato;
+  src: url("../font/Lato-Regular.ttf"), url("../font/Lato-Regular.eot");
+}
+@font-face {
+  font-family: Lato-Bold;
+  src: url("../font/Lato-Bold.ttf"), url("../font/Lato-Bold.eot");
+}
+pre {
+  border: 1px dashed #ddd;
+}
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+.header {
+  text-align: center;
+}
+.header h1,
+.header h2 {
+  margin: 0;
+  line-height: 1.2;
+}
+.header .title a {
+  color: #f78769;
+  text-decoration: none;
+  font: 700 3rem Lora-Bold;
+  transition: 0.3s;
+}
+.header .title a:hover {
+  color: #bbb;
+}
+.header .desc {
+  margin: 0.5em 0 0.25em;
+  font: 18px Lora;
+  color: #bbb;
+}
+.header .links {
+  height: 40px;
+  margin: 2.25em auto 4.5em;
+  border-top: 1px dashed #ddd;
+  border-bottom: 1px dashed #ddd;
+  font: 700 13px Lato-Bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.header .links ul {
+  text-decoration: none;
+  padding: 0;
+}
+.header .links ul li {
+  display: inline-block;
+}
+.header .links ul li:first-child::after {
+  content: "\00B7";
+  margin: 0 0.75em;
+}
+.header .links ul li:last-child::after {
+  content: '';
+}
+.header .links ul li a {
+  color: #777;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.header .links ul li a:hover {
+  color: #f78769;
+}
+.header .social-button {
+  display: none;
+}
+.header .hide-links {
+  display: block;
+}
+@media screen and (max-width: 640px) {
+  .header .title a {
+    font-size: 2.5rem;
+  }
+  .header .links {
+    border: none;
+  }
+  .header .social-links {
+    margin-top: 9px;
+    padding-top: 9px !important;
+    text-align: left;
+    border-top: 1px dashed #ddd;
+  }
+  .header .hide-links {
+    display: none;
+  }
+  .header .social-button {
+    display: block;
+    margin: 0 auto;
+    padding: 0.75em 1em;
+    border: 1px dashed #fff;
+    outline: 5px solid #bbb;
+    background: #bbb;
+    font: 700 13px Lato-Bold;
+    color: #fff;
+    text-transform: upperCase;
+  }
+  .header .social-button::before {
+    content: '';
+    background: url("https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/menu.svg");
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+    vertical-align: -3px;
+  }
+  .header .social-button:focus,
+  .header .social-button:active {
+    background: #f78769;
+    outline: 5px solid #f78769;
+  }
+}
+.post {
+  position: relative;
+  text-align: center;
+  border-bottom: 1px dashed #ddd;
+  margin: 0 0 4.5em;
+  padding: 0 0 3em;
+}
+.post::after {
+  content: '';
+  display: block;
+  background: url("https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button.svg") no-repeat -46px top/132px 35px;
+  width: 88px;
+  height: 35px;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, -18px);
+}
+.post .post-cat {
+  display: inline-block;
+  margin: 0 0 5px;
+}
+.post .post-cat:first-of-type::after {
+  content: "\00B7";
+  margin: 0 0.75em;
+  color: #f78769;
+}
+.post .post-cat:last-of-type::after {
+  content: '';
+}
+.post .post-cat a {
+  font: 700 13px Lato-Bold;
+  color: #f78769;
+  text-decoration: none;
+  transition: 0.3s;
+  text-transform: upperCase;
+  letter-spacing: 1px;
+}
+.post .post-cat a:hover {
+  color: #777;
+}
+.post .post-title {
+  margin: 0 0 0.5em;
+  font: 1.953em Lora;
+  color: #777;
+}
+.post .post-title::after {
+  content: "";
+  display: block;
+  margin: 0.5em auto;
+  width: 20%;
+  height: 2px;
+  background-color: #f3f3f3;
+}
+.post .post-title a {
+  color: #777;
+  text-decoration: none;
+}
+.post .post-date {
+  padding: 0;
+  list-style: none;
+  color: #bbb;
+  font: 14px/1.6 Lato;
+}
+.post .post-date li {
+  display: inline-block;
+}
+.post .post-date li:first-child::after {
+  content: "\00B7";
+  margin: 0 0.75em;
+}
+.post .post-cover {
+  position: relative;
+  user-select: none;
+}
+.post .post-cover:after {
+  position: absolute;
+  content: '';
+  width: 82%;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 40px 10px #fff inset;
+}
+.post .post-cover img {
+  max-width: 80%;
+  border-radius: 10px;
+}
+.post .post-content {
+  position: relative;
+  color: #777;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5em;
+  text-align: left;
+}
+.post .post-content a.more-link {
+  box-shadow: inset 0 -80px 80px -5px rgba(255,255,255,0.75);
+  color: #f78769;
+  font-family: Lora-Bold;
+  font-weight: 700;
+  display: block;
+  width: 100%;
+  position: absolute;
+  bottom: -32px;
+  padding-top: 100px;
+  text-align: center;
+  text-decoration: none;
+  transition: 0.5s;
+}
+.post .post-content a.more-link:hover {
+  box-shadow: none;
+}
+.post .post-content img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+.aside {
+  overflow: hidden;
+  width: 25%;
+  float: right;
+}
+.aside-section {
+  margin: 0 0 3em;
+}
+.aside-section h1 {
+  font: 1.25em/1.2 Lora;
+  margin: 0.67em 0;
+  color: #777;
+}
+.aside-section h1:before {
+  content: '';
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  margin-right: 0.45em;
+  float: left;
+  background: url("https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button.svg") no-repeat 0 0/84px 22px;
+  width: 22px;
+  height: 32px;
+}
+.aside-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.aside-section ul li {
+  border-top: 1px dashed #ddd;
+  margin-top: 0.6em;
+  padding-top: 0.6em;
+}
+.aside-section ul li a {
+  color: #f78769;
+  text-decoration: none;
+  font: 14px Lato;
+  transition: 0.3s;
+}
+.aside-section ul li a:hover {
+  color: #ddd;
+}
+.aside-section.tag li {
+  display: inline-block;
+  border: none;
+  margin: 0 10px 0 0;
+}
+.aside-section.tag li a {
+  border: 1px dashed #ddd;
+  padding: 4px;
+}
+@media screen and (max-width: 1015px) {
+  .aside {
+    width: 100%;
+  }
+}
+body {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.container {
+  max-width: 1142px;
+  width: 80%;
+  box-sizing: border-box;
+  padding: 3em 5%;
+  background: #fff;
+  margin: 3em auto;
+  overflow: hidden;
+}
+.container .main {
+  width: 70%;
+  float: left;
+}
+@media screen and (max-width: 1015px) {
+  .container .main {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 640px) {
+  .container {
+    margin: 3em 0 0;
+    width: 100%;
+    padding: 1.75em;
+  }
+}

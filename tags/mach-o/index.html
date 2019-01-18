@@ -1,457 +1,141 @@
-
-<!doctype html>
-<html class="theme-next use-motion theme-next-mala">
+<!DOCTYPE html>
+<html>
 <head>
-  
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="keywords" content="hexo, autumn">
+    <title>
+        4ch12dy
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
+    
+    <link rel="stylesheet" href="../../css/style.css">
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
+    <script>
+        infiniteScroll()
 
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
-
-
-
-
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.5.1"/>
-
-
-    <meta name="description" content="给我一点时间和power" />
-
-
-
-  <meta name="keywords" content="Hexo,Mala" />
-
-
-
-  <link rel="alternate" href="../../atom.xml" title="4ch12dy" type="application/atom+xml" />
-
-
-
-  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.5.1" />
-
-
-<meta name="description" content="给我一点时间和power">
-<meta property="og:type" content="website">
-<meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/mach-o/index.html">
-<meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="给我一点时间和power">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4ch12dy">
-<meta name="twitter:description" content="给我一点时间和power">
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var CONFIG = {
-    scheme: 'Mala',
-    sidebar: 'always'
-  };
-</script>
-
-  <title> 标签: mach-o | 4ch12dy </title>
+        // for mobile menu
+        $(function () {
+            $('.social-button').click(function () {
+                if ($('.social-links').hasClass('hide-links')) {
+                    $('.social-links').removeClass('hide-links')
+                } else {
+                    $('.social-links').addClass('hide-links')
+                }
+            })
+        })
+    </script>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #595959">
+        <div class="container">
+            <header class="header">
+    <h1 class="title">
+        <a href="../../index.html" class="logo">
+            4ch12dy
+        </a>
+    </h1>
+    <h2 class="desc">
+        当梦想全都被take away
+    </h2>
 
-  <!--[if lte IE 8]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
-  
-
-
-
-  <div class="container one-column ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
-  <a href="/" class="brand" rel="start">
-      <span class="logo">
-        <i class="icon-next-logo"></i>
-      </span>
-      <span class="site-title">当梦想全都被take away</span>
-  </a>
-  <span class="logo-line-after"><i></i></span>
-</h1>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            <i class="menu-item-icon icon-next-home"></i> <br />
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            <i class="menu-item-icon icon-next-categories"></i> <br />
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            <i class="menu-item-icon icon-next-archives"></i> <br />
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            <i class="menu-item-icon icon-next-tags"></i> <br />
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-iosre">
-          <a href="/iOSRERESOURCE" rel="section">
-            <i class="menu-item-icon icon-next-iosre"></i> <br />
-            iOSRE相关资料
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-aboutme">
-          <a href="/aboutme" rel="section">
-            <i class="menu-item-icon icon-next-aboutme"></i> <br />
-            关于我
-          </a>
-        </li>
-      
-
-      
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
-    </header>
-
+    <nav class="links">
+        <button class="social-button">
+            menu
+        </button>
+        <ul class="social-links hide-links">
+            
+                <li>
+                    <a href="https://github.com/4ch12dy">
+                        Github
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="http://4ch12dy.site/aboutme/">
+                        About
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="http://4ch12dy.site/fuckshit/">
+                        Words
+                    </a>
+                </li>
+                
+        </ul>
+    </nav>
+</header>
+                <main class="main">
+                    
+<section class="posts">
     
-      
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="../../2017/04/10/mach-o动态链接/mach-o动态链接/">
+                            Mach-o动态链接
+                        </a>
+                    </h1>
 
-      
-
-    
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div id="content" class="content"> 
-
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        mach-o
-        <small>标签</small>
-      </h2>
-    </div>
-
-    
-      
-
-  <article class="post post-type-normal"itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
+                    <ul class="post-date">
+                        <li>
+                            April 10, 2017
+                        </li>
+                        <li>
+                            4ch12dy
+                        </li>
+                    </ul>
+                    
+                        <div class="post-cover">
+                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true">
+                        </div>
+                    
+                    <div class="post-content ">
+                        
+                            <a href="../../2017/04/10/mach-o动态链接/mach-o动态链接/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
         
-            <a class="post-title-link" href="../../2017/04/10/mach-o动态链接/mach-o动态链接/" itemprop="url">
-              <span itemprop="name">Mach-o动态链接</span>
-            </a>
-        
-      </h1>
+</section>
 
-      <div class="post-meta">
-        <time class="post-time" datetime="2017-04-10T03:12:19.000Z" itemprop="dateCreated" content="2017-04-10"> 04-10 </time>
-      </div>
+                </main>
+                <aside class="aside">
+                    <section class="aside-section">
+                        
+    <h1>Categories</h1>
 
-    </header>
-  </article>
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../categories/看雪/">看雪</a></li></ul>
+
+                    </section>
+                    <section class="aside-section">
+                        
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/">2016</a></li></ul>
 
 
-    
-  </div>
+                    </section>
+                    <section class="aside-section tag">
+                        
+    <h1>Tags</h1>
 
-  
- </div>
+    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../调试/">调试</a></li></ul>
 
-        
-      </div>
-
-      
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      <section class="site-overview">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/header.jpg?raw=true" alt="4ch12dy" itemprop="image"/>
-          <p class="site-author-name" itemprop="name">4ch12dy</p>
+                    </section>
+                </aside>
         </div>
-        <p class="site-description motion-element" itemprop="description">给我一点时间和power</p>
+    </body>
 
-        
-		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=27646205&auto=0&height=66">网易云音乐</iframe>
-       
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="../../archives">
-              <span class="site-state-item-count">30</span>
-              <span class="site-state-item-name">归档</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            <a href="../../categories">
-              <span class="site-state-item-count">13</span>
-              <span class="site-state-item-name">分类</span>
-              </a>
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="../../tags">
-              <span class="site-state-item-count">51</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="../../atom.xml" rel="alternate">
-              <i class="menu-item-icon icon-next-feed"></i>
-              RSS
-            </a>
-          </div>
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://twitter.com/4chendy" target="_blank">Twitter</a>
-              </span>
-            
-          
-        </div>
-
-     
-
-        <div class="links-of-friendly motion-element">
-          
-            <p class="site-author-name">技术分享</p>
-            
-              <span class="links-of-author-item">
-              <a href="http://turingh.github.io/" target="_blank">mrh</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://blog.imjun.net/" target="_blank">杨君的小黑屋</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://weeklyalgo.codes/" target="_blank">hook</a>
-              </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://iyiyang.cnblogs.com/" target="_blank">yiyang</a>
-              </span>
-            
-          
-        </div>
-        
-
-        
-        
-        
-      </section>
-
-      
-
-    </div>
-  </aside>
-
-
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner"> <div class="copyright" >
-  
-  &copy; &nbsp; 
-  <span itemprop="copyrightYear">2019
-  </span>
-  <span class="with-love">
-    <i class="icon-next-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">4ch12dy
-  </span>
-</div>
-
-<div class="powered-by">
-  当梦想全都被take away
-</div>
-<div class="theme-info">
-  keep hacking!
-</div>
-
-
-<!-- busuanzi -->
-
-
-
- </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  <script type="text/javascript" src="../../vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  
-  
-    <script type="text/javascript">
-      postMotionOptions = {stagger: 100, drag: true};
-    </script>
-  
-
-  
-    
-
-  <script type="text/javascript">
-    var disqus_shortname = '4ch12dy';
-    var disqus_identifier = 'tags/mach-o/index.html';
-    var disqus_title = '';
-    var disqus_url = '';
-
-    function run_disqus_script(disqus_script){
-      var dsq = document.createElement('script');
-      dsq.type = 'text/javascript';
-      dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }
-
-    run_disqus_script('count.js');
-    
-  </script>
-
-  
-  
-  <script type="text/javascript" src="../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="../../js/fancy-box.js?v=0.4.5.1"></script>
-
-
-  <script type="text/javascript" src="../../js/helpers.js?v=0.4.5.1"></script>
-  
-
-  <script type="text/javascript" src="../../vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="../../vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="../../js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
-
-
-
-
-  <script type="text/javascript" src="../../js/nav-toggle.js?v=0.4.5.1"></script>
-  <script type="text/javascript" src="../../vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-
-  <script type="text/javascript">
-    $(document).ready(function () {
-      if (CONFIG.sidebar === 'always') {
-        displaySidebar();
-      }
-      if (isMobile()) {
-        FastClick.attach(document.body);
-      }
-    });
-  </script>
-
-  
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="../../js/lazyload.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $("#posts").find('img').lazyload({
-        placeholder: "../../images/loading.gif",
-        effect: "fadeIn"
-      });
-    });
-  </script>
-</body>
 </html>
