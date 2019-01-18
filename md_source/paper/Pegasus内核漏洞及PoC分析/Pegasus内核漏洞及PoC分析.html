@@ -1,181 +1,92 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-<!-- Head tag -->
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="keywords" content="hexo, autumn">
+    <title>
+        4ch12dy
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico">
+    
+    <link rel="stylesheet" href="../../../css/style.css">
 
-  <!--Description-->
-  
-  <meta name="description" content="给我一点时间和power">
-  
-
-  <!--Author-->
-  
-  <meta name="author" content="4ch12dy">
-  
-
-  <!--Open Graph Title-->
-  
-      <meta property="og:title" content="Pegasus内核漏洞及PoC分析"/>
-  
-  <!--Open Graph Description-->
-  
-      <meta property="og:description" content="给我一点时间和power" />
-  
-  <!--Open Graph Site Name-->
-  <meta property="og:site_name" content="4ch12dy"/>
-  <!--Type page-->
-  
-      <meta property="og:type" content="article" />
-  
-  <!--Page Cover-->
-  
-
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <!-- 百度统计 -->
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
     <script>
-	var _hmt = _hmt || [];
-	(function() {
-  	var hm = document.createElement("script");
-  	hm.src = "https://hm.baidu.com/hm.js?c0451e16533956173997b85f7a8de666";
-  	var s = document.getElementsByTagName("script")[0]; 
-  	s.parentNode.insertBefore(hm, s);
-	})();
+        hljs.initHighlightingOnLoad()
     </script>
-  <!-- Title -->
-  
-  <title>Pegasus内核漏洞及PoC分析 - 4ch12dy</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
+    <script>
+        infiniteScroll()
 
-
-  <link rel="shortcut icon" href="../../../favicon.ico">
-    <!--font-awesome-->
-  <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Custom CSS/Sass -->
-  <link rel="stylesheet" href="../../../css/style.css">
-
+        // for mobile menu
+        $(function () {
+            $('.social-button').click(function () {
+                if ($('.social-links').hasClass('hide-links')) {
+                    $('.social-links').removeClass('hide-links')
+                } else {
+                    $('.social-links').addClass('hide-links')
+                }
+            })
+        })
+    </script>
 </head>
 
-
-<body>
-
-  <!-- Nav -->
-  <header class="site-header">
-  <div class="header-inside">
-    
-    <div class="logo">
-      <a href="../../../index.html" rel="home">
-        
-        <img src="http://oct3pmpde.bkt.clouddn.com/timg.jpg" alt="4ch12dy" height="60">
-        
-      </a>
-    </div>
-    <a class="header-name" href="../../../index.html">
-            <span>4ch12dy</span>
-            的部落宅
+    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <div class="container">
+            <header class="header">
+    <h1 class="title">
+        <a href="../../../index.html" class="logo">
+            4ch12dy
         </a>
-    <!-- navbar -->
-    <nav class="navbar">
-      <!--  nav links -->
-      <div class="collapse">
-        <ul class="navbar-nav">
-          
-          
-            <li>
-              <a href="../../../.">
-                
-                  <i class="fa fa-home "></i>
-                
-                首页
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../archives">
-                
-                  <i class="fa fa-archive "></i>
-                
-                归档
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../about">
-                
-                  <i class="fa fa-user "></i>
-                
-                关于
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../project">
-                
-                  <i class="fa fa-folder-open "></i>
-                
-                项目
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../photo">
-                
-                  <i class="fa fa-photo "></i>
-                
-                相册
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../guestbook">
-                
-                  <i class="fa fa-edit "></i>
-                
-                留言
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../atom.xml">
-                
-                  <i class="fa fa-send "></i>
-                
-                RSS
-              </a>
-            </li>
-          
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </nav>
-    <div class="button-wrap">
-      <button class="menu-toggle">Primary Menu</button>
-    </div>
-  </div>
-</header>
+    </h1>
+    <h2 class="desc">
+        X1a0
+    </h2>
 
-
-  <!-- Main Content -->
-  <div class="content-area">
-  <div class="post">
-    <!-- Post Content -->
-    <div class="container">
-      <article>
-        <!-- Title date & tags -->
-        <div class="post-header">
-          <h1 class="entry-title">
-            Pegasus内核漏洞及PoC分析
+    <nav class="links">
+        <button class="social-button">
+            menu
+        </button>
+        <ul class="social-links hide-links">
             
-          </h1>
-         
-        </div>
-         <p class="a-posted-on">
-          2017-05-01
-          </p>
-        <!-- Post Main Content -->
-        <div class="entry-content">
-          <h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><blockquote>
+                <li>
+                    <a href="https://github.com/FrontendSophie">
+                        Github
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://www.linkedin.com/in/frontendsophie/">
+                        LinkedIn
+                    </a>
+                </li>
+                
+        </ul>
+    </nav>
+</header>
+                <main class="main">
+                    <article class="post">
+    
+    <h2 class="post-title">
+        Pegasus内核漏洞及PoC分析
+    </h2>
+    <ul class="post-date">
+        <li>
+            2017-05-01
+        </li>
+        <li>
+            4ch12dy
+        </li>
+    </ul>
+    <div class="post-content">
+        <h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><blockquote>
 <p> 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X<br> 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google<br> 1.<a href="http://www.freebuf.com/articles/terminal/113128.html" target="_blank" rel="external">iOS“远程越狱”间谍软件Pegasus技术分析</a><br> 2.<a href="http://bobao.360.cn/learning/detail/2996.html" target="_blank" rel="external">iOS三叉戟漏洞补丁分析、利用代码 公布（POC</a><br> 3.<a href="http://blog.pangu.io/pegasus-apt/" target="_blank" rel="external">Pegasus – 针对iOS设备的APT攻击分析</a></p>
 </blockquote>
 <h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><ol>
@@ -483,38 +394,34 @@ if (kr != KERN_SUCCESS)
 <p>kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);<br>if (kr != KERN_SUCCESS)<br>    return;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">最后如果一切都顺利，我们检查当前进程`getuid`是否等于0，如果是就提权root成功，然后调用`system(&quot;/bin/bash&quot;)`弹出一个shell！</div></pre></td></tr></table></figure></p>
 <p>if (getuid() == 0) {<br>    puts(“(+) got r00t!”);<br>    system(“/bin/bash”);<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div></pre></td><td class="code"><pre><div class="line">测试：</div><div class="line">![0-2](/Users/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-2.png </div><div class="line">)</div><div class="line"></div><div class="line"></div><div class="line">## 0x04 总结</div><div class="line">终于完了，如果认真的一步步分析过来，相信你一定有很多收获和感悟。谁不一样呢？当我一步步的咬着英文看了太多资料和别人的分析，当不熟悉一个领域的时候，会感到害怕，烦躁，困惑。当然在这之中，特别感谢看雪iOS安全小组的[黄大大](http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/)和[杨君大大](http://blog.imjun.net/posts/restore-symbol-of-iOS-app/)，给我了解答了很多困惑，很是感动。从准备分析到写完这篇文章，连续花了7天时间，庆幸自己坚持下来，学到了很多之前都不了解的技术。在分析这个漏洞及利用的时候，我才发现把之前学的linux堆栈漏洞的各个知识点都串了起来，包括-堆管理原理，ROP，Vtable等等等等。也印证了今天在微博上看到教主的那句话：</div><div class="line">**学好书不求甚解，爱技术不论用处**，当我去用之前所学去理解一个个知识点的时候才体会到后半句：**没有会意便欣然忘食**</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">**PoC**</div><div class="line">完整的Poc代码在[这里](https://github.com/NULL-ME/PegasusX)</div><div class="line"></div><div class="line">**特别感谢**</div><div class="line"></div><div class="line">* [mrh](http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/) --这是黄大大的分析，黄大大是一个特别严谨细致的人，分析文章使人豁然开朗</div><div class="line">* [jndok&apos;s blog](https://jndok.github.io/2016/10/04/pegasus-writeup/) --本文大多基于jndok的分析，可以去看看原文的分析</div><div class="line">* [杨君的小黑屋](http://blog.imjun.net/posts/restore-symbol-of-iOS-app/)--杨君大大特别有耐心，执着于技术，乐于分享技术</div><div class="line"></div><div class="line"></div><div class="line">**参考**  </div><div class="line">1.[User Client Info.txt](https://developer.apple.com/library/content/samplecode/SimpleUserClient/Listings/User_Client_Info_txt.html)  </div><div class="line">2.[Attacking-The-XNU-Kernal-In-El-Capitain](https://www.blackhat.com/docs/eu-15/materials/eu-15-Todesco-Attacking-The-XNU-Kernal-In-El-Capitain.pdf)  </div><div class="line">3.[Mac OS X Privilege Escalation via Use-After-Free: CVE-2016-1828](https://bazad.github.io/2016/05/mac-os-x-use-after-free/)  </div><div class="line">4.[Defiling-Mac-OS-X-Ruxcon](http://ho.ax/downloads/Defiling-Mac-OS-X-Ruxcon.pdf)  </div><div class="line">5.[Apple Mac OSX Kernel - Exploitable NULL Dereference in CoreCaptureResponder Due to Unchecked Return Value](https://www.exploit-db.com/exploits/39925/)  </div><div class="line">6.[认真分析mmap：是什么 为什么 怎么用](http://www.cnblogs.com/huxiao-tee/p/4660352.html)  </div><div class="line">7.[Resolving kernel symbols](http://ho.ax/posts/2012/02/resolving-kernel-symbols/)  </div><div class="line"></div><div class="line">**OSUnserializeBinary源码**</div><div class="line"></div><div class="line">``` </div><div class="line">OSObject *</div><div class="line">OSUnserializeBinary(const char *buffer, size_t bufferSize, OSString **errorString)</div><div class="line">&#123;</div><div class="line">	OSObject ** objsArray;</div><div class="line">	uint32_t    objsCapacity;</div><div class="line">	uint32_t    objsIdx;</div><div class="line"></div><div class="line">	OSObject ** stackArray;</div><div class="line">	uint32_t    stackCapacity;</div><div class="line">	uint32_t    stackIdx;</div><div class="line"></div><div class="line">    OSObject     * result;</div><div class="line">    OSObject     * parent;</div><div class="line">    OSDictionary * dict;</div><div class="line">    OSArray      * array;</div><div class="line">    OSSet        * set;</div><div class="line">    OSDictionary * newDict;</div><div class="line">    OSArray      * newArray;</div><div class="line">    OSSet        * newSet;</div><div class="line">    OSObject     * o;</div><div class="line">    OSSymbol     * sym;</div><div class="line"></div><div class="line">    size_t           bufferPos;</div><div class="line">    const uint32_t * next;</div><div class="line">    uint32_t         key, len, wordLen;</div><div class="line">    bool             end, newCollect, isRef;</div><div class="line">    unsigned long long value;</div><div class="line">    bool ok;</div><div class="line"></div><div class="line">	if (errorString) *errorString = 0;</div><div class="line">	if (0 != strcmp(kOSSerializeBinarySignature, buffer)) return (NULL);</div><div class="line">	if (3 &amp; ((uintptr_t) buffer)) return (NULL);</div><div class="line">	if (bufferSize &lt; sizeof(kOSSerializeBinarySignature)) return (NULL);</div><div class="line">	bufferPos = sizeof(kOSSerializeBinarySignature);</div><div class="line">	next = (typeof(next)) (((uintptr_t) buffer) + bufferPos);</div><div class="line"></div><div class="line">	DEBG(&quot;---------OSUnserializeBinary(%p)\n&quot;, buffer);</div><div class="line"></div><div class="line">	objsArray = stackArray    = NULL;</div><div class="line">	objsIdx   = objsCapacity  = 0;</div><div class="line">	stackIdx  = stackCapacity = 0;</div><div class="line"></div><div class="line">    result   = 0;</div><div class="line">    parent   = 0;</div><div class="line">	dict     = 0;</div><div class="line">	array    = 0;</div><div class="line">	set      = 0;</div><div class="line">	sym      = 0;</div><div class="line"></div><div class="line">	ok = true;</div><div class="line">	while (ok)</div><div class="line">	&#123;</div><div class="line">		bufferPos += sizeof(*next);</div><div class="line">		if (!(ok = (bufferPos &lt;= bufferSize))) break;</div><div class="line">		key = *next++;</div><div class="line"></div><div class="line">        len = (key &amp; kOSSerializeDataMask);</div><div class="line">        wordLen = (len + 3) &gt;&gt; 2;</div><div class="line">		end = (0 != (kOSSerializeEndCollecton &amp; key));</div><div class="line">        DEBG(&quot;key 0x%08x: 0x%04x, %d\n&quot;, key, len, end);</div><div class="line"></div><div class="line">        newCollect = isRef = false;</div><div class="line">		o = 0; newDict = 0; newArray = 0; newSet = 0;</div><div class="line">		</div><div class="line">		switch (kOSSerializeTypeMask &amp; key)</div><div class="line">		&#123;</div><div class="line">		    case kOSSerializeDictionary:</div><div class="line">				o = newDict = OSDictionary::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line">		    case kOSSerializeArray:</div><div class="line">				o = newArray = OSArray::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line">		    case kOSSerializeSet:</div><div class="line">				o = newSet = OSSet::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeObject:</div><div class="line">				if (len &gt;= objsIdx) break;</div><div class="line">				o = objsArray[len];</div><div class="line">				o-&gt;retain();</div><div class="line">				isRef = true;</div><div class="line">				break;</div><div class="line"></div><div class="line">		    case kOSSerializeNumber:</div><div class="line">				bufferPos += sizeof(long long);</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		    	value = next[1];</div><div class="line">		    	value &lt;&lt;= 32;</div><div class="line">		    	value |= next[0];</div><div class="line">		    	o = OSNumber::withNumber(value, len);</div><div class="line">		    	next += 2;</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeSymbol:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize)           break;</div><div class="line">				if (0 != ((const char *)next)[len-1]) break;</div><div class="line">		        o = (OSObject *) OSSymbol::withCString((const char *) next);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeString:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		        o = OSString::withStringOfLength((const char *) next, len);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">    	    case kOSSerializeData:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		        o = OSData::withBytes(next, len);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">    	    case kOSSerializeBoolean:</div><div class="line">				o = (len ? kOSBooleanTrue : kOSBooleanFalse);</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    default:</div><div class="line">		        break;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (!(ok = (o != 0))) break;</div><div class="line"></div><div class="line">		if (!isRef)</div><div class="line">		&#123;</div><div class="line">			setAtIndex(objs, objsIdx, o);</div><div class="line">			if (!ok) break;</div><div class="line">			objsIdx++;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (dict)</div><div class="line">		&#123;</div><div class="line">			if (sym)</div><div class="line">			&#123;</div><div class="line">				DEBG(&quot;%s = %s\n&quot;, sym-&gt;getCStringNoCopy(), o-&gt;getMetaClass()-&gt;getClassName());</div><div class="line">				if (o != dict) ok = dict-&gt;setObject(sym, o);</div><div class="line">				o-&gt;release();</div><div class="line">				sym-&gt;release();</div><div class="line">				sym = 0;</div><div class="line">			&#125;</div><div class="line">			else </div><div class="line">			&#123;</div><div class="line">				sym = OSDynamicCast(OSSymbol, o);</div><div class="line">				ok = (sym != 0);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		else if (array) </div><div class="line">		&#123;</div><div class="line">			ok = array-&gt;setObject(o);</div><div class="line">		    o-&gt;release();</div><div class="line">		&#125;</div><div class="line">		else if (set)</div><div class="line">		&#123;</div><div class="line">		   ok = set-&gt;setObject(o);</div><div class="line">		   o-&gt;release();</div><div class="line">		&#125;</div><div class="line">		else</div><div class="line">		&#123;</div><div class="line">		    assert(!parent);</div><div class="line">		    result = o;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (!ok) break;</div><div class="line"></div><div class="line">		if (newCollect)</div><div class="line">		&#123;</div><div class="line">			if (!end)</div><div class="line">			&#123;</div><div class="line">				stackIdx++;</div><div class="line">				setAtIndex(stack, stackIdx, parent);</div><div class="line">				if (!ok) break;</div><div class="line">			&#125;</div><div class="line">			DEBG(&quot;++stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">			parent = o;</div><div class="line">			dict   = newDict;</div><div class="line">			array  = newArray;</div><div class="line">			set    = newSet;</div><div class="line">			end    = false;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (end)</div><div class="line">		&#123;</div><div class="line">			if (!stackIdx) break;</div><div class="line">			parent = stackArray[stackIdx];</div><div class="line">			DEBG(&quot;--stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">			stackIdx--;</div><div class="line">			set   = 0; </div><div class="line">			dict  = 0; </div><div class="line">			array = 0;</div><div class="line">			if (!(dict = OSDynamicCast(OSDictionary, parent)))</div><div class="line">			&#123;</div><div class="line">				if (!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	DEBG(&quot;ret %p\n&quot;, result);</div><div class="line"></div><div class="line">	if (objsCapacity)  kfree(objsArray,  objsCapacity  * sizeof(*objsArray));</div><div class="line">	if (stackCapacity) kfree(stackArray, stackCapacity * sizeof(*stackArray));</div><div class="line"></div><div class="line">	if (!ok &amp;&amp; result)</div><div class="line">	&#123;</div><div class="line">		result-&gt;release();</div><div class="line">		result = 0;</div><div class="line">	&#125;</div><div class="line">	return (result);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
-        </div>
-      </article>
     </div>
-    <!-- Pre or Next -->
-    
-　　　　
-  </div>
-</div>
+</article>
+                </main>
+                <aside class="aside">
+                    <section class="aside-section">
+                        
+    <h1>Categories</h1>
+
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../categories/看雪/">看雪</a></li></ul>
+
+                    </section>
+                    <section class="aside-section">
+                        
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../archives/2016/">2016</a></li></ul>
 
 
-  <!-- Footer -->
-  <!-- Footer -->
-<footer class="site-info">
-  <p>
-    <span>4ch12dy &copy; 2019</span>
-    
-      <span class="split">|</span>
-      <span>th是个小屁孩的技术小屋</span>
-    
-  </p>
-  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-  本站总访问量<span id="busuanzi_value_site_pv"></span>次
-  本站访客数<span id="busuanzi_value_site_uv"></span>人次
-</footer>
+                    </section>
+                    <section class="aside-section tag">
+                        
+    <h1>Tags</h1>
 
+    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../tags/调试/">调试</a></li></ul>
 
-  <!-- After footer scripts -->
-  <!-- scripts -->
-<script src="../../../js/app.js"></script>
-
-
-
-</body>
+                    </section>
+                </aside>
+        </div>
+    </body>
 
 </html>

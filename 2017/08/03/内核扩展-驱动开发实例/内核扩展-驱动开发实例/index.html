@@ -1,181 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-<!-- Head tag -->
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="keywords" content="hexo, autumn">
+    <title>
+        4ch12dy
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico">
+    
+    <link rel="stylesheet" href="../../../../../css/style.css">
 
-  <!--Description-->
-  
-  <meta name="description" content="给我一点时间和power">
-  
-
-  <!--Author-->
-  
-  <meta name="author" content="4ch12dy">
-  
-
-  <!--Open Graph Title-->
-  
-      <meta property="og:title" content="内核扩展-驱动开发实例"/>
-  
-  <!--Open Graph Description-->
-  
-      <meta property="og:description" content="给我一点时间和power" />
-  
-  <!--Open Graph Site Name-->
-  <meta property="og:site_name" content="4ch12dy"/>
-  <!--Type page-->
-  
-      <meta property="og:type" content="article" />
-  
-  <!--Page Cover-->
-  
-
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <!-- 百度统计 -->
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
     <script>
-	var _hmt = _hmt || [];
-	(function() {
-  	var hm = document.createElement("script");
-  	hm.src = "https://hm.baidu.com/hm.js?c0451e16533956173997b85f7a8de666";
-  	var s = document.getElementsByTagName("script")[0]; 
-  	s.parentNode.insertBefore(hm, s);
-	})();
+        hljs.initHighlightingOnLoad()
     </script>
-  <!-- Title -->
-  
-  <title>内核扩展-驱动开发实例 - 4ch12dy</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
+    <script>
+        infiniteScroll()
 
-
-  <link rel="shortcut icon" href="../../../../../favicon.ico">
-    <!--font-awesome-->
-  <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Custom CSS/Sass -->
-  <link rel="stylesheet" href="../../../../../css/style.css">
-
+        // for mobile menu
+        $(function () {
+            $('.social-button').click(function () {
+                if ($('.social-links').hasClass('hide-links')) {
+                    $('.social-links').removeClass('hide-links')
+                } else {
+                    $('.social-links').addClass('hide-links')
+                }
+            })
+        })
+    </script>
 </head>
 
-
-<body>
-
-  <!-- Nav -->
-  <header class="site-header">
-  <div class="header-inside">
-    
-    <div class="logo">
-      <a href="../../../../../index.html" rel="home">
-        
-        <img src="http://oct3pmpde.bkt.clouddn.com/timg.jpg" alt="4ch12dy" height="60">
-        
-      </a>
-    </div>
-    <a class="header-name" href="../../../../../index.html">
-            <span>4ch12dy</span>
-            的部落宅
+    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <div class="container">
+            <header class="header">
+    <h1 class="title">
+        <a href="../../../../../index.html" class="logo">
+            4ch12dy
         </a>
-    <!-- navbar -->
-    <nav class="navbar">
-      <!--  nav links -->
-      <div class="collapse">
-        <ul class="navbar-nav">
-          
-          
-            <li>
-              <a href="../../../../../.">
-                
-                  <i class="fa fa-home "></i>
-                
-                首页
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../../../archives">
-                
-                  <i class="fa fa-archive "></i>
-                
-                归档
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../../../about">
-                
-                  <i class="fa fa-user "></i>
-                
-                关于
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../../../project">
-                
-                  <i class="fa fa-folder-open "></i>
-                
-                项目
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../../../photo">
-                
-                  <i class="fa fa-photo "></i>
-                
-                相册
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../../../guestbook">
-                
-                  <i class="fa fa-edit "></i>
-                
-                留言
-              </a>
-            </li>
-          
-            <li>
-              <a href="../../../../../atom.xml">
-                
-                  <i class="fa fa-send "></i>
-                
-                RSS
-              </a>
-            </li>
-          
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </nav>
-    <div class="button-wrap">
-      <button class="menu-toggle">Primary Menu</button>
-    </div>
-  </div>
-</header>
+    </h1>
+    <h2 class="desc">
+        X1a0
+    </h2>
 
-
-  <!-- Main Content -->
-  <div class="content-area">
-  <div class="post">
-    <!-- Post Content -->
-    <div class="container">
-      <article>
-        <!-- Title date & tags -->
-        <div class="post-header">
-          <h1 class="entry-title">
-            内核扩展-驱动开发实例
+    <nav class="links">
+        <button class="social-button">
+            menu
+        </button>
+        <ul class="social-links hide-links">
             
-          </h1>
-         
-        </div>
-         <p class="a-posted-on">
-          2017-08-03
-          </p>
-        <!-- Post Main Content -->
-        <div class="entry-content">
-          <blockquote>
+                <li>
+                    <a href="https://github.com/FrontendSophie">
+                        Github
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://www.linkedin.com/in/frontendsophie/">
+                        LinkedIn
+                    </a>
+                </li>
+                
+        </ul>
+    </nav>
+</header>
+                <main class="main">
+                    <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        内核扩展-驱动开发实例
+    </h2>
+    <ul class="post-date">
+        <li>
+            2017-08-03
+        </li>
+        <li>
+            4ch12dy
+        </li>
+    </ul>
+    <div class="post-content">
+        <blockquote>
 <blockquote>
 <p>结合《OS X 内核编程》以及网上相关的学习，用一个例子来说明自己对macOS IOkit的理解</p>
 </blockquote>
@@ -186,64 +99,34 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">#include &lt;IOKit/IOService.h&gt;</div><div class="line">class com_osxkernel_driver_IOKitTest : public IOService &#123;</div><div class="line">    </div><div class="line">    //一个宏定义，会自动生成该类的构造方法、析构方法和运行时</div><div class="line">    OSDeclareDefaultStructors(com_osxkernel_driver_IOKitTest)</div><div class="line">    </div><div class="line">public:</div><div class="line">    //该方法与Cocoa中的init和C++中的构造方法类似</div><div class="line">    virtual bool init(OSDictionary* dictionary = NULL);</div><div class="line">    //该方法与Cocoa中的dealloc和C++中的析构方法类似</div><div class="line">    virtual void free(void);</div><div class="line">    </div><div class="line">    //进行驱动匹配时调用</div><div class="line">    virtual IOService* probe(IOService* provider, SInt32* score);</div><div class="line">    //当匹配成功后加载驱动</div><div class="line">    virtual bool start(IOService *provider);</div><div class="line">    //当硬件移除时或卸载驱动</div><div class="line">    virtual void stop(IOService *provider);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>在IOKitTest.cpp中输入以下的代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">#include &quot;IOKitTest.h&quot;</div><div class="line">#include &lt;IOKit/IOLib.h&gt;</div><div class="line">//让你拥有Cocoa中的super关键字一样的体验</div><div class="line">#define super IOService</div><div class="line">//和头文件中的宏定义类似，自动生成一些特定代码</div><div class="line">OSDefineMetaClassAndStructors(com_osxkernel_driver_IOKitTest, IOService)</div><div class="line">//该方法打印出dict的内容</div><div class="line">bool com_osxkernel_driver_IOKitTest::init(OSDictionary *dict)</div><div class="line">&#123;</div><div class="line">    bool res = super::init(dict);</div><div class="line">    IOLog(&quot;IOKitTest::init abcd\n&quot;);</div><div class="line">    </div><div class="line">    OSCollectionIterator *iter = OSCollectionIterator::withCollection(dict);</div><div class="line">    if (iter)</div><div class="line">    &#123;</div><div class="line">        OSObject *object = NULL;</div><div class="line">        while ((object = iter-&gt;getNextObject()))</div><div class="line">        &#123;</div><div class="line">            OSSymbol *key = OSDynamicCast(OSSymbol, object);</div><div class="line">            IOLog(&quot;key:%s  &quot;,key-&gt;getCStringNoCopy());</div><div class="line">            OSString *value = OSDynamicCast(OSString, dict-&gt;getObject(key));</div><div class="line">            if (value != NULL)</div><div class="line">            &#123;</div><div class="line">                IOLog(&quot;value:%s\n&quot;,value-&gt;getCStringNoCopy());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    return res;</div><div class="line">&#125;</div><div class="line">void com_osxkernel_driver_IOKitTest::free(void)</div><div class="line">&#123;</div><div class="line">    IOLog(&quot;IOKitTest::free\n&quot;);</div><div class="line">    super::free();</div><div class="line">&#125;</div><div class="line">IOService* com_osxkernel_driver_IOKitTest::probe(IOService* provider, SInt32* score)</div><div class="line">&#123;</div><div class="line">    IOService *res = super::probe(provider, score);</div><div class="line">    IOLog(&quot;IOKitTest::probe\n&quot;);</div><div class="line">    return res;</div><div class="line">&#125;</div><div class="line">bool com_osxkernel_driver_IOKitTest::start(IOService *provider)</div><div class="line">&#123;</div><div class="line">    bool res = super::start(provider);</div><div class="line">    IOLog(&quot;IOKitTest::start\n&quot;);</div><div class="line">    //只有调用了此方法，应用层才可以连接该驱动</div><div class="line">    registerService();</div><div class="line">    return res;</div><div class="line">&#125;</div><div class="line">void com_osxkernel_driver_IOKitTest::stop(IOService *provider)</div><div class="line">&#123;</div><div class="line">    IOLog(&quot;IOKitTest::stop\n&quot;);</div><div class="line">    super::stop(provider);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+    </div>
+</article>
+                </main>
+                <aside class="aside">
+                    <section class="aside-section">
+                        
+    <h1>Categories</h1>
+
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
+
+                    </section>
+                    <section class="aside-section">
+                        
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
+
+
+                    </section>
+                    <section class="aside-section tag">
+                        
+    <h1>Tags</h1>
+
+    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
+
+                    </section>
+                </aside>
         </div>
-      </article>
-    </div>
-    <!-- Pre or Next -->
-    
-	<div class="container" >
-           <ul class="pager">
-    	     
-      	     <li class="previous">
-              <a href="/2017/08/07/iOS越狱检测/iOS越狱检测/" rel="prev">下一篇</a>
-             </li>
-           
-           
-              <li class="next">
-              <a href="/2017/08/01/获取macOS序列号UUID等/获取macOS序列号UUID等/" rel="prev">上一篇</a>
-            </li>
-           
-          </ul>
-       </div>
-　　　　<!-- Comments -->
-    <div class="container">
-      
-<section id="comment">
-  <!-- <h1 class="title">Comments</h1> -->
-
-  
-</section>
-
-
-    </div>
-   
-　　　　
-  </div>
-</div>
-
-
-  <!-- Footer -->
-  <!-- Footer -->
-<footer class="site-info">
-  <p>
-    <span>4ch12dy &copy; 2019</span>
-    
-      <span class="split">|</span>
-      <span>th是个小屁孩的技术小屋</span>
-    
-  </p>
-  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-  本站总访问量<span id="busuanzi_value_site_pv"></span>次
-  本站访客数<span id="busuanzi_value_site_uv"></span>人次
-</footer>
-
-
-  <!-- After footer scripts -->
-  <!-- scripts -->
-<script src="../../../../../js/app.js"></script>
-
-
-
-</body>
+    </body>
 
 </html>
