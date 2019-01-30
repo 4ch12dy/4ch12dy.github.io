@@ -1,20 +1,63 @@
-extends partial/layout
-
-block site_title
-    != page.title + " · " + config.title
-
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
-
-block container
-    include mixins/post
-    +post(page)
-
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
-
-block copyright
-    include partial/copyright
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> gdb常用调试命令总结 · 4ch12dy</title><meta name="description" content="gdb常用调试命令总结 - 4ch12dy"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="../../../../../favicon.png"><link rel="stylesheet" href="../../../../../css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://github.com/4ch12dy/4ch12dy.github.io.git/atom.xml" title="4ch12dy"></head><body><div class="wrap"><header><a href="../../../../../index.html" class="logo-link"><img src="../../../../../favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="../../../../../index.html" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="../../../../../archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://4ch12dy.site/aboutme/" target="_blank" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="../../../../../atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">gdb常用调试命令总结</h1><div class="post-info">Mar 21, 2017</div><div class="post-content"><h2 id="0x01-序"><a href="#0x01-序" class="headerlink" title="0x01 序"></a>0x01 序</h2><p>最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。</p>
+<h2 id="0x02-命令行参数"><a href="#0x02-命令行参数" class="headerlink" title="0x02 命令行参数"></a>0x02 命令行参数</h2><p>有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：</p>
+<ol>
+<li>gdb命令行的 –args 参数</li>
+<li>gdb环境中 set args命令</li>
+<li>show args查看程序参数</li>
+</ol>
+<h2 id="0x03-多线程调试"><a href="#0x03-多线程调试" class="headerlink" title="0x03 多线程调试"></a>0x03 多线程调试</h2><p>多线程调试可能是问得最多的。其实，重要就是下面几个命令：</p>
+<p>info thread 查看当前进程的线程。<br>thread <id> 切换调试的线程为指定ID的线程。<br>break file.c:100 thread all  在file.c文件第100行处为所有经过这里的线程设置断点。<br>set scheduler-locking off|on|step，这个是问得最多的。在使用step或者continue命令调试当前被调试线程的时候，其他线程也是同时执行的，怎么只让被调试程序执行呢？通过这个命令就可以实现这个需求。</id></p>
+<ul>
+<li>off 不锁定任何线程，也就是所有线程都执行，这是默认值。</li>
+<li>on 只有当前被调试程序会执行。</li>
+<li>step 在单步的时候，除了next过一个函数的情况(熟悉情况的人可能知道，这其实是一个设置断点然后continue的行为)以外，只有当前线程会执行。</li>
+</ul>
+<h2 id="0x04-断点"><a href="#0x04-断点" class="headerlink" title="0x04 断点"></a>0x04 断点</h2><ul>
+<li>break *0x000000   下断点</li>
+<li>info breakpoints  查看断点</li>
+<li>delete break 1    删除断点</li>
+<li>break  [where] if [condition] 条件断点</li>
+<li>enable 恢复失效的断点</li>
+<li>disable 使断点失效</li>
+<li>clear 清除断点</li>
+<li>break 21 在第21行设置断点</li>
+<li>break main 在main函数处设置断点</li>
+<li>break test 在函数test处设置断点</li>
+</ul>
+<h2 id="0x05-x命令"><a href="#0x05-x命令" class="headerlink" title="0x05 x命令"></a>0x05 x命令</h2><p>也许，你很喜欢用p命令。所以，当你不知道变量名的时候，你可能会手足无措，因为p命令总是需要一个变量名的。x命令是用来查看内存的，在gdb中 “help x” 你可以查看其帮助。</p>
+<ul>
+<li>x/x 以十六进制输出</li>
+<li>x/d 以十进制输出</li>
+<li>x/c 以单字符输出</li>
+<li>x/i  反汇编 – 通常，我们会使用 x/10i $ip-20 来查看当前的汇编（$ip是指令寄存器）</li>
+<li>x/s 以字符串输出</li>
+<li>x/5i $pc  查看汇编代码</li>
+<li>x/4wx 0x000000 查看内存</li>
+</ul>
+<h2 id="0x06-command命令"><a href="#0x06-command命令" class="headerlink" title="0x06 command命令"></a>0x06 command命令</h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(gdb) break func</div><div class="line">Breakpoint 1 at 0x3475678: file test.c, line 12.</div><div class="line">(gdb) command 1</div><div class="line">Type commands for when breakpoint 1 is hit, one per line.</div><div class="line">End with a line saying just &quot;end&quot;.</div><div class="line">&gt;print arg1</div><div class="line">&gt;print arg2</div><div class="line">&gt;print arg3</div><div class="line">&gt;end</div><div class="line">(gdb)</div></pre></td></tr></table></figure></p>
+<p>当我们的断点到达时，自动执行command中的三个命令，把func的三个参数值打出来。</p>
+<h2 id="0x07-其他"><a href="#0x07-其他" class="headerlink" title="0x07 其他"></a>0x07 其他</h2><ul>
+<li>step /  s  下一步，直接执行下一条程序</li>
+<li><code>set disassembly-flavor intel 设置为intel汇编指令</code></li>
+<li>info proc mappings </li>
+<li>`define stop-hook 设置断点触发后自动执行命令<blockquote>
+<p>info registers<br>x/24wx $esp<br>x/2i $eip<br>end`</p>
+</blockquote>
+</li>
+<li>continue / cont 下一段，如果遇到函数，不会进入函数，逐过程，有点类似VS里面的F10</li>
+<li>run 运行</li>
+<li>finish 结束调试</li>
+<li>print / p 显示某个变量的值</li>
+<li>p *array@len 输出数组</li>
+<li>p i 输出i的值</li>
+</ul>
+<h2 id="0x08-附表"><a href="#0x08-附表" class="headerlink" title="0x08 附表"></a>0x08 附表</h2><p><strong>寄存器宽度表</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">|63..32|31..16|15-8|7-0|</div><div class="line">               |AH.|AL.|</div><div class="line">               |AX.....|</div><div class="line">       |EAX............|</div><div class="line">|RAX...................|</div></pre></td></tr></table></figure></p>
+</div></article></div></main><footer><div class="paginator"><a href="../../../../04/10/mach-o动态链接/mach-o动态链接/" class="prev">PREV</a><a href="../../../07/C++ Virtual table/详解virtual table/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = '4ch12dy';
+var disqus_identifier = '2017/03/21/gdb常用调试命令总结/gdb/';
+var disqus_title = 'gdb常用调试命令总结';
+var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/03/21/gdb常用调试命令总结/gdb/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//4ch12dy.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2019 <a href="https://github.com/4ch12dy/4ch12dy.github.io.git">4ch12dy</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

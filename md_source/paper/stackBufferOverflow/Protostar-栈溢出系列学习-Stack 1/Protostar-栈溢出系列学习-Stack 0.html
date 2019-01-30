@@ -1,20 +1,41 @@
-extends partial/layout
-
-block site_title
-    != page.title + " · " + config.title
-
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
-
-block container
-    include mixins/post
-    +post(page)
-
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
-
-block copyright
-    include partial/copyright
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Protostar-栈溢出系列学习-Stack 1 · 4ch12dy</title><meta name="description" content="Protostar-栈溢出系列学习-Stack 1 - 4ch12dy"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="../../../../favicon.png"><link rel="stylesheet" href="../../../../css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://github.com/4ch12dy/4ch12dy.github.io.git/atom.xml" title="4ch12dy"></head><body><div class="wrap"><header><a href="../../../../index.html" class="logo-link"><img src="../../../../favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="../../../../index.html" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="../../../../archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://4ch12dy.site/aboutme/" target="_blank" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="../../../../atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Protostar-栈溢出系列学习-Stack 1</h1><div class="post-info">Apr 15, 2016</div><div class="post-content"><h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>接着之前的系列，下面研究两种控制eip的方式</p>
+<h2 id="0x01-通过覆盖栈中的函数指针控制eip"><a href="#0x01-通过覆盖栈中的函数指针控制eip" class="headerlink" title="0x01 通过覆盖栈中的函数指针控制eip"></a>0x01 通过覆盖栈中的函数指针控制eip</h2><p>Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved EIP)</p>
+<p>Hints:<br>both gdb and objdump is your friend you determining where the win() function lies in memory.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line"></div><div class="line">void win()</div><div class="line">&#123;</div><div class="line">  printf(&quot;code flow successfully changed\n&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  volatile int (*fp)();</div><div class="line">  char buffer[64];</div><div class="line"></div><div class="line">  fp = 0;</div><div class="line"></div><div class="line">  gets(buffer);</div><div class="line"></div><div class="line">  if(fp) &#123;</div><div class="line">      printf(&quot;calling function pointer, jumping to 0x%08x\n&quot;, fp);</div><div class="line">      fp();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>在main函数下断点，分析可知，1处为fp的地址，2处为fp()的调用，我们需要覆盖掉esp+0x5c处所存的函数指针值，使其跳转到win()函数<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-0.png" alt="1-0"></p>
+</li>
+<li><p>利用Python编写exp测试脚本，可以发现QQQQ覆盖了函数指针<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-1.png" alt="1-1"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-2.png" alt="1-2"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-3.png" alt="1-3"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-4.png" alt="1-4"></p>
+</li>
+</ul>
+<ul>
+<li>重新编写exp,将QQQQ改为win()函数的地址，即可实现自定义调用，控制eip</li>
+</ul>
+<p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-5.png" alt="1-5"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-6.png" alt="1-6"></p>
+<p><strong>成功执行win()函数</strong></p>
+<p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-7.png" alt="1-7"></p>
+<h2 id="0x02-通过ret指令控制eip"><a href="#0x02-通过ret指令控制eip" class="headerlink" title="0x02 通过ret指令控制eip"></a>0x02 通过ret指令控制eip</h2><p>Stack4 takes a look at overwriting saved EIP and standard buffer overflows.</p>
+<p>This level is at /opt/protostar/bin/stack4</p>
+<p>Hints:<br>A variety of introductory papers into buffer overflows may help.<br>gdb lets you do “run &lt; input”<br>EIP is not directly after the end of buffer, compiler padding can also increase the size.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line"></div><div class="line">void win()</div><div class="line">&#123;</div><div class="line">  printf(&quot;code flow successfully changed\n&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  char buffer[64];</div><div class="line"></div><div class="line">  gets(buffer);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>先分析一下，可以发现这个程序很简单，看上去没有可以直接控制eip的方法，但函数的调用过程在结束的时候会将保存的返回地址存在栈中，ret指令的时候会将传给eip。所以我们可以覆盖对应的返回地址值达到控制eip</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">______________</div><div class="line">|            |  &lt;---esp</div><div class="line">--------------</div><div class="line">|  局部变量1  |</div><div class="line">--------------</div><div class="line">|  局部变量2  |</div><div class="line">--------------</div><div class="line">| ...        |</div><div class="line">--------------</div><div class="line">|            |  &lt;---new ebp</div><div class="line">--------------</div><div class="line">|   old ebp  |</div><div class="line">--------------</div><div class="line">|  返回地址   |  ret --------&gt; eip</div><div class="line">--------------</div></pre></td></tr></table></figure>
+</li>
+<li><p>和前面一样，这次我们之间利用Python编写exp测试脚本，可以发现SSSS覆盖了old ebp，TTTT覆盖了返回地址</p>
+</li>
+</ul>
+<p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-9.png" alt="1-9"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-8.png" alt="1-8"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-10.png" alt="1-10"></p>
+<ul>
+<li>我们查看win()的地址，重新编写对应exp，然后将TTTT改为其地址，成功达到目的。</li>
+</ul>
+<p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-11.png" alt="1-11"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-12.png" alt="1-12"></p>
+</div></article></div></main><footer><div class="paginator"></div><div id="disqus_thread"></div><script>var disqus_shortname = '4ch12dy';
+var disqus_identifier = 'md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 0.html';
+var disqus_title = 'Protostar-栈溢出系列学习-Stack 1';
+var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 0.html';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//4ch12dy.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2019 <a href="https://github.com/4ch12dy/4ch12dy.github.io.git">4ch12dy</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

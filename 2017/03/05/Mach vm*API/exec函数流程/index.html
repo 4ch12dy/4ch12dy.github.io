@@ -1,20 +1,49 @@
-extends partial/layout
-
-block site_title
-    != page.title + " · " + config.title
-
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
-
-block container
-    include mixins/post
-    +post(page)
-
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
-
-block copyright
-    include partial/copyright
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Mach vm*API · 4ch12dy</title><meta name="description" content="Mach vm*API - 4ch12dy"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="../../../../../favicon.png"><link rel="stylesheet" href="../../../../../css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://github.com/4ch12dy/4ch12dy.github.io.git/atom.xml" title="4ch12dy"></head><body><div class="wrap"><header><a href="../../../../../index.html" class="logo-link"><img src="../../../../../favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="../../../../../index.html" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="../../../../../archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://4ch12dy.site/aboutme/" target="_blank" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="../../../../../atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Mach vm*API</h1><div class="post-info">Mar 5, 2017</div><div class="post-content"><h2 id="exec函数流程"><a href="#exec函数流程" class="headerlink" title="exec函数流程"></a>exec函数流程</h2><p><img src="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png" alt="exec函数流程"></p>
+<h2 id="mach-vm"><a href="#mach-vm" class="headerlink" title="mach_vm_*"></a><code>mach_vm_*</code></h2><ul>
+<li><p>mach_vm_cllocate</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是<code>VM_FLAGS_ANYWHERE</code>，那么内存将被分配到address指向的地址。</p>
+<ul>
+<li>mach_vm_region<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">kern_return_t</div><div class="line">mach_vm_region(</div><div class="line">	vm_map_t		 map,</div><div class="line">	mach_vm_offset_t	*address,		/* IN/OUT */</div><div class="line">	mach_vm_size_t	*size,			/* OUT */</div><div class="line">	vm_region_flavor_t	 flavor,		/* IN */</div><div class="line">	vm_region_info_t	 info,			/* OUT */</div><div class="line">	mach_msg_type_number_t	*count,			/* IN/OUT */</div><div class="line">	mach_port_t		*object_name)		/* OUT */</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>获取map指向的任务内，address地址起始的VM region（虚拟内存区域）的信息。目前标记为flavor只有<code>VM_BASIC_INFO_64</code>。<br>获得的info的数据结构如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">struct vm_region_basic_info_64 &#123;</div><div class="line">	vm_prot_t 	protection;</div><div class="line">	vm_prot_t		max_protection;</div><div class="line">	vm_inherit_t		inheritance;</div><div class="line">	boolean_t		shared;</div><div class="line">	boolean_t		reserved;</div><div class="line">	memory_object_offset_t	offset;</div><div class="line">	vm_behavior_t		behavior;</div><div class="line">	unsigned short		user_wired_count;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>mach_vm_protect<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">kern_return_t</div><div class="line">mach_vm_protect(</div><div class="line">	mach_port_name_t 	task,</div><div class="line">	mach_vm_address_t 	address,</div><div class="line">	mach_vm_size_t 	size,</div><div class="line">	boolean_t 	set_maximum,</div><div class="line">	vm_prot_t 	new_protection)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对address到address+size这一段的内存设置内存保护策略,new_protection就是最后设置成为的保护机制。</p>
+<ul>
+<li>mach_vm_write<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">kern_return_t</div><div class="line">mach_vm_write(</div><div class="line">	vm_map_t		map,</div><div class="line">	mach_vm_address_t		address,</div><div class="line">	pointer_t			data,</div><div class="line">	__unused mach_msg_type_number_t	size)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对address指向的内存改写内容。</p>
+<ul>
+<li>mach_vm_read<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">kern_return_t </div><div class="line">mach_vm_read(</div><div class="line">	vm_map_t 	target_task, </div><div class="line">	mach_vm_address_t 	address, </div><div class="line">	mach_vm_size_t 	size, </div><div class="line">	vm_offset_t 	*data,   </div><div class="line">	mach_msg_type_number_t 	*dataCnt);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对address指向的内存读取内容.</p>
+<h2 id="mach-port"><a href="#mach-port" class="headerlink" title="mach_port_*"></a><code>mach_port_*</code></h2><ul>
+<li>mach_port_allocate<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">kern_return_t </div><div class="line">mach_port_allocate(</div><div class="line">	ipc_space_t 	task, </div><div class="line">	mach_port_right_t 	right,</div><div class="line">	mach_port_name_t 	*name);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>task指要分配端口的任务(<code>mach_task_self()</code>)，right指分配给该端口的权限，name指代分配端口名的地址<br><code>Ports有如下权限，Ports可以在不同的task之间传递，通过传递可以赋予其他task对ports的操作权限。例如POC中使用的就是在父进程与子进程之间传递Port得到了对内存操作的权限。</code><br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#define MACH_PORT_RIGHT_SEND		((mach_port_right_t) 0)</div><div class="line">#define MACH_PORT_RIGHT_RECEIVE		((mach_port_right_t) 1)</div><div class="line">#define MACH_PORT_RIGHT_SEND_ONCE	((mach_port_right_t) 2)</div><div class="line">#define MACH_PORT_RIGHT_PORT_SET	((mach_port_right_t) 3)</div><div class="line">#define MACH_PORT_RIGHT_DEAD_NAME	((mach_port_right_t) 4)</div><div class="line">#define MACH_PORT_RIGHT_LABELH	        ((mach_port_right_t) 5)</div><div class="line">#define MACH_PORT_RIGHT_NUMBER		((mach_port_right_t) 6)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>mach_port_insert_right<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">kern_return_t </div><div class="line">mach_port_insert_right(</div><div class="line">	ipc_space_t		task, </div><div class="line">	mach_port_name_t 		name, </div><div class="line">	mach_port_t 		poly, </div><div class="line">	mach_msg_type_name_t	 polyPoly);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/" target="_blank" rel="external">http://turingh.github.io/2016/04/03/CVE-2016-1757%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/</a></li>
+<li><a href="https://developer.apple.com/reference/kernel/1578704-mach_port_allocate" target="_blank" rel="external">https://developer.apple.com</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="../../../07/C++ Virtual table/详解virtual table/" class="prev">PREV</a><a href="../../../../../2016/12/06/macOS内核框架/macOS内核架构-功能/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = '4ch12dy';
+var disqus_identifier = '2017/03/05/Mach vm*API/exec函数流程/';
+var disqus_title = 'Mach vm*API';
+var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/03/05/Mach vm*API/exec函数流程/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//4ch12dy.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2019 <a href="https://github.com/4ch12dy/4ch12dy.github.io.git">4ch12dy</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

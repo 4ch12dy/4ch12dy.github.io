@@ -1,20 +1,51 @@
-extends partial/layout
-
-block site_title
-    != page.title + " · " + config.title
-
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
-
-block container
-    include mixins/post
-    +post(page)
-
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
-
-block copyright
-    include partial/copyright
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 关于我 · 4ch12dy</title><meta name="description" content="关于我 - 4ch12dy"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="../favicon.png"><link rel="stylesheet" href="../css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://github.com/4ch12dy/4ch12dy.github.io.git/atom.xml" title="4ch12dy"></head><body><div class="wrap"><header><a href="../index.html" class="logo-link"><img src="../favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="../index.html" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="../archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://4ch12dy.site/aboutme/" target="_blank" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="../atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">关于我</h1><div class="post-info">Mar 9, 2017</div><div class="post-content"><h2 id="项目经验"><a href="#项目经验" class="headerlink" title="项目经验"></a>项目经验</h2><h3 id="看雪iOS安全小组资格题CrackMe-2016-08"><a href="#看雪iOS安全小组资格题CrackMe-2016-08" class="headerlink" title="看雪iOS安全小组资格题CrackMe(2016.08)"></a>看雪iOS安全小组资格题CrackMe(2016.08)</h3><p><strong>题目描述:</strong>该crackme为一个ipa的iOS应用程序，需要完成逆向,破解其算法分析编写注册机。</p>
+<p><strong>解题思路:</strong></p>
+<ol>
+<li>dumpdecrypted对crackme程序脱壳，classdump其所有类的头文件，拉入IDA分析，转到check函数。</li>
+<li>先静态直接在一条跳转指令上修改到该地址，顺利弹出成功界面。</li>
+<li>利用debugserver,lldb结合IDA的静态汇编代码分析其之间的加密过程。</li>
+<li>修复内存访问错误，先动态修改，后对其进行静态修改，绕过花指令。</li>
+<li>最后分析出其算法并编写了对应的注册机程序，真机测试通过。</li>
+</ol>
+<p><strong>一点感受:</strong>这次实战收获很大，题目难度较大，无论成功与否，对与自己来说已经算成功了，熟悉调试命令，扎实了逆向基本功。</p>
+<h3 id="短信防钓鱼插件SMSAnti-2016-10"><a href="#短信防钓鱼插件SMSAnti-2016-10" class="headerlink" title="短信防钓鱼插件SMSAnti(2016.10)"></a>短信防钓鱼插件SMSAnti(2016.10)</h3><p><strong>项目描述:</strong>这是一个iPhone短信系统应用的插件，能在用户点击钓鱼链接时检测网址并弹窗提醒用户。</p>
+<p><strong>主要技术:</strong></p>
+<ol>
+<li>MobileSMS为系统应用，可直接classdump拿到所有头文件</li>
+<li>利用logify跟踪SMSApplication所有方法，发现可疑函数openURL</li>
+<li>debugserver+lldb动态调试，验证<code>SMSApplication</code>的<code>openURL</code>能在跳转到Safari前拿到URL。</li>
+<li>基于钓鱼网址与原网址相近，编写字符串匹配算法判断其是否为钓鱼链接。</li>
+<li>弹窗方式提醒用户，用户可选择转到正确网址或继续前往。</li>
+</ol>
+<p><strong>一点问题：</strong>在提醒弹窗<code>alertView</code>上出了一点小问题，始终不能很好地中断跳转过程，经过一番查找和咨询，后来通过新增一个<code>UIWindow</code>解决了问题。后面准备再优化下算法以及增加在线检测等功能。</p>
+<h3 id="基于Console的简单内存修改器-2016-12"><a href="#基于Console的简单内存修改器-2016-12" class="headerlink" title="基于Console的简单内存修改器(2016.12)"></a>基于Console的简单内存修改器(2016.12)</h3><p><strong>项目描述:</strong>该内存修改器扫描通过进程id附加进程,并对其数据进行更改</p>
+<p><strong>主要技术:</strong></p>
+<ol>
+<li>通过给定的进程id获取task(<code>task_for_pid()</code>)</li>
+<li>搜索需要更改的数据值(<code>mach_vm_region()``mach_vm_read()</code>)</li>
+<li>列出搜索结果，选择并修改其内存值(<code>mach_vm_write()</code>)</li>
+</ol>
+<h2 id="专业技能"><a href="#专业技能" class="headerlink" title="专业技能"></a>专业技能</h2><ul>
+<li>掌握java、C、Object-C编程语言</li>
+<li>熟悉Hopper、IDA Pro、lldb等常用逆向分析工具,熟悉ARM,x86/64等指令集</li>
+<li>具备一定的英文读写能力，能熟练阅读英文技术文档</li>
+<li>具有较强的逆向分析能力并具有软件破解经验 </li>
+<li>了解OSX内核调试，熟悉iOS越狱过程及原理</li>
+<li>了解常见的app的加固措施(代码混淆,mach-O文件restrict字段加固等)</li>
+</ul>
+<h2 id="自我评价"><a href="#自我评价" class="headerlink" title="自我评价"></a>自我评价</h2><ul>
+<li>搜索自学能力较强，英语专业书籍阅读流畅，阅读了大量英文 macOS内核，越狱原理，iOS安全相关的文章和书籍</li>
+<li>乐于思考，善于总结学习能力较高,有自制力,做事情始终坚持有始终。</li>
+<li>对整个计算机体系有着自己的理解和认识。在学习macOS内核的过程中尤其兴奋，有着浓厚的兴趣。</li>
+<li>专业课成绩均分87+，获国家单项奖学金，英语四六级证书</li>
+<li>有问题不逃避,愿意虚心向他人学习,不以自我为中心;愿意以谦虚态度接纳他人,会用 100%的热情和精力投入到工作中。</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"></div><div id="disqus_thread"></div><script>var disqus_shortname = '4ch12dy';
+var disqus_identifier = 'about/index.html';
+var disqus_title = '关于我';
+var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/about/index.html';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//4ch12dy.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2019 <a href="https://github.com/4ch12dy/4ch12dy.github.io.git">4ch12dy</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

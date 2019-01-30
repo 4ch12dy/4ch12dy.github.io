@@ -1,20 +1,37 @@
-extends partial/layout
-
-block site_title
-    != page.title + " · " + config.title
-
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
-
-block container
-    include mixins/post
-    +post(page)
-
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
-
-block copyright
-    include partial/copyright
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 常见iOS越狱检测手段 · 4ch12dy</title><meta name="description" content="常见iOS越狱检测手段 - 4ch12dy"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="../../../../../favicon.png"><link rel="stylesheet" href="../../../../../css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://github.com/4ch12dy/4ch12dy.github.io.git/atom.xml" title="4ch12dy"></head><body><div class="wrap"><header><a href="../../../../../index.html" class="logo-link"><img src="../../../../../favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="../../../../../index.html" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="../../../../../archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://4ch12dy.site/aboutme/" target="_blank" class="nav-list-link">ABOUT</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="../../../../../atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">常见iOS越狱检测手段</h1><div class="post-info">Aug 7, 2017</div><div class="post-content"><h2 id="iOS越狱检测"><a href="#iOS越狱检测" class="headerlink" title="iOS越狱检测"></a>iOS越狱检测</h2><blockquote>
+<blockquote>
+<p>如何检测越狱其实就是检测越狱后与非越狱的差异。一句话说明越狱检测原理主要便是检测相关权限，也很容易想到，因为越狱使得权限很大得到了提升。比如某些目录是否能访问，是否安装某些动态库，是否安装某些app等，另外建议对检测的类名及方法名进行混淆，对关键字符串进行加密等手段。</p>
+<p>注:以下代码均已在真机上测试完成<br>Demo工程代码<a href="https://github.com/NULL-ME/NULL-ME.github.io/tree/master/articlePic/JailbreakCheckDemo">地址</a></p>
+</blockquote>
+</blockquote>
+<h3 id="1-使用NSFileManager检测是否安装常见越狱工具"><a href="#1-使用NSFileManager检测是否安装常见越狱工具" class="headerlink" title="1. 使用NSFileManager检测是否安装常见越狱工具"></a>1. 使用NSFileManager检测是否安装常见越狱工具</h3><p>注：采用<code>NSFileManager</code>存在可能被hook的情况，最好结合底层<code>stat</code>等函数双重检测</p>
+<p><strong>示例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/* </div><div class="line">常见越狱工具路径：</div><div class="line">/Library/MobileSubstrate/MobileSubstrate.dylib </div><div class="line">/Applications/Cydia.app   </div><div class="line">/var/lib/cydia/</div><div class="line">/var/cache/apt   </div><div class="line">/var/lib/apt    </div><div class="line">/etc/apt </div><div class="line">/bin/bash </div><div class="line">/bin/sh </div><div class="line">/usr/sbin/sshd   </div><div class="line">/usr/libexec/ssh-keysign   </div><div class="line">/etc/ssh/sshd_config</div><div class="line">*/</div><div class="line"></div><div class="line">- (BOOL)checkPath</div><div class="line">&#123;</div><div class="line"> 	BOOL jailBroken = NO;</div><div class="line"></div><div class="line"> 	NSString * aptPath = @&quot;/private/var/lib/apt&quot;;</div><div class="line"></div><div class="line"> 	if ([[NSFileManager defaultManager] fileExistsAtPath:aptPath]) &#123;</div><div class="line">     	jailBroken = YES;</div><div class="line"> 	&#125;</div><div class="line"> 	</div><div class="line">	return jailBroken;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-使用stat系列函数检测常用越狱工具"><a href="#2-使用stat系列函数检测常用越狱工具" class="headerlink" title="2. 使用stat系列函数检测常用越狱工具"></a>2. 使用stat系列函数检测常用越狱工具</h3><p><strong>示例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//头文件 #import &lt;sys/stat.h&gt;</div><div class="line">//路径同上</div><div class="line">//使用stat系列函数检测</div><div class="line"></div><div class="line">    struct stat stat_info;</div><div class="line"></div><div class="line">    if (0 == stat(&quot;/Applications/Cydia.app&quot;, &amp;stat_info)) &#123;</div><div class="line">        jailbroken = YES;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>检测stat是否被替换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">	int ret;</div><div class="line"></div><div class="line">	Dl_info dylib_info;</div><div class="line"></div><div class="line">	int (*func_stat)(const char *,struct stat *) = stat;</div><div class="line"></div><div class="line">	if ((ret = dladdr(func_stat, &amp;dylib_info))) &#123;</div><div class="line">    	if (strcmp(dylib_info.dli_fname,&quot;/usr/lib/system/libsystem_kernel.dylib&quot;) != 0) &#123; </div><div class="line">      		jailbroken = YES; </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-检测程序运行的环境变量"><a href="#3-检测程序运行的环境变量" class="headerlink" title="3.检测程序运行的环境变量"></a>3.检测程序运行的环境变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//检测当前程序运行的环境变量，防止通过DYLD_INSERT_LIBRARIES注入链接异常动态库，来更改相关工具名称</div><div class="line">- (BOOL)checkEnv</div><div class="line">&#123;</div><div class="line"> 	char *env = getenv(&quot;DYLD_INSERT_LIBRARIES&quot;);</div><div class="line"> 	</div><div class="line"> 	NSLog(@&quot;%s&quot;, env);</div><div class="line"> 	</div><div class="line"> 	if (env) &#123;</div><div class="line">     	return YES;</div><div class="line"> 	&#125;</div><div class="line">	return NO;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-dylib动态库检测"><a href="#4-dylib动态库检测" class="headerlink" title="4.dylib动态库检测"></a>4.dylib动态库检测</h3><p><strong>示例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//头文件 #import &lt;mach-o/dyld.h&gt;</div><div class="line">//几乎所有的越狱机都会安装 Library/MobileSubstrate/MobileSubstrate.dylib动态库</div><div class="line"></div><div class="line">    uint32_t count = _dyld_image_count();</div><div class="line"></div><div class="line">    for (uint32_t i = 0 ; i &lt; count; ++i) &#123;</div><div class="line"></div><div class="line">        NSString *name = [[NSString alloc]initWithUTF8String:_dyld_get_image_name(i)];</div><div class="line"></div><div class="line">        if ([name containsString:@&quot;Library/MobileSubstrate/MobileSubstrate.dylib&quot;]) &#123;</div><div class="line">            jailbroken = YES;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><p><a href="http://www.jianshu.com/p/a43be50dc958" target="_blank" rel="external">http://www.jianshu.com/p/a43be50dc958</a></p>
+</li>
+<li><p><a href="http://www.freebuf.com/articles/wireless/6318.html" target="_blank" rel="external">http://www.freebuf.com/articles/wireless/6318.html</a></p>
+</li>
+</ul>
+<ul>
+<li><p><a href="http://www.jianshu.com/p/f664b1da8458" target="_blank" rel="external">http://www.jianshu.com/p/f664b1da8458</a></p>
+</li>
+<li><p><a href="http://www.jianshu.com/p/f220e63319eb" target="_blank" rel="external">http://www.jianshu.com/p/f220e63319eb</a></p>
+</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="../../../08/浅谈SSD与安全擦除/SSD与安全擦除/" class="prev">PREV</a><a href="../../../03/内核扩展-驱动开发实例/内核扩展-驱动开发实例/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = '4ch12dy';
+var disqus_identifier = '2017/08/07/iOS越狱检测/iOS越狱检测/';
+var disqus_title = '常见iOS越狱检测手段';
+var disqus_url = 'https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/07/iOS越狱检测/iOS越狱检测/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//4ch12dy.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2019 <a href="https://github.com/4ch12dy/4ch12dy.github.io.git">4ch12dy</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
