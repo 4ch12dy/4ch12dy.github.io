@@ -1,155 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <meta name="keywords" content="hexo, autumn">
-    <title>
-        4ch12dy
-    </title>
-    <!-- favicon -->
-    
-    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
-    
-    <link rel="stylesheet" href="../../../../../css/style.css">
+extends partial/layout
 
-    <!-- highlight -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-    <script>
-        hljs.initHighlightingOnLoad()
-    </script>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
-    <script>
-        infiniteScroll()
+block site_title
+    != page.title + " · " + config.title
 
-        // for mobile menu
-        $(function () {
-            $('.social-button').click(function () {
-                if ($('.social-links').hasClass('hide-links')) {
-                    $('.social-links').removeClass('hide-links')
-                } else {
-                    $('.social-links').addClass('hide-links')
-                }
-            })
-        })
-    </script>
-</head>
+block description
+    - var desc = page.desc || page.title + ' - ' + config.author;
+    meta(name="description", content=desc)
 
-    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
-        <div class="container">
-            <header class="header">
-    <h1 class="title">
-        <a href="../../../../../index.html" class="logo">
-            4ch12dy
-        </a>
-    </h1>
-    <h2 class="desc">
-        当梦想全都被take away
-    </h2>
+block container
+    include mixins/post
+    +post(page)
 
-    <nav class="links">
-        <button class="social-button">
-            menu
-        </button>
-        <ul class="social-links hide-links">
-            
-                <li>
-                    <a href="https://github.com/4ch12dy">
-                        Github
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="http://4ch12dy.site/aboutme/">
-                        About
-                    </a>
-                </li>
-                
-        </ul>
-    </nav>
-</header>
-                <main class="main">
-                    <article class="post">
-    
-    
-    <h4 class="post-cat">
-        <a href="../../../../../categories/关于数学/">
-            关于数学
-        </a>
-    </h4>
-    
-    
-    <h2 class="post-title">
-        一道高中数学题的思考？
-    </h2>
-    <ul class="post-date">
-        <li>
-            2017-05-04
-        </li>
-        <li>
-            4ch12dy
-        </li>
-    </ul>
-    <div class="post-content">
-        <h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><blockquote>
-<p> 突然在邮件中收到Quora中这样一个问题”What does X equal in $\sqrt{x+15} + \sqrt{x} = 15$? “ 凭着曾经对数学的热爱，我点了进去。顺便学习了点知识。</p>
-</blockquote>
-<h2 id="0x01-你会怎么解决？"><a href="#0x01-你会怎么解决？" class="headerlink" title="0x01 你会怎么解决？"></a>0x01 你会怎么解决？</h2><p>不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都知道，同时平方带来就是可能会升高次数，有时候拿到答案还是挺繁琐的，至少计算上来说是这样的。</p>
-<h2 id="0x02-方法1-平方法"><a href="#0x02-方法1-平方法" class="headerlink" title="0x02 方法1 平方法"></a>0x02 方法1 平方法</h2><p>通常解决这个问题的方法是将方程的两边平方并简化，并保持平方，直到方程中没有平方根</p>
-<p>$\sqrt{x+15} + \sqrt{x} = 15$ </p>
-<p>$(\sqrt{x+15} + \sqrt{x})^2 = 15^2$ </p>
-<p>$x+15 + 2\sqrt{(x+15)x} + x = 225$ </p>
-<p>$2\sqrt{(x+15)x} = 210 - 2x$  </p>
-<p>$\sqrt{(x+15)x} = 105 - x$  </p>
-<p>$(\sqrt{(x+15)x})^2 = (105 - x)^2$  </p>
-<p>$x^2 + 15x = 11025 - 210x +x^2$  </p>
-<p>$225x = 11025$  </p>
-<p>$ x = 49$<br>思维过程很清楚，但明显计算上有点繁琐。  </p>
-<h2 id="0x03-方法2-拼凑法"><a href="#0x03-方法2-拼凑法" class="headerlink" title="0x03 方法2 拼凑法"></a>0x03 方法2 拼凑法</h2><p>不一定可靠，但一定最快。大多情况下，都是开方后是整数。所以每个完全平方数的序列（$1^22^23^3…6^27^28^2… =&gt; 1 4 9 16 25 36 49 64 …$）</p>
-<p>哪两个数相差15呢？很明显64 - 49 = 15，也许你觉得这很不靠谱，其实至少对于开方是整数的结果来说是很快的，觉得慢主要是你还不熟练。因为并不是一个一个的去试验，因为相邻之差是递增且快。类似二叉树来查找会很快得出结果。  </p>
-<p>$\sqrt{49 + 15} + \sqrt{49} = 15$  </p>
-<p>$7 + 8 = 15$<br>最快，但不一定可靠。</p>
-<h2 id="0x04-方法3-平方差法"><a href="#0x04-方法3-平方差法" class="headerlink" title="0x04 方法3 平方差法"></a>0x04 方法3 平方差法</h2><p>暂且称作平方差法吧，这个方法是我最推荐的，既快又准。<br>原式：$\sqrt{x+15} + \sqrt{x} = 15$  (1)</p>
-<p>设 $\sqrt{x+15} - \sqrt{x} = k$  </p>
-<p>又 $(\sqrt{x+15} - \sqrt{x})(\sqrt{x+15} + \sqrt{x})= 15k$ </p>
-<p>解得： $k = 1$    </p>
-<p>所以 $\sqrt{x+15} - \sqrt{x} = 1$ （2）</p>
-<p>然后<code>（1）+ (2)</code>:   $2\sqrt{x+15} = 16$  </p>
-<p>解得: $x = 49$  </p>
-<p>多么棒的一个方法 I love it！  </p>
-<h2 id="0x05-我与数学"><a href="#0x05-我与数学" class="headerlink" title="0x05 我与数学"></a>0x05 我与数学</h2><p>从小数学就比语文好的我，数学确实给了我很多自信，想破头皮的去思考一个一个的题。一如既往的热爱，以致于高考只填了一个专业–数学。由于种种原因，没能选上，去来到了计算机相关的专业。计算机科学同样是一个迷人的世界，那种理解本质，控制计算机的运行是让人着迷的。在反馈上来说，计算机比做数学得到的反馈更真实，快速。做数学题的时候总是找不到方向，得到的反馈少且慢，容易让人沮丧，想必这也是大多人讨厌数学的原因之一吧。虽然现在更热爱计算机，但心底里仍然有一个数学的种子。以至于很多时候看到感兴趣的题也会拿上纸笔算一算，知乎上也关注了相关话题，还有一个自己特别骄傲的回答，关于高中数列的，具体情况移步<a href="https://www.zhihu.com/question/30050677" target="_blank" rel="external">高考数学数列放缩总结技巧有哪些？</a><br>相信不管是现在还是将来，数学都是我最深处的支持。</p>
+block pagination
+    include mixins/paginator
+    +post()
+    include partial/comment
 
-    </div>
-</article>
-                </main>
-                <aside class="aside">
-                    <section class="aside-section">
-                        
-    <h1>Categories</h1>
-
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/XNU/">XNU</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
-
-                    </section>
-                    <section class="aside-section">
-                        
-    <h1>Archives</h1>
-
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
-
-
-                    </section>
-                    <section class="aside-section tag">
-                        
-    <h1>Tags</h1>
-
-    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Kernel/">Kernel</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/XNU/">XNU</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
-
-                    </section>
-                </aside>
-        </div>
-    </body>
-
-</html>
+block copyright
+    include partial/copyright

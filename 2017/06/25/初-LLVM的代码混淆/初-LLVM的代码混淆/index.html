@@ -1,179 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <meta name="keywords" content="hexo, autumn">
-    <title>
-        4ch12dy
-    </title>
-    <!-- favicon -->
-    
-    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
-    
-    <link rel="stylesheet" href="../../../../../css/style.css">
+extends partial/layout
 
-    <!-- highlight -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-    <script>
-        hljs.initHighlightingOnLoad()
-    </script>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
-    <script>
-        infiniteScroll()
+block site_title
+    != page.title + " · " + config.title
 
-        // for mobile menu
-        $(function () {
-            $('.social-button').click(function () {
-                if ($('.social-links').hasClass('hide-links')) {
-                    $('.social-links').removeClass('hide-links')
-                } else {
-                    $('.social-links').addClass('hide-links')
-                }
-            })
-        })
-    </script>
-</head>
+block description
+    - var desc = page.desc || page.title + ' - ' + config.author;
+    meta(name="description", content=desc)
 
-    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
-        <div class="container">
-            <header class="header">
-    <h1 class="title">
-        <a href="../../../../../index.html" class="logo">
-            4ch12dy
-        </a>
-    </h1>
-    <h2 class="desc">
-        当梦想全都被take away
-    </h2>
+block container
+    include mixins/post
+    +post(page)
 
-    <nav class="links">
-        <button class="social-button">
-            menu
-        </button>
-        <ul class="social-links hide-links">
-            
-                <li>
-                    <a href="https://github.com/4ch12dy">
-                        Github
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="http://4ch12dy.site/aboutme/">
-                        About
-                    </a>
-                </li>
-                
-        </ul>
-    </nav>
-</header>
-                <main class="main">
-                    <article class="post">
-    
-    
-    <h4 class="post-cat">
-        <a href="../../../../../categories/llvm/">
-            llvm
-        </a>
-    </h4>
-    
-    
-    <h2 class="post-title">
-        初-LLVM的代码混淆
-    </h2>
-    <ul class="post-date">
-        <li>
-            2017-06-25
-        </li>
-        <li>
-            4ch12dy
-        </li>
-    </ul>
-    <div class="post-content">
-        <h2 id="0x00-目录"><a href="#0x00-目录" class="headerlink" title="0x00 目录"></a>0x00 目录</h2><blockquote>
-<blockquote>
-<p>断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新</p>
-</blockquote>
-</blockquote>
-<ul>
-<li>LLVM简介</li>
-<li>一个基于LLVM简单的代码混淆例子</li>
-<li>参考链接</li>
-</ul>
-<h2 id="0x01-LLVM简介"><a href="#0x01-LLVM简介" class="headerlink" title="0x01 LLVM简介"></a>0x01 LLVM简介</h2><p>LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。<br>LLVM的主要架构如下：</p>
-<ul>
-<li>前端：前端用来获取源代码然后将它转变为某种中间表示，我们可以选择不同的编译器来作为LLVM的前端，如gcc，clang。</li>
-<li>Pass：Pass是LLVM优化工作的一个节点，一个节点做些事，一起加起来就构成了LLVM完整的优化和转化。</li>
-<li>后端：后端用来生成实际的机器码，一般情况下不会关注这一部分。</li>
-</ul>
-<h3 id="LLVM框架："><a href="#LLVM框架：" class="headerlink" title="LLVM框架："></a>LLVM框架：</h3><p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true" alt="0-0"><br>这里与传统的编译器不同，LLVM采用了一种统一的中间表示：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-1.png?raw=true" alt="0-1"></p>
-<h3 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h3><p>首先下载LLVM  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd where-you-want-llvm-to-live</div><div class="line">$ svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm</div></pre></td></tr></table></figure>
-<p>我们选择clang作为LLVM前端，然后下载clang  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cd where-you-want-llvm-to-live</div><div class="line">$ cd llvm/tools</div><div class="line">$ svn co http://llvm.org/svn/llvm-project/cfe/trunk clang</div></pre></td></tr></table></figure>
-<p>下载编译运行库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cd where-you-want-llvm-to-live</div><div class="line">$ cd llvm/projects</div><div class="line">$ svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt</div></pre></td></tr></table></figure>
-<p>最后编译LLVM源码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ mkdir build</div><div class="line">$ cd build</div><div class="line">$ cmake -DCMAKE_BUILD_TYPE:String=Release ../llvm/</div><div class="line">$ make</div></pre></td></tr></table></figure>
-<p>编译时间可能有点长，编译完成之后进行安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$sudo make install</div></pre></td></tr></table></figure>
-<p>接下来就是LLVM的使用，先创建一个hello.c源文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">int main()&#123;</div><div class="line">    printf(&quot;hello LLVM\n&quot;);</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-一个基于LLVM简单的代码混淆例子"><a href="#0x02-一个基于LLVM简单的代码混淆例子" class="headerlink" title="0x02 一个基于LLVM简单的代码混淆例子"></a>0x02 一个基于LLVM简单的代码混淆例子</h2><p>Pass是LLVM中一个很重要的部分，每个Pass都是做优化或者转换的工作，LLVM的优化和转换工作就是由很多个Pass一起完成的。我们通过继承指定的类以及实现相关的虚函数来实现具体的Pass，具体的类型主要有以下几种：  </p>
-<ul>
-<li>ImmutablePass</li>
-<li>MoudlePass</li>
-<li>CallGraphSCCPass</li>
-<li>FuncationPass</li>
-<li>LoopPass</li>
-<li>RegionPass</li>
-<li>BasicBlockPass</li>
-<li>MachineFunctionPass</li>
-</ul>
-<p>下面这个例子来介绍一下pass的编写并达到简单的混淆。从这里下载这个模板<a href="https://github.com/NULL-ME/NULL-ME.github.io/tree/master/articlePic/LLVM/skeleton">llvm-pass-skeleton</a></p>
-<p>下面是完整代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">#include &quot;llvm/Pass.h&quot;</div><div class="line">#include &quot;llvm/IR/Function.h&quot;</div><div class="line">#include &quot;llvm/Support/raw_ostream.h&quot;</div><div class="line">#include &quot;llvm/IR/LegacyPassManager.h&quot;</div><div class="line">#include &quot;llvm/Transforms/IPO/PassManagerBuilder.h&quot;</div><div class="line">#include &quot;llvm/IR/Intrinsics.h&quot;</div><div class="line">#include &quot;llvm/IR/Instructions.h&quot;</div><div class="line"></div><div class="line">using namespace llvm;</div><div class="line"></div><div class="line">namespace &#123;</div><div class="line">  struct SkeletonPass : public FunctionPass &#123;</div><div class="line">    static char ID;</div><div class="line">    SkeletonPass() : FunctionPass(ID) &#123;&#125;</div><div class="line"></div><div class="line">    // virtual bool runOnFunction(Function &amp;F) &#123;</div><div class="line">    //   errs() &lt;&lt; &quot;I saw a function called &quot; &lt;&lt; F.getName() &lt;&lt; &quot;!\n&quot;;</div><div class="line">    //   return false;</div><div class="line">    // &#125;</div><div class="line">    bool runOnFunction(Function &amp;F) override &#123;</div><div class="line">            Function *tmp = &amp;F;</div><div class="line">            // 遍历函数中的所有基本块</div><div class="line">            for (Function::iterator bb = tmp-&gt;begin(); bb != tmp-&gt;end(); ++bb) &#123;</div><div class="line">                // 遍历基本块中的每条指令</div><div class="line">                for (BasicBlock::iterator inst = bb-&gt;begin(); inst != bb-&gt;end(); ++inst) &#123;</div><div class="line">                    // 是否是add指令</div><div class="line">                    if (inst-&gt;isBinaryOp()) &#123;</div><div class="line">                        if (inst-&gt;getOpcode() == Instruction::Add) &#123;</div><div class="line">                            ob_add(cast&lt;BinaryOperator&gt;(inst));</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        // a+b === a-(-b)</div><div class="line">        bool ob_add(BinaryOperator *bo) &#123;</div><div class="line">            BinaryOperator *op = NULL;</div><div class="line">             </div><div class="line">            if (bo-&gt;getOpcode() == Instruction::Add) &#123;</div><div class="line">                // 生成 (－b)</div><div class="line">                op = BinaryOperator::CreateNeg(bo-&gt;getOperand(1), &quot;&quot;, bo);</div><div class="line">                // 生成 a-(-b)</div><div class="line">                op = BinaryOperator::Create(Instruction::Sub, bo-&gt;getOperand(0), op, &quot;&quot;, bo);</div><div class="line">                 </div><div class="line">                op-&gt;setHasNoSignedWrap(bo-&gt;hasNoSignedWrap());</div><div class="line">                op-&gt;setHasNoUnsignedWrap(bo-&gt;hasNoUnsignedWrap());</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            // 替换所有出现该指令的地方</div><div class="line">            bo-&gt;replaceAllUsesWith(op);</div><div class="line">        &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">char SkeletonPass::ID = 0;</div><div class="line"></div><div class="line">// Automatically enable the pass.</div><div class="line">// http://adriansampson.net/blog/clangpass.html</div><div class="line">static void registerSkeletonPass(const PassManagerBuilder &amp;,</div><div class="line">                         legacy::PassManagerBase &amp;PM) &#123;</div><div class="line">  PM.add(new SkeletonPass());</div><div class="line">&#125;</div><div class="line">static RegisterStandardPasses</div><div class="line">  RegisterMyPass(PassManagerBuilder::EP_EarlyAsPossible,</div><div class="line">                 registerSkeletonPass);</div></pre></td></tr></table></figure>
-<p>通过继承<code>FunctionPass</code>重写虚函数<code>runOnFunction</code>来到达我们代码混淆的目的，再看关键的混淆部分，如下面注释那样，找到函数中的add指令，并将其改为sub指令。如<code>a+b</code>经过混淆为<code>a-(-b)</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">bool runOnFunction(Function &amp;F) override &#123;</div><div class="line">            Function *tmp = &amp;F;</div><div class="line">            // 遍历函数中的所有基本块</div><div class="line">            for (Function::iterator bb = tmp-&gt;begin(); bb != tmp-&gt;end(); ++bb) &#123;</div><div class="line">                // 遍历基本块中的每条指令</div><div class="line">                for (BasicBlock::iterator inst = bb-&gt;begin(); inst != bb-&gt;end(); ++inst) &#123;</div><div class="line">                    // 是否是add指令</div><div class="line">                    if (inst-&gt;isBinaryOp()) &#123;</div><div class="line">                        if (inst-&gt;getOpcode() == Instruction::Add) &#123;</div><div class="line">                            ob_add(cast&lt;BinaryOperator&gt;(inst));</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            return false;</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
-<p>代码很简单，这里就不多说。我们使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$clang -Xclang -load -Xclang build/skeleton/libSkeletonPass.* something.c</div></pre></td></tr></table></figure>
-<p>来运行这个pass编译成目标可执行文件<br>现在我们创建一个addTest.c文件来测试是否代码混淆</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">int func(int a,int b)</div><div class="line">&#123;</div><div class="line">	return a + b;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">	int c;</div><div class="line">	c = func(6,9);</div><div class="line">	printf(&quot;%d\n&quot;,c);</div><div class="line">	return c;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>先按照一般的编译源代码，查看关键汇编代码：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-2.png?raw=true" alt="0-2"><br>然后运行我们的pass进行编译<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-3.png?raw=true" alt="0-3"><br>很明显，汇编代码发生了改变，当然这里仅仅是一个简单的混淆，感兴趣的可以研究下<a href="https://github.com/obfuscator-llvm">obfuscator-llvm</a>这个项目。</p>
-<h2 id="0x03-参考链接"><a href="#0x03-参考链接" class="headerlink" title="0x03 参考链接"></a>0x03 参考链接</h2><p><a href="http://www.tuicool.com/articles/2meqIjq" target="_blank" rel="external">深入剖析 iOS 编译 Clang / LLVM</a><br><a href="http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/" target="_blank" rel="external">http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/</a></p>
+block pagination
+    include mixins/paginator
+    +post()
+    include partial/comment
 
-    </div>
-</article>
-                </main>
-                <aside class="aside">
-                    <section class="aside-section">
-                        
-    <h1>Categories</h1>
-
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/XNU/">XNU</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
-
-                    </section>
-                    <section class="aside-section">
-                        
-    <h1>Archives</h1>
-
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
-
-
-                    </section>
-                    <section class="aside-section tag">
-                        
-    <h1>Tags</h1>
-
-    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Kernel/">Kernel</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/XNU/">XNU</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
-
-                    </section>
-                </aside>
-        </div>
-    </body>
-
-</html>
+block copyright
+    include partial/copyright

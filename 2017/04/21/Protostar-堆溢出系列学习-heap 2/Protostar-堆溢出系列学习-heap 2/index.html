@@ -1,136 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <meta name="keywords" content="hexo, autumn">
-    <title>
-        4ch12dy
-    </title>
-    <!-- favicon -->
-    
-    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
-    
-    <link rel="stylesheet" href="../../../../../css/style.css">
+extends partial/layout
 
-    <!-- highlight -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-    <script>
-        hljs.initHighlightingOnLoad()
-    </script>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
-    <script>
-        infiniteScroll()
+block site_title
+    != page.title + " · " + config.title
 
-        // for mobile menu
-        $(function () {
-            $('.social-button').click(function () {
-                if ($('.social-links').hasClass('hide-links')) {
-                    $('.social-links').removeClass('hide-links')
-                } else {
-                    $('.social-links').addClass('hide-links')
-                }
-            })
-        })
-    </script>
-</head>
+block description
+    - var desc = page.desc || page.title + ' - ' + config.author;
+    meta(name="description", content=desc)
 
-    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
-        <div class="container">
-            <header class="header">
-    <h1 class="title">
-        <a href="../../../../../index.html" class="logo">
-            4ch12dy
-        </a>
-    </h1>
-    <h2 class="desc">
-        当梦想全都被take away
-    </h2>
+block container
+    include mixins/post
+    +post(page)
 
-    <nav class="links">
-        <button class="social-button">
-            menu
-        </button>
-        <ul class="social-links hide-links">
-            
-                <li>
-                    <a href="https://github.com/4ch12dy">
-                        Github
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="http://4ch12dy.site/aboutme/">
-                        About
-                    </a>
-                </li>
-                
-        </ul>
-    </nav>
-</header>
-                <main class="main">
-                    <article class="post">
-    
-    
-    <h4 class="post-cat">
-        <a href="../../../../../categories/Linux堆栈漏洞学习系列/">
-            Linux堆栈漏洞学习系列
-        </a>
-    </h4>
-    
-    
-    <h2 class="post-title">
-        Protostar-堆溢出学习-UAF(use after free)
-    </h2>
-    <ul class="post-date">
-        <li>
-            2017-04-21
-        </li>
-        <li>
-            4ch12dy
-        </li>
-    </ul>
-    <div class="post-content">
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
-<p>下面看一个堆中常见的漏洞-UAF(use after free)</p>
-</blockquote>
-<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;sys/types.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">struct auth &#123;</div><div class="line">  char name[32];</div><div class="line">  int auth;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">struct auth *auth;</div><div class="line">char *service;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  char line[128];</div><div class="line"></div><div class="line">  while(1) &#123;</div><div class="line">      printf(&quot;[ auth = %p, service = %p ]\n&quot;, auth, service);</div><div class="line"></div><div class="line">      if(fgets(line, sizeof(line), stdin) == NULL) break;</div><div class="line">      </div><div class="line">      if(strncmp(line, &quot;auth &quot;, 5) == 0) &#123;</div><div class="line">          auth = malloc(sizeof(auth));</div><div class="line">          memset(auth, 0, sizeof(auth));</div><div class="line">          if(strlen(line + 5) &lt; 31) &#123;</div><div class="line">              strcpy(auth-&gt;name, line + 5);</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      if(strncmp(line, &quot;reset&quot;, 5) == 0) &#123;</div><div class="line">          free(auth);</div><div class="line">      &#125;</div><div class="line">      if(strncmp(line, &quot;service&quot;, 6) == 0) &#123;</div><div class="line">          service = strdup(line + 7);</div><div class="line">      &#125;</div><div class="line">      if(strncmp(line, &quot;login&quot;, 5) == 0) &#123;</div><div class="line">          if(auth-&gt;auth) &#123;</div><div class="line">              printf(&quot;you have logged in already!\n&quot;);</div><div class="line">          &#125; else &#123;</div><div class="line">              printf(&quot;please enter your password\n&quot;);</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-分析-amp-思考"><a href="#0x02-分析-amp-思考" class="headerlink" title="0x02 分析&amp;思考"></a>0x02 分析&amp;思考</h2><p>程序有4个命令，对<code>auth</code>这个结构体进行分配内存以及释放内存，然后有结构体里的<code>auth-&gt;auth</code>来决定是否授权。很明显让我们修改<code>auth-&gt;auth</code>的值。<br>reset命令释放<code>auth</code>但没有设为null，后面<code>auth-&gt;auth</code>发生引用。所以这里有个UAF漏洞。</p>
-<h2 id="0x03-调试-amp-hack"><a href="#0x03-调试-amp-hack" class="headerlink" title="0x03 调试&amp;hack"></a>0x03 调试&amp;hack</h2><p>1.在第一个printf处下个断点，观察每次分配和释放后堆，auth以及service的情况</p>
-<p>2.先输入<code>auth admin</code>，然后输入<code>login</code>试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true" alt="0-0"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/nologin.png?raw=true" alt="nologin"><br>3.再输入<code>reset</code>释放堆内存<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-1.png?raw=true" alt="0-1"><br>4.输入<code>service</code>分配内存<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-2.png?raw=true" alt="0-2"><br>5.以上我们可以发现，给service分配的内存居然也指向auth的地址？因为之前free了auth，所以系统认为这段内存为可用，当再次分配的时候就会返回对应内存。基于此，我们继续给service分配内存，让其覆盖<code>auth-&gt;auth</code>的内存值。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-3.png?raw=true" alt="0-3"><br>6.再次输入<code>login</code>命令<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-4.png?raw=true" alt="0-4"></p>
-<h2 id="0x04-一点感受"><a href="#0x04-一点感受" class="headerlink" title="0x04 一点感受"></a>0x04 一点感受</h2><p>通过这个例子简单的学习了UAF漏洞后，无疑free后不设为null，后果是不敢想象的。继续学习堆相关的漏洞利用。keep hack！</p>
+block pagination
+    include mixins/paginator
+    +post()
+    include partial/comment
 
-    </div>
-</article>
-                </main>
-                <aside class="aside">
-                    <section class="aside-section">
-                        
-    <h1>Categories</h1>
-
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/XNU/">XNU</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
-
-                    </section>
-                    <section class="aside-section">
-                        
-    <h1>Archives</h1>
-
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
-
-
-                    </section>
-                    <section class="aside-section tag">
-                        
-    <h1>Tags</h1>
-
-    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Kernel/">Kernel</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/XNU/">XNU</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
-
-                    </section>
-                </aside>
-        </div>
-    </body>
-
-</html>
+block copyright
+    include partial/copyright

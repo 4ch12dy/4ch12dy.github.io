@@ -1,146 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <meta name="keywords" content="hexo, autumn">
-    <title>
-        4ch12dy
-    </title>
-    <!-- favicon -->
-    
-    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
-    
-    <link rel="stylesheet" href="../../../../../css/style.css">
+extends partial/layout
 
-    <!-- highlight -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-    <script>
-        hljs.initHighlightingOnLoad()
-    </script>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
-    <script>
-        infiniteScroll()
+block site_title
+    != page.title + " · " + config.title
 
-        // for mobile menu
-        $(function () {
-            $('.social-button').click(function () {
-                if ($('.social-links').hasClass('hide-links')) {
-                    $('.social-links').removeClass('hide-links')
-                } else {
-                    $('.social-links').addClass('hide-links')
-                }
-            })
-        })
-    </script>
-</head>
+block description
+    - var desc = page.desc || page.title + ' - ' + config.author;
+    meta(name="description", content=desc)
 
-    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
-        <div class="container">
-            <header class="header">
-    <h1 class="title">
-        <a href="../../../../../index.html" class="logo">
-            4ch12dy
-        </a>
-    </h1>
-    <h2 class="desc">
-        当梦想全都被take away
-    </h2>
+block container
+    include mixins/post
+    +post(page)
 
-    <nav class="links">
-        <button class="social-button">
-            menu
-        </button>
-        <ul class="social-links hide-links">
-            
-                <li>
-                    <a href="https://github.com/4ch12dy">
-                        Github
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="http://4ch12dy.site/aboutme/">
-                        About
-                    </a>
-                </li>
-                
-        </ul>
-    </nav>
-</header>
-                <main class="main">
-                    <article class="post">
-    
-    
-    
-    <h2 class="post-title">
-        Mach-o动态链接
-    </h2>
-    <ul class="post-date">
-        <li>
-            2017-04-10
-        </li>
-        <li>
-            4ch12dy
-        </li>
-    </ul>
-    <div class="post-content">
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。<br>所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。<br>macOS中是内核执行<code>LC_DYLINKER</code>加载命令时启动的，通常为<code>/usr/lib/dyld</code>接管刚创建进程的控制权。<br>本文就来分析其符号的动态链接过程。</p>
-<h2 id="0x01-符号的加载过程"><a href="#0x01-符号的加载过程" class="headerlink" title="0x01 符号的加载过程"></a>0x01 符号的加载过程</h2><p>以下面这个简单的C语言程序为例。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">void main(int argc, char *argv[]) &#123;</div><div class="line"></div><div class="line">	printf(&quot;first printf&quot;);</div><div class="line">	printf(&quot;second printf&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>对应的汇编代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">-&gt;  0x100000f40 &lt;+0&gt;:  pushq  %rbp</div><div class="line">    0x100000f41 &lt;+1&gt;:  movq   %rsp, %rbp</div><div class="line">    0x100000f44 &lt;+4&gt;:  subq   $0x20, %rsp</div><div class="line">    0x100000f48 &lt;+8&gt;:  leaq   0x4b(%rip), %rax          ; &quot;first printf&quot;</div><div class="line">    0x100000f4f &lt;+15&gt;: movl   %edi, -0x4(%rbp)</div><div class="line">    0x100000f52 &lt;+18&gt;: movq   %rsi, -0x10(%rbp)</div><div class="line">    0x100000f56 &lt;+22&gt;: movq   %rax, %rdi</div><div class="line">    0x100000f59 &lt;+25&gt;: movb   $0x0, %al</div><div class="line">    0x100000f5b &lt;+27&gt;: callq  0x100000f7a               ; symbol stub for: printf</div><div class="line">    0x100000f60 &lt;+32&gt;: leaq   0x40(%rip), %rdi          ; &quot;second printf&quot;</div><div class="line">    0x100000f67 &lt;+39&gt;: movl   %eax, -0x14(%rbp)</div><div class="line">    0x100000f6a &lt;+42&gt;: movb   $0x0, %al</div><div class="line">    0x100000f6c &lt;+44&gt;: callq  0x100000f7a               ; symbol stub for: printf</div><div class="line">    0x100000f71 &lt;+49&gt;: movl   %eax, -0x18(%rbp)</div><div class="line">    0x100000f74 &lt;+52&gt;: addq   $0x20, %rsp</div><div class="line">    0x100000f78 &lt;+56&gt;: popq   %rbp</div><div class="line">    0x100000f79 &lt;+57&gt;: retq</div></pre></td></tr></table></figure>
-<p>和大多数的Linux系统一样，mach-o符号的动态绑定也采用了打桩机制，简单的说就是在遇到外部符号的时候就会先跳转到stub区</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true" alt="stub区"></p>
-<ul>
-<li>第一次printf会先进入<code>dyld_stub_binder</code>区去找到<code>printf</code>函数的地址，我们用lldb调试观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E8%B7%B3%E8%BD%AC%E8%BF%87%E7%A8%8B.png?raw=true" alt="stub跳转过程"><br>会发现正好地址在<code>dyld_stub_binder</code>区</p>
-<p>验证:</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%811.png?raw=true" alt="验证1"></p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/la_symbol_ptr%E9%AA%8C%E8%AF%812.png?raw=true" alt="验证1"></p>
-<ul>
-<li>第二次<code>printf</code>我们在观察<code>DATA</code>段<code>la_symbol_ptr</code>区地址值</li>
-</ul>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/%E7%AC%AC%E4%BA%8C%E6%AC%A1printf%E9%AA%8C%E8%AF%81.png?raw=true" alt="第二次"></p>
-<p>我们会发现当第二次再次调用<code>printf</code>函数时，还是会先跳转到stub区，但此时<code>la_symbol_ptr</code>中的值却变为了<code>printf</code>的真实地址，而不是<code>dyld_stub_binder</code>。这样就完成了一次延时绑定，后面就直接调用。</p>
-<h2 id="0x02-stub桩机制总结"><a href="#0x02-stub桩机制总结" class="headerlink" title="0x02 stub桩机制总结"></a>0x02 stub桩机制总结</h2><p>综上分析，我们可以发现所有的外部函数引用都会在<code>DATA</code>段<code>la_symbol_ptr</code>区中产生一个占位符，其初始值为<code>dyld_stub_binder</code>区中对应的编号地址。当第一个调用时，就会进入符号的动态链接过程，一旦找到其地址后，就会将<code>DATA</code>段<code>la_symbol_ptr</code>区中的占位符改为找到后的地址。这样就完成了只需要一个符号绑定。</p>
-<p>stub桩机制的巧妙之处也在此，首先当产生一个外部符号调用时，直接跳到对应的stub桩位置，然后由里面保存的地址来判断是第一次调用还是已经找到符号的地址。就像桩这个名字含义一样，一个占位符的思想。</p>
-<h2 id="0x03-参考"><a href="#0x03-参考" class="headerlink" title="0x03 参考"></a>0x03 参考</h2><p><a href="http://turingh.github.io/2016/03/10/Mach-O%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" target="_blank" rel="external">Mach-O的动态链接相关知识</a></p>
-<p><a href="http://timetobleed.com/dynamic-linking-elf-vs-mach-o/" target="_blank" rel="external">Dynamic Linking: ELF vs. Mach-O</a></p>
-<p><a href="http://timetobleed.com/dynamic-symbol-table-duel-elf-vs-mach-o-round-2/" target="_blank" rel="external">Dynamic symbol table duel: ELF vs Mach-O, round 2</a></p>
+block pagination
+    include mixins/paginator
+    +post()
+    include partial/comment
 
-    </div>
-</article>
-                </main>
-                <aside class="aside">
-                    <section class="aside-section">
-                        
-    <h1>Categories</h1>
-
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/XNU/">XNU</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
-
-                    </section>
-                    <section class="aside-section">
-                        
-    <h1>Archives</h1>
-
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
-
-
-                    </section>
-                    <section class="aside-section tag">
-                        
-    <h1>Tags</h1>
-
-    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Kernel/">Kernel</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/XNU/">XNU</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
-
-                    </section>
-                </aside>
-        </div>
-    </body>
-
-</html>
+block copyright
+    include partial/copyright

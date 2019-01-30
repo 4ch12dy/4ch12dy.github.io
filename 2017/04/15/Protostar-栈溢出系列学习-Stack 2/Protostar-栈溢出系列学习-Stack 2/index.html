@@ -1,161 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <meta name="keywords" content="hexo, autumn">
-    <title>
-        4ch12dy
-    </title>
-    <!-- favicon -->
-    
-    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
-    
-    <link rel="stylesheet" href="../../../../../css/style.css">
+extends partial/layout
 
-    <!-- highlight -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-    <script>
-        hljs.initHighlightingOnLoad()
-    </script>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
-    <script>
-        infiniteScroll()
+block site_title
+    != page.title + " · " + config.title
 
-        // for mobile menu
-        $(function () {
-            $('.social-button').click(function () {
-                if ($('.social-links').hasClass('hide-links')) {
-                    $('.social-links').removeClass('hide-links')
-                } else {
-                    $('.social-links').addClass('hide-links')
-                }
-            })
-        })
-    </script>
-</head>
+block description
+    - var desc = page.desc || page.title + ' - ' + config.author;
+    meta(name="description", content=desc)
 
-    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
-        <div class="container">
-            <header class="header">
-    <h1 class="title">
-        <a href="../../../../../index.html" class="logo">
-            4ch12dy
-        </a>
-    </h1>
-    <h2 class="desc">
-        当梦想全都被take away
-    </h2>
+block container
+    include mixins/post
+    +post(page)
 
-    <nav class="links">
-        <button class="social-button">
-            menu
-        </button>
-        <ul class="social-links hide-links">
-            
-                <li>
-                    <a href="https://github.com/4ch12dy">
-                        Github
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="http://4ch12dy.site/aboutme/">
-                        About
-                    </a>
-                </li>
-                
-        </ul>
-    </nav>
-</header>
-                <main class="main">
-                    <article class="post">
-    
-    
-    <h4 class="post-cat">
-        <a href="../../../../../categories/Linux堆栈漏洞学习系列/">
-            Linux堆栈漏洞学习系列
-        </a>
-    </h4>
-    
-    
-    <h2 class="post-title">
-        Protostar-栈溢出学习-ret跳转到自定义shellcode
-    </h2>
-    <ul class="post-date">
-        <li>
-            2017-04-15
-        </li>
-        <li>
-            4ch12dy
-        </li>
-    </ul>
-    <div class="post-content">
-        <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
-<p> 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。</p>
-</blockquote>
-<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><p>Stack5 is a standard buffer overflow, this time introducing shellcode.</p>
-<p>This level is at /opt/protostar/bin/stack5</p>
-<p>Hints:<br>At this point in time, it might be easier to use someone elses shellcode<br>If debugging the shellcode, use \xcc (int3) to stop the program executing and return to the debugger<br>remove the int3s once your shellcode is done.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  char buffer[64];</div><div class="line"></div><div class="line">  gets(buffer);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-思路-amp-分析"><a href="#0x02-思路-amp-分析" class="headerlink" title="0x02 思路&amp;分析"></a>0x02 思路&amp;分析</h2><p>和前面的一样，我们可以通过覆盖返回地址然后由ret指令跳转到目标地址，但这次我们没有了win()函数，那我们应该跳转到哪里呢？没错，还是跳到栈上。要达到执行代码的目的，所以我们需要在栈上写入shellcode。Here we go！</p>
-<h2 id="0x03-调试-amp-hack"><a href="#0x03-调试-amp-hack" class="headerlink" title="0x03 调试&amp;hack"></a>0x03 调试&amp;hack</h2><ul>
-<li>对应汇编，我们在<code>0x080483da &lt;main+22&gt;:    ret</code>处下个断点</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">(gdb) disassemble </div><div class="line">Dump of assembler code for function main:</div><div class="line">0x080483c4 &lt;main+0&gt;:	push   %ebp</div><div class="line">0x080483c5 &lt;main+1&gt;:	mov    %esp,%ebp</div><div class="line">0x080483c7 &lt;main+3&gt;:	and    $0xfffffff0,%esp</div><div class="line">0x080483ca &lt;main+6&gt;:	sub    $0x50,%esp</div><div class="line">0x080483cd &lt;main+9&gt;:	lea    0x10(%esp),%eax</div><div class="line">0x080483d1 &lt;main+13&gt;:	mov    %eax,(%esp)</div><div class="line">0x080483d4 &lt;main+16&gt;:	call   0x80482e8 &lt;gets@plt&gt;</div><div class="line">0x080483d9 &lt;main+21&gt;:	leave  </div><div class="line">0x080483da &lt;main+22&gt;:	ret</div></pre></td></tr></table></figure>
-<ul>
-<li><p>同样的方法，Python脚本测试返回地址</p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true" alt="2-0"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-1.png?raw=true" alt="2-1"><br>可以发现<code>0xbffff79c</code>处正是返回地址，对应到TTTT,我需要在TTTT处写上我们要跳转的地址。</p>
-<p>既然题目中说了用<code>int 3 cc指令</code>那我们就先来测试下–[cc指令（见文章末尾）]<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-2.png?raw=true" alt="2-2"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-3.png?raw=true" alt="2-3"><br>我们成功执行了<code>cc INT 3指令</code>并触发 SIGTRAP</p>
-</li>
-<li><p>引入nop slide<br>为什么需要nop slide?<br>来看看这种情况，我们再启动一个终端去调试。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-4.png?raw=true" alt="2-4"><br>发现地址里面内容一样，但地址却不同，为什么会这样呢？再看看整个栈的情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-5.png?raw=true" alt="2-5"><br>可以发现，在圈中之后的栈地址都相同，但由于工作路径不同，导致前面的栈地址都发生了变化。<br>因此，我们需要引入nop slide去解决这种情况。</p>
-</li>
-<li><p>填写shellcode<br>自此，我们可以加入我们的shellcode了。这里我用的<a href="http://shell-storm.org/shellcode/files/shellcode-811.php" target="_blank" rel="external">这里</a>的shellcode。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-6.png?raw=true" alt="2-6"></p>
-</li>
-</ul>
-<p><strong>现在我们重新编写Python脚本，制作shellcode payload</strong></p>
-<p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-7.png?raw=true" alt="2-7"></p>
-<p>我们已经跳转的地址已经变化了40字节，并加入100的nopslide偏移，然后再执行shellcode</p>
-<ul>
-<li><p>运行测试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-8.png?raw=true" alt="2-8"><br>的确执行了dash，但并没有出现运行结果，这里很容易困惑。<br>不应该这样的啊？<br>经过思考，原来我们执行了<code>/bin/dash</code>后，并没有输入任何数据，所以就退出了。</p>
-<p>那怎么才能让执行后输入数据呢？<br>这里有一个小技巧，在执行后用<code>cat</code>指令，将输入转到输出<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-9.png?raw=true" alt="2-9"></p>
-</li>
-</ul>
-<h4 id="so-cool-make-it"><a href="#so-cool-make-it" class="headerlink" title="so cool! make it!"></a>so cool! make it!</h4><h2 id="0x04-附录"><a href="#0x04-附录" class="headerlink" title="0x04 附录"></a>0x04 附录</h2><p>INT 3 CC</p>
-<p>详细分分析可以看这边文章<a href="http://blog.csdn.net/trochiluses/article/details/20209593" target="_blank" rel="external">int 3中断与软件调试</a></p>
-<p>简单的理解就是:当我们调试程序时，可以在可能有问题的地方插入一条INT 3指令，使CPU执行到这一点时停下来。这便是软件调试中经常用到的断点（breakpoint）功能，因此INT 3指令又被称为断点指令。</p>
+block pagination
+    include mixins/paginator
+    +post()
+    include partial/comment
 
-    </div>
-</article>
-                </main>
-                <aside class="aside">
-                    <section class="aside-section">
-                        
-    <h1>Categories</h1>
-
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/XNU/">XNU</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
-
-                    </section>
-                    <section class="aside-section">
-                        
-    <h1>Archives</h1>
-
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
-
-
-                    </section>
-                    <section class="aside-section tag">
-                        
-    <h1>Tags</h1>
-
-    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Kernel/">Kernel</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/XNU/">XNU</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
-
-                    </section>
-                </aside>
-        </div>
-    </body>
-
-</html>
+block copyright
+    include partial/copyright
