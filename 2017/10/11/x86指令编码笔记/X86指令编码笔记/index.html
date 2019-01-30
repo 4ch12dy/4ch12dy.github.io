@@ -39,7 +39,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Se">
 				<h1 class="site-name"><a href="/" title="4ch12dy">4ch12dy</a></h1>
 				<h2 class="blog-motto">当梦想全都被take away</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -54,7 +54,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Se">
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:github.com/4ch12dy/4ch12dy.github.io.git">
 					</form>
 					
@@ -78,7 +78,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Se">
     </p>
   <p class="article-time">
     <time datetime="2017-10-11T03:46:13.000Z" itemprop="datePublished">2017-10-11</time>
-    更新日期:<time datetime="2017-10-16T04:09:00.000Z" itemprop="dateModified">2017-10-16</time>
+    Updated:<time datetime="2017-10-16T04:09:00.000Z" itemprop="dateModified">2017-10-16</time>
     
   </p>
 </header>
@@ -86,7 +86,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Se">
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#x86指令编码格式"><span class="toc-number">1.</span> <span class="toc-text">x86指令编码格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指令prefix"><span class="toc-number">2.</span> <span class="toc-text">指令prefix</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#REX-prefix—开启-64-位计算的基石"><span class="toc-number">2.1.</span> <span class="toc-text">REX prefix—开启 64 位计算的基石</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#寄存器编码表"><span class="toc-number">2.1.1.</span> <span class="toc-text">寄存器编码表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#opcode"><span class="toc-number">3.</span> <span class="toc-text">opcode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ModR-M"><span class="toc-number">4.</span> <span class="toc-text">ModR/M</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SIB"><span class="toc-number">5.</span> <span class="toc-text">SIB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Displacement-和-Immediate"><span class="toc-number">6.</span> <span class="toc-text">Displacement 和 Immediate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#综合起来，看下面的例子："><span class="toc-number">7.</span> <span class="toc-text">综合起来，看下面的例子：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考及索引"><span class="toc-number">8.</span> <span class="toc-text">参考及索引</span></a></li></ol>
 		</div>
 		
@@ -293,20 +293,20 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Se">
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
   <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#x86指令编码格式"><span class="toc-number">1.</span> <span class="toc-text">x86指令编码格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指令prefix"><span class="toc-number">2.</span> <span class="toc-text">指令prefix</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#REX-prefix—开启-64-位计算的基石"><span class="toc-number">2.1.</span> <span class="toc-text">REX prefix—开启 64 位计算的基石</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#寄存器编码表"><span class="toc-number">2.1.1.</span> <span class="toc-text">寄存器编码表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#opcode"><span class="toc-number">3.</span> <span class="toc-text">opcode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ModR-M"><span class="toc-number">4.</span> <span class="toc-text">ModR/M</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SIB"><span class="toc-number">5.</span> <span class="toc-text">SIB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Displacement-和-Immediate"><span class="toc-number">6.</span> <span class="toc-text">Displacement 和 Immediate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#综合起来，看下面的例子："><span class="toc-number">7.</span> <span class="toc-text">综合起来，看下面的例子：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考及索引"><span class="toc-number">8.</span> <span class="toc-text">参考及索引</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 			<li><a href="/categories/C/" title="C++">C++<sup>2</sup></a></li>
@@ -343,7 +343,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Se">
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/BSD/" title="BSD">BSD<sup>1</sup></a></li>
@@ -391,7 +391,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Se">
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>

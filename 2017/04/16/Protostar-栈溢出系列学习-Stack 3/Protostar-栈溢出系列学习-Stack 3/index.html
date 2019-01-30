@@ -39,7 +39,7 @@
 				<h1 class="site-name"><a href="/" title="4ch12dy">4ch12dy</a></h1>
 				<h2 class="blog-motto">当梦想全都被take away</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -54,7 +54,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:github.com/4ch12dy/4ch12dy.github.io.git">
 					</form>
 					
@@ -78,7 +78,7 @@
     </p>
   <p class="article-time">
     <time datetime="2017-04-16T03:12:19.000Z" itemprop="datePublished">2017-04-16</time>
-    更新日期:<time datetime="2017-05-02T14:33:55.000Z" itemprop="dateModified">2017-05-02</time>
+    Updated:<time datetime="2017-05-02T14:33:55.000Z" itemprop="dateModified">2017-05-02</time>
     
   </p>
 </header>
@@ -86,7 +86,7 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-序"><span class="toc-number">1.</span> <span class="toc-text">0x00 序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-stack3"><span class="toc-number">2.</span> <span class="toc-text">0x01 stack3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-思路-amp-分析"><span class="toc-number">3.</span> <span class="toc-text">0x02 思路&分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-ROP"><span class="toc-number">4.</span> <span class="toc-text">0x03 ROP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getpath-汇编"><span class="toc-number">4.1.</span> <span class="toc-text">getpath()汇编</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调试-amp-hack"><span class="toc-number">4.2.</span> <span class="toc-text">调试&hack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Ret2libc"><span class="toc-number">5.</span> <span class="toc-text">0x04 Ret2libc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#system-amp-quot-bin-sh-quot"><span class="toc-number">5.1.</span> <span class="toc-text">system & "/bin/sh"</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hack"><span class="toc-number">5.2.</span> <span class="toc-text">hack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">5.3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cooooool-make-it"><span class="toc-number">5.4.</span> <span class="toc-text">cooooool! make it!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-小结"><span class="toc-number">6.</span> <span class="toc-text">0x05 小结</span></a></li></ol>
 		</div>
 		
@@ -166,20 +166,20 @@
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
   <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-序"><span class="toc-number">1.</span> <span class="toc-text">0x00 序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-stack3"><span class="toc-number">2.</span> <span class="toc-text">0x01 stack3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-思路-amp-分析"><span class="toc-number">3.</span> <span class="toc-text">0x02 思路&分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-ROP"><span class="toc-number">4.</span> <span class="toc-text">0x03 ROP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getpath-汇编"><span class="toc-number">4.1.</span> <span class="toc-text">getpath()汇编</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调试-amp-hack"><span class="toc-number">4.2.</span> <span class="toc-text">调试&hack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Ret2libc"><span class="toc-number">5.</span> <span class="toc-text">0x04 Ret2libc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#system-amp-quot-bin-sh-quot"><span class="toc-number">5.1.</span> <span class="toc-text">system & "/bin/sh"</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hack"><span class="toc-number">5.2.</span> <span class="toc-text">hack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">5.3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cooooool-make-it"><span class="toc-number">5.4.</span> <span class="toc-text">cooooool! make it!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-小结"><span class="toc-number">6.</span> <span class="toc-text">0x05 小结</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 			<li><a href="/categories/C/" title="C++">C++<sup>2</sup></a></li>
@@ -216,7 +216,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/BSD/" title="BSD">BSD<sup>1</sup></a></li>
@@ -264,7 +264,7 @@
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
