@@ -1,100 +1,94 @@
-<!DOCTYPE html>
-<html>
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-    <meta name="keywords" content="hexo, autumn">
-    <title>
-        4ch12dy
-    </title>
-    <!-- favicon -->
+  <meta charset="UTF-8">
+  
+    <title>C++类结构以及vtable分析 | 4ch12dy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
-    <link rel="icon" href="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/favicon.ico">
+    <meta name="author" content="4ch12dy">
+    
+    <meta name="description" content="C++类结构以及vtable分析
+通过实验自己对一些C++数据结构的理解
+
+实验一12345678910111213141516171819202122232425262728293031323334353637383940414243#include &amp;lt;iostream&amp;gt; using ">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
     
     <link rel="stylesheet" href="../../../../../css/style.css">
-
-    <!-- highlight -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
-    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-    <script>
-        hljs.initHighlightingOnLoad()
-    </script>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@1.0.0/dist/hexo-infinite-scroll.min.js"></script>
-    <script>
-        infiniteScroll()
-
-        // for mobile menu
-        $(function () {
-            $('.social-button').click(function () {
-                if ($('.social-links').hasClass('hide-links')) {
-                    $('.social-links').removeClass('hide-links')
-                } else {
-                    $('.social-links').addClass('hide-links')
-                }
-            })
-        })
-    </script>
 </head>
 
-    <body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
-        <div class="container">
-            <header class="header">
-    <h1 class="title">
-        <a href="../../../../../index.html" class="logo">
-            4ch12dy
-        </a>
-    </h1>
-    <h2 class="desc">
-        当梦想全都被take away
-    </h2>
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="4ch12dy" title="4ch12dy"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="4ch12dy">4ch12dy</a></h1>
+				<h2 class="blog-motto">当梦想全都被take away</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:github.com/4ch12dy/4ch12dy.github.io.git">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
 
-    <nav class="links">
-        <button class="social-button">
-            menu
-        </button>
-        <ul class="social-links hide-links">
-            
-                <li>
-                    <a href="https://github.com/4ch12dy">
-                        Github
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="http://4ch12dy.site/aboutme/">
-                        About
-                    </a>
-                </li>
-                
-        </ul>
-    </nav>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/01/22/C++类结构以及vtable分析/C++类结构以及vtable分析/" title="C++类结构以及vtable分析" itemprop="url">C++类结构以及vtable分析</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="https://github.com/4ch12dy/4ch12dy.github.io.git" title="4ch12dy">4ch12dy</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2019-01-22T10:07:00.000Z" itemprop="datePublished">2019-01-22</time>
+    Updated:<time datetime="2019-01-22T10:08:39.833Z" itemprop="dateModified">2019-01-22</time>
+    
+  </p>
 </header>
-                <main class="main">
-                    <article class="post">
-    
-    
-    <h4 class="post-cat">
-        <a href="../../../../../categories/C/">
-            C++
-        </a>
-    </h4>
-    
-    
-    <h2 class="post-title">
-        C++类结构以及vtable分析
-    </h2>
-    <ul class="post-date">
-        <li>
-            2019-01-22
-        </li>
-        <li>
-            4ch12dy
-        </li>
-    </ul>
-    <div class="post-content">
-        <h3 id="C-类结构以及vtable分析"><a href="#C-类结构以及vtable分析" class="headerlink" title="C++类结构以及vtable分析"></a>C++类结构以及vtable分析</h3><blockquote>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#C-类结构以及vtable分析"><span class="toc-number">1.</span> <span class="toc-text">C++类结构以及vtable分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实验一"><span class="toc-number">2.</span> <span class="toc-text">实验一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实验二"><span class="toc-number">3.</span> <span class="toc-text">实验二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一点理解"><span class="toc-number">4.</span> <span class="toc-text">一点理解</span></a></li></ol>
+		</div>
+		
+		<h3 id="C-类结构以及vtable分析"><a href="#C-类结构以及vtable分析" class="headerlink" title="C++类结构以及vtable分析"></a>C++类结构以及vtable分析</h3><blockquote>
 <p>通过实验自己对一些C++数据结构的理解</p>
 </blockquote>
 <h3 id="实验一"><a href="#实验一" class="headerlink" title="实验一"></a>实验一</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"> </div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"> </div><div class="line"><span class="comment">// 基类</span></div><div class="line"><span class="keyword">class</span> Shape </div><div class="line">&#123;</div><div class="line">   <span class="keyword">public</span>:</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">setWidth</span><span class="params">(<span class="keyword">int</span> w)</span></span></div><div class="line">      &#123;</div><div class="line">         width = w;</div><div class="line">      &#125;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">setHeight</span><span class="params">(<span class="keyword">int</span> h)</span></span></div><div class="line">      &#123;</div><div class="line">         height = h;</div><div class="line">      &#125;</div><div class="line">   <span class="keyword">protected</span>:</div><div class="line">      <span class="keyword">int</span> width;</div><div class="line">      <span class="keyword">int</span> height;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">// 派生类</span></div><div class="line"><span class="keyword">class</span> Rectangle: <span class="keyword">public</span> Shape</div><div class="line">&#123;</div><div class="line">   <span class="keyword">public</span>:</div><div class="line">      <span class="function"><span class="keyword">int</span> <span class="title">getArea</span><span class="params">()</span></span></div><div class="line">      &#123; </div><div class="line">         <span class="keyword">return</span> (width * height); </div><div class="line">      &#125;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></div><div class="line">&#123;</div><div class="line">   Rectangle Rect;</div><div class="line"> </div><div class="line">   Rect.setWidth(<span class="number">5</span>);</div><div class="line">   Rect.setHeight(<span class="number">7</span>);</div><div class="line"> </div><div class="line">   <span class="comment">// 输出对象的面积</span></div><div class="line">   <span class="built_in">cout</span> &lt;&lt; <span class="string">"Total area: "</span> &lt;&lt; Rect.getArea() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line"> </div><div class="line">   <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -121,35 +115,294 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">__data:<span class="number">0000000100002110</span> ; `vtable <span class="keyword">for</span>'Rectangle</div><div class="line">__data:<span class="number">0000000100002110</span> __ZTV9Rectangle dq <span class="number">0</span>                    ; DATA XREF: __got:__ZTV9Rectangle_ptr↑o</div><div class="line">__data:<span class="number">0000000100002110</span>                                         ; offset to <span class="keyword">this</span></div><div class="line">__data:<span class="number">0000000100002118</span>                 dq offset __ZTI9Rectangle ; `typeinfo <span class="keyword">for</span>'Rectangle</div><div class="line">__data:<span class="number">0000000100002120</span>                 dq offset __ZN9Rectangle7getAreaEv ; Rectangle::getArea(<span class="keyword">void</span>)</div></pre></td></tr></table></figure>
 <p>就是_DATA段中的数据结构，现在我们可以清晰的理解C++类在内存的数据结构了。</p>
 <h3 id="一点理解"><a href="#一点理解" class="headerlink" title="一点理解"></a>一点理解</h3><p>C++这个语言特性非常多，如果不能理解其本质很容易造成bug。这里想把C++和OC做一个简单的对比，C++的很多实现都是在编译时就确定的，C++中的类我更愿意理解成为C中的结构体。而OC这语言，大多都是在运行时才能确定，方法转化为消息处理。在可执行文件中也有专门的段存储其复杂的类数据结构，也因为这样，OC在运行时可以做很多hack操作，比如hook其方法实现等等。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/C/">C++</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="../../../../../categories/C/">C++</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/01/22/C++类结构以及vtable分析/C++类结构以及vtable分析/" data-title="C++类结构以及vtable分析 | 4ch12dy" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/01/30/XNU系统调用深度解析/XNU系统调用深度解析/" title="XNU系统调用深度解析">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  XNU系统调用深度解析</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/"  title="LLDB调试器栈符号化">
+ <strong>NEXT:</strong><br/> 
+ <span>LLDB调试器栈符号化
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#C-类结构以及vtable分析"><span class="toc-number">1.</span> <span class="toc-text">C++类结构以及vtable分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实验一"><span class="toc-number">2.</span> <span class="toc-text">实验一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实验二"><span class="toc-number">3.</span> <span class="toc-text">实验二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一点理解"><span class="toc-number">4.</span> <span class="toc-text">一点理解</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/C/" title="C++">C++<sup>2</sup></a></li>
+		
+			<li><a href="/categories/CTF/" title="CTF">CTF<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Linux堆栈漏洞学习系列/" title="Linux堆栈漏洞学习系列">Linux堆栈漏洞学习系列<sup>10</sup></a></li>
+		
+			<li><a href="/categories/iOS-macOS内核漏洞分析/PoC分析/" title="PoC分析">PoC分析<sup>1</sup></a></li>
+		
+			<li><a href="/categories/XNU/" title="XNU">XNU<sup>1</sup></a></li>
+		
+			<li><a href="/categories/iOS-macOS内核漏洞分析/" title="iOS&amp;macOS内核漏洞分析">iOS&amp;macOS内核漏洞分析<sup>1</sup></a></li>
+		
+			<li><a href="/categories/kext-iokit/" title="kext/iokit">kext/iokit<sup>1</sup></a></li>
+		
+			<li><a href="/categories/llvm/" title="llvm">llvm<sup>1</sup></a></li>
+		
+			<li><a href="/categories/macOS内核知识点/" title="macOS内核知识点">macOS内核知识点<sup>1</sup></a></li>
+		
+			<li><a href="/categories/macho-dyld/" title="macho/dyld">macho/dyld<sup>1</sup></a></li>
+		
+			<li><a href="/categories/一点一点/" title="一点一点">一点一点<sup>1</sup></a></li>
+		
+			<li><a href="/categories/关于数学/" title="关于数学">关于数学<sup>1</sup></a></li>
+		
+			<li><a href="/categories/杂/" title="杂">杂<sup>2</sup></a></li>
+		
+			<li><a href="/categories/看雪/" title="看雪">看雪<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/BSD/" title="BSD">BSD<sup>1</sup></a></li>
+		
+			<li><a href="/tags/C/" title="C++">C++<sup>2</sup></a></li>
+		
+			<li><a href="/tags/CTF/" title="CTF">CTF<sup>1</sup></a></li>
+		
+			<li><a href="/tags/CVE-2016-4655/" title="CVE-2016-4655">CVE-2016-4655<sup>1</sup></a></li>
+		
+			<li><a href="/tags/CVE-2016-4656/" title="CVE-2016-4656">CVE-2016-4656<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Crackme/" title="Crackme">Crackme<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DLMalloc/" title="DLMalloc">DLMalloc<sup>1</sup></a></li>
+		
+			<li><a href="/tags/GOT表/" title="GOT表">GOT表<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Kernel/" title="Kernel">Kernel<sup>1</sup></a></li>
+		
+			<li><a href="/tags/LLDB/" title="LLDB">LLDB<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Linux/" title="Linux">Linux<sup>9</sup></a></li>
+		
+			<li><a href="/tags/Pegasus/" title="Pegasus">Pegasus<sup>1</sup></a></li>
+		
+			<li><a href="/tags/PoC/" title="PoC">PoC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Protostar/" title="Protostar">Protostar<sup>9</sup></a></li>
+		
+			<li><a href="/tags/SSD/" title="SSD">SSD<sup>1</sup></a></li>
+		
+			<li><a href="/tags/UAF/" title="UAF">UAF<sup>1</sup></a></li>
+		
+			<li><a href="/tags/XNU/" title="XNU">XNU<sup>1</sup></a></li>
+		
+			<li><a href="/tags/android/" title="android">android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cve/" title="cve">cve<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dyld/" title="dyld">dyld<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
     </div>
-</article>
-                </main>
-                <aside class="aside">
-                    <section class="aside-section">
-                        
-    <h1>Categories</h1>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2019 
+		
+		<a href="https://github.com/4ch12dy/4ch12dy.github.io.git" target="_blank" title="4ch12dy">4ch12dy</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
 
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/CTF/">CTF</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/XNU/">XNU</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/">iOS&macOS内核漏洞分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/iOS-macOS内核漏洞分析/PoC分析/">PoC分析</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/kext-iokit/">kext/iokit</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/llvm/">llvm</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macOS内核知识点/">macOS内核知识点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/macho-dyld/">macho/dyld</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/一点一点/">一点一点</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/关于数学/">关于数学</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/杂/">杂</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../../categories/看雪/">看雪</a></li></ul>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
 
-                    </section>
-                    <section class="aside-section">
-                        
-    <h1>Archives</h1>
 
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2018/">2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2017/">2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../../archives/2016/">2016</a></li></ul>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
-                    </section>
-                    <section class="aside-section tag">
-                        
-    <h1>Tags</h1>
 
-    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/BSD/">BSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4655/">CVE-2016-4655</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/CVE-2016-4656/">CVE-2016-4656</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Crackme/">Crackme</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/DLMalloc/">DLMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/GOT表/">GOT表</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Kernel/">Kernel</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/LLDB/">LLDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Pegasus/">Pegasus</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/PoC/">PoC</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/Protostar/">Protostar</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/SSD/">SSD</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/UAF/">UAF</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/XNU/">XNU</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/cve/">cve</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/dyld/">dyld</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/format/">format</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/free/">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/gdb/">gdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/heap/">heap</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/iOS应用安全/">iOS应用安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/ida/">ida</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/kext/">kext</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/llvm/">llvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS/">macOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macOS内核/">macOS内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach/">mach</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/mach-o/">mach-o</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macho/">macho</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/macos内核/">macos内核</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/malloc/">malloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/metadata/">metadata</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/obfuscation/">obfuscation</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/printf/">printf</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/strcpy/">strcpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/stub/">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vm/">vm</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/vtable/">vtable</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/writeup/">writeup</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/x86/">x86</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/xnu/">xnu</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/堆溢出/">堆溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/栈溢出/">栈溢出</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/看雪/">看雪</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../../tags/调试/">调试</a></li></ul>
 
-                    </section>
-                </aside>
-        </div>
-    </body>
 
+
+  </body>
 </html>
