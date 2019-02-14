@@ -20,7 +20,10 @@
   <meta name="description" content="记录下，可能会用到
 
 
-12345678910111213141516171819202122232425262728293031323334353637383940414243+ (NSString *)serialNumber &amp;#123;  io_service_t platformExpert = IOServiceGetMatchingService(      kIOMasterP">
++ (NSString *)serialNumber {
+  io_service_t platformExpert = IOServiceGetMatchingService(
+      kIOMasterPortDefault, IOServiceMatching(&amp;quot;IOPlatformExpertDevice&amp;quot;));
+  if (!platf">
 <meta property="og:type" content="article">
 <meta property="og:title" content="获取macOS序列号UUID等">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/01/获取macOS序列号UUID等/获取macOS序列号UUID等/index.html">
@@ -28,22 +31,26 @@
 <meta property="og:description" content="记录下，可能会用到
 
 
-12345678910111213141516171819202122232425262728293031323334353637383940414243+ (NSString *)serialNumber &amp;#123;  io_service_t platformExpert = IOServiceGetMatchingService(      kIOMasterP">
++ (NSString *)serialNumber {
+  io_service_t platformExpert = IOServiceGetMatchingService(
+      kIOMasterPortDefault, IOServiceMatching(&amp;quot;IOPlatformExpertDevice&amp;quot;));
+  if (!platf">
 <meta property="og:updated_time" content="2017-08-30T01:47:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="获取macOS序列号UUID等">
 <meta name="twitter:description" content="记录下，可能会用到
 
 
-12345678910111213141516171819202122232425262728293031323334353637383940414243+ (NSString *)serialNumber &amp;#123;  io_service_t platformExpert = IOServiceGetMatchingService(      kIOMasterP">
++ (NSString *)serialNumber {
+  io_service_t platformExpert = IOServiceGetMatchingService(
+      kIOMasterPortDefault, IOServiceMatching(&amp;quot;IOPlatformExpertDevice&amp;quot;));
+  if (!platf">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../../../css/common.css">
 <link rel="stylesheet" href="../../../../../css/nav.css">
@@ -58,7 +65,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -82,7 +89,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../../about">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
@@ -102,7 +109,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../about">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
@@ -158,7 +165,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-08-01</span>
             </div>
             
@@ -175,11 +182,69 @@
 <p>记录下，可能会用到</p>
 </blockquote>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">+ (NSString *)serialNumber &#123;</div><div class="line">  io_service_t platformExpert = IOServiceGetMatchingService(</div><div class="line">      kIOMasterPortDefault, IOServiceMatching(&quot;IOPlatformExpertDevice&quot;));</div><div class="line">  if (!platformExpert) return nil;</div><div class="line"></div><div class="line">  NSString *serial = CFBridgingRelease(IORegistryEntryCreateCFProperty(</div><div class="line">      platformExpert, CFSTR(kIOPlatformSerialNumberKey), kCFAllocatorDefault, 0));</div><div class="line"></div><div class="line">  IOObjectRelease(platformExpert);</div><div class="line"></div><div class="line">  return serial;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (NSString *)hardwareUUID &#123;</div><div class="line">  io_service_t platformExpert = IOServiceGetMatchingService(</div><div class="line">      kIOMasterPortDefault, IOServiceMatching(&quot;IOPlatformExpertDevice&quot;));</div><div class="line">  if (!platformExpert) return nil;</div><div class="line"></div><div class="line">  NSString *uuid = CFBridgingRelease(IORegistryEntryCreateCFProperty(</div><div class="line">      platformExpert, CFSTR(kIOPlatformUUIDKey), kCFAllocatorDefault, 0));</div><div class="line"></div><div class="line">  IOObjectRelease(platformExpert);</div><div class="line"></div><div class="line">  return uuid;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (NSString *)osVersion &#123;</div><div class="line">  return [SNTSystemInfo _systemVersionDictionary][@&quot;ProductVersion&quot;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (NSString *)osBuild &#123;</div><div class="line">  return [SNTSystemInfo _systemVersionDictionary][@&quot;ProductBuildVersion&quot;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (NSString *)shortHostname &#123;</div><div class="line">  return [[[SNTSystemInfo longHostname] componentsSeparatedByString:@&quot;.&quot;] firstObject];</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (NSString *)longHostname &#123;</div><div class="line">  char hostname[MAXHOSTNAMELEN];</div><div class="line">  gethostname(hostname, (int)sizeof(hostname));</div><div class="line">  return @(hostname);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">serialnum:C02R****FVH5</div><div class="line">UUID:9C090ED8-****-540B-****-0C186E98FDFE</div></pre></td></tr></table></figure>
-<h3 id="忽略一些警告的标识"><a href="#忽略一些警告的标识" class="headerlink" title="忽略一些警告的标识"></a>忽略一些警告的标识</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic ignored &quot;警告名称&quot;</div><div class="line"></div><div class="line">￼// 被夹在这中间的代码针对于此警告都会忽视不显示出来</div><div class="line"></div><div class="line">//常见警告的名称</div><div class="line">//1.声明变量未使用  &quot;-Wunused-variable&quot;</div><div class="line">//2.方法定义未实现  &quot;-Wincomplete-implementation&quot;</div><div class="line">//3.未声明的选择器  &quot;-Wundeclared-selector&quot;</div><div class="line">//4.参数格式不匹配  &quot;-Wformat&quot;</div><div class="line">//5.废弃掉的方法     &quot;-Wdeprecated-declarations&quot;</div><div class="line">//6.不会执行的代码  &quot;-Wunreachable-code&quot;</div><div class="line">//7.忽略在arc 环境下performSelector产生的 leaks 的警告 &quot;-Warc-performSelector-leaks&quot;</div><div class="line"></div><div class="line">#pragma clang diagnostic pop</div></pre></td></tr></table></figure>
+<pre><code class="objective-c">+ (NSString *)serialNumber {
+  io_service_t platformExpert = IOServiceGetMatchingService(
+      kIOMasterPortDefault, IOServiceMatching(&quot;IOPlatformExpertDevice&quot;));
+  if (!platformExpert) return nil;
 
+  NSString *serial = CFBridgingRelease(IORegistryEntryCreateCFProperty(
+      platformExpert, CFSTR(kIOPlatformSerialNumberKey), kCFAllocatorDefault, 0));
+
+  IOObjectRelease(platformExpert);
+
+  return serial;
+}
+
++ (NSString *)hardwareUUID {
+  io_service_t platformExpert = IOServiceGetMatchingService(
+      kIOMasterPortDefault, IOServiceMatching(&quot;IOPlatformExpertDevice&quot;));
+  if (!platformExpert) return nil;
+
+  NSString *uuid = CFBridgingRelease(IORegistryEntryCreateCFProperty(
+      platformExpert, CFSTR(kIOPlatformUUIDKey), kCFAllocatorDefault, 0));
+
+  IOObjectRelease(platformExpert);
+
+  return uuid;
+}
+
++ (NSString *)osVersion {
+  return [SNTSystemInfo _systemVersionDictionary][@&quot;ProductVersion&quot;];
+}
+
++ (NSString *)osBuild {
+  return [SNTSystemInfo _systemVersionDictionary][@&quot;ProductBuildVersion&quot;];
+}
+
++ (NSString *)shortHostname {
+  return [[[SNTSystemInfo longHostname] componentsSeparatedByString:@&quot;.&quot;] firstObject];
+}
+
++ (NSString *)longHostname {
+  char hostname[MAXHOSTNAMELEN];
+  gethostname(hostname, (int)sizeof(hostname));
+  return @(hostname);
+}
+</code></pre>
+<p>输出：</p>
+<pre><code>serialnum:C02R****FVH5
+UUID:9C090ED8-****-540B-****-0C186E98FDFE
+</code></pre><h3 id="忽略一些警告的标识"><a href="#忽略一些警告的标识" class="headerlink" title="忽略一些警告的标识"></a>忽略一些警告的标识</h3><pre><code>#pragma clang diagnostic push
+#pragma clang diagnostic ignored &quot;警告名称&quot;
+
+￼// 被夹在这中间的代码针对于此警告都会忽视不显示出来
+
+//常见警告的名称
+//1.声明变量未使用  &quot;-Wunused-variable&quot;
+//2.方法定义未实现  &quot;-Wincomplete-implementation&quot;
+//3.未声明的选择器  &quot;-Wundeclared-selector&quot;
+//4.参数格式不匹配  &quot;-Wformat&quot;
+//5.废弃掉的方法     &quot;-Wdeprecated-declarations&quot;
+//6.不会执行的代码  &quot;-Wunreachable-code&quot;
+//7.忽略在arc 环境下performSelector产生的 leaks 的警告 &quot;-Warc-performSelector-leaks&quot;
+
+#pragma clang diagnostic pop
+</code></pre>
         </div>
         <div class="post-reply">
             

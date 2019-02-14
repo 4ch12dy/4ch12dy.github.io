@@ -40,8 +40,6 @@ tags: [linux,heap,malloc,free]0x00 序当学习漏洞利用到一定阶段的时
     <link rel="icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="../../../css/common.css">
 <link rel="stylesheet" href="../../../css/nav.css">
 <link rel="stylesheet" href="../../../css/layout.css">
@@ -55,7 +53,7 @@ tags: [linux,heap,malloc,free]0x00 序当学习漏洞利用到一定阶段的时
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -79,7 +77,7 @@ tags: [linux,heap,malloc,free]0x00 序当学习漏洞利用到一定阶段的时
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../about">
+            <a class="nav-item" href="../../../aboutme">
                 About
             </a>
             
@@ -99,7 +97,7 @@ tags: [linux,heap,malloc,free]0x00 序当学习漏洞利用到一定阶段的时
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../about">
+            <a class="nav-item flex-1" href="../../../aboutme">
                 About
             </a>
             
@@ -154,7 +152,7 @@ tags: [linux,heap,malloc,free]0x00 序当学习漏洞利用到一定阶段的时
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2018-10-03</span>
             </div>
             
@@ -163,8 +161,10 @@ tags: [linux,heap,malloc,free]0x00 序当学习漏洞利用到一定阶段的时
             <hr>
 <p>title: 深入理解Linux堆分配器-DLMalloc<br>date: 2017-04-24 12:16</p>
 <h2 id="tags-linux-heap-malloc-free"><a href="#tags-linux-heap-malloc-free" class="headerlink" title="tags: [linux,heap,malloc,free]"></a>tags: [linux,heap,malloc,free]</h2><h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有一定的了解了。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识。</p>
-<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1.DLMalloc</div><div class="line">2.内存Chunk</div><div class="line">3.Bin</div></pre></td></tr></table></figure>
-<h2 id="0x02-DLMalloc"><a href="#0x02-DLMalloc" class="headerlink" title="0x02 DLMalloc"></a>0x02 DLMalloc</h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。</p>
+<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><pre><code>1.DLMalloc
+2.内存Chunk
+3.Bin
+</code></pre><h2 id="0x02-DLMalloc"><a href="#0x02-DLMalloc" class="headerlink" title="0x02 DLMalloc"></a>0x02 DLMalloc</h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。</p>
 <p>明显内存分配器在操作系统中是相当重要的，主要在需要满足下列的特点：</p>
 <ul>
 <li>稳定性(stability)</li>
@@ -175,220 +175,373 @@ tags: [linux,heap,malloc,free]0x00 序当学习漏洞利用到一定阶段的时
 <p>根据上面的内存特点，将有助于后面对chunk以及Bin等的理解。</p>
 <h2 id="0x03-内存chunk"><a href="#0x03-内存chunk" class="headerlink" title="0x03 内存chunk"></a>0x03 内存chunk</h2><p>1.什么是chunk？<br>chunk是堆中一些连续的内存块，可以用作分配，释放，拆分，合并。不存在两个连续的释放chunk，这是在于相邻的chunk会合并。</p>
 <p>2.数据结构</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">struct malloc_chunk &#123;</div><div class="line">	INTERNAL_SIZE_T prev_size; //当前chunk前一个chunk的大小，仅在前一个									  为freed才使用</div><div class="line">	INTERNAL_SIZE_T size;      //当前chunk的大小</div><div class="line">	struct malloc_chunk * fd;  //如果当前为释放chunk，指向双向free 									   list中前一个chunk</div><div class="line">	struct malloc_chunk * bk;  //如果当前为释放chunk，指向双向free 									   list中后一个chunk</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>根据上面的描述我们可以知道，chunk在分配时和释放时数据结构是不同的，看下面的图例:</p>
+<pre><code>struct malloc_chunk {
+    INTERNAL_SIZE_T prev_size; //当前chunk前一个chunk的大小，仅在前一个                                      为freed才使用
+    INTERNAL_SIZE_T size;      //当前chunk的大小
+    struct malloc_chunk * fd;  //如果当前为释放chunk，指向双向free                                        list中前一个chunk
+    struct malloc_chunk * bk;  //如果当前为释放chunk，指向双向free                                        list中后一个chunk
+}
+</code></pre><p>根据上面的描述我们可以知道，chunk在分配时和释放时数据结构是不同的，看下面的图例:</p>
 <ul>
 <li>allocate chunk</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">chunk   --&gt;+---------------------------------------+</div><div class="line">           |     前一个chunk大小                     |</div><div class="line">           +---------------------------------------+</div><div class="line">           |     当前chunk大小                 |A|M|P|</div><div class="line"> mem    --&gt;+---------------------------------------+</div><div class="line">           |     malloc返回用户的开始地址，储存用户数据  |</div><div class="line">           .                                       .</div><div class="line">           .                                       .</div><div class="line">           .                                       .</div><div class="line">           +---------------------------------------+</div><div class="line">nextchunk-&gt;|     前一个chunk大小                     |</div><div class="line">           +---------------------------------------+</div><div class="line">                       ...        </div><div class="line">```   </div><div class="line"></div><div class="line">*  freed chunk</div></pre></td></tr></table></figure>
-<p>chunk   –&gt;+—————————————+<br>           |     前一个chunk大小                     |<br>           +—————————————+<br>           |     当前chunk大小                |A| |P|<br> mem    –&gt;+—————————————+<br>           |     fd指向free list中下一个chunk        |<br>           +—————————————+<br>           |     bk指向free list中后一个chunk        |<br>           +—————————————+<br>           .     用户数据 可能为0                    .<br>           .                                       .<br>nextchunk-&gt;+—————————————+<br>           |     前一个chunk大小                     |<br>           +—————————————+<br>                       …<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">    </div><div class="line">3.更多细节</div><div class="line">因为chunk是按照8字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？</div><div class="line">然后可以想到有一个最小chunk的存在，其大小为16字节()。</div><div class="line"></div><div class="line">4.特殊chunk</div><div class="line"></div><div class="line">top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</div><div class="line"></div><div class="line">last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is the result of allocation requests for small chunks that have no exact fit in any of the bins. If the request is larger than the last_remainder chunk but smaller than a block in a bin, then the chunk is split again. The last_remainder chunk is the result of having to split a larger chunk into two, one part of it is handed out from the allocation, and the other because the last_remainder chunk.</div><div class="line"></div><div class="line"></div><div class="line">## 0x04 Bin</div><div class="line">chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。</div><div class="line"></div><div class="line">这里我主要介绍fsatbin和normalbin</div><div class="line"></div><div class="line">(1)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。</div><div class="line"></div><div class="line">(2)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</div><div class="line"></div><div class="line">## 0x05 free()源代码分析及相关细节</div><div class="line"></div><div class="line">`free(void *mem)--&gt;__libc_free(void *mem)`</div></pre></td></tr></table></figure></p>
-<p>void<br>__libc_free (void <em>mem)<br>{<br>  mstate ar_ptr;<br>  mchunkptr p;                          /</em> chunk corresponding to mem */</p>
-<p>  void (<em>hook) (void </em>, const void <em>)<br>    = atomic_forced_read (<strong>free_hook);<br>  if (</strong>builtin_expect (hook != NULL, 0))<br>    {<br>      (</em>hook)(mem, RETURN_ADDRESS (0));<br>      return;<br>    }</p>
-<p>  if (mem == 0)                              /<em> free(0) has no effect </em>/<br>    return;</p>
-<p>  p = mem2chunk (mem);</p>
-<p>  if (chunk_is<em>mmapped (p))                       /<em> release mmapped memory. </em>/<br>    {<br>      /<em> See if the dynamic brk/mmap threshold needs adjusting.<br>         Dumped fake mmapped chunks do not affect the threshold.  </em>/<br>      if (!mp</em>.no_dyn_threshold<br>          &amp;&amp; chunksize<em>nomask (p) &gt; mp</em>.mmap_threshold<br>          &amp;&amp; chunksize_nomask (p) &lt;= DEFAULT_MMAP_THRESHOLD_MAX<br>          &amp;&amp; !DUMPED_MAIN_ARENA<em>CHUNK (p))<br>        {<br>          mp</em>.mmap<em>threshold = chunksize (p);<br>          mp</em>.trim<em>threshold = 2 * mp</em>.mmap_threshold;<br>          LIBC_PROBE (memory_mallopt_free_dyn<em>thresholds, 2,<br>                      mp</em>.mmap<em>threshold, mp</em>.trim_threshold);<br>        }<br>      munmap_chunk (p);<br>      return;<br>    }</p>
-<p>  ar_ptr = arena_for_chunk (p);<br>  _int_free (ar_ptr, p, 0); //跳转到_int_free<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">我们先不关注其他的，只需要知道会调用_int_free就就可以了</div><div class="line"></div><div class="line"></div><div class="line">`__libc_free(void *mem)--&gt;_int_free (mstate av, mchunkptr p, int have_lock)`</div></pre></td></tr></table></figure></p>
-<p>static void<br>_int_free (mstate av, mchunkptr p, int have_lock)<br>{<br>  INTERNAL_SIZE_T size;        /<em> 当前chunk的大小 </em>/<br>  mfastbinptr <em>fb;             /</em> 相关的fastbin <em>/<br>  mchunkptr nextchunk;         /</em> 下一个相邻的chunk <em>/<br>  INTERNAL_SIZE_T nextsize;    /</em> 下一个chunk的大小 <em>/<br>  int nextinuse;               /</em> 下一个chunk正在使用时为真 <em>/<br>  INTERNAL_SIZE_T prevsize;    /</em> 前一个chunk的大小 <em>/<br>  mchunkptr bck;               /</em> 指向free链表中向后一个chunk <em>/<br>  mchunkptr fwd;               /</em> 指向free链表中向前一个chunk */</p>
-<p>  const char *errstr = NULL;<br>  int locked = 0;</p>
-<p>  size = chunksize (p);</p>
-<p>  /<em> Little security check which won’t hurt performance: the<br>     allocator never wrapps around at the end of the address space.<br>     Therefore we can exclude some size values which might appear<br>     here by accident or by “design” from some intruder.  </em>/<br>  //一些安全检查<br>  if (<strong>builtin_expect ((uintptr_t) p &gt; (uintptr_t) -size, 0)<br>      || </strong>builtin_expect (misaligned_chunk (p), 0))<br>    {<br>      errstr = “free(): invalid pointer”;<br>    errout:<br>      if (!have_lock &amp;&amp; locked)<br>        <strong>libc_lock_unlock (av-&gt;mutex);<br>      malloc_printerr (check_action, errstr, chunk2mem (p), av);<br>      return;<br>    }<br>  /<em> We know that each chunk is at least MINSIZE bytes in size or a multiple of MALLOC_ALIGNMENT.  </em>/<br>   //检查是否满足大于等于最小大小<br>  if (</strong>glibc_unlikely (size &lt; MINSIZE || !aligned_OK (size)))<br>    {<br>      errstr = “free(): invalid size”;<br>      goto errout;<br>    }</p>
-<p>  check_inuse_chunk(av, p); //检查当前chunk是否在使用</p>
-<p>  /<em><br>    如果满足，则将该chunk放入fastbin以便malloc时能够快速找到和使用
-  </em>/<br>  if ((unsigned long)(size) &lt;= (unsigned long)(get_max_fast ())</p>
-<p>#if TRIM_FASTBINS<br>      /<em><br>        If TRIM_FASTBINS set, don’t place chunks<br>        bordering top into fastbins
-      </em>/<br>      &amp;&amp; (chunk_at_offset(p, size) != av-&gt;top)</p>
-<p>#endif<br>      ) {</p>
-<pre><code>if (__builtin_expect (chunksize_nomask (chunk_at_offset (p, size))
-                      &lt;= 2 * SIZE_SZ, 0)
-    || __builtin_expect (chunksize (chunk_at_offset (p, size))
-                         &gt;= av-&gt;system_mem, 0))
-  {
-    /* We might not have a lock at this point and concurrent modifications
-       of system_mem might have let to a false positive.  Redo the test
-       after getting the lock.  */
-    if (have_lock
-        || ({ assert (locked == 0);
-              __libc_lock_lock (av-&gt;mutex);
-              locked = 1;
-              chunksize_nomask (chunk_at_offset (p, size)) &lt;= 2 * SIZE_SZ
-                || chunksize (chunk_at_offset (p, size)) &gt;= av-&gt;system_mem;
-          }))
-      {
-        errstr = &quot;free(): invalid next size (fast)&quot;;
-        goto errout;
-      }
-    if (! have_lock)
-      {
-        __libc_lock_unlock (av-&gt;mutex);
-        locked = 0;
-      }
-  }
+<pre><code>chunk   --&gt;+---------------------------------------+
+           |     前一个chunk大小                     |
+           +---------------------------------------+
+           |     当前chunk大小                 |A|M|P|
+ mem    --&gt;+---------------------------------------+
+           |     malloc返回用户的开始地址，储存用户数据  |
+           .                                       .
+           .                                       .
+           .                                       .
+           +---------------------------------------+
+nextchunk-&gt;|     前一个chunk大小                     |
+           +---------------------------------------+
+                       ...
+</code></pre><ul>
+<li>freed chunk</li>
+</ul>
+<pre><code>chunk   --&gt;+---------------------------------------+
+           |     前一个chunk大小                     |
+           +---------------------------------------+
+           |     当前chunk大小                |A| |P|
+ mem    --&gt;+---------------------------------------+
+           |     fd指向free list中下一个chunk        |
+           +---------------------------------------+
+           |     bk指向free list中后一个chunk        |
+           +---------------------------------------+
+           .     用户数据 可能为0                    .
+           .                                       .
+nextchunk-&gt;+---------------------------------------+
+           |     前一个chunk大小                     |
+           +---------------------------------------+
+                       ...
+</code></pre><p>3.更多细节<br>因为chunk是按照8字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？<br>然后可以想到有一个最小chunk的存在，其大小为16字节()。</p>
+<p>4.特殊chunk</p>
+<p>top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</p>
+<p>last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is the result of allocation requests for small chunks that have no exact fit in any of the bins. If the request is larger than the last_remainder chunk but smaller than a block in a bin, then the chunk is split again. The last_remainder chunk is the result of having to split a larger chunk into two, one part of it is handed out from the allocation, and the other because the last_remainder chunk.</p>
+<h2 id="0x04-Bin"><a href="#0x04-Bin" class="headerlink" title="0x04 Bin"></a>0x04 Bin</h2><p>chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。</p>
+<p>这里我主要介绍fsatbin和normalbin</p>
+<p>(1)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。</p>
+<p>(2)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</p>
+<h2 id="0x05-free-源代码分析及相关细节"><a href="#0x05-free-源代码分析及相关细节" class="headerlink" title="0x05 free()源代码分析及相关细节"></a>0x05 free()源代码分析及相关细节</h2><p><code>free(void *mem)--&gt;__libc_free(void *mem)</code></p>
+<pre><code>void
+__libc_free (void *mem)
+{
+  mstate ar_ptr;
+  mchunkptr p;                          /* chunk corresponding to mem */
 
-free_perturb (chunk2mem(p), size - 2 * SIZE_SZ);
-
-set_fastchunks(av);
-unsigned int idx = fastbin_index(size);
-fb = &amp;fastbin (av, idx);
-
-/* Atomically link P to its fastbin: P-&gt;FD = *FB; *FB = P;  */
-mchunkptr old = *fb, old2;
-unsigned int old_idx = ~0u;
-do
-  {
-    /* Check that the top of the bin is not the record we are going to add
-       (i.e., double free).  */
-    if (__builtin_expect (old == p, 0))
-      {
-        errstr = &quot;double free or corruption (fasttop)&quot;;
-        goto errout;
-      }
-    /* Check that size of fastbin chunk at the top is the same as
-       size of the chunk that we are adding.  We can dereference OLD
-       only if we have the lock, otherwise it might have already been
-       deallocated.  See use of OLD_IDX below for the actual check.  */
-    if (have_lock &amp;&amp; old != NULL)
-      old_idx = fastbin_index(chunksize(old));
-    p-&gt;fd = old2 = old;
-  }
-while ((old = catomic_compare_and_exchange_val_rel (fb, p, old2)) != old2);
-
-if (have_lock &amp;&amp; old != NULL &amp;&amp; __builtin_expect (old_idx != idx, 0))
-  {
-    errstr = &quot;invalid fastbin entry (free)&quot;;
-    goto errout;
-  }
-</code></pre><p>  }</p>
-<p>  /<em><br>    Consolidate other non-mmapped chunks as they arrive.
-  </em>/<br>  //检查是否是通过mmap()分配的内存<br>  else if (!chunk_is_mmapped(p)) {<br>    if (! have_lock) {<br>      __libc_lock_lock (av-&gt;mutex);<br>      locked = 1;<br>    }</p>
-<pre><code>nextchunk = chunk_at_offset(p, size);//返回下一个chunk的地址
-
-/* Lightweight tests: check whether the block is already the
-   top block.  */
-//检查下一个是否为top-chunk
-if (__glibc_unlikely (p == av-&gt;top))
-  {
-    errstr = &quot;double free or corruption (top)&quot;;
-    goto errout;
-  }
-/* Or whether the next chunk is beyond the boundaries of the arena.  */
-if (__builtin_expect (contiguous (av)
-                      &amp;&amp; (char *) nextchunk
-                      &gt;= ((char *) av-&gt;top + chunksize(av-&gt;top)), 0))
-  {
-    errstr = &quot;double free or corruption (out)&quot;;
-    goto errout;
-  }
-/* Or whether the block is actually not marked used.  */
-if (__glibc_unlikely (!prev_inuse(nextchunk)))
-  {
-    errstr = &quot;double free or corruption (!prev)&quot;;
-    goto errout;
-  }
-
-nextsize = chunksize(nextchunk);
-if (__builtin_expect (chunksize_nomask (nextchunk) &lt;= 2 * SIZE_SZ, 0)
-    || __builtin_expect (nextsize &gt;= av-&gt;system_mem, 0))
-  {
-    errstr = &quot;free(): invalid next size (normal)&quot;;
-    goto errout;
-  }
-
-free_perturb (chunk2mem(p), size - 2 * SIZE_SZ);
-
-/* 与后面chunk一个合并 */
-if (!prev_inuse(p)) {
-  prevsize = prev_size (p);
-  size += prevsize;
-  p = chunk_at_offset(p, -((long) prevsize));
-  unlink(av, p, bck, fwd);//将后一个chunk从双向链表上取下来
-}
-
-if (nextchunk != av-&gt;top) {
-  /* get and clear inuse bit */
-  nextinuse = inuse_bit_at_offset(nextchunk, nextsize);
-
-  /* 与前面chunk一个合并*/
-  if (!nextinuse) {
-    unlink(av, nextchunk, bck, fwd);//将前一个chunk从双向链表上取下来
-    size += nextsize;
-  } else
-    clear_inuse_bit_at_offset(nextchunk, 0);
-
-  /*
-    Place the chunk in unsorted chunk list. Chunks are
-    not placed into regular bins until after they have
-    been given one chance to be used in malloc.
-  */
-
-  bck = unsorted_chunks(av);
-  fwd = bck-&gt;fd;
-  if (__glibc_unlikely (fwd-&gt;bk != bck))
+  void (*hook) (void *, const void *)
+    = atomic_forced_read (__free_hook);
+  if (__builtin_expect (hook != NULL, 0))
     {
-      errstr = &quot;free(): corrupted unsorted chunks&quot;;
+      (*hook)(mem, RETURN_ADDRESS (0));
+      return;
+    }
+
+  if (mem == 0)                              /* free(0) has no effect */
+    return;
+
+  p = mem2chunk (mem);
+
+  if (chunk_is_mmapped (p))                       /* release mmapped memory. */
+    {
+      /* See if the dynamic brk/mmap threshold needs adjusting.
+         Dumped fake mmapped chunks do not affect the threshold.  */
+      if (!mp_.no_dyn_threshold
+          &amp;&amp; chunksize_nomask (p) &gt; mp_.mmap_threshold
+          &amp;&amp; chunksize_nomask (p) &lt;= DEFAULT_MMAP_THRESHOLD_MAX
+          &amp;&amp; !DUMPED_MAIN_ARENA_CHUNK (p))
+        {
+          mp_.mmap_threshold = chunksize (p);
+          mp_.trim_threshold = 2 * mp_.mmap_threshold;
+          LIBC_PROBE (memory_mallopt_free_dyn_thresholds, 2,
+                      mp_.mmap_threshold, mp_.trim_threshold);
+        }
+      munmap_chunk (p);
+      return;
+    }
+
+  ar_ptr = arena_for_chunk (p);
+  _int_free (ar_ptr, p, 0); //跳转到_int_free
+}
+</code></pre><p>我们先不关注其他的，只需要知道会调用_int_free就就可以了</p>
+<p><code>__libc_free(void *mem)--&gt;_int_free (mstate av, mchunkptr p, int have_lock)</code></p>
+<pre><code>static void
+_int_free (mstate av, mchunkptr p, int have_lock)
+{
+  INTERNAL_SIZE_T size;        /* 当前chunk的大小 */
+  mfastbinptr *fb;             /* 相关的fastbin */
+  mchunkptr nextchunk;         /* 下一个相邻的chunk */
+  INTERNAL_SIZE_T nextsize;    /* 下一个chunk的大小 */
+  int nextinuse;               /* 下一个chunk正在使用时为真 */
+  INTERNAL_SIZE_T prevsize;    /* 前一个chunk的大小 */
+  mchunkptr bck;               /* 指向free链表中向后一个chunk */
+  mchunkptr fwd;               /* 指向free链表中向前一个chunk */
+
+  const char *errstr = NULL;
+  int locked = 0;
+
+  size = chunksize (p);
+
+  /* Little security check which won&#39;t hurt performance: the
+     allocator never wrapps around at the end of the address space.
+     Therefore we can exclude some size values which might appear
+     here by accident or by &quot;design&quot; from some intruder.  */
+  //一些安全检查
+  if (__builtin_expect ((uintptr_t) p &gt; (uintptr_t) -size, 0)
+      || __builtin_expect (misaligned_chunk (p), 0))
+    {
+      errstr = &quot;free(): invalid pointer&quot;;
+    errout:
+      if (!have_lock &amp;&amp; locked)
+        __libc_lock_unlock (av-&gt;mutex);
+      malloc_printerr (check_action, errstr, chunk2mem (p), av);
+      return;
+    }
+  /* We know that each chunk is at least MINSIZE bytes in size or a multiple of MALLOC_ALIGNMENT.  */
+   //检查是否满足大于等于最小大小
+  if (__glibc_unlikely (size &lt; MINSIZE || !aligned_OK (size)))
+    {
+      errstr = &quot;free(): invalid size&quot;;
       goto errout;
     }
-  p-&gt;fd = fwd;
-  p-&gt;bk = bck;
-  if (!in_smallbin_range(size))
-    {
-      p-&gt;fd_nextsize = NULL;
-      p-&gt;bk_nextsize = NULL;
+
+  check_inuse_chunk(av, p); //检查当前chunk是否在使用
+
+  /*
+    如果满足，则将该chunk放入fastbin以便malloc时能够快速找到和使用
+  */
+  if ((unsigned long)(size) &lt;= (unsigned long)(get_max_fast ())
+
+#if TRIM_FASTBINS
+      /*
+        If TRIM_FASTBINS set, don&#39;t place chunks
+        bordering top into fastbins
+      */
+      &amp;&amp; (chunk_at_offset(p, size) != av-&gt;top)
+#endif
+      ) {
+
+    if (__builtin_expect (chunksize_nomask (chunk_at_offset (p, size))
+                          &lt;= 2 * SIZE_SZ, 0)
+        || __builtin_expect (chunksize (chunk_at_offset (p, size))
+                             &gt;= av-&gt;system_mem, 0))
+      {
+        /* We might not have a lock at this point and concurrent modifications
+           of system_mem might have let to a false positive.  Redo the test
+           after getting the lock.  */
+        if (have_lock
+            || ({ assert (locked == 0);
+                  __libc_lock_lock (av-&gt;mutex);
+                  locked = 1;
+                  chunksize_nomask (chunk_at_offset (p, size)) &lt;= 2 * SIZE_SZ
+                    || chunksize (chunk_at_offset (p, size)) &gt;= av-&gt;system_mem;
+              }))
+          {
+            errstr = &quot;free(): invalid next size (fast)&quot;;
+            goto errout;
+          }
+        if (! have_lock)
+          {
+            __libc_lock_unlock (av-&gt;mutex);
+            locked = 0;
+          }
+      }
+
+    free_perturb (chunk2mem(p), size - 2 * SIZE_SZ);
+
+    set_fastchunks(av);
+    unsigned int idx = fastbin_index(size);
+    fb = &amp;fastbin (av, idx);
+
+    /* Atomically link P to its fastbin: P-&gt;FD = *FB; *FB = P;  */
+    mchunkptr old = *fb, old2;
+    unsigned int old_idx = ~0u;
+    do
+      {
+        /* Check that the top of the bin is not the record we are going to add
+           (i.e., double free).  */
+        if (__builtin_expect (old == p, 0))
+          {
+            errstr = &quot;double free or corruption (fasttop)&quot;;
+            goto errout;
+          }
+        /* Check that size of fastbin chunk at the top is the same as
+           size of the chunk that we are adding.  We can dereference OLD
+           only if we have the lock, otherwise it might have already been
+           deallocated.  See use of OLD_IDX below for the actual check.  */
+        if (have_lock &amp;&amp; old != NULL)
+          old_idx = fastbin_index(chunksize(old));
+        p-&gt;fd = old2 = old;
+      }
+    while ((old = catomic_compare_and_exchange_val_rel (fb, p, old2)) != old2);
+
+    if (have_lock &amp;&amp; old != NULL &amp;&amp; __builtin_expect (old_idx != idx, 0))
+      {
+        errstr = &quot;invalid fastbin entry (free)&quot;;
+        goto errout;
+      }
+  }
+
+  /*
+    Consolidate other non-mmapped chunks as they arrive.
+  */
+  //检查是否是通过mmap()分配的内存
+  else if (!chunk_is_mmapped(p)) {
+    if (! have_lock) {
+      __libc_lock_lock (av-&gt;mutex);
+      locked = 1;
     }
-  bck-&gt;fd = p;
-  fwd-&gt;bk = p;
 
-  set_head(p, size | PREV_INUSE);
-  set_foot(p, size);
+    nextchunk = chunk_at_offset(p, size);//返回下一个chunk的地址
 
-  check_free_chunk(av, p);
-}
+    /* Lightweight tests: check whether the block is already the
+       top block.  */
+    //检查下一个是否为top-chunk
+    if (__glibc_unlikely (p == av-&gt;top))
+      {
+        errstr = &quot;double free or corruption (top)&quot;;
+        goto errout;
+      }
+    /* Or whether the next chunk is beyond the boundaries of the arena.  */
+    if (__builtin_expect (contiguous (av)
+                          &amp;&amp; (char *) nextchunk
+                          &gt;= ((char *) av-&gt;top + chunksize(av-&gt;top)), 0))
+      {
+        errstr = &quot;double free or corruption (out)&quot;;
+        goto errout;
+      }
+    /* Or whether the block is actually not marked used.  */
+    if (__glibc_unlikely (!prev_inuse(nextchunk)))
+      {
+        errstr = &quot;double free or corruption (!prev)&quot;;
+        goto errout;
+      }
 
-/*
-  如果当前chunk正好与topchunk相邻，则合并到topchunk
-*/
+    nextsize = chunksize(nextchunk);
+    if (__builtin_expect (chunksize_nomask (nextchunk) &lt;= 2 * SIZE_SZ, 0)
+        || __builtin_expect (nextsize &gt;= av-&gt;system_mem, 0))
+      {
+        errstr = &quot;free(): invalid next size (normal)&quot;;
+        goto errout;
+      }
 
-else {
-  size += nextsize;
-  set_head(p, size | PREV_INUSE);
-  av-&gt;top = p;
-  check_chunk(av, p);
-}
+    free_perturb (chunk2mem(p), size - 2 * SIZE_SZ);
 
-/*
-  If freeing a large space, consolidate possibly-surrounding
-  chunks. Then, if the total unused topmost memory exceeds trim
-  threshold, ask malloc_trim to reduce top.
+    /* 与后面chunk一个合并 */
+    if (!prev_inuse(p)) {
+      prevsize = prev_size (p);
+      size += prevsize;
+      p = chunk_at_offset(p, -((long) prevsize));
+      unlink(av, p, bck, fwd);//将后一个chunk从双向链表上取下来
+    }
 
-  Unless max_fast is 0, we don&apos;t know if there are fastbins
-  bordering top, so we cannot tell for sure whether threshold
-  has been reached unless fastbins are consolidated.  But we
-  don&apos;t want to consolidate on each free.  As a compromise,
-  consolidation is performed if FASTBIN_CONSOLIDATION_THRESHOLD
-  is reached.
-*/
+    if (nextchunk != av-&gt;top) {
+      /* get and clear inuse bit */
+      nextinuse = inuse_bit_at_offset(nextchunk, nextsize);
 
-if ((unsigned long)(size) &gt;= FASTBIN_CONSOLIDATION_THRESHOLD) {
-  if (have_fastchunks(av))
-    malloc_consolidate(av);
+      /* 与前面chunk一个合并*/
+      if (!nextinuse) {
+        unlink(av, nextchunk, bck, fwd);//将前一个chunk从双向链表上取下来
+        size += nextsize;
+      } else
+        clear_inuse_bit_at_offset(nextchunk, 0);
 
-  if (av == &amp;main_arena) {
-</code></pre><p>#ifndef MORECORE_CANNOT<em>TRIM<br>        if ((unsigned long)(chunksize(av-&gt;top)) &gt;=<br>            (unsigned long)(mp</em>.trim<em>threshold))<br>          systrim(mp</em>.top_pad, av);</p>
-<p>#endif<br>      } else {<br>        /<em> Always try heap_trim(), even if the top chunk is not<br>           large, because the corresponding heap might go away.  </em>/<br>        heap_info *heap = heap_for_ptr(top(av));</p>
-<pre><code>    assert(heap-&gt;ar_ptr == av);
-    heap_trim(heap, mp_.top_pad);
+      /*
+        Place the chunk in unsorted chunk list. Chunks are
+        not placed into regular bins until after they have
+        been given one chance to be used in malloc.
+      */
+
+      bck = unsorted_chunks(av);
+      fwd = bck-&gt;fd;
+      if (__glibc_unlikely (fwd-&gt;bk != bck))
+        {
+          errstr = &quot;free(): corrupted unsorted chunks&quot;;
+          goto errout;
+        }
+      p-&gt;fd = fwd;
+      p-&gt;bk = bck;
+      if (!in_smallbin_range(size))
+        {
+          p-&gt;fd_nextsize = NULL;
+          p-&gt;bk_nextsize = NULL;
+        }
+      bck-&gt;fd = p;
+      fwd-&gt;bk = p;
+
+      set_head(p, size | PREV_INUSE);
+      set_foot(p, size);
+
+      check_free_chunk(av, p);
+    }
+
+    /*
+      如果当前chunk正好与topchunk相邻，则合并到topchunk
+    */
+
+    else {
+      size += nextsize;
+      set_head(p, size | PREV_INUSE);
+      av-&gt;top = p;
+      check_chunk(av, p);
+    }
+
+    /*
+      If freeing a large space, consolidate possibly-surrounding
+      chunks. Then, if the total unused topmost memory exceeds trim
+      threshold, ask malloc_trim to reduce top.
+
+      Unless max_fast is 0, we don&#39;t know if there are fastbins
+      bordering top, so we cannot tell for sure whether threshold
+      has been reached unless fastbins are consolidated.  But we
+      don&#39;t want to consolidate on each free.  As a compromise,
+      consolidation is performed if FASTBIN_CONSOLIDATION_THRESHOLD
+      is reached.
+    */
+
+    if ((unsigned long)(size) &gt;= FASTBIN_CONSOLIDATION_THRESHOLD) {
+      if (have_fastchunks(av))
+        malloc_consolidate(av);
+
+      if (av == &amp;main_arena) {
+#ifndef MORECORE_CANNOT_TRIM
+        if ((unsigned long)(chunksize(av-&gt;top)) &gt;=
+            (unsigned long)(mp_.trim_threshold))
+          systrim(mp_.top_pad, av);
+#endif
+      } else {
+        /* Always try heap_trim(), even if the top chunk is not
+           large, because the corresponding heap might go away.  */
+        heap_info *heap = heap_for_ptr(top(av));
+
+        assert(heap-&gt;ar_ptr == av);
+        heap_trim(heap, mp_.top_pad);
+      }
+    }
+
+    if (! have_lock) {
+      assert (locked);
+      __libc_lock_unlock (av-&gt;mutex);
+    }
+  }
+  /*
+    If the chunk was allocated via mmap, release via munmap().
+  */
+
+  else {
+    munmap_chunk (p);
   }
 }
-
-if (! have_lock) {
-  assert (locked);
-  __libc_lock_unlock (av-&gt;mutex);
+</code></pre><p>这里重点看看unlink()宏定义</p>
+<pre><code>#define unlink( P, BK, FD ) {            
+    BK = P-&gt;bk;                          
+    FD = P-&gt;fd;                          
+    FD-&gt;bk = BK;  //可能会造成任意写                       
+    BK-&gt;fd = FD;                         
 }
-</code></pre><p>  }<br>  /<em><br>    If the chunk was allocated via mmap, release via munmap().
-  </em>/</p>
-<p>  else {<br>    munmap_chunk (p);<br>  }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">这里重点看看unlink()宏定义</div></pre></td></tr></table></figure></p>
-<p>#define unlink( P, BK, FD ) {<br>    BK = P-&gt;bk;<br>    FD = P-&gt;fd;<br>    FD-&gt;bk = BK;  //可能会造成任意写<br>    BK-&gt;fd = FD;<br>}</p>
-<p>```</p>
-<p><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#__libc_free" target="_blank" rel="external">glibc/malloc.c源码</a></p>
+</code></pre><p><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#__libc_free" target="_blank" rel="external">glibc/malloc.c源码</a></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
 <li><a href="http://phrack.org/issues/57/8.html#article" target="_blank" rel="external">Vudo malloc tricks</a></li>
 <li><a href="http://gee.cs.oswego.edu/dl/html/malloc.html" target="_blank" rel="external">A Memory Allocator</a></li>

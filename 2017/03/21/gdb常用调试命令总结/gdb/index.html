@@ -55,8 +55,6 @@ show args查看程序参数
     <link rel="icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="../../../../../css/common.css">
 <link rel="stylesheet" href="../../../../../css/nav.css">
 <link rel="stylesheet" href="../../../../../css/layout.css">
@@ -70,7 +68,7 @@ show args查看程序参数
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -94,7 +92,7 @@ show args查看程序参数
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../../about">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
@@ -114,7 +112,7 @@ show args查看程序参数
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../about">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
@@ -170,7 +168,7 @@ show args查看程序参数
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-03-21</span>
             </div>
             
@@ -222,8 +220,18 @@ show args查看程序参数
 <li>x/5i $pc  查看汇编代码</li>
 <li>x/4wx 0x000000 查看内存</li>
 </ul>
-<h2 id="0x06-command命令"><a href="#0x06-command命令" class="headerlink" title="0x06 command命令"></a>0x06 command命令</h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(gdb) break func</div><div class="line">Breakpoint 1 at 0x3475678: file test.c, line 12.</div><div class="line">(gdb) command 1</div><div class="line">Type commands for when breakpoint 1 is hit, one per line.</div><div class="line">End with a line saying just &quot;end&quot;.</div><div class="line">&gt;print arg1</div><div class="line">&gt;print arg2</div><div class="line">&gt;print arg3</div><div class="line">&gt;end</div><div class="line">(gdb)</div></pre></td></tr></table></figure></p>
-<p>当我们的断点到达时，自动执行command中的三个命令，把func的三个参数值打出来。</p>
+<h2 id="0x06-command命令"><a href="#0x06-command命令" class="headerlink" title="0x06 command命令"></a>0x06 command命令</h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：</p>
+<pre><code>(gdb) break func
+Breakpoint 1 at 0x3475678: file test.c, line 12.
+(gdb) command 1
+Type commands for when breakpoint 1 is hit, one per line.
+End with a line saying just &quot;end&quot;.
+&gt;print arg1
+&gt;print arg2
+&gt;print arg3
+&gt;end
+(gdb)
+</code></pre><p>当我们的断点到达时，自动执行command中的三个命令，把func的三个参数值打出来。</p>
 <h2 id="0x07-其他"><a href="#0x07-其他" class="headerlink" title="0x07 其他"></a>0x07 其他</h2><ul>
 <li>step /  s  下一步，直接执行下一条程序</li>
 <li><code>set disassembly-flavor intel 设置为intel汇编指令</code></li>
@@ -239,8 +247,13 @@ show args查看程序参数
 <li>p *array@len 输出数组</li>
 <li>p i 输出i的值</li>
 </ul>
-<h2 id="0x08-附表"><a href="#0x08-附表" class="headerlink" title="0x08 附表"></a>0x08 附表</h2><p><strong>寄存器宽度表</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">|63..32|31..16|15-8|7-0|</div><div class="line">               |AH.|AL.|</div><div class="line">               |AX.....|</div><div class="line">       |EAX............|</div><div class="line">|RAX...................|</div></pre></td></tr></table></figure></p>
-
+<h2 id="0x08-附表"><a href="#0x08-附表" class="headerlink" title="0x08 附表"></a>0x08 附表</h2><p><strong>寄存器宽度表</strong></p>
+<pre><code>|63..32|31..16|15-8|7-0|
+               |AH.|AL.|
+               |AX.....|
+       |EAX............|
+|RAX...................|
+</code></pre>
         </div>
         <div class="post-reply">
             

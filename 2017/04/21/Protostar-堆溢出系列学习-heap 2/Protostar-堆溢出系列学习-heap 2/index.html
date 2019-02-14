@@ -20,7 +20,13 @@
   <meta name="description" content="0x00 序
 下面看一个堆中常见的漏洞-UAF(use after free)
 
-0x01 C语言源代码123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stri">
+0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;sys/types.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+
+struct auth {">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Protostar-堆溢出学习-UAF(use after free)">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/index.html">
@@ -28,7 +34,13 @@
 <meta property="og:description" content="0x00 序
 下面看一个堆中常见的漏洞-UAF(use after free)
 
-0x01 C语言源代码123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stri">
+0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;sys/types.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+
+struct auth {">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/nologin.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-1.png?raw=true">
@@ -41,7 +53,13 @@
 <meta name="twitter:description" content="0x00 序
 下面看一个堆中常见的漏洞-UAF(use after free)
 
-0x01 C语言源代码123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stri">
+0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;sys/types.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+
+struct auth {">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -49,8 +67,6 @@
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../../../css/common.css">
 <link rel="stylesheet" href="../../../../../css/nav.css">
@@ -65,7 +81,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -89,7 +105,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../../about">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
@@ -109,7 +125,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../about">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
@@ -165,7 +181,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-04-21</span>
             </div>
             
@@ -186,8 +202,52 @@
             <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
 <p>下面看一个堆中常见的漏洞-UAF(use after free)</p>
 </blockquote>
-<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;sys/types.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">struct auth &#123;</div><div class="line">  char name[32];</div><div class="line">  int auth;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">struct auth *auth;</div><div class="line">char *service;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  char line[128];</div><div class="line"></div><div class="line">  while(1) &#123;</div><div class="line">      printf(&quot;[ auth = %p, service = %p ]\n&quot;, auth, service);</div><div class="line"></div><div class="line">      if(fgets(line, sizeof(line), stdin) == NULL) break;</div><div class="line">      </div><div class="line">      if(strncmp(line, &quot;auth &quot;, 5) == 0) &#123;</div><div class="line">          auth = malloc(sizeof(auth));</div><div class="line">          memset(auth, 0, sizeof(auth));</div><div class="line">          if(strlen(line + 5) &lt; 31) &#123;</div><div class="line">              strcpy(auth-&gt;name, line + 5);</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      if(strncmp(line, &quot;reset&quot;, 5) == 0) &#123;</div><div class="line">          free(auth);</div><div class="line">      &#125;</div><div class="line">      if(strncmp(line, &quot;service&quot;, 6) == 0) &#123;</div><div class="line">          service = strdup(line + 7);</div><div class="line">      &#125;</div><div class="line">      if(strncmp(line, &quot;login&quot;, 5) == 0) &#123;</div><div class="line">          if(auth-&gt;auth) &#123;</div><div class="line">              printf(&quot;you have logged in already!\n&quot;);</div><div class="line">          &#125; else &#123;</div><div class="line">              printf(&quot;please enter your password\n&quot;);</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-分析-amp-思考"><a href="#0x02-分析-amp-思考" class="headerlink" title="0x02 分析&amp;思考"></a>0x02 分析&amp;思考</h2><p>程序有4个命令，对<code>auth</code>这个结构体进行分配内存以及释放内存，然后有结构体里的<code>auth-&gt;auth</code>来决定是否授权。很明显让我们修改<code>auth-&gt;auth</code>的值。<br>reset命令释放<code>auth</code>但没有设为null，后面<code>auth-&gt;auth</code>发生引用。所以这里有个UAF漏洞。</p>
+<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><pre><code>#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;stdio.h&gt;
+
+struct auth {
+  char name[32];
+  int auth;
+};
+
+struct auth *auth;
+char *service;
+
+int main(int argc, char **argv)
+{
+  char line[128];
+
+  while(1) {
+      printf(&quot;[ auth = %p, service = %p ]\n&quot;, auth, service);
+
+      if(fgets(line, sizeof(line), stdin) == NULL) break;
+
+      if(strncmp(line, &quot;auth &quot;, 5) == 0) {
+          auth = malloc(sizeof(auth));
+          memset(auth, 0, sizeof(auth));
+          if(strlen(line + 5) &lt; 31) {
+              strcpy(auth-&gt;name, line + 5);
+          }
+      }
+      if(strncmp(line, &quot;reset&quot;, 5) == 0) {
+          free(auth);
+      }
+      if(strncmp(line, &quot;service&quot;, 6) == 0) {
+          service = strdup(line + 7);
+      }
+      if(strncmp(line, &quot;login&quot;, 5) == 0) {
+          if(auth-&gt;auth) {
+              printf(&quot;you have logged in already!\n&quot;);
+          } else {
+              printf(&quot;please enter your password\n&quot;);
+          }
+      }
+  }
+}
+</code></pre><h2 id="0x02-分析-amp-思考"><a href="#0x02-分析-amp-思考" class="headerlink" title="0x02 分析&amp;思考"></a>0x02 分析&amp;思考</h2><p>程序有4个命令，对<code>auth</code>这个结构体进行分配内存以及释放内存，然后有结构体里的<code>auth-&gt;auth</code>来决定是否授权。很明显让我们修改<code>auth-&gt;auth</code>的值。<br>reset命令释放<code>auth</code>但没有设为null，后面<code>auth-&gt;auth</code>发生引用。所以这里有个UAF漏洞。</p>
 <h2 id="0x03-调试-amp-hack"><a href="#0x03-调试-amp-hack" class="headerlink" title="0x03 调试&amp;hack"></a>0x03 调试&amp;hack</h2><p>1.在第一个printf处下个断点，观察每次分配和释放后堆，auth以及service的情况</p>
 <p>2.先输入<code>auth admin</code>，然后输入<code>login</code>试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true" alt="0-0"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/nologin.png?raw=true" alt="nologin"><br>3.再输入<code>reset</code>释放堆内存<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-1.png?raw=true" alt="0-1"><br>4.输入<code>service</code>分配内存<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-2.png?raw=true" alt="0-2"><br>5.以上我们可以发现，给service分配的内存居然也指向auth的地址？因为之前free了auth，所以系统认为这段内存为可用，当再次分配的时候就会返回对应内存。基于此，我们继续给service分配内存，让其覆盖<code>auth-&gt;auth</code>的内存值。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-3.png?raw=true" alt="0-3"><br>6.再次输入<code>login</code>命令<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-4.png?raw=true" alt="0-4"></p>
 <h2 id="0x04-一点感受"><a href="#0x04-一点感受" class="headerlink" title="0x04 一点感受"></a>0x04 一点感受</h2><p>通过这个例子简单的学习了UAF漏洞后，无疑free后不设为null，后果是不敢想象的。继续学习堆相关的漏洞利用。keep hack！</p>

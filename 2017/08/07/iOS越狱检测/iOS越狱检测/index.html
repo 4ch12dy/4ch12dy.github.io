@@ -52,8 +52,6 @@
     <link rel="icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="../../../../../css/common.css">
 <link rel="stylesheet" href="../../../../../css/nav.css">
 <link rel="stylesheet" href="../../../../../css/layout.css">
@@ -67,7 +65,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -91,7 +89,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../../about">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
@@ -111,7 +109,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../about">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
@@ -167,7 +165,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-08-07</span>
             </div>
             
@@ -187,15 +185,83 @@
 </blockquote>
 <h3 id="1-使用NSFileManager检测是否安装常见越狱工具"><a href="#1-使用NSFileManager检测是否安装常见越狱工具" class="headerlink" title="1. 使用NSFileManager检测是否安装常见越狱工具"></a>1. 使用NSFileManager检测是否安装常见越狱工具</h3><p>注：采用<code>NSFileManager</code>存在可能被hook的情况，最好结合底层<code>stat</code>等函数双重检测</p>
 <p><strong>示例代码</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">/* </div><div class="line">常见越狱工具路径：</div><div class="line">/Library/MobileSubstrate/MobileSubstrate.dylib </div><div class="line">/Applications/Cydia.app   </div><div class="line">/var/lib/cydia/</div><div class="line">/var/cache/apt   </div><div class="line">/var/lib/apt    </div><div class="line">/etc/apt </div><div class="line">/bin/bash </div><div class="line">/bin/sh </div><div class="line">/usr/sbin/sshd   </div><div class="line">/usr/libexec/ssh-keysign   </div><div class="line">/etc/ssh/sshd_config</div><div class="line">*/</div><div class="line"></div><div class="line">- (BOOL)checkPath</div><div class="line">&#123;</div><div class="line"> 	BOOL jailBroken = NO;</div><div class="line"></div><div class="line"> 	NSString * aptPath = @&quot;/private/var/lib/apt&quot;;</div><div class="line"></div><div class="line"> 	if ([[NSFileManager defaultManager] fileExistsAtPath:aptPath]) &#123;</div><div class="line">     	jailBroken = YES;</div><div class="line"> 	&#125;</div><div class="line"> 	</div><div class="line">	return jailBroken;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="2-使用stat系列函数检测常用越狱工具"><a href="#2-使用stat系列函数检测常用越狱工具" class="headerlink" title="2. 使用stat系列函数检测常用越狱工具"></a>2. 使用stat系列函数检测常用越狱工具</h3><p><strong>示例代码</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//头文件 #import &lt;sys/stat.h&gt;</div><div class="line">//路径同上</div><div class="line">//使用stat系列函数检测</div><div class="line"></div><div class="line">    struct stat stat_info;</div><div class="line"></div><div class="line">    if (0 == stat(&quot;/Applications/Cydia.app&quot;, &amp;stat_info)) &#123;</div><div class="line">        jailbroken = YES;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>检测stat是否被替换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">	int ret;</div><div class="line"></div><div class="line">	Dl_info dylib_info;</div><div class="line"></div><div class="line">	int (*func_stat)(const char *,struct stat *) = stat;</div><div class="line"></div><div class="line">	if ((ret = dladdr(func_stat, &amp;dylib_info))) &#123;</div><div class="line">    	if (strcmp(dylib_info.dli_fname,&quot;/usr/lib/system/libsystem_kernel.dylib&quot;) != 0) &#123; </div><div class="line">      		jailbroken = YES; </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="3-检测程序运行的环境变量"><a href="#3-检测程序运行的环境变量" class="headerlink" title="3.检测程序运行的环境变量"></a>3.检测程序运行的环境变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//检测当前程序运行的环境变量，防止通过DYLD_INSERT_LIBRARIES注入链接异常动态库，来更改相关工具名称</div><div class="line">- (BOOL)checkEnv</div><div class="line">&#123;</div><div class="line"> 	char *env = getenv(&quot;DYLD_INSERT_LIBRARIES&quot;);</div><div class="line"> 	</div><div class="line"> 	NSLog(@&quot;%s&quot;, env);</div><div class="line"> 	</div><div class="line"> 	if (env) &#123;</div><div class="line">     	return YES;</div><div class="line"> 	&#125;</div><div class="line">	return NO;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="4-dylib动态库检测"><a href="#4-dylib动态库检测" class="headerlink" title="4.dylib动态库检测"></a>4.dylib动态库检测</h3><p><strong>示例代码</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//头文件 #import &lt;mach-o/dyld.h&gt;</div><div class="line">//几乎所有的越狱机都会安装 Library/MobileSubstrate/MobileSubstrate.dylib动态库</div><div class="line"></div><div class="line">    uint32_t count = _dyld_image_count();</div><div class="line"></div><div class="line">    for (uint32_t i = 0 ; i &lt; count; ++i) &#123;</div><div class="line"></div><div class="line">        NSString *name = [[NSString alloc]initWithUTF8String:_dyld_get_image_name(i)];</div><div class="line"></div><div class="line">        if ([name containsString:@&quot;Library/MobileSubstrate/MobileSubstrate.dylib&quot;]) &#123;</div><div class="line">            jailbroken = YES;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<pre><code>/* 
+常见越狱工具路径：
+/Library/MobileSubstrate/MobileSubstrate.dylib 
+/Applications/Cydia.app   
+/var/lib/cydia/
+/var/cache/apt   
+/var/lib/apt    
+/etc/apt 
+/bin/bash 
+/bin/sh 
+/usr/sbin/sshd   
+/usr/libexec/ssh-keysign   
+/etc/ssh/sshd_config
+*/
+
+- (BOOL)checkPath
+{
+     BOOL jailBroken = NO;
+
+     NSString * aptPath = @&quot;/private/var/lib/apt&quot;;
+
+     if ([[NSFileManager defaultManager] fileExistsAtPath:aptPath]) {
+         jailBroken = YES;
+     }
+
+    return jailBroken;
+}
+</code></pre><h3 id="2-使用stat系列函数检测常用越狱工具"><a href="#2-使用stat系列函数检测常用越狱工具" class="headerlink" title="2. 使用stat系列函数检测常用越狱工具"></a>2. 使用stat系列函数检测常用越狱工具</h3><p><strong>示例代码</strong></p>
+<pre><code>//头文件 #import &lt;sys/stat.h&gt;
+//路径同上
+//使用stat系列函数检测
+
+    struct stat stat_info;
+
+    if (0 == stat(&quot;/Applications/Cydia.app&quot;, &amp;stat_info)) {
+        jailbroken = YES;
+    }
+</code></pre><p>检测stat是否被替换</p>
+<pre><code>    int ret;
+
+    Dl_info dylib_info;
+
+    int (*func_stat)(const char *,struct stat *) = stat;
+
+    if ((ret = dladdr(func_stat, &amp;dylib_info))) {
+        if (strcmp(dylib_info.dli_fname,&quot;/usr/lib/system/libsystem_kernel.dylib&quot;) != 0) { 
+              jailbroken = YES; 
+    }
+}
+</code></pre><h3 id="3-检测程序运行的环境变量"><a href="#3-检测程序运行的环境变量" class="headerlink" title="3.检测程序运行的环境变量"></a>3.检测程序运行的环境变量</h3><pre><code>//检测当前程序运行的环境变量，防止通过DYLD_INSERT_LIBRARIES注入链接异常动态库，来更改相关工具名称
+- (BOOL)checkEnv
+{
+     char *env = getenv(&quot;DYLD_INSERT_LIBRARIES&quot;);
+
+     NSLog(@&quot;%s&quot;, env);
+
+     if (env) {
+         return YES;
+     }
+    return NO;
+}
+</code></pre><h3 id="4-dylib动态库检测"><a href="#4-dylib动态库检测" class="headerlink" title="4.dylib动态库检测"></a>4.dylib动态库检测</h3><p><strong>示例代码</strong></p>
+<pre><code>//头文件 #import &lt;mach-o/dyld.h&gt;
+//几乎所有的越狱机都会安装 Library/MobileSubstrate/MobileSubstrate.dylib动态库
+
+    uint32_t count = _dyld_image_count();
+
+    for (uint32_t i = 0 ; i &lt; count; ++i) {
+
+        NSString *name = [[NSString alloc]initWithUTF8String:_dyld_get_image_name(i)];
+
+        if ([name containsString:@&quot;Library/MobileSubstrate/MobileSubstrate.dylib&quot;]) {
+            jailbroken = YES;
+        }
+
+    }
+</code></pre><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><p><a href="http://www.jianshu.com/p/a43be50dc958" target="_blank" rel="external">http://www.jianshu.com/p/a43be50dc958</a></p>
 </li>
 <li><p><a href="http://www.freebuf.com/articles/wireless/6318.html" target="_blank" rel="external">http://www.freebuf.com/articles/wireless/6318.html</a></p>

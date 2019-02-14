@@ -20,7 +20,10 @@
   <meta name="description" content="exec函数流程
 machvm* API
 mach_vm_cllocate
-map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是`VM_FLAGS_">
+mach_vm_allocate(vm_map_t map,mach_vm_address_t *address,mach_vm_size_t size,int flags);
+
+
+在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4ch12dy">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/Mach内核基础知识/exec函数流程.html">
@@ -28,7 +31,10 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
 <meta property="og:description" content="exec函数流程
 machvm* API
 mach_vm_cllocate
-map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是`VM_FLAGS_">
+mach_vm_allocate(vm_map_t map,mach_vm_address_t *address,mach_vm_size_t size,int flags);
+
+
+在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
 <meta property="og:image" content="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png">
 <meta property="og:updated_time" content="2017-03-09T02:28:48.000Z">
 <meta name="twitter:card" content="summary">
@@ -36,7 +42,10 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
 <meta name="twitter:description" content="exec函数流程
 machvm* API
 mach_vm_cllocate
-map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是`VM_FLAGS_">
+mach_vm_allocate(vm_map_t map,mach_vm_address_t *address,mach_vm_size_t size,int flags);
+
+
+在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -44,8 +53,6 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../css/common.css">
 <link rel="stylesheet" href="../../../css/nav.css">
@@ -60,7 +67,7 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -84,7 +91,7 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../about">
+            <a class="nav-item" href="../../../aboutme">
                 About
             </a>
             
@@ -104,7 +111,7 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../about">
+            <a class="nav-item flex-1" href="../../../aboutme">
                 About
             </a>
             
@@ -159,7 +166,7 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2018-10-03</span>
             </div>
             
@@ -168,10 +175,22 @@ map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```1234在map中�
             <h2 id="exec函数流程"><a href="#exec函数流程" class="headerlink" title="exec函数流程"></a>exec函数流程</h2><p><img src="https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png" alt="exec函数流程"></p>
 <h2 id="machvm-API"><a href="#machvm-API" class="headerlink" title="machvm* API"></a>mach<em>vm</em>* API</h2><ul>
 <li><p>mach_vm_cllocate</p>
-<figure class="highlight plain"><figcaption><span>map,mach_vm_address_t *address,mach_vm_size_t size,int flags);```</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是`VM_FLAGS_ANYWHERE`，那么内存将被分配到address指向的地址。</div><div class="line"></div><div class="line">* mach_vm_region</div></pre></td></tr></table></figure>
+<p><code>mach_vm_allocate(vm_map_t map,mach_vm_address_t *address,mach_vm_size_t size,int flags);</code></p>
 </li>
 </ul>
-<p>kern_return_t<br>mach_vm_region(<br>    vm_map_t         map,<br>    mach_vm_offset_t    <em>address,        /</em> IN/OUT <em>/<br>    mach_vm_size_t    </em>size,            /<em> OUT </em>/<br>    vm_region_flavor_t     flavor,        /<em> IN </em>/<br>    vm_region_info_t     info,            /<em> OUT </em>/<br>    mach_msg_type_number_t    <em>count,            /</em> IN/OUT <em>/<br>    mach_port_t        </em>object_name)        /<em> OUT </em>/<br>```</p>
+<p>在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个I/O的参数（例如：获取分配后的内存大小）。如果flags的值不是<code>VM_FLAGS_ANYWHERE</code>，那么内存将被分配到address指向的地址。</p>
+<ul>
+<li>mach_vm_region<pre><code>kern_return_t
+mach_vm_region(
+  vm_map_t         map,
+  mach_vm_offset_t    *address,        /* IN/OUT */
+  mach_vm_size_t    *size,            /* OUT */
+  vm_region_flavor_t     flavor,        /* IN */
+  vm_region_info_t     info,            /* OUT */
+  mach_msg_type_number_t    *count,            /* IN/OUT */
+  mach_port_t        *object_name)        /* OUT */
+</code></pre></li>
+</ul>
 
         </div>
         <div class="post-reply">

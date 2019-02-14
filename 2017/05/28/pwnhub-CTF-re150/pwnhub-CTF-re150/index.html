@@ -49,8 +49,6 @@
     <link rel="icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="../../../../../css/common.css">
 <link rel="stylesheet" href="../../../../../css/nav.css">
 <link rel="stylesheet" href="../../../../../css/layout.css">
@@ -64,7 +62,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -88,7 +86,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../../about">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
@@ -108,7 +106,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../about">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
@@ -164,7 +162,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-05-28</span>
             </div>
             
@@ -186,11 +184,83 @@
 <p>由<code>__libc_start_main</code>函数可得第一个参数即为<code>main</code>函数地址<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/pwnhub-CTF-re150/0-2.png?raw=true" alt="0-0"><br>这里作为对比，可以看下hopper中对<code>0x8048320</code>main函数的解析<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/pwnhub-CTF-re150/0-3.png?raw=true" alt="0-0"><br>完全不知道是什么有木有？所以拿到题如果放到IDA之类的反汇编工具根本看不出什么线索</p>
 <p>接下来所做的事就是获取输入的字符串然后进行加密，然后与程序里的字符串加密比较，具体看后面的代码。</p>
 <h2 id="0x02-修复程序"><a href="#0x02-修复程序" class="headerlink" title="0x02 修复程序"></a>0x02 修复程序</h2><p>根据上面的分析，我们将程序进行修复</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;fcntl.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;assert.h&gt;</div><div class="line">#include &lt;elf.h&gt;</div><div class="line">#define ENTRY 0x08048320</div><div class="line">#define FILE_OFF 0x320</div><div class="line">#define COUNT 0x432</div><div class="line">int main(int argc,char *argv[])&#123;</div><div class="line">    </div><div class="line">    Elf32_Ehdr ehdr;</div><div class="line">    unsigned char buf[COUNT] = &#123;0&#125;;</div><div class="line">    assert(argc == 2);</div><div class="line">    int fd = open(argv[1],O_RDWR);//打开文件</div><div class="line">    assert(fd&gt;0);</div><div class="line">    </div><div class="line">	assert(lseek(fd,0,SEEK_SET)!=-1);// 读取elf头</div><div class="line">	assert(read(fd,&amp;ehdr,sizeof(ehdr)) == sizeof(ehdr)); </div><div class="line">	ehdr.e_entry = ENTRY;//修改入口地址  </div><div class="line"></div><div class="line">	assert(lseek(fd,0,SEEK_SET)!=-1);//回写elf头</div><div class="line">	assert(write(fd,&amp;ehdr,sizeof(ehdr)) == sizeof(ehdr));  </div><div class="line">   </div><div class="line">    //解密</div><div class="line">    assert(lseek(fd,FILE_OFF,SEEK_SET)!=-1);//读取被加密的代码</div><div class="line">    assert(read(fd,buf,COUNT) == COUNT);</div><div class="line">    int i = 0;</div><div class="line">    while(i&lt;COUNT)&#123;</div><div class="line">        buf[i] = (buf[i]^66)&lt;&lt;5 | (buf[i]^66)&gt;&gt;3;</div><div class="line">		 i++; 	</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">    assert(lseek(fd,FILE_OFF,SEEK_SET)!=-1);//写入正确代码</div><div class="line">    assert(write(fd,buf,COUNT) == COUNT);</div></pre></td></tr></table></figure>
-<h2 id="0x03-分析算法计算flag"><a href="#0x03-分析算法计算flag" class="headerlink" title="0x03 分析算法计算flag"></a>0x03 分析算法计算flag</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/python</div><div class="line"># -*- coding: UTF-8 -*-</div><div class="line">from __future__ import print_function  </div><div class="line">import sys</div><div class="line">def getflag():</div><div class="line">    print(&quot;[i]start to encrypt key&quot;)</div><div class="line">        </div><div class="line">    key = [0x73,0x8d,0xf2,0x4c,0xc7,0xd4,0x7b,0xf7,0x18,0x32,0x71,0x0d,0xcf,0xdc,0x67,0x4f,0x7f,0x0b,0x6d]</div><div class="line">    encryptKey = []</div><div class="line">        </div><div class="line">    print(&quot;encryptKey=[&quot;, end=&quot;&quot;)</div><div class="line">    for idx in range(len(key)):</div><div class="line">        encryptKey.append(key[idx] ^ 0x20)</div><div class="line">        print(&quot;%x &quot; % encryptKey[idx], end=&quot;&quot;)</div><div class="line">    print(&quot;]&quot;)  </div><div class="line">        </div><div class="line"></div><div class="line">    flag = []</div><div class="line">    print(&quot;[i]find the flag&quot;)</div><div class="line">    for i in range(len(encryptKey)):</div><div class="line">        count = 0x00</div><div class="line">        while(count &lt;= 0x7f):</div><div class="line">            one = count &gt;&gt; (((0 &gt;&gt; 0x1d) + i) &amp; 0x7 - (0 &gt;&gt; 0x1d))</div><div class="line">            two = count &lt;&lt; (0x8 - (((0 &gt;&gt; 0x1d) + i) &amp; 0x7 - (0 &gt;&gt; 0x1d)))</div><div class="line">            if((((one | two) ^ i) &amp; 0xff) == encryptKey[i]):</div><div class="line">                flag.append(count)</div><div class="line">                break</div><div class="line">            count = count + 1</div><div class="line">                </div><div class="line">    print(&quot;flag = &quot;,end=&quot;&quot;)</div><div class="line">    for i in range(len(flag)):</div><div class="line">        print(&quot;%c&quot; % flag[i], end=&quot;&quot;)   </div><div class="line">        </div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    key = getflag()</div></pre></td></tr></table></figure>
-<p>最后运行程序得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[i]start to encrypt key</div><div class="line">encryptKey=[53 ad d2 6c e7 f4 5b d7 38 12 51 2d ef fc 47 6f 5f 2b 4d ]</div><div class="line">[i]find the flag</div><div class="line">flag = SYC&#123;&gt;&gt;Wh06m1&gt;&gt;R0Ot&#125;</div></pre></td></tr></table></figure>
-<p>测试：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/pwnhub-CTF-re150/0-4.png?raw=true" alt="0-0"></p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;assert.h&gt;
+#include &lt;elf.h&gt;
+#define ENTRY 0x08048320
+#define FILE_OFF 0x320
+#define COUNT 0x432
+int main(int argc,char *argv[]){
+
+    Elf32_Ehdr ehdr;
+    unsigned char buf[COUNT] = {0};
+    assert(argc == 2);
+    int fd = open(argv[1],O_RDWR);//打开文件
+    assert(fd&gt;0);
+
+    assert(lseek(fd,0,SEEK_SET)!=-1);// 读取elf头
+    assert(read(fd,&amp;ehdr,sizeof(ehdr)) == sizeof(ehdr)); 
+    ehdr.e_entry = ENTRY;//修改入口地址  
+
+    assert(lseek(fd,0,SEEK_SET)!=-1);//回写elf头
+    assert(write(fd,&amp;ehdr,sizeof(ehdr)) == sizeof(ehdr));  
+
+    //解密
+    assert(lseek(fd,FILE_OFF,SEEK_SET)!=-1);//读取被加密的代码
+    assert(read(fd,buf,COUNT) == COUNT);
+    int i = 0;
+    while(i&lt;COUNT){
+        buf[i] = (buf[i]^66)&lt;&lt;5 | (buf[i]^66)&gt;&gt;3;
+         i++;     
+    }
+
+    assert(lseek(fd,FILE_OFF,SEEK_SET)!=-1);//写入正确代码
+    assert(write(fd,buf,COUNT) == COUNT);
+</code></pre><h2 id="0x03-分析算法计算flag"><a href="#0x03-分析算法计算flag" class="headerlink" title="0x03 分析算法计算flag"></a>0x03 分析算法计算flag</h2><pre><code>#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+from __future__ import print_function  
+import sys
+def getflag():
+    print(&quot;[i]start to encrypt key&quot;)
+
+    key = [0x73,0x8d,0xf2,0x4c,0xc7,0xd4,0x7b,0xf7,0x18,0x32,0x71,0x0d,0xcf,0xdc,0x67,0x4f,0x7f,0x0b,0x6d]
+    encryptKey = []
+
+    print(&quot;encryptKey=[&quot;, end=&quot;&quot;)
+    for idx in range(len(key)):
+        encryptKey.append(key[idx] ^ 0x20)
+        print(&quot;%x &quot; % encryptKey[idx], end=&quot;&quot;)
+    print(&quot;]&quot;)  
+
+
+    flag = []
+    print(&quot;[i]find the flag&quot;)
+    for i in range(len(encryptKey)):
+        count = 0x00
+        while(count &lt;= 0x7f):
+            one = count &gt;&gt; (((0 &gt;&gt; 0x1d) + i) &amp; 0x7 - (0 &gt;&gt; 0x1d))
+            two = count &lt;&lt; (0x8 - (((0 &gt;&gt; 0x1d) + i) &amp; 0x7 - (0 &gt;&gt; 0x1d)))
+            if((((one | two) ^ i) &amp; 0xff) == encryptKey[i]):
+                flag.append(count)
+                break
+            count = count + 1
+
+    print(&quot;flag = &quot;,end=&quot;&quot;)
+    for i in range(len(flag)):
+        print(&quot;%c&quot; % flag[i], end=&quot;&quot;)   
+
+
+if __name__ == &#39;__main__&#39;:
+    key = getflag()
+</code></pre><p>最后运行程序得到flag</p>
+<pre><code>[i]start to encrypt key
+encryptKey=[53 ad d2 6c e7 f4 5b d7 38 12 51 2d ef fc 47 6f 5f 2b 4d ]
+[i]find the flag
+flag = SYC{&gt;&gt;Wh06m1&gt;&gt;R0Ot}
+</code></pre><p>测试：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/pwnhub-CTF-re150/0-4.png?raw=true" alt="0-0"></p>
 
         </div>
         <div class="post-reply">

@@ -20,7 +20,10 @@
   <meta name="description" content="0x00 序
  学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
 
-0x01 C语言源代码1234567891011121314151617181920212223242526272829#include &amp;lt;stdlib.h&amp;gt;#include">
+0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#inc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Protostar-堆溢出学习-滥用堆metadata重定向程序执行">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/index.html">
@@ -28,7 +31,10 @@
 <meta property="og:description" content="0x00 序
  学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
 
-0x01 C语言源代码1234567891011121314151617181920212223242526272829#include &amp;lt;stdlib.h&amp;gt;#include">
+0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#inc">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-1.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-2.png?raw=true">
@@ -43,7 +49,10 @@
 <meta name="twitter:description" content="0x00 序
  学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
 
-0x01 C语言源代码1234567891011121314151617181920212223242526272829#include &amp;lt;stdlib.h&amp;gt;#include">
+0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
+#include &amp;lt;unistd.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#inc">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -51,8 +60,6 @@
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="../../../../../css/common.css">
 <link rel="stylesheet" href="../../../../../css/nav.css">
@@ -67,7 +74,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -91,7 +98,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../../../../about">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
@@ -111,7 +118,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../about">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
@@ -167,7 +174,7 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
                 <span class="post-date sub-title">at: 2017-04-26</span>
             </div>
             
@@ -190,14 +197,43 @@
             <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
 <p> 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对<a href="https://null-me.github.io/2017/04/23/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/" target="_blank" rel="external">linux堆管理DLMalloc的分析</a>这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析</p>
 </blockquote>
-<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">#include &lt;unistd.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;sys/types.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line"></div><div class="line">void winner()</div><div class="line">&#123;</div><div class="line">  printf(&quot;that wasn&apos;t too bad now, was it? @ %d\n&quot;, time(NULL));</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char **argv)</div><div class="line">&#123;</div><div class="line">  char *a, *b, *c;</div><div class="line"></div><div class="line">  a = malloc(32);</div><div class="line">  b = malloc(32);</div><div class="line">  c = malloc(32);</div><div class="line"></div><div class="line">  strcpy(a, argv[1]);</div><div class="line">  strcpy(b, argv[2]);</div><div class="line">  strcpy(c, argv[3]);</div><div class="line"></div><div class="line">  free(c);</div><div class="line">  free(b);</div><div class="line">  free(a);</div><div class="line"></div><div class="line">  printf(&quot;dynamite failed?\n&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>在这个程序中虽然我们知道有堆溢出的问题，可是堆上并没有什么逻辑上的漏洞，没有可利用的指针？没有UAF漏洞？那怎么才能执行到<code>winner()</code>函数呢？似乎是不可能的事。但通过之前对linux堆管理的分析，可知<code>free()</code>函数中的<code>unlink()</code>函数能够造成一个任意地址写的可能，再像之前那样来修改GOT表，不就是可以执行<code>winner()</code>函数了吗？所以要执行unlink()函数就需要构造两个chunk合并的过程，继而将一个chunk从原来的双链表中unlink下来。<br>就照着这个思路来一步步实现这个过程。</p>
+<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><pre><code>#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;stdio.h&gt;
+
+void winner()
+{
+  printf(&quot;that wasn&#39;t too bad now, was it? @ %d\n&quot;, time(NULL));
+}
+
+int main(int argc, char **argv)
+{
+  char *a, *b, *c;
+
+  a = malloc(32);
+  b = malloc(32);
+  c = malloc(32);
+
+  strcpy(a, argv[1]);
+  strcpy(b, argv[2]);
+  strcpy(c, argv[3]);
+
+  free(c);
+  free(b);
+  free(a);
+
+  printf(&quot;dynamite failed?\n&quot;);
+}
+</code></pre><h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>在这个程序中虽然我们知道有堆溢出的问题，可是堆上并没有什么逻辑上的漏洞，没有可利用的指针？没有UAF漏洞？那怎么才能执行到<code>winner()</code>函数呢？似乎是不可能的事。但通过之前对linux堆管理的分析，可知<code>free()</code>函数中的<code>unlink()</code>函数能够造成一个任意地址写的可能，再像之前那样来修改GOT表，不就是可以执行<code>winner()</code>函数了吗？所以要执行unlink()函数就需要构造两个chunk合并的过程，继而将一个chunk从原来的双链表中unlink下来。<br>就照着这个思路来一步步实现这个过程。</p>
 <h2 id="0x03-调试"><a href="#0x03-调试" class="headerlink" title="0x03 调试"></a>0x03 调试</h2><p>1.输入<code>AAAA</code> <code>BBBB</code> <code>CCCC</code>然后free前后后观察堆结构<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true" alt="0-0"><br>由上图可得，一共有三个分配的chunk，大小都为29(101001)末位表示前一个chunk正在使用。可以看到最后还有一个很大的chunk，这就是上文所指的topchunk。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-1.png?raw=true" alt="0-1"><br>因为chunk的大小<80字节，所以free后存在单链表的fastbin中，`1-->2–&gt;3–&gt;null`的方式连接  </80字节，所以free后存在单链表的fastbin中，`1--></p>
 <p>2.因为需要unlink一个chunk到双链表bin，所以先覆盖掉第三个chunk让其大小为0x64=100字节。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-2.png?raw=true" alt="0-2"><br>因为我们准备向前合并，所以将preinuse位设为1，即64+1=65</p>
 <p>3.然后还需要构造一个假的chunk让其unlink，这个chunk将精心构造，首先fd=GoT地址 bk=winner地址？等等，这里存在一个问题在于：GoT=winner地址，但winner=GoT在会发生段错误，所以这里有个小技巧在于bk=堆地址，GoT-12=堆地址，然后堆中填上shellcode，去调用winner。<br>构造字符串：<br><code>CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\xfc\xff\xff\xff\xfc\xff\xff\xff\x1c\xb1\x04\x08\x0c\xc0\x04\x08</code><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-3.png?raw=true" alt="0-3"></p>
 <p>4.现在我们需要构造shellcode，因为堆地址+16字节出会写入GoT地址，所以我们的shellcode要足够小，正好我们仅仅需要调用winner而已。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-4.png?raw=true" alt="0-4"><br>这里我们用在线的转换工具下面的汇编转化为x86指令字符串</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mov eax,0x8048864</div><div class="line">call eax</div></pre></td></tr></table></figure>
-<p><code>0x8048864</code>为winner()函数地址</p>
+<pre><code>mov eax,0x8048864
+call eax
+</code></pre><p><code>0x8048864</code>为winner()函数地址</p>
 <p>5.将上面的shellcode写入第一个chunk那里，here we hack！<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-5.png?raw=true" alt="0-5"><br>下图可以看到shellcode后面就被填入了GoT地址，也说明了shellcode只能为8字节大小。<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-6.png?raw=true" alt="0-6"><br>GoT地址已经修改，下面可以看到已经执行了winnwe()函数<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-7.png?raw=true" alt="0-7"></p>
 <h2 id="0x04-一点补充"><a href="#0x04-一点补充" class="headerlink" title="0x04 一点补充"></a>0x04 一点补充</h2><p>在上面构造chunk中，也许你已经发现了chunk大小为<code>0xfffffffc</code>，这是一个什么巧妙的方法去绕过free()里面的检查等。具体的细节可以看<br><a href="http://phrack.org/issues/57/9.html#article" target="_blank" rel="external">Once upon a free()</a>这篇文章，简单的说就是当某个数加上<code>0xfffffffc</code>时会造成溢出相当于减4从而使其向前偏移4个字节，绕过检查，避免崩溃。</p>
 <h2 id="0x05-堆漏洞学习总结"><a href="#0x05-堆漏洞学习总结" class="headerlink" title="0x05 堆漏洞学习总结"></a>0x05 堆漏洞学习总结</h2><p>目前可能这是最后一个堆漏洞的学习，这个堆漏洞的学习理解到动手前后花费了大量时间，不过这都是值得的，如果能够坚持下来，将会对堆漏洞有一个清晰的认识。以后再遇到漏洞或者别人的分析能够快速准确的理解。虽然现在堆管理代码经过了很多改善和patch，但基本和关键的技术还是没变。所以keep hacking!</p>

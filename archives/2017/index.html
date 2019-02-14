@@ -33,8 +33,6 @@
     <link rel="icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
   <link rel="stylesheet" href="../../css/common.css">
 <link rel="stylesheet" href="../../css/nav.css">
 <link rel="stylesheet" href="../../css/layout.css">
@@ -48,7 +46,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Diskobólos</span>'s Blog
+              <span class="logo">xia0</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -72,7 +70,7 @@
                 My Works
             </a>
             
-            <a class="nav-item" href="../../about">
+            <a class="nav-item" href="../../aboutme">
                 About
             </a>
             
@@ -92,7 +90,7 @@
                 My Works
             </a>
             
-            <a class="nav-item flex-1" href="../../about">
+            <a class="nav-item flex-1" href="../../aboutme">
                 About
             </a>
             
@@ -305,7 +303,7 @@ x86指令编码格式很多时候我们..
 
 
 坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
-1jmethodID equals_id = env-&gt;GetMeth..
+jmethodID equals_id = env-&gt;GetMetho..
                                         </p>
                                         <p>2017-11-28</p>
                                         <button class="button is-small">Read More</button>
@@ -501,7 +499,9 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 记录下，可能会用到
 
 
-12345678910111213141516171819202122232425262728293031323334353637383940414243+ (NSString *)serialNumber &#123;  io_service_t platformExpert = IOServiceGetMatchingSe..
++ (NSString *)serialNumber {
+  io_service_t platformExpert = IOServiceGetMatchingService(
+      kIOMasterPortDefault, IOServiceMatching(&quot;IOPlatformExpertDevice..
                                         </p>
                                         <p>2017-08-01</p>
                                         <button class="button is-small">Read More</button>
@@ -534,7 +534,12 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
 通过macho/dyld.h提供的函数，程序可以获取到自身加载的dylib信息，这里做个简单记录
 
 
-12345678910111213141516171819#include&lt;stdio.h&gt;#include &lt;mach-o/dyld.h&gt;void getDylibInfo()&#123;    printf(&quot;*..
+#include&lt;stdio.h&gt;
+#include &lt;mach-o/dyld.h&gt;
+
+void getDylibInfo()
+{
+    printf(&quot;*****Created by 4ch12dy*****\n..
                                         </p>
                                         <p>2017-08-01</p>
                                         <button class="button is-small">Read More</button>
