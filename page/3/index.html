@@ -304,6 +304,46 @@
  -->
                     
                     
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/18/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Protostar-堆溢出学习-覆盖堆函数指针劫持代码流</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">Linux</span>
+                                            
+                                                <span class="tag is-post-tag">Protostar</span>
+                                            
+                                                <span class="tag is-post-tag">堆溢出</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 序
+ 学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
+
+0x01 C语言源代码C代码
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include ..
+                                        </p>
+                                        <p>2017-04-18</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
                 
                     
                         <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
@@ -837,10 +877,6 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     堆溢出
                 </a>
             
-                <a class="tags-item" href="tags/C/" title="C++" rel="2">
-                    C++
-                </a>
-            
                 <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
                     strcpy
                 </a>
@@ -849,16 +885,16 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     GOT表
                 </a>
             
+                <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
+                    UAF
+                </a>
+            
                 <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
                     metadata
                 </a>
             
                 <a class="tags-item" href="tags/DLMalloc/" title="DLMalloc" rel="1">
                     DLMalloc
-                </a>
-            
-                <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
-                    UAF
                 </a>
             
                 <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="1">
@@ -879,6 +915,10 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
             
                 <a class="tags-item" href="tags/format/" title="format" rel="1">
                     format
+                </a>
+            
+                <a class="tags-item" href="tags/C/" title="C++" rel="2">
+                    C++
                 </a>
             
                 <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
@@ -909,18 +949,6 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     iOS应用安全
                 </a>
             
-                <a class="tags-item" href="tags/xnu/" title="xnu" rel="1">
-                    xnu
-                </a>
-            
-                <a class="tags-item" href="tags/macos内核/" title="macos内核" rel="1">
-                    macos内核
-                </a>
-            
-                <a class="tags-item" href="tags/BSD/" title="BSD" rel="1">
-                    BSD
-                </a>
-            
                 <a class="tags-item" href="tags/mach-o/" title="mach-o" rel="1">
                     mach-o
                 </a>
@@ -933,16 +961,28 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     stub
                 </a>
             
-                <a class="tags-item" href="tags/数学/" title="数学" rel="1">
-                    数学
-                </a>
-            
                 <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
                     CTF
                 </a>
             
                 <a class="tags-item" href="tags/writeup/" title="writeup" rel="1">
                     writeup
+                </a>
+            
+                <a class="tags-item" href="tags/数学/" title="数学" rel="1">
+                    数学
+                </a>
+            
+                <a class="tags-item" href="tags/xnu/" title="xnu" rel="1">
+                    xnu
+                </a>
+            
+                <a class="tags-item" href="tags/macos内核/" title="macos内核" rel="1">
+                    macos内核
+                </a>
+            
+                <a class="tags-item" href="tags/BSD/" title="BSD" rel="1">
+                    BSD
                 </a>
             
                 <a class="tags-item" href="tags/kext/" title="kext" rel="2">
@@ -981,16 +1021,16 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     free
                 </a>
             
-                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
-                    x86
-                </a>
-            
                 <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
                     XNU
                 </a>
             
                 <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
                     Kernel
+                </a>
+            
+                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
+                    x86
                 </a>
             
                 <a class="tags-item" href="tags/SSD/" title="SSD" rel="1">
