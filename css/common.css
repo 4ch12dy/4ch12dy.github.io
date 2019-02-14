@@ -145,8 +145,8 @@
 .is-post-tag {
     background: rgba(0,0,0,0);
     border-radius: 3px;
-    border: 1px solid orangered;
-    color: orangered;
+    border: 1px solid red;
+    color: white;
 }
 
 .is-invisible {
