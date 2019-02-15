@@ -338,9 +338,9 @@
       <category term="macho/dyld" scheme="https://github.com/4ch12dy/4ch12dy.github.io.git/categories/macho-dyld/"/>
     
     
-      <category term="macho" scheme="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/macho/"/>
-    
       <category term="dyld" scheme="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/dyld/"/>
+    
+      <category term="macho" scheme="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/macho/"/>
     
   </entry>
   
