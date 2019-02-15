@@ -58,11 +58,11 @@
             <div id="search_result"></div>
         </div>
         <div class="nav-right nav-menu">
-            <embed src="//music.163.com/style/swf/widget.swf?sid=1319702785&type=2&auto=1&width=278&height=32" width="298" height="52"  allowNetworking="all">
-            </embed>
-            <a class="nav-item" id="search">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1319702785&auto=1&height=32">
+            </iframe>
+            <!-- <a class="nav-item" id="search">
                 <i class="fa fa-search" aria-hidden="true"></i>
-            </a>
+            </a> -->
             
             <a class="nav-item" href="../../index.html">
                 Home
@@ -827,9 +827,9 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                 
             </ul>
         </div>
-        <div>
+        <!-- <div>
             <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=255 height=86 src="//music.163.com/outchain/player?type=2&id=1319702785&auto=1&height=66">网易云音乐</iframe>
-        </div>
+        </div> -->
     </div>
     <div class="content-box">
         <!--post数量和tag category 数量-->
@@ -850,24 +850,12 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
         </div>
         <div class="content-inner is-flex flex-wrap justify-space-between">
             
-                <a class="tags-item" href="tags/android/" title="android" rel="1">
-                    android
-                </a>
-            
                 <a class="tags-item" href="tags/ida/" title="ida" rel="1">
                     ida
                 </a>
             
-                <a class="tags-item" href="tags/C/" title="C++" rel="2">
-                    C++
-                </a>
-            
-                <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="1">
-                    LLDB
-                </a>
-            
-                <a class="tags-item" href="tags/python/" title="python" rel="1">
-                    python
+                <a class="tags-item" href="tags/android/" title="android" rel="1">
+                    android
                 </a>
             
                 <a class="tags-item" href="tags/macOS内核/" title="macOS内核" rel="1">
@@ -882,6 +870,10 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     vm
                 </a>
             
+                <a class="tags-item" href="tags/C/" title="C++" rel="2">
+                    C++
+                </a>
+            
                 <a class="tags-item" href="tags/Linux/" title="Linux" rel="9">
                     Linux
                 </a>
@@ -894,20 +886,16 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     堆溢出
                 </a>
             
-                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
-                    strcpy
+                <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="1">
+                    LLDB
                 </a>
             
-                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
-                    GOT表
+                <a class="tags-item" href="tags/python/" title="python" rel="1">
+                    python
                 </a>
             
                 <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
                     UAF
-                </a>
-            
-                <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
-                    栈溢出
                 </a>
             
                 <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
@@ -918,16 +906,16 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     DLMalloc
                 </a>
             
-                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
-                    gdb
+                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
+                    strcpy
                 </a>
             
-                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
-                    linux
+                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
+                    GOT表
                 </a>
             
-                <a class="tags-item" href="tags/调试/" title="调试" rel="1">
-                    调试
+                <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
+                    栈溢出
                 </a>
             
                 <a class="tags-item" href="tags/printf/" title="printf" rel="1">
@@ -950,8 +938,24 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     iOS
                 </a>
             
+                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
+                    gdb
+                </a>
+            
+                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
+                    linux
+                </a>
+            
+                <a class="tags-item" href="tags/调试/" title="调试" rel="1">
+                    调试
+                </a>
+            
                 <a class="tags-item" href="tags/iOS应用安全/" title="iOS应用安全" rel="1">
                     iOS应用安全
+                </a>
+            
+                <a class="tags-item" href="tags/数学/" title="数学" rel="1">
+                    数学
                 </a>
             
                 <a class="tags-item" href="tags/xnu/" title="xnu" rel="1">
@@ -978,10 +982,6 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     stub
                 </a>
             
-                <a class="tags-item" href="tags/数学/" title="数学" rel="1">
-                    数学
-                </a>
-            
                 <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
                     CTF
                 </a>
@@ -994,20 +994,20 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     kext
                 </a>
             
-                <a class="tags-item" href="tags/llvm/" title="llvm" rel="1">
-                    llvm
-                </a>
-            
-                <a class="tags-item" href="tags/obfuscation/" title="obfuscation" rel="1">
-                    obfuscation
+                <a class="tags-item" href="tags/macho/" title="macho" rel="1">
+                    macho
                 </a>
             
                 <a class="tags-item" href="tags/macOS/" title="macOS" rel="1">
                     macOS
                 </a>
             
-                <a class="tags-item" href="tags/macho/" title="macho" rel="1">
-                    macho
+                <a class="tags-item" href="tags/llvm/" title="llvm" rel="1">
+                    llvm
+                </a>
+            
+                <a class="tags-item" href="tags/obfuscation/" title="obfuscation" rel="1">
+                    obfuscation
                 </a>
             
                 <a class="tags-item" href="tags/vtable/" title="vtable" rel="1">
@@ -1026,16 +1026,16 @@ mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,in
                     free
                 </a>
             
-                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
-                    x86
-                </a>
-            
                 <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
                     XNU
                 </a>
             
                 <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
                     Kernel
+                </a>
+            
+                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
+                    x86
                 </a>
             
                 <a class="tags-item" href="tags/SSD/" title="SSD" rel="1">
