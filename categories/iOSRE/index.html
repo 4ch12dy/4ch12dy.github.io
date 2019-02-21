@@ -15,12 +15,12 @@
   </script>
 
   
-  <title>Catégorie: 杂 | 4ch12dy</title>
+  <title>Category: iOSRE | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/categories/杂/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/categories/iOSRE/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="给我一点时间和power">
 <meta name="twitter:card" content="summary">
@@ -120,7 +120,7 @@
 
 <div class="container tag-cate-wrap">
     <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·杂</strong></h1>
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·iOSRE</strong></h1>
     </div>
 
     
@@ -128,24 +128,71 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/10/11/x86指令编码笔记/X86指令编码笔记/">
+                <a href="/2019/01/30/XNU系统调用深度解析/XNU系统调用深度解析/">
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>XNU系统调用深度解析</strong> <small class="post-date">at: 2019-01-30</small>
+                                <br>
+                                XNU系统调用深度解析
+从一个函数分析到系统调用的内核实现
+
+由一段POC而起#include &lt;stdio.h&gt;
+#include &lt;mach/i386/kern_return.h&gt;
+#include &lt;mach/mach_traps.h&gt;
+#include &lt;servers/bootstrap.h&gt;
+#..
+                            </p>
+                            <button class="button is-info">Read</button>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    
+        <div class="box">
+            <article class="media">
+                
+                <a href="/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">
                     
                     <div class="media-left">
                         <figure class="image is-128x128">
-                            <img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true" style="height: 100%; width: 100%">
+                            <img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/lldb-python/b_bt.jpg?raw=true" style="height: 100%; width: 100%">
                         </figure>
                     </div>
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>X86指令编码笔记</strong> <small class="post-date">at: 2017-10-11</small>
+                                <strong>LLDB调试器栈符号化</strong> <small class="post-date">at: 2018-10-03</small>
                                 <br>
-                                
-由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
-
-x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
-x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中..
+                                强化你的lldb调试器Why?lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后才能..
+                            </p>
+                            <button class="button is-info">Read</button>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    
+        <div class="box">
+            <article class="media">
+                
+                <a href="/2017/04/10/mach-o动态链接/mach-o动态链接/">
+                    
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true" style="height: 100%; width: 100%">
+                        </figure>
+                    </div>
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>Mach-o动态链接</strong> <small class="post-date">at: 2017-04-10</small>
+                                <br>
+                                0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/us..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
