@@ -147,36 +147,34 @@
                 <!-- 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-7-desktop">
-        <a href="/2017/04/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/">
+        <a href="/2017/03/21/gdb常用调试命令总结/gdb/">
             <div class="full-height post-hover"
                  style="
-                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true');
+                         background-image: url('');
                          height: 350px;
                          background-size: cover;
                          background-repeat: no-repeat;
                          ">
                     <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
                         <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            Protostar-栈溢出学习-ret跳转到自定义shellcode
+                            gdb常用调试命令总结
                         </h1>
                         <div>
                         
                             `
-                                <span class="tag is-post-tag">Linux</span>
+                                <span class="tag is-post-tag">gdb</span>
                             `
-                                <span class="tag is-post-tag">Protostar</span>
+                                <span class="tag is-post-tag">linux</span>
                             `
-                                <span class="tag is-post-tag">栈溢出</span>
+                                <span class="tag is-post-tag">调试</span>
                             
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            0x00 序
- 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
-
-0x01 C语言源代码Stack5 is a standard buffer o..
+                            0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
+0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知..
                         </p>
-                        <p class="date text-shadow">2017-04-15</p>
+                        <p class="date text-shadow">2017-03-21</p>
                         <button class="button is-info is-small">Read More</button>
                     </div>
             </div>
@@ -186,277 +184,61 @@
         <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
                 
-<a class="post-hover" href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true')">
+<a class="post-hover" href="/2017/03/07/C++ Virtual table/详解virtual table/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip
+                详解virtual table
             </h3>
             
             
-            <span class="tag is-post-tag">Linux</span>
+            <span class="tag is-post-tag">C++</span>
             
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
+            <span class="tag is-post-tag">vtable</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
-                0x00 序
- 接着之前的系列，下面研究两种控制eip的方式
-
-0x01 C语言源代码Stack..
+                详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-13</p>
+            <p class="date text-shadow is-marginless">2017-03-07</p>
         </div>
     </div>
 </a>
             
-            
-                
-<a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-简单栈溢出修改局部变量值
-            </h3>
-            
-            
-            <span class="tag is-post-tag">Linux</span>
-            
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简..
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-11</p>
-        </div>
-    </div>
-</a>
             
         </div>
     </div>
     <div class="column is-12 is-hidden-desktop">
         
         
-<a class="post-hover" href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true')">
+<a class="post-hover" href="/2017/03/07/C++ Virtual table/详解virtual table/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip
+                详解virtual table
             </h3>
             
             
-            <span class="tag is-post-tag">Linux</span>
+            <span class="tag is-post-tag">C++</span>
             
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
+            <span class="tag is-post-tag">vtable</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
-                0x00 序
- 接着之前的系列，下面研究两种控制eip的方式
-
-0x01 C语言源代码Stack..
+                详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-13</p>
+            <p class="date text-shadow is-marginless">2017-03-07</p>
         </div>
     </div>
 </a>
         
-        
-        
-<a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-简单栈溢出修改局部变量值
-            </h3>
-            
-            
-            <span class="tag is-post-tag">Linux</span>
-            
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简..
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-11</p>
-        </div>
-    </div>
-</a>
         
     </div>
 </div>
  -->
                     
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-ret跳转到自定义shellcode</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序
- 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
-
-0x01 C语言源代码Stack5 is a standard buffer overflow, this time introducing shellcode.
-This level is at /..
-                                        </p>
-                                        <p>2017-04-15</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序
- 接着之前的系列，下面研究两种控制eip的方式
-
-0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to ..
-                                        </p>
-                                        <p>2017-04-13</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-简单栈溢出修改局部变量值</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始吧！
-
-0x01 Protostar虚拟机环境搭建虚拟机下载地址
-虚拟机环境搭建视频教程
-默认用户名和密码:
-
-user..
-                                        </p>
-                                        <p>2017-04-11</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/10/mach-o动态链接/mach-o动态链接/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Mach-o动态链接</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">mach-o</span>
-                                            
-                                                <span class="tag is-post-tag">dyld</span>
-                                            
-                                                <span class="tag is-post-tag">stub</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/us..
-                                        </p>
-                                        <p>2017-04-10</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
@@ -493,7 +275,7 @@ gdb环境中 set args..
                     
                 
                     
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/03/07/C++ Virtual table/详解virtual table/">
                             <div class="columns" style="min-height: 230px;">
@@ -517,47 +299,6 @@ gdb环境中 set args..
                                             详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时..
                                         </p>
                                         <p>2017-03-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/03/05/Mach vm*API/exec函数流程/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://raw.githubusercontent.com/turingH/BLOGIMAGE/f10c5443276635863d7ac7aea6fa2e6db76ce2c3/png/OSX%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDmach-o%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Mach vm*API</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">macOS内核</span>
-                                            
-                                                <span class="tag is-post-tag">mach</span>
-                                            
-                                                <span class="tag is-post-tag">vm</span>
-                                            
-                                        </p>
-                                        <p>
-                                            exec函数流程
-mach_vm_*
-mach_vm_cllocate
-mach_vm_allocate(vm_map_t map,mach_vm_address_t  *address,mach_vm_size_t size,int flags);
-
-
-在map中分配size个字节大小的内存，根据flags的不同会有不同的处理方式。address是一个..
-                                        </p>
-                                        <p>2017-03-05</p>
                                         <button class="button is-small">Read More</button>
                                     </div>
                                 </div>

@@ -65,13 +65,6 @@
   </url>
   
   <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/01/%E8%8E%B7%E5%8F%96macOS%E5%BA%8F%E5%88%97%E5%8F%B7UUID%E7%AD%89/%E8%8E%B7%E5%8F%96macOS%E5%BA%8F%E5%88%97%E5%8F%B7UUID%E7%AD%89/</loc>
-    
-    <lastmod>2017-08-30T01:47:33.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/tags/index.html</loc>
     
     <lastmod>2017-08-29T12:05:42.000Z</lastmod>
@@ -86,30 +79,9 @@
   </url>
   
   <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/08/%E6%B5%85%E8%B0%88SSD%E4%B8%8E%E5%AE%89%E5%85%A8%E6%93%A6%E9%99%A4/SSD%E4%B8%8E%E5%AE%89%E5%85%A8%E6%93%A6%E9%99%A4/</loc>
-    
-    <lastmod>2017-08-08T06:40:43.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/07/iOS%E8%B6%8A%E7%8B%B1%E6%A3%80%E6%B5%8B/iOS%E8%B6%8A%E7%8B%B1%E6%A3%80%E6%B5%8B/</loc>
-    
-    <lastmod>2017-08-07T10:41:31.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/03/%E5%86%85%E6%A0%B8%E6%89%A9%E5%B1%95-%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AE%9E%E4%BE%8B/%E5%86%85%E6%A0%B8%E6%89%A9%E5%B1%95-%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AE%9E%E4%BE%8B/</loc>
     
     <lastmod>2017-08-04T02:06:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/08/01/%E9%81%8D%E5%8E%86%E8%87%AA%E8%BA%AB%E5%8A%A0%E8%BD%BD%E7%9A%84dylib%E8%8E%B7%E5%8F%96%E8%BD%BD%E5%85%A5%E5%9C%B0%E5%9D%80%E5%92%8CASLR%E5%9C%B0%E5%9D%80%E7%AD%89/%E9%81%8D%E5%8E%86%E8%87%AA%E8%BA%AB%E5%8A%A0%E8%BD%BD%E7%9A%84dylib%E8%8E%B7%E5%8F%96%E8%BD%BD%E5%85%A5%E5%9C%B0%E5%9D%80%E5%92%8CASLR%E5%9C%B0%E5%9D%80%E7%AD%89/</loc>
-    
-    <lastmod>2017-08-02T08:39:50.000Z</lastmod>
     
   </url>
   
@@ -166,13 +138,6 @@
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/23/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/</loc>
     
     <lastmod>2017-05-02T14:36:05.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2016/12/06/macOS%E5%86%85%E6%A0%B8%E6%A1%86%E6%9E%B6/macOS%E5%86%85%E6%A0%B8%E6%9E%B6%E6%9E%84-%E5%8A%9F%E8%83%BD/</loc>
-    
-    <lastmod>2017-05-02T14:35:49.000Z</lastmod>
     
   </url>
   
@@ -282,14 +247,14 @@
   </url>
   
   <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc.html</loc>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc.html</loc>
     
     <lastmod>2017-04-24T15:57:04.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc.html</loc>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc.html</loc>
     
     <lastmod>2017-04-24T15:57:04.000Z</lastmod>
     
@@ -369,13 +334,6 @@
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/10/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/</loc>
     
     <lastmod>2017-04-10T14:50:13.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/03/05/Mach%20vm*API/exec%E5%87%BD%E6%95%B0%E6%B5%81%E7%A8%8B/</loc>
-    
-    <lastmod>2017-04-10T13:56:41.000Z</lastmod>
     
   </url>
   
