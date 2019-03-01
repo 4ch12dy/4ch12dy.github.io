@@ -466,6 +466,52 @@ jmethodID equals_id = env-&gt;GetMetho..
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/10/21/ARM64基础知识整理/ARM64基础知识整理/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>ARM6基础知识整理</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">ARM64</span>
+                                            
+                                        </p>
+                                        <p>
+                                            ARM64基础知识整理Register参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
+其他特殊寄存器
+
+
+X29(FP)
+栈帧寄存器  类比x64中rbp
+
+
+
+
+X30(LR)
+链接寄存器，保存函数返回地址，x64该地址保存在栈中
+
+
+SP
+栈顶寄存器，类比x64中
+
+
+PC
+指向..
+                                        </p>
+                                        <p>2017-10-21</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/10/11/x86指令编码笔记/X86指令编码笔记/">
                             <div class="columns" style="min-height: 230px;">
                                 
@@ -597,36 +643,6 @@ LLVM简介
 然后转去hopper搜下相关字符串，并没有发现error相关字符串，syclover也没有相关printf等函数输出，看来只能上gdb调试看..
                                         </p>
                                         <p>2017-05-28</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/05/04/math/math/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>一道高中数学题的思考？</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">math</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 写在前面
- 突然在邮件中收到Quora中这样一个问题”What does X equal in $\sqrt{x+15} + \sqrt{x} = 15$? “ 凭着曾经对数学的热爱，我点了进去。顺便学习了点知识。
-
-0x01 你会怎么解决？不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都知道..
-                                        </p>
-                                        <p>2017-05-04</p>
                                         <button class="button is-small">Read More</button>
                                     </div>
                                 </div>
@@ -797,10 +813,6 @@ LLVM简介
                     android
                 </a>
             
-                <a class="tags-item" href="tags/C/" title="C++" rel="2">
-                    C++
-                </a>
-            
                 <a class="tags-item" href="tags/ida/" title="ida" rel="1">
                     ida
                 </a>
@@ -811,6 +823,10 @@ LLVM简介
             
                 <a class="tags-item" href="tags/python/" title="python" rel="1">
                     python
+                </a>
+            
+                <a class="tags-item" href="tags/C/" title="C++" rel="2">
+                    C++
                 </a>
             
                 <a class="tags-item" href="tags/Linux/" title="Linux" rel="9">
@@ -829,14 +845,6 @@ LLVM简介
                     UAF
                 </a>
             
-                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
-                    strcpy
-                </a>
-            
-                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
-                    GOT表
-                </a>
-            
                 <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
                     metadata
                 </a>
@@ -845,8 +853,24 @@ LLVM简介
                     DLMalloc
                 </a>
             
+                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
+                    strcpy
+                </a>
+            
+                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
+                    GOT表
+                </a>
+            
                 <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
                     栈溢出
+                </a>
+            
+                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
+                    gdb
+                </a>
+            
+                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
+                    linux
                 </a>
             
                 <a class="tags-item" href="tags/printf/" title="printf" rel="1">
@@ -857,12 +881,8 @@ LLVM简介
                     format
                 </a>
             
-                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
-                    gdb
-                </a>
-            
-                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
-                    linux
+                <a class="tags-item" href="tags/kext/" title="kext" rel="1">
+                    kext
                 </a>
             
                 <a class="tags-item" href="tags/crackme/" title="crackme" rel="1">
@@ -889,10 +909,6 @@ LLVM简介
                     stub
                 </a>
             
-                <a class="tags-item" href="tags/math/" title="math" rel="1">
-                    math
-                </a>
-            
                 <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
                     CTF
                 </a>
@@ -901,8 +917,8 @@ LLVM简介
                     writeup
                 </a>
             
-                <a class="tags-item" href="tags/kext/" title="kext" rel="1">
-                    kext
+                <a class="tags-item" href="tags/math/" title="math" rel="1">
+                    math
                 </a>
             
                 <a class="tags-item" href="tags/LLVM/" title="LLVM" rel="1">
@@ -929,16 +945,16 @@ LLVM简介
                     free
                 </a>
             
+                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
+                    x86
+                </a>
+            
                 <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
                     XNU
                 </a>
             
                 <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
                     Kernel
-                </a>
-            
-                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
-                    x86
                 </a>
             
                 <a class="tags-item" href="tags/Pegasus/" title="Pegasus" rel="1">
@@ -976,7 +992,7 @@ LLVM简介
             <strong>Archives</strong>
         </div>
         <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 </aside>

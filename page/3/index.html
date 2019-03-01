@@ -147,17 +147,17 @@
                 <!-- 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-7-desktop">
-        <a href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
+        <a href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/">
             <div class="full-height post-hover"
                  style="
-                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true');
+                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true');
                          height: 350px;
                          background-size: cover;
                          background-repeat: no-repeat;
                          ">
                     <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
                         <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            Protostar-栈溢出学习-简单栈溢出修改局部变量值
+                            Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip
                         </h1>
                         <div>
                         
@@ -171,10 +171,12 @@
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始..
+                            0x00 序
+ 接着之前的系列，下面研究两种控制eip的方式
+
+0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwri..
                         </p>
-                        <p class="date text-shadow">2017-04-11</p>
+                        <p class="date text-shadow">2017-04-13</p>
                         <button class="button is-info is-small">Read More</button>
                     </div>
             </div>
@@ -184,6 +186,33 @@
         <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
                 
+<a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                Protostar-栈溢出学习-简单栈溢出修改局部变量值
+            </h3>
+            
+            
+            <span class="tag is-post-tag">Linux</span>
+            
+            <span class="tag is-post-tag">Protostar</span>
+            
+            <span class="tag is-post-tag">栈溢出</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                0x01 序
+ 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简..
+            </p>
+            <p class="date text-shadow is-marginless">2017-04-11</p>
+        </div>
+    </div>
+</a>
+            
+            
+                
 <a class="post-hover" href="/2017/04/10/mach-o动态链接/mach-o动态链接/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -204,30 +233,6 @@
                 0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接..
             </p>
             <p class="date text-shadow is-marginless">2017-04-10</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2017/03/21/gdb常用调试命令总结/gdb/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                gdb常用调试命令总结
-            </h3>
-            
-            
-            <span class="tag is-post-tag">gdb</span>
-            
-            <span class="tag is-post-tag">linux</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，..
-            </p>
-            <p class="date text-shadow is-marginless">2017-03-21</p>
         </div>
     </div>
 </a>
@@ -237,6 +242,33 @@
     <div class="column is-12 is-hidden-desktop">
         
         
+<a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                Protostar-栈溢出学习-简单栈溢出修改局部变量值
+            </h3>
+            
+            
+            <span class="tag is-post-tag">Linux</span>
+            
+            <span class="tag is-post-tag">Protostar</span>
+            
+            <span class="tag is-post-tag">栈溢出</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                0x01 序
+ 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简..
+            </p>
+            <p class="date text-shadow is-marginless">2017-04-11</p>
+        </div>
+    </div>
+</a>
+        
+        
+        
 <a class="post-hover" href="/2017/04/10/mach-o动态链接/mach-o动态链接/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -257,30 +289,6 @@
                 0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接..
             </p>
             <p class="date text-shadow is-marginless">2017-04-10</p>
-        </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2017/03/21/gdb常用调试命令总结/gdb/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                gdb常用调试命令总结
-            </h3>
-            
-            
-            <span class="tag is-post-tag">gdb</span>
-            
-            <span class="tag is-post-tag">linux</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，..
-            </p>
-            <p class="date text-shadow is-marginless">2017-03-21</p>
         </div>
     </div>
 </a>
@@ -291,6 +299,44 @@
                     
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">Linux</span>
+                                            
+                                                <span class="tag is-post-tag">Protostar</span>
+                                            
+                                                <span class="tag is-post-tag">栈溢出</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 序
+ 接着之前的系列，下面研究两种控制eip的方式
+
+0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to ..
+                                        </p>
+                                        <p>2017-04-13</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
                             <div class="columns" style="min-height: 230px;">
@@ -367,7 +413,7 @@ user..
                     
                 
                     
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/03/21/gdb常用调试命令总结/gdb/">
                             <div class="columns" style="min-height: 230px;">
@@ -424,52 +470,6 @@ gdb环境中 set args..
                                             详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时..
                                         </p>
                                         <p>2017-03-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2016/12/21/ARM64基础知识整理/ARM64基础知识整理/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>ARM6基础知识整理</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">ARM64</span>
-                                            
-                                        </p>
-                                        <p>
-                                            ARM64基础知识整理Register参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
-其他特殊寄存器
-
-
-X29(FP)
-栈帧寄存器  类比x64中rbp
-
-
-
-
-X30(LR)
-链接寄存器，保存函数返回地址，x64该地址保存在栈中
-
-
-SP
-栈顶寄存器，类比x64中
-
-
-PC
-指向..
-                                        </p>
-                                        <p>2016-12-21</p>
                                         <button class="button is-small">Read More</button>
                                     </div>
                                 </div>
@@ -677,10 +677,6 @@ PC
                     android
                 </a>
             
-                <a class="tags-item" href="tags/C/" title="C++" rel="2">
-                    C++
-                </a>
-            
                 <a class="tags-item" href="tags/ida/" title="ida" rel="1">
                     ida
                 </a>
@@ -691,6 +687,10 @@ PC
             
                 <a class="tags-item" href="tags/python/" title="python" rel="1">
                     python
+                </a>
+            
+                <a class="tags-item" href="tags/C/" title="C++" rel="2">
+                    C++
                 </a>
             
                 <a class="tags-item" href="tags/Linux/" title="Linux" rel="9">
@@ -709,14 +709,6 @@ PC
                     UAF
                 </a>
             
-                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
-                    strcpy
-                </a>
-            
-                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
-                    GOT表
-                </a>
-            
                 <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
                     metadata
                 </a>
@@ -725,8 +717,24 @@ PC
                     DLMalloc
                 </a>
             
+                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
+                    strcpy
+                </a>
+            
+                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
+                    GOT表
+                </a>
+            
                 <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
                     栈溢出
+                </a>
+            
+                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
+                    gdb
+                </a>
+            
+                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
+                    linux
                 </a>
             
                 <a class="tags-item" href="tags/printf/" title="printf" rel="1">
@@ -737,12 +745,8 @@ PC
                     format
                 </a>
             
-                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
-                    gdb
-                </a>
-            
-                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
-                    linux
+                <a class="tags-item" href="tags/kext/" title="kext" rel="1">
+                    kext
                 </a>
             
                 <a class="tags-item" href="tags/crackme/" title="crackme" rel="1">
@@ -769,10 +773,6 @@ PC
                     stub
                 </a>
             
-                <a class="tags-item" href="tags/math/" title="math" rel="1">
-                    math
-                </a>
-            
                 <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
                     CTF
                 </a>
@@ -781,8 +781,8 @@ PC
                     writeup
                 </a>
             
-                <a class="tags-item" href="tags/kext/" title="kext" rel="1">
-                    kext
+                <a class="tags-item" href="tags/math/" title="math" rel="1">
+                    math
                 </a>
             
                 <a class="tags-item" href="tags/LLVM/" title="LLVM" rel="1">
@@ -809,16 +809,16 @@ PC
                     free
                 </a>
             
+                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
+                    x86
+                </a>
+            
                 <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
                     XNU
                 </a>
             
                 <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
                     Kernel
-                </a>
-            
-                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
-                    x86
                 </a>
             
                 <a class="tags-item" href="tags/Pegasus/" title="Pegasus" rel="1">
@@ -856,7 +856,7 @@ PC
             <strong>Archives</strong>
         </div>
         <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 </aside>
