@@ -173,8 +173,8 @@
         var copyContent = content.cloneNode(true)
         var blurCopyContent = document.createElement('div')
             blurCopyContent.classList.add('content-blur')
-            blurCopyContent.appendChild(copyContent)
-            navbar.appendChild(blurCopyContent)
+            // blurCopyContent.appendChild(copyContent)
+            // navbar.appendChild(blurCopyContent)
 
         // 顶部间距
         var spaceNumber = 30;
