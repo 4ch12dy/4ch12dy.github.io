@@ -15,17 +15,39 @@
   </script>
 
   
-  <title>4ch12dy</title>
+  <title>TCTF-Elements | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="给我一点时间和power">
-<meta property="og:type" content="website">
-<meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/page/3/index.html">
+  <meta name="description" content="TCTF-Elements
+这道题其实是一个数学问题，当时没有做出来，解题过程中走了很多弯路，踩了很多坑，不过也补了很多知识。
+
+Elements下面是main函数伪代码
+signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
+{
+  char v3; // bl
+  const __int32_t **v4; // rax">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCTF-Elements">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/03/27/TCTF-Elements/TCTF-Elements/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="给我一点时间和power">
+<meta property="og:description" content="TCTF-Elements
+这道题其实是一个数学问题，当时没有做出来，解题过程中走了很多弯路，踩了很多坑，不过也补了很多知识。
+
+Elements下面是main函数伪代码
+signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
+{
+  char v3; // bl
+  const __int32_t **v4; // rax">
+<meta property="og:updated_time" content="2019-03-27T07:15:38.692Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4ch12dy">
-<meta name="twitter:description" content="给我一点时间和power">
+<meta name="twitter:title" content="TCTF-Elements">
+<meta name="twitter:description" content="TCTF-Elements
+这道题其实是一个数学问题，当时没有做出来，解题过程中走了很多弯路，踩了很多坑，不过也补了很多知识。
+
+Elements下面是main函数伪代码
+signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
+{
+  char v3; // bl
+  const __int32_t **v4; // rax">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -33,9 +55,9 @@
     <link rel="icon" href="/favicon.png">
   
   
-  <link rel="stylesheet" href="../../css/common.css">
-<link rel="stylesheet" href="../../css/nav.css">
-<link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../../../../css/common.css">
+<link rel="stylesheet" href="../../../../../css/nav.css">
+<link rel="stylesheet" href="../../../../../css/layout.css">
   
 
 </head>
@@ -64,15 +86,15 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
             </a>
             
-            <a class="nav-item" href="../../index.html">
+            <a class="nav-item" href="../../../../../index.html">
                 Home
             </a>
             
-            <a class="nav-item" href="../../aboutme">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item" href="../../strike">
+            <a class="nav-item" href="../../../../../strike">
                 Strike
             </a>
             
@@ -84,15 +106,15 @@
         </span>
         <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
             
-            <a class="nav-item flex-1" href="../../index.html">
+            <a class="nav-item flex-1" href="../../../../../index.html">
                 Home
             </a>
             
-            <a class="nav-item flex-1" href="../../aboutme">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item flex-1" href="../../strike">
+            <a class="nav-item flex-1" href="../../../../../strike">
                 Strike
             </a>
             
@@ -103,903 +125,367 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .post-hover:hover {
-        box-shadow: inset 0 0 100px #000;
-        transition: box-shadow .2s;
-    }
+          <!--博文页面-->
 
-    .sub-post-container .post-hover:hover h3 {
-        text-decoration: underline gray;
-    }
-
-
-    .primary-item-main {
-        height: 330px;
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
         background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .primary-container .title,
-    .primary-container .sub-title,
-    .primary-container .post-content-text,
-    .primary-container .date {
-        color: #fff;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    .post-content-text {
-        color: #f1f1f1!important;
-    }
-
-    .primary-container .post-hover {
-        background: black;
-    }
-
-    .content-bg-mask {
-        background: rgba(0,0,0,.4);
-    }
-
-</style>
-
-<div style="background: #f5f8f9;">
-    <div id="main-container" class="container" style="padding-top: 20px;">
-        <div class="is-flex main-content justify-center">
-            <section class="column is-9">
-                <!-- 
-<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
-    <div class="column  is-7-desktop">
-        <a href="/2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/">
-            <div class="full-height post-hover"
-                 style="
-                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true');
-                         height: 350px;
-                         background-size: cover;
-                         background-repeat: no-repeat;
-                         ">
-                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
-                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            Protostar-栈溢出学习-printf格式%n任意地址写
-                        </h1>
-                        <div>
-                        
-                            `
-                                <span class="tag is-post-tag">Linux</span>
-                            `
-                                <span class="tag is-post-tag">Protostar</span>
-                            `
-                                <span class="tag is-post-tag">printf</span>
-                            `
-                                <span class="tag is-post-tag">format</span>
-                            
-                        
-                        </div>
-                        <p class="post-content-text is-marginless has-padding text-shadow">
-                            0x00 序
-从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
-
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unist..
-                        </p>
-                        <p class="date text-shadow">2017-04-17</p>
-                        <button class="button is-info is-small">Read More</button>
-                    </div>
-            </div>
-        </a>
-    </div>
-    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
-        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
-            
-                
-<a class="post-hover" href="/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-ROP执行shellcode
-            </h3>
-            
-            
-            <span class="tag is-post-tag">Linux</span>
-            
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x00 序
- 和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存..
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-16</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2017/04/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-ret跳转到自定义shellcode
-            </h3>
-            
-            
-            <span class="tag is-post-tag">Linux</span>
-            
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x00 序
- 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分..
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-15</p>
-        </div>
-    </div>
-</a>
-            
-        </div>
-    </div>
-    <div class="column is-12 is-hidden-desktop">
-        
-        
-<a class="post-hover" href="/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-ROP执行shellcode
-            </h3>
-            
-            
-            <span class="tag is-post-tag">Linux</span>
-            
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x00 序
- 和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存..
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-16</p>
-        </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2017/04/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-ret跳转到自定义shellcode
-            </h3>
-            
-            
-            <span class="tag is-post-tag">Linux</span>
-            
-            <span class="tag is-post-tag">Protostar</span>
-            
-            <span class="tag is-post-tag">栈溢出</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                0x00 序
- 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分..
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-15</p>
-        </div>
-    </div>
-</a>
-        
-    </div>
-</div>
- -->
-                    
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-printf格式%n任意地址写</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">printf</span>
-                                            
-                                                <span class="tag is-post-tag">format</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序
-从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
-
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-
-..
-                                        </p>
-                                        <p>2017-04-17</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-ROP执行shellcode</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序
- 和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
-
-0x01 stack3#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&g..
-                                        </p>
-                                        <p>2017-04-16</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-ret跳转到自定义shellcode</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序
- 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
-
-0x01 C语言源代码Stack5 is a standard buffer overflow, this time introducing shellcode.
-This level is at /..
-                                        </p>
-                                        <p>2017-04-15</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序
- 接着之前的系列，下面研究两种控制eip的方式
-
-0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to ..
-                                        </p>
-                                        <p>2017-04-13</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-简单栈溢出修改局部变量值</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始吧！
-
-0x01 Protostar虚拟机环境搭建虚拟机下载地址
-虚拟机环境搭建视频教程
-默认用户名和密码:
-
-user..
-                                        </p>
-                                        <p>2017-04-11</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/10/mach-o动态链接/mach-o动态链接/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Mach-o动态链接</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">mach-o</span>
-                                            
-                                                <span class="tag is-post-tag">dyld</span>
-                                            
-                                                <span class="tag is-post-tag">stub</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/us..
-                                        </p>
-                                        <p>2017-04-10</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/03/21/gdb常用调试命令总结/gdb/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>gdb常用调试命令总结</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">gdb</span>
-                                            
-                                                <span class="tag is-post-tag">linux</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
-0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
-
-gdb命令行的 –args 参数
-gdb环境中 set args..
-                                        </p>
-                                        <p>2017-03-21</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/03/07/C++ Virtual table/详解virtual table/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>详解virtual table</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">C++</span>
-                                            
-                                                <span class="tag is-post-tag">vtable</span>
-                                            
-                                        </p>
-                                        <p>
-                                            详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时..
-                                        </p>
-                                        <p>2017-03-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2016/08/05/iOSCrackme/iOSCrackme/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/iOSCrackme/1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>看雪iOSCrackme破解报告</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">crackme</span>
-                                            
-                                                <span class="tag is-post-tag">看雪</span>
-                                            
-                                                <span class="tag is-post-tag">iOS</span>
-                                            
-                                        </p>
-                                        <p>
-                                            看雪iOSCrackme破解报告0x01.首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，很容易在控制器中找到如下函数
-0x02.然后将可执行文件拉入IDA分析，直接跳到check这个函数。可以猜测这个函数应该就是加密函数。下面重点对这个函数进行详细分析。
-0x03.在分析之前，先在手机屏幕..
-                                        </p>
-                                        <p>2016-08-05</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                <!--翻頁-->
-                <nav class="pagination is-flex" style="justify-content: flex-end">
-                    
-                        
-                            <a class="pagination-previous" href="/page/2/">Previous</a>
-                        
-                        
-                    
-                </nav>
-            </section>
-            
-                <style>
-    /*user info start*/
-    .user-info {
-        padding: 15px 0 0;
-    }
-
-    .user-info .avatar {
-        width: 155px;
-        height: 155px;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
         border-radius: 50%;
     }
 
-    .sns-container {
-        flex-wrap: wrap;
-    }
-
-    .sns-container a{
-        color: black;
-    }
-    /*user info end*/
-
-    /*Tag start*/
-    #tag_cloud .tags-item{
-        display: inline-block;
-        color: #000;
-        border: 1px solid gray;
-
-        margin: 4px 2px;
-        padding: 0 4px;
-        border-radius: 6px;
-    }
-    /*Tag end*/
-
-    /*Site box start*/
-    .site-box {
-        height: 60px;
-    }
-    /*Site box end*/
-
-    .category-list-item,
-    .archive-list-item {
-        display: flex;
-        margin-bottom: 4px;
-        justify-content: space-between;
-    }
-    .category-list-link,
-    .archive-list-link {
-        color: black;
-    }
-
-    .category-list-count,
-    .archive-list-count {
-        width: 32px;
+    .flow-chart {
         text-align: center;
-        border-radius: 4px;
-        color: #fff;
-        background-color: gray;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
-<aside class="column is-hidden-touch is-3" style="max-width: 280px; min-width: 230px">
-    <div class="content-box user-info">
-        <div class="has-padding">
-            <header class="has-text-centered">
-                <img class="avatar" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/other/xia0.png?raw=true">
-            </header>
-            <section class="has-text-centered">
-                <h3><strong>xia0</strong></h3>
-                <p class="sub-title">you’ll need to learn how to manage distractions, how to reach flow, and how to embrace deep work, and recognize that it is deliberate practice, not just hours spent in front of a computer or a book that determines how fast you will achieve mastery</p>
-                
-                <p class="is-flex center" style=" color: gray">
-                    <i class="fa fa-map-marker" style="padding: 5px"></i>
-                    nowhere
-                </p>
-                
-            </section>
-        </div>
-        <div class="top-line">
-            <ul class="sns-container justify-center is-flex has-padding">
-                
-
-                
-                <li>
-                    <a target="_blank" href="https://twitter.com/x1a0Z">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                        </span>
-                    </a>
-                </li>
-                
-
-                
-                <li>
-                    <a target="_blank" href="https://www.zhihu.com/people/eee-face">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                    </a>
-                </li>
-                
-
-                
-
-                
-
-                
-                <li>
-                    <a target="_blank" href="https://github.com/4ch12dy">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                    </a>
-                </li>
-                
-
-                
-            </ul>
-        </div>
-        <!-- <div>
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=256 height=450 src="//music.163.com/outchain/player?type=0&id=2669421801&auto=1&height=430"></iframe>
-        </div> -->
-    </div>
-    <div class="content-box">
-        <!--post数量和tag category 数量-->
-        <div class="site-box is-flex">
-            <div class="flex-1 is-flex flex-column center full-height right-line">
-                <strong>29</strong>
-                <p>Posts</p>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>TCTF-Elements</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/other/xia0.png?raw=true">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
+                <span class="post-date sub-title">at: 2019-03-27</span>
             </div>
-            <div class="flex-1 is-flex flex-column center full-height">
-                <strong>45</strong>
-                <p>Tags</p>
-            </div>
+            
+                <div>
+                    
+                         <a class="tag is-post-tag" href="/tags/tctf/">tctf</a>
+                    
+                         <a class="tag is-post-tag" href="/tags/re/">re</a>
+                    
+                </div>
+            
+        </div>
+        <div class="content" style="overflow: auto">
+            <h4 id="TCTF-Elements"><a href="#TCTF-Elements" class="headerlink" title="TCTF-Elements"></a>TCTF-Elements</h4><blockquote>
+<p>这道题其实是一个数学问题，当时没有做出来，解题过程中走了很多弯路，踩了很多坑，不过也补了很多知识。</p>
+</blockquote>
+<h4 id="Elements"><a href="#Elements" class="headerlink" title="Elements"></a>Elements</h4><p>下面是main函数伪代码</p>
+<pre><code class="c">signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
+{
+  char v3; // bl
+  const __int32_t **v4; // rax
+  char *v5; // rcx
+  size_t v6; // rcx
+  signed __int64 result; // rax
+  char *v8; // r12
+  signed __int64 v9; // r14
+  char v10; // bl
+  signed __int64 v11; // rax
+  const unsigned __int16 *v12; // rcx
+  signed __int64 v13; // rdx
+  __int64 v14; // rsi
+  unsigned __int16 v15; // bx
+  signed __int64 v16; // rsi
+  __m128i v17; // xmm0
+  char *v18; // rax
+  double v19; // xmm2_8
+  double v20; // xmm0_8
+  double v21; // xmm2_8
+  double v22; // xmm3_8
+  double v23; // [rsp+20h] [rbp-148h]
+  double v24; // [rsp+28h] [rbp-140h]
+  double v25; // [rsp+30h] [rbp-138h]
+  char s[8]; // [rsp+40h] [rbp-128h]
+  char v27; // [rsp+6Bh] [rbp-FDh]
+
+  fgets(s, 256, stdin);
+  v3 = s[0];
+  if ( s[0] )
+  {
+    v4 = __ctype_tolower_loc();
+    v5 = &amp;s[1];
+    do
+    {
+      *(v5 - 1) = (*v4)[v3];
+      v3 = *v5++;
+    }
+    while ( v3 );
+  }
+  v6 = strlen(s);
+  result = 0LL;
+  if ( v6 &gt;= 0x2C &amp;&amp; (*(_QWORD *)s &amp; 0xFFFFFFFFFFLL) == 530015415398LL &amp;&amp; v27 == 125 )
+  {
+    v27 = 0;
+    v8 = strtok(&amp;s[5], &quot;-&quot;);
+    v9 = 0LL;
+    if ( v8 )
+    {
+      while ( strlen(v8) == 12 )
+      {
+        v10 = *v8;
+        v11 = 0LL;
+        if ( *v8 )
+        {
+          v12 = *__ctype_b_loc();
+          v13 = 1LL;
+          v11 = 0LL;
+          do
+          {
+            v14 = v10;
+            v15 = v12[v10];
+            if ( (char)v14 &lt;= 102 &amp;&amp; v15 &amp; 0x400 )
+            {
+              v16 = v14 - 87;
+            }
+            else
+            {
+              if ( !(v15 &amp; 0x800) )
+                goto LABEL_31;
+              v16 = v14 - 48;
+            }
+            v11 = v16 | 16 * v11;
+            if ( v13 &gt; 11 )
+              break;
+            v10 = v8[v13++];
+          }
+          while ( v10 );
+        }
+        if ( !v9 &amp;&amp; v11 != 62791383142154LL )
+          break;
+        v17 = (__m128i)_mm_sub_pd(
+                         (__m128d)_mm_unpacklo_epi32((__m128i)(unsigned __int64)v11, (__m128i)xmmword_400BD0),
+                         (__m128d)xmmword_400BE0);
+        *(&amp;v23 + v9++) = COERCE_DOUBLE(_mm_shuffle_epi32(v17, 78)) + *(double *)v17.m128i_i64;
+        v18 = strtok(0LL, &quot;-&quot;);
+        v8 = v18;
+        if ( v9 &gt; 2 || !v18 )
+        {
+          if ( v24 &lt;= v23 || v25 &lt;= v24 || v23 + v24 &lt;= v25 )
+            break;
+          v19 = v24 * v24 + v23 * v23 - v25 * v25;
+          v20 = sqrt(4.0 * v23 * v23 * v24 * v24 - v19 * v19) * 0.25;
+          v21 = (v20 + v20) / (v23 + v24 + v25) + -1.940035480806554e13;
+          if ( v21 &lt; 0.00001 &amp;&amp; v21 &gt; -0.00001 )
+          {
+            v22 = v23 * v24 * v25 / (v20 * 4.0) + -4.777053952827391e13;
+            if ( v22 &lt; 0.00001 &amp;&amp; v22 &gt; -0.00001 )
+              puts(&quot;Congratz, input is your flag&quot;);
+          }
+          return 0LL;
+        }
+      }
+    }
+LABEL_31:
+    result = 0xFFFFFFFFLL;
+  }
+  return result;
+}
+</code></pre>
+<p>这个题整个逻辑很清晰，前面一部分对输入的字符串做了一些格式和字符数量判断。</p>
+<p>分析可得到需要输入以下格式<code>flag{xxxxxxxxxxxx-xxxxxxxxxxxx-xxxxxxxxxxxx}</code></p>
+<p>这里通过<code>-</code>分割成三个部分，其中第一部分是已知的<code>391bc2164f0a</code>，后面就是程序验证逻辑</p>
+<pre><code class="c">          if ( v24 &lt;= v23 || v25 &lt;= v24 || v23 + v24 &lt;= v25 )
+            break;
+          v19 = v24 * v24 + v23 * v23 - v25 * v25;
+          v20 = sqrt(4.0 * v23 * v23 * v24 * v24 - v19 * v19) * 0.25;
+          v21 = (v20 + v20) / (v23 + v24 + v25) + -1.940035480806554e13;
+          if ( v21 &lt; 0.00001 &amp;&amp; v21 &gt; -0.00001 )
+          {
+            v22 = v23 * v24 * v25 / (v20 * 4.0) + -4.777053952827391e13;
+            if ( v22 &lt; 0.00001 &amp;&amp; v22 &gt; -0.00001 )
+              puts(&quot;Congratz, input is your flag&quot;);
+          }
+</code></pre>
+<p>当时一看其实就知道是一个三角形相关的运算，整理可得以下表达式</p>
+<p>$c&gt;b,b&gt;a,a+b&gt;c$</p>
+<p>$p=\frac{\sqrt{4a^2b^2-(a^2+b^2-c^2)^2)}}{2(a+b+c)}$</p>
+<p>$q=\frac{abc}{(\sqrt{4a^2b^2-(a^2+b^2-c^2)^2})}$</p>
+<p>$-0.00001&lt;p&lt;0.00001,-0.00001&lt;q&lt;0.00001 $</p>
+<p>但并没有看出来是三角形内外圆的半径公式，所以想着直接上约束求解器z3</p>
+<pre><code class="python">from z3 import *
+x = Real(&#39;x&#39;)
+y = Real(&#39;y&#39;)
+z = Real(&#39;z&#39;)
+
+m = Real(&#39;m&#39;)
+n = Real(&#39;n&#39;)
+
+p = Real(&#39;p&#39;)
+q = Real(&#39;q&#39;)
+
+solver = Solver()
+
+m = x*x+y*y-z*z
+n = (4.0*x*x*y*y-m*m)**0.5*0.25
+p = 2*n/(x+y+z) + (-1.940035480806554296875E13)
+q = x*y*z/(4.0*n) + (-4.777053952827391e13)
+
+solver.add(z &gt; y)
+solver.add(y &gt; x)
+solver.add(x + y &gt; z)
+solver.add(p &gt; -100,p&lt;100)
+solver.add(q &gt; -100,q&lt;100)
+solver.add(x == 6.2791383142154e13)
+
+if solver.check() == sat:
+    print(solver.model())
+else:
+    print(&#39;unsolve&#39;)
+</code></pre>
+<p>结果求解了很久z3解不出来，后来才知道z3不能求解该类问题。z3文档中有提及只能解决非线性多项式约束，导致花了很长时间在思考是不是脚本的问题。然后用wolframalpha去求解也没有结果（目前还不清楚原因</p>
+<p>下来思考了很久才知道是求解三角形的内外半径，通过内外圆的性质得到如下公式</p>
+<p>$$Rr=\frac{abc}{2(a+b+c)}$$</p>
+<p>$$tanC = \frac{2r}{a+b-c} = \frac{sinC}{1+cosC}$$</p>
+<p>这里$sinC,cosC,R,r,c$都是已知的</p>
+<p>所以联立能得到$$a=7.0802074077033E13,b=9.5523798483318E13 $$</p>
+<p>得到对应的浮点数表示4064e4798769,56e0de138176</p>
+<pre><code class="assembly">movq    xmm0, rax
+punpckldq xmm0, xmmword ptr cs:qword_400BD0
+subpd   xmm0, cs:xmmword_400BE0
+pshufd  xmm1, xmm0, 4Eh
+addpd   xmm1, xmm0
+movlpd  [rsp+r14*8+168h+var_148], xmm1
+</code></pre>
+<p>在这里需要逆向求解出rax的值，即flag后面两部分。刚开始在这里卡了一下，感觉求解不出来。后面观察到qword_400BD0和xmmword_400BE0这两个数十分特殊</p>
+<pre><code>qword_400BD0=0x4530000043300000
+xmmword_400BE0=0x45300000000000004330000000000000
+</code></pre><p>punpckldq指令会将qword_400BD0和rax分成两部分组合，这里恰好qword_400BD0为浮点数的阶数部分，rax为尾数部分</p>
+<p>然后再分别与4530000000000000，4330000000000000相减。特殊在于这两个数阶数和上面对应相等，尾数部分为0，倒是相减结果又变回原始值。</p>
+<p>所以其实这里的变换等于没有变换。</p>
+<p>所以三个边长分别等于391bc2164f0a,4064e4798769,56e0de138176</p>
+<p>最后的flag=flag{391bc2164f0a-4064e4798769-56e0de138176}</p>
+<h4 id="补充：浮点数表示、运算、指令"><a href="#补充：浮点数表示、运算、指令" class="headerlink" title="补充：浮点数表示、运算、指令"></a>补充：浮点数表示、运算、指令</h4><p>浮点数有单精度和双精度之分，float占4个字节，double占8个字节</p>
+<p>在表示小数的时候采用类比科学计数法的方法，把二进制小数转换为2为底的指数表示$V=(-1)^s<em>M</em>2^E$</p>
+<p>e等于向左或向右移动到1为止的个数</p>
+<p>比如：12.25   对应二进制：1100.01 这里需要向右移动三位$1.10001*2^3$</p>
+<p>下面以float表示12.25这个数，分为三部分，符号位（1位）、指数（8位）、尾数（23位）</p>
+<p>符号位0，指数3，尾数10001(第一位默认为1不需要表示)</p>
+<p>由于指数也有负指数，所以其实还需要一位表示符号位， IEEE规定，小于01111111的指数位为负数</p>
+<p>其实这里可以理解为首位表示符号位，这样的话采用如下计算出float指数部分表示<code>10000000+11-1=10000010</code></p>
+<p>最后12.15单精度浮点数表示为：<code>0 10000010 10001000000000000000000</code> </p>
+<p>十六进制：<code>0x41440000</code> 内存中小端表示：<code>00 00 44 41</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Float/Double</th>
+<th style="text-align:center">符号位</th>
+<th style="text-align:center">指数</th>
+<th style="text-align:center">尾数</th>
+<th style="text-align:left">示例</th>
+<th style="text-align:left">16进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Float</td>
+<td style="text-align:center">1位</td>
+<td style="text-align:center">8位</td>
+<td style="text-align:center">23位</td>
+<td style="text-align:left">0 10000010 10001000000000000000000</td>
+<td style="text-align:left">41440000</td>
+</tr>
+<tr>
+<td style="text-align:center">Double</td>
+<td style="text-align:center">1位</td>
+<td style="text-align:center">11位</td>
+<td style="text-align:center">52位</td>
+<td style="text-align:left">0 10000000010 1000100000000000000000000000 000000000000000000000000</td>
+<td style="text-align:left">4028800000000000</td>
+</tr>
+</tbody>
+</table>
+<p>特殊的数表示：当全指数尾数全为0时，表示最小的数，这里定义为0；当指数全为1，尾数全为0时，表示最大的数，这里定义为无穷。</p>
+<p>在线转换<a href="http://www.binaryconvert.com/" target="_blank" rel="external">http://www.binaryconvert.com/</a> </p>
+<p>浮点数在进行加减运算的时候需要先对阶然后尾数部分运算</p>
+<p>浮点数指令查询<a href="https://asm.inightmare.org/opcodelst/index.php" target="_blank" rel="external">https://asm.inightmare.org/opcodelst/index.php</a></p>
+<p>这里解释下<code>pshufd  xmm1, xmm0, 4Eh</code>指令</p>
+<p><code>pshufd</code>可以按照指定的方式重新排列数据</p>
+<p>这里4E二进制<code>01 00 11 10</code></p>
+<table>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xmm0</td>
+<td>42cc8d80 00000000 41e842c9 e1400000</td>
+</tr>
+<tr>
+<td>4E</td>
+<td>01               00                 11               10</td>
+</tr>
+<tr>
+<td>xmm1</td>
+<td>41e842c9 e1400000 42cc8d80 00000000</td>
+</tr>
+</tbody>
+</table>
+
+        </div>
+        <div class="post-reply">
+            
+            
+            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
+                <script>
+
+                    /**
+                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                    /*
+                     var disqus_config = function () {
+                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                     };
+                     */
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = 'https://4ch12dy.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            
         </div>
     </div>
-    <div id='tag_cloud' class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Tags</strong>
-        </div>
-        <div class="content-inner is-flex flex-wrap justify-space-between">
-            
-                <a class="tags-item" href="tags/ARM64/" title="ARM64" rel="1">
-                    ARM64
-                </a>
-            
-                <a class="tags-item" href="tags/C/" title="C++" rel="2">
-                    C++
-                </a>
-            
-                <a class="tags-item" href="tags/ida/" title="ida" rel="1">
-                    ida
-                </a>
-            
-                <a class="tags-item" href="tags/android/" title="android" rel="1">
-                    android
-                </a>
-            
-                <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="1">
-                    LLDB
-                </a>
-            
-                <a class="tags-item" href="tags/python/" title="python" rel="1">
-                    python
-                </a>
-            
-                <a class="tags-item" href="tags/Linux/" title="Linux" rel="9">
-                    Linux
-                </a>
-            
-                <a class="tags-item" href="tags/Protostar/" title="Protostar" rel="9">
-                    Protostar
-                </a>
-            
-                <a class="tags-item" href="tags/堆溢出/" title="堆溢出" rel="4">
-                    堆溢出
-                </a>
-            
-                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
-                    strcpy
-                </a>
-            
-                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
-                    GOT表
-                </a>
-            
-                <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
-                    UAF
-                </a>
-            
-                <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
-                    metadata
-                </a>
-            
-                <a class="tags-item" href="tags/DLMalloc/" title="DLMalloc" rel="1">
-                    DLMalloc
-                </a>
-            
-                <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
-                    栈溢出
-                </a>
-            
-                <a class="tags-item" href="tags/printf/" title="printf" rel="1">
-                    printf
-                </a>
-            
-                <a class="tags-item" href="tags/format/" title="format" rel="1">
-                    format
-                </a>
-            
-                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
-                    gdb
-                </a>
-            
-                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
-                    linux
-                </a>
-            
-                <a class="tags-item" href="tags/mach-o/" title="mach-o" rel="1">
-                    mach-o
-                </a>
-            
-                <a class="tags-item" href="tags/dyld/" title="dyld" rel="1">
-                    dyld
-                </a>
-            
-                <a class="tags-item" href="tags/stub/" title="stub" rel="1">
-                    stub
-                </a>
-            
-                <a class="tags-item" href="tags/crackme/" title="crackme" rel="1">
-                    crackme
-                </a>
-            
-                <a class="tags-item" href="tags/看雪/" title="看雪" rel="1">
-                    看雪
-                </a>
-            
-                <a class="tags-item" href="tags/iOS/" title="iOS" rel="1">
-                    iOS
-                </a>
-            
-                <a class="tags-item" href="tags/math/" title="math" rel="1">
-                    math
-                </a>
-            
-                <a class="tags-item" href="tags/kext/" title="kext" rel="1">
-                    kext
-                </a>
-            
-                <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
-                    CTF
-                </a>
-            
-                <a class="tags-item" href="tags/writeup/" title="writeup" rel="1">
-                    writeup
-                </a>
-            
-                <a class="tags-item" href="tags/LLVM/" title="LLVM" rel="1">
-                    LLVM
-                </a>
-            
-                <a class="tags-item" href="tags/obfuscation/" title="obfuscation" rel="1">
-                    obfuscation
-                </a>
-            
-                <a class="tags-item" href="tags/vtable/" title="vtable" rel="1">
-                    vtable
-                </a>
-            
-                <a class="tags-item" href="tags/heap/" title="heap" rel="1">
-                    heap
-                </a>
-            
-                <a class="tags-item" href="tags/malloc/" title="malloc" rel="1">
-                    malloc
-                </a>
-            
-                <a class="tags-item" href="tags/free/" title="free" rel="1">
-                    free
-                </a>
-            
-                <a class="tags-item" href="tags/tctf/" title="tctf" rel="1">
-                    tctf
-                </a>
-            
-                <a class="tags-item" href="tags/re/" title="re" rel="1">
-                    re
-                </a>
-            
-                <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
-                    XNU
-                </a>
-            
-                <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
-                    Kernel
-                </a>
-            
-                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
-                    x86
-                </a>
-            
-                <a class="tags-item" href="tags/Pegasus/" title="Pegasus" rel="1">
-                    Pegasus
-                </a>
-            
-                <a class="tags-item" href="tags/cve/" title="cve" rel="1">
-                    cve
-                </a>
-            
-                <a class="tags-item" href="tags/CVE-2016-4655/" title="CVE-2016-4655" rel="1">
-                    CVE-2016-4655
-                </a>
-            
-                <a class="tags-item" href="tags/CVE-2016-4656/" title="CVE-2016-4656" rel="1">
-                    CVE-2016-4656
-                </a>
-            
-                <a class="tags-item" href="tags/PoC/" title="PoC" rel="1">
-                    PoC
-                </a>
-            
-        </div>
-    </div>
-    <div class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Categories</strong>
-        </div>
-        <div class="content-inner">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/CTF/">CTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/IDA/">IDA</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/LLVM/">LLVM</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/assembly/">assembly</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/crackme/">crackme</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/ctf/">ctf</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSCVE/">iOSCVE</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSRE/">iOSRE</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/kext-iokit/">kext/iokit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/me/">me</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/misc/">misc</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/pwn/">pwn</a><span class="category-list-count">1</span></li></ul>
-        </div>
-    </div>
-    <div class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Archives</strong>
-        </div>
-        <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/03/">March 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
-        </div>
-    </div>
-</aside>
-            
-        </div>
-    </div>
-</div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="../../../../../css/highlight_github.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
       </div>
   </div>
@@ -1037,8 +523,8 @@ gdb环境中 set args..
   </div>
 </footer>
 
-<script src="../../js/search_core.js"></script>
-<script src="../../js/script.js"></script>
+<script src="../../../../../js/search_core.js"></script>
+<script src="../../../../../js/script.js"></script>
 
 </body>
 </html>
