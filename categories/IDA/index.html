@@ -146,7 +146,7 @@
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX184HmwkSe4DUMaQyYcneoOFy0syrNfjS5/4dCeWIwqSggXQ1n5n1xCz2eH25YMp6iDQkiQOgVfkCIF..
+U2FsdGVkX1+d2YkYS5B0Ii8wRqSx6jiNHwdRfmm5Niw+GESAcM9vIQ9dqZxaPEoi7ysH/a0OPLyMVQ/HH9PW//k..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -220,5 +220,20 @@ U2FsdGVkX184HmwkSe4DUMaQyYcneoOFy0syrNfjS5/4dCeWIwqSggXQ1n5n1xCz2eH25YMp6iDQkiQO
 <script src="../../js/search_core.js"></script>
 <script src="../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

@@ -37,7 +37,7 @@ signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
 {
   char v3; // bl
   const __int32_t **v4; // rax">
-<meta property="og:updated_time" content="2019-03-27T07:15:38.692Z">
+<meta property="og:updated_time" content="2019-03-28T06:43:55.877Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCTF-Elements">
 <meta name="twitter:description" content="TCTF-Elements
@@ -316,8 +316,8 @@ LABEL_31:
 </code></pre>
 <p>当时一看其实就知道是一个三角形相关的运算，整理可得以下表达式</p>
 <p>$c&gt;b,b&gt;a,a+b&gt;c$</p>
-<p>$p=\frac{\sqrt{4a^2b^2-(a^2+b^2-c^2)^2)}}{2(a+b+c)}$</p>
-<p>$q=\frac{abc}{(\sqrt{4a^2b^2-(a^2+b^2-c^2)^2})}$</p>
+<p>$p=\frac{\sqrt{4a^2b^2-(a^2+b^2-c^2)^2)}}{2(a+b+c)}-1.940035480806554e13$</p>
+<p>$q=\frac{abc}{(\sqrt{4a^2b^2-(a^2+b^2-c^2)^2})}-4.777053952827391e13$</p>
 <p>$-0.00001&lt;p&lt;0.00001,-0.00001&lt;q&lt;0.00001 $</p>
 <p>但并没有看出来是三角形内外圆的半径公式，所以想着直接上约束求解器z3</p>
 <pre><code class="python">from z3 import *
@@ -526,5 +526,20 @@ xmmword_400BE0=0x45300000000000004330000000000000
 <script src="../../../../../js/search_core.js"></script>
 <script src="../../../../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
