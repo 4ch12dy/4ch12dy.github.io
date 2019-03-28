@@ -37,7 +37,7 @@ signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
 {
   char v3; // bl
   const __int32_t **v4; // rax">
-<meta property="og:updated_time" content="2019-03-28T06:43:55.877Z">
+<meta property="og:updated_time" content="2019-03-28T07:06:17.336Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCTF-Elements">
 <meta name="twitter:description" content="TCTF-Elements
@@ -353,7 +353,7 @@ else:
 <p>结果求解了很久z3解不出来，后来才知道z3不能求解该类问题。z3文档中有提及只能解决非线性多项式约束，导致花了很长时间在思考是不是脚本的问题。然后用wolframalpha去求解也没有结果（目前还不清楚原因</p>
 <p>下来思考了很久才知道是求解三角形的内外半径，通过内外圆的性质得到如下公式</p>
 <p>$$Rr=\frac{abc}{2(a+b+c)}$$</p>
-<p>$$tanC = \frac{2r}{a+b-c} = \frac{sinC}{1+cosC}$$</p>
+<p>$$tan\frac{C}{2} = \frac{2r}{a+b-c} = \frac{sinC}{1+cosC}$$</p>
 <p>这里$sinC,cosC,R,r,c$都是已知的</p>
 <p>所以联立能得到$$a=7.0802074077033E13,b=9.5523798483318E13 $$</p>
 <p>得到对应的浮点数表示4064e4798769,56e0de138176</p>
