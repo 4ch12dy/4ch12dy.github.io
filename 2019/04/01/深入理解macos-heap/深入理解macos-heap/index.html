@@ -15,17 +15,27 @@
   </script>
 
   
-  <title>Mot-clé: Pegasus | 4ch12dy</title>
+  <title>源码解读macOS/iOS Heap | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="给我一点时间和power">
-<meta property="og:type" content="website">
-<meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/Pegasus/index.html">
+  <meta name="description" content="源码解读macOS/iOS Heap
+关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。
+
+从malloc说起malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就从源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码解读macOS/iOS Heap">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/01/深入理解macos-heap/深入理解macos-heap/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="给我一点时间和power">
+<meta property="og:description" content="源码解读macOS/iOS Heap
+关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。
+
+从malloc说起malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就从源">
+<meta property="og:updated_time" content="2019-04-02T05:50:15.199Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4ch12dy">
-<meta name="twitter:description" content="给我一点时间和power">
+<meta name="twitter:title" content="源码解读macOS/iOS Heap">
+<meta name="twitter:description" content="源码解读macOS/iOS Heap
+关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。
+
+从malloc说起malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就从源">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -33,9 +43,9 @@
     <link rel="icon" href="/favicon.png">
   
   
-  <link rel="stylesheet" href="../../css/common.css">
-<link rel="stylesheet" href="../../css/nav.css">
-<link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../../../../css/common.css">
+<link rel="stylesheet" href="../../../../../css/nav.css">
+<link rel="stylesheet" href="../../../../../css/layout.css">
   
 
 </head>
@@ -64,15 +74,15 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
             </a>
             
-            <a class="nav-item" href="../../index.html">
+            <a class="nav-item" href="../../../../../index.html">
                 Home
             </a>
             
-            <a class="nav-item" href="../../aboutme">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item" href="../../strike">
+            <a class="nav-item" href="../../../../../strike">
                 Strike
             </a>
             
@@ -84,15 +94,15 @@
         </span>
         <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
             
-            <a class="nav-item flex-1" href="../../index.html">
+            <a class="nav-item flex-1" href="../../../../../index.html">
                 Home
             </a>
             
-            <a class="nav-item flex-1" href="../../aboutme">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item flex-1" href="../../strike">
+            <a class="nav-item flex-1" href="../../../../../strike">
                 Strike
             </a>
             
@@ -103,55 +113,911 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .container.tag-cate-wrap {
-        min-height: 93vh;
+          <!--博文页面-->
+
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
+        background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .category-title-inner {
-        padding-top: 50px;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    strong {
-        text-transform: capitalize;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+    }
+
+    .flow-chart {
+        text-align: center;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
-
-
-<div class="container tag-cate-wrap">
-    <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·Pegasus</strong></h1>
-    </div>
-
-    
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/05/01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/">
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>源码解读macOS/iOS Heap</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/other/xia0.png?raw=true">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
+                <span class="post-date sub-title">at: 2019-04-01</span>
+            </div>
+            
+                <div>
                     
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
+                         <a class="tag is-post-tag" href="/tags/heap/">heap</a>
                     
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Pegasus内核漏洞及PoC分析</strong> <small class="post-date">at: 2017-05-01</small>
-                                <br>
-                                0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
+                </div>
+            
         </div>
-    
-</div>
+        <div class="content" style="overflow: auto">
+            <h3 id="源码解读macOS-iOS-Heap"><a href="#源码解读macOS-iOS-Heap" class="headerlink" title="源码解读macOS/iOS Heap"></a>源码解读macOS/iOS Heap</h3><blockquote>
+<p>关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。</p>
+</blockquote>
+<h4 id="从malloc说起"><a href="#从malloc说起" class="headerlink" title="从malloc说起"></a>从malloc说起</h4><p><code>malloc</code>是我们经常使用的函数，这里也是<code>libmalloc.dylib</code>暴露出来的接口，另外苹果开源了<a href="https://opensource.apple.com/source/libmalloc/" target="_blank" rel="external">libmalloc代码</a>。所以接下来我们就从源码的角度深入下去。</p>
+<pre><code class="c">void *
+malloc(size_t size)
+{
+    void *retval;
+    retval = malloc_zone_malloc(default_zone, size);
+    if (retval == NULL) {
+        errno = ENOMEM;
+    }
+    return retval;
+}
+</code></pre>
+<p>这里实际调用了<code>malloc_zone_malloc</code>函数，传入了<code>default_zone</code>全局变量</p>
+<pre><code class="c">static virtual_default_zone_t virtual_default_zone
+__attribute__((section(&quot;__DATA,__v_zone&quot;)))
+__attribute__((aligned(PAGE_MAX_SIZE))) = {
+    NULL,
+    NULL,
+    default_zone_size,
+    default_zone_malloc,
+    default_zone_calloc,
+    default_zone_valloc,
+    default_zone_free,
+    default_zone_realloc,
+    default_zone_destroy,
+    DEFAULT_MALLOC_ZONE_STRING,
+    default_zone_batch_malloc,
+    default_zone_batch_free,
+    &amp;default_zone_introspect,
+    10,
+    default_zone_memalign,
+    default_zone_free_definite_size,
+    default_zone_pressure_relief,
+    default_zone_malloc_claimed_address,
+};
+
+static malloc_zone_t *default_zone = &amp;virtual_default_zone.malloc_zone;
+</code></pre>
+<p>这里初始化了一个默认的zone，正如名字一样<code>virtual_default_zone</code>其实是一个虚假的zone，接下来是调用<code>malloc_zone_malloc</code></p>
+<pre><code class="c">void *
+malloc_zone_malloc(malloc_zone_t *zone, size_t size)
+{
+    MALLOC_TRACE(TRACE_malloc | DBG_FUNC_START, (uintptr_t)zone, size, 0, 0);
+
+    void *ptr;
+    if (malloc_check_start &amp;&amp; (malloc_check_counter++ &gt;= malloc_check_start)) {
+        internal_check();
+    }
+    if (size &gt; MALLOC_ABSOLUTE_MAX_SIZE) {
+        return NULL;
+    }
+
+    ptr = zone-&gt;malloc(zone, size);        // if lite zone is passed in then we still call the lite methods
+
+
+    if (malloc_logger) {
+        malloc_logger(MALLOC_LOG_TYPE_ALLOCATE | MALLOC_LOG_TYPE_HAS_ZONE, (uintptr_t)zone, (uintptr_t)size, 0, (uintptr_t)ptr, 0);
+    }
+
+    MALLOC_TRACE(TRACE_malloc | DBG_FUNC_END, (uintptr_t)zone, size, (uintptr_t)ptr, 0);
+    return ptr;
+}
+</code></pre>
+<p>这里调用的<code>ptr = zone-&gt;malloc(zone, size);</code>就是<code>default_zone_malloc</code>函数</p>
+<pre><code class="c">static void *
+default_zone_malloc(malloc_zone_t *zone, size_t size)
+{
+    zone = runtime_default_zone();
+
+    return zone-&gt;malloc(zone, size);
+}
+</code></pre>
+<p>这里的<code>runtime_default_zone()</code>很重要，其实这里才是去真正的初始化zone</p>
+<pre><code class="c">runtime_default_zone   // inline
+----inline_malloc_default_zone  //inline
+--------_malloc_initialize_once  //inline 
+------------_malloc_initialize()
+</code></pre>
+<p>下面看<code>_malloc_initialize</code>函数，去掉了一些不相干代码</p>
+<pre><code class="c">static void
+_malloc_initialize(void *context __unused)
+{
+    MALLOC_LOCK();
+    unsigned n;
+    malloc_zone_t *zone = NULL;
+
+    ...
+    zone = create_scalable_zone(0, malloc_debug_flags);
+    malloc_zone_register_while_locked(zone);
+    malloc_set_zone_name(zone, DEFAULT_MALLOC_ZONE_STRING);    
+
+    initial_default_zone = zone;
+
+    if (n != 0) { // make the default first, for efficiency
+        unsigned protect_size = malloc_num_zones_allocated * sizeof(malloc_zone_t *);
+        malloc_zone_t *hold = malloc_zones[0];
+
+        if (hold-&gt;zone_name &amp;&amp; strcmp(hold-&gt;zone_name, DEFAULT_MALLOC_ZONE_STRING) == 0) {
+            malloc_set_zone_name(hold, NULL);
+        }
+
+        mprotect(malloc_zones, protect_size, PROT_READ | PROT_WRITE);
+        malloc_zones[0] = malloc_zones[n];
+        malloc_zones[n] = hold;
+        mprotect(malloc_zones, protect_size, PROT_READ);
+    }
+
+    ...
+}
+</code></pre>
+<p>这里主要看<code>create_scalable_zone</code>函数，所以默认的zone实际上就是scalable zone</p>
+<pre><code class="c">malloc_zone_t *
+create_scalable_zone(size_t initial_size, unsigned debug_flags) {
+    return (malloc_zone_t *) create_scalable_szone(initial_size, debug_flags);
+}
+
+szone_t *
+create_scalable_szone(size_t initial_size, unsigned debug_flags)
+{
+    szone_t *szone;
+
+    /* get memory for the zone. */
+    szone = mvm_allocate_pages(SZONE_PAGED_SIZE, 0, 0, VM_MEMORY_MALLOC);
+    if (!szone) {
+        return NULL;
+    }
+
+    ...
+
+    // Query the number of configured processors.
+    // Uniprocessor case gets just one tiny and one small magazine (whose index is zero). This gives
+    // the same behavior as the original scalable malloc. MP gets per-CPU magazines
+    // that scale (way) better.
+    unsigned int max_mags = mag_max_magazines();
+    uint32_t num_magazines = (max_mags &gt; 1) ? MIN(max_mags, TINY_MAX_MAGAZINES) : 1;
+    rack_init(&amp;szone-&gt;tiny_rack, RACK_TYPE_TINY, num_magazines, debug_flags);
+    rack_init(&amp;szone-&gt;small_rack, RACK_TYPE_SMALL, num_magazines, debug_flags);
+
+#if CONFIG_LARGE_CACHE
+    // madvise(..., MADV_REUSABLE) death-row arrivals above this threshold [~0.1%]
+    szone-&gt;large_entry_cache_reserve_limit = (size_t)(memsize &gt;&gt; 10);
+
+    /* &lt;rdar://problem/6610904&gt; Reset protection when returning a previous large allocation? */
+    int32_t libSystemVersion = NSVersionOfLinkTimeLibrary(&quot;System&quot;);
+    if ((-1 != libSystemVersion) &amp;&amp; ((libSystemVersion &gt;&gt; 16) &lt; 112) /* CFSystemVersionSnowLeopard */) {
+        szone-&gt;large_legacy_reset_mprotect = TRUE;
+    } else {
+        szone-&gt;large_legacy_reset_mprotect = FALSE;
+    }
+#endif
+
+    // Initialize the security token.
+    szone-&gt;cookie = (uintptr_t)malloc_entropy[0];
+
+    szone-&gt;basic_zone.version = 10;
+    szone-&gt;basic_zone.size = (void *)szone_size;
+    szone-&gt;basic_zone.malloc = (void *)szone_malloc;
+    szone-&gt;basic_zone.calloc = (void *)szone_calloc;
+    szone-&gt;basic_zone.valloc = (void *)szone_valloc;
+    szone-&gt;basic_zone.free = (void *)szone_free;
+    szone-&gt;basic_zone.realloc = (void *)szone_realloc;
+    szone-&gt;basic_zone.destroy = (void *)szone_destroy;
+    szone-&gt;basic_zone.batch_malloc = (void *)szone_batch_malloc;
+    szone-&gt;basic_zone.batch_free = (void *)szone_batch_free;
+    szone-&gt;basic_zone.introspect = (struct malloc_introspection_t *)&amp;szone_introspect;
+    szone-&gt;basic_zone.memalign = (void *)szone_memalign;
+    szone-&gt;basic_zone.free_definite_size = (void *)szone_free_definite_size;
+    szone-&gt;basic_zone.pressure_relief = (void *)szone_pressure_relief;
+    szone-&gt;basic_zone.claimed_address = (void *)szone_claimed_address;
+
+    /* Set to zero once and for all as required by CFAllocator. */
+    szone-&gt;basic_zone.reserved1 = 0;
+    /* Set to zero once and for all as required by CFAllocator. */
+    szone-&gt;basic_zone.reserved2 = 0;
+
+    /* Prevent overwriting the function pointers in basic_zone. */
+    mprotect(szone, sizeof(szone-&gt;basic_zone), PROT_READ);
+
+    szone-&gt;debug_flags = debug_flags;
+    _malloc_lock_init(&amp;szone-&gt;large_szone_lock);
+
+    szone-&gt;cpu_id_key = -1UL; // Unused.
+
+    CHECK(szone, __PRETTY_FUNCTION__);
+    return szone;
+}
+</code></pre>
+<p>这个函数分配并且初始化了szone，设置了<code>szone_malloc</code>、<code>szone_free</code>等函数</p>
+<p>所以后面在调用<code>malloc</code>和<code>free</code>的时候实际上调用的是<code>szone_malloc</code>、<code>szone_free</code>。<code>szone_malloc</code>的实现涉及到苹果关于堆设计中最重要的部分，这里先不展开讲解。可以看出苹果设计的这种结构很方便扩展，事实上的确如此，不仅是scalable zone，还可以注册WebKit Malloc、GFXMallocZone、QuartzCore。由对应zone的<code>malloc_zone_*</code>进行实际的内存分配工作。</p>
+<p>下面是程序第一次调用malloc的栈帧，可以看出与我们分析的调用顺序一致</p>
+<pre><code class="c"> *  frame #0: 0x00007fff60bd72af libsystem_malloc.dylib`create_scalable_szone
+    frame #1: 0x00007fff60bd6e71 libsystem_malloc.dylib`_malloc_initialize + 1482
+    frame #2: 0x00007fff60c0facb libsystem_platform.dylib`_os_once_callout + 18
+    frame #3: 0x00007fff60bd68a5 libsystem_malloc.dylib`default_zone_malloc + 77
+    frame #4: 0x00007fff60bd6807 libsystem_malloc.dylib`malloc_zone_malloc + 103
+    frame #5: 0x00007fff60bd6783 libsystem_malloc.dylib`malloc + 24
+    frame #6: 0x00007fff60a9831d libsystem_c.dylib`arc4_init + 109
+    frame #7: 0x00007fff60a98479 libsystem_c.dylib`arc4random_buf + 37
+    frame #8: 0x00007fff5f94644e libobjc.A.dylib`_read_images + 396
+    frame #9: 0x00007fff5f945473 libobjc.A.dylib`map_images_nolock + 1197
+    frame #10: 0x00007fff5f959279 libobjc.A.dylib`map_images + 68
+    ....
+</code></pre>
+<h4 id="scalable-zone"><a href="#scalable-zone" class="headerlink" title="scalable zone"></a>scalable zone</h4><p>szone包含两个racks，分别是tiny和small rack</p>
+<table>
+<thead>
+<tr>
+<th>rack</th>
+<th>32位机器</th>
+<th>64位机器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tiny</td>
+<td>&lt;= 496B</td>
+<td>&lt;= 1008B</td>
+</tr>
+<tr>
+<td>small</td>
+<td>&lt;= 128KB</td>
+<td>&lt;=128KB</td>
+</tr>
+</tbody>
+</table>
+<p>大于127KB的就由large allocator分配，直接采用分配页大小的方式。这里不详细讨论。</p>
+<ul>
+<li>有几个处理器，rack就有几个magazine</li>
+<li>每个magazine有多个regions，tiny(1MB)、small(8MB)</li>
+<li>每个region被分为quantum，tiny(16B，64520 Q/region)、small(512B，16319 Q/region)</li>
+</ul>
+<p>具体可以从后面结构体中看出来其包含关系。</p>
+<h5 id="malloc-gt-szone-malloc-gt-szone-malloc-should-clear"><a href="#malloc-gt-szone-malloc-gt-szone-malloc-should-clear" class="headerlink" title="malloc-&gt;szone_malloc-&gt;szone_malloc_should_clear"></a>malloc-&gt;szone_malloc-&gt;szone_malloc_should_clear</h5><pre><code class="c">MALLOC_NOINLINE void *
+szone_malloc_should_clear(szone_t *szone, size_t size, boolean_t cleared_requested)
+{
+    void *ptr;
+    msize_t msize;
+
+    if (size &lt;= SMALL_THRESHOLD) {
+        // tiny size: &lt;=1008 bytes (64-bit), &lt;=496 bytes (32-bit)
+        // think tiny
+        msize = TINY_MSIZE_FOR_BYTES(size + TINY_QUANTUM - 1);
+        if (!msize) {
+            msize = 1;
+        }
+        ptr = tiny_malloc_should_clear(&amp;szone-&gt;tiny_rack, msize, cleared_requested);
+    } else if (size &lt;= szone-&gt;large_threshold) {
+        // small size: &lt;=15k (iOS), &lt;=64k (large iOS), &lt;=128k (macOS)
+        // think small
+        msize = SMALL_MSIZE_FOR_BYTES(size + SMALL_QUANTUM - 1);
+        if (!msize) {
+            msize = 1;
+        }
+        ptr = small_malloc_should_clear(&amp;szone-&gt;small_rack, msize, cleared_requested);
+    } else {
+        // large: all other allocations
+        size_t num_kernel_pages = round_page_quanta(size) &gt;&gt; vm_page_quanta_shift;
+        if (num_kernel_pages == 0) { /* Overflowed */
+            ptr = 0;
+        } else {
+            ptr = large_malloc(szone, num_kernel_pages, 0, cleared_requested);
+        }
+    }
+
+    return ptr;
+}
+</code></pre>
+<p>上面可以清楚看出会根据其申请内存大小从tiny、small、large三种方式分配。这里以tiny为例</p>
+<h5 id="tiny-malloc-should-clear"><a href="#tiny-malloc-should-clear" class="headerlink" title="tiny_malloc_should_clear"></a>tiny_malloc_should_clear</h5><pre><code class="c">void *
+tiny_malloc_should_clear(rack_t *rack, msize_t msize, boolean_t cleared_requested)
+{
+    void *ptr;
+    mag_index_t mag_index = tiny_mag_get_thread_index() % rack-&gt;num_magazines;
+    magazine_t *tiny_mag_ptr = &amp;(rack-&gt;magazines[mag_index]);
+
+    MALLOC_TRACE(TRACE_tiny_malloc, (uintptr_t)rack, TINY_BYTES_FOR_MSIZE(msize), (uintptr_t)tiny_mag_ptr, cleared_requested);
+
+#if DEBUG_MALLOC
+    if (DEPOT_MAGAZINE_INDEX == mag_index) {
+        malloc_zone_error(rack-&gt;debug_flags, true, &quot;malloc called for magazine index -1\n&quot;);
+        return (NULL);
+    }
+
+    if (!msize) {
+        malloc_zone_error(rack-&gt;debug_flags, true, &quot;invariant broken (!msize) in allocation (region)\n&quot;);
+        return (NULL);
+    }
+#endif
+
+    SZONE_MAGAZINE_PTR_LOCK(tiny_mag_ptr);
+
+#if CONFIG_TINY_CACHE
+    ptr = tiny_mag_ptr-&gt;mag_last_free;
+
+    if (tiny_mag_ptr-&gt;mag_last_free_msize == msize) {
+        // we have a winner
+        tiny_mag_ptr-&gt;mag_last_free = NULL;
+        tiny_mag_ptr-&gt;mag_last_free_msize = 0;
+        tiny_mag_ptr-&gt;mag_last_free_rgn = NULL;
+        SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+        CHECK(szone, __PRETTY_FUNCTION__);
+        if (cleared_requested) {
+            memset(ptr, 0, TINY_BYTES_FOR_MSIZE(msize));
+        }
+#if DEBUG_MALLOC
+        if (LOG(szone, ptr)) {
+            malloc_report(ASL_LEVEL_INFO, &quot;in tiny_malloc_should_clear(), tiny cache ptr=%p, msize=%d\n&quot;, ptr, msize);
+        }
+#endif
+        return ptr;
+    }
+#endif /* CONFIG_TINY_CACHE */
+
+    while (1) {
+        ptr = tiny_malloc_from_free_list(rack, tiny_mag_ptr, mag_index, msize);
+        if (ptr) {
+            SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+            CHECK(szone, __PRETTY_FUNCTION__);
+            if (cleared_requested) {
+                memset(ptr, 0, TINY_BYTES_FOR_MSIZE(msize));
+            }
+            return ptr;
+        }
+
+        if (tiny_get_region_from_depot(rack, tiny_mag_ptr, mag_index, msize)) {
+            ptr = tiny_malloc_from_free_list(rack, tiny_mag_ptr, mag_index, msize);
+            if (ptr) {
+                SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+                CHECK(szone, __PRETTY_FUNCTION__);
+                if (cleared_requested) {
+                    memset(ptr, 0, TINY_BYTES_FOR_MSIZE(msize));
+                }
+                return ptr;
+            }
+        }
+
+        // The magazine is exhausted. A new region (heap) must be allocated to satisfy this call to malloc().
+        // The allocation, an mmap() system call, will be performed outside the magazine spin locks by the first
+        // thread that suffers the exhaustion. That thread sets &quot;alloc_underway&quot; and enters a critical section.
+        // Threads arriving here later are excluded from the critical section, yield the CPU, and then retry the
+        // allocation. After some time the magazine is resupplied, the original thread leaves with its allocation,
+        // and retry-ing threads succeed in the code just above.
+        if (!tiny_mag_ptr-&gt;alloc_underway) {
+            void *fresh_region;
+
+            // time to create a new region (do this outside the magazine lock)
+            tiny_mag_ptr-&gt;alloc_underway = TRUE;
+            OSMemoryBarrier();
+            SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+            fresh_region = mvm_allocate_pages_securely(TINY_REGION_SIZE, TINY_BLOCKS_ALIGN, VM_MEMORY_MALLOC_TINY, rack-&gt;debug_flags);
+            SZONE_MAGAZINE_PTR_LOCK(tiny_mag_ptr);
+
+            // DTrace USDT Probe
+            MAGMALLOC_ALLOCREGION(TINY_SZONE_FROM_RACK(rack), (int)mag_index, fresh_region, TINY_REGION_SIZE);
+
+            if (!fresh_region) { // out of memory!
+                tiny_mag_ptr-&gt;alloc_underway = FALSE;
+                OSMemoryBarrier();
+                SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+                return NULL;
+            }
+
+            ptr = tiny_malloc_from_region_no_lock(rack, tiny_mag_ptr, mag_index, msize, fresh_region);
+
+            // we don&#39;t clear because this freshly allocated space is pristine
+            tiny_mag_ptr-&gt;alloc_underway = FALSE;
+            OSMemoryBarrier();
+            SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+            CHECK(szone, __PRETTY_FUNCTION__);
+            return ptr;
+        } else {
+            SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+            yield();
+            SZONE_MAGAZINE_PTR_LOCK(tiny_mag_ptr);
+        }
+    }
+    /* NOTREACHED */
+}
+</code></pre>
+<p>这里的<code>if (tiny_mag_ptr-&gt;mag_last_free_msize == msize)</code>是判断申请大小是否和缓存的大小相同，如果相同，则直接把该内存返回给程序。反之则从<code>ptr = tiny_malloc_from_free_list(rack, tiny_mag_ptr, mag_index, msize);</code>free list中去获取刚好大于该大小的free list。这里的free list是按quantum的倍数递增的一个链表。若还是不能满足则去freelist中由合并得到的较大block中去分配。还不能满足则去region剩余部分申请。最后还不满足则申请新的一个region。申请失败则返回NULL。</p>
+<h5 id="free-gt-malloc-zone-free-gt-szone-free"><a href="#free-gt-malloc-zone-free-gt-szone-free" class="headerlink" title="free-&gt;malloc_zone_free-&gt;szone_free"></a>free-&gt;malloc_zone_free-&gt;szone_free</h5><pre><code class="c">void
+szone_free(szone_t *szone, void *ptr)
+{
+    region_t tiny_region;
+    region_t small_region;
+
+#if DEBUG_MALLOC
+    if (LOG(szone, ptr)) {
+        malloc_report(ASL_LEVEL_INFO, &quot;in szone_free with %p\n&quot;, ptr);
+    }
+#endif
+    if (!ptr) {
+        return;
+    }
+    /*
+     * Try to free to a tiny region.
+     */
+    if ((uintptr_t)ptr &amp; (TINY_QUANTUM - 1)) {
+        malloc_zone_error(szone-&gt;debug_flags, true, &quot;Non-aligned pointer %p being freed\n&quot;, ptr);
+        return;
+    }
+    if ((tiny_region = tiny_region_for_ptr_no_lock(&amp;szone-&gt;tiny_rack, ptr)) != NULL) {
+        if (TINY_INDEX_FOR_PTR(ptr) &gt;= NUM_TINY_BLOCKS) {
+            malloc_zone_error(szone-&gt;debug_flags, true, &quot;Pointer %p to metadata being freed\n&quot;, ptr);
+            return;
+        }
+        free_tiny(&amp;szone-&gt;tiny_rack, ptr, tiny_region, 0);
+        return;
+    }
+
+    /*
+     * Try to free to a small region.
+     */
+    if ((uintptr_t)ptr &amp; (SMALL_QUANTUM - 1)) {
+        malloc_zone_error(szone-&gt;debug_flags, true, &quot;Non-aligned pointer %p being freed (2)\n&quot;, ptr);
+        return;
+    }
+    if ((small_region = small_region_for_ptr_no_lock(&amp;szone-&gt;small_rack, ptr)) != NULL) {
+        if (SMALL_META_INDEX_FOR_PTR(ptr) &gt;= NUM_SMALL_BLOCKS) {
+            malloc_zone_error(szone-&gt;debug_flags, true, &quot;Pointer %p to metadata being freed (2)\n&quot;, ptr);
+            return;
+        }
+        free_small(&amp;szone-&gt;small_rack, ptr, small_region, 0);
+        return;
+    }
+
+    /* check that it&#39;s a legal large allocation */
+    if ((uintptr_t)ptr &amp; (vm_page_quanta_size - 1)) {
+        malloc_zone_error(szone-&gt;debug_flags, true, &quot;non-page-aligned, non-allocated pointer %p being freed\n&quot;, ptr);
+        return;
+    }
+    free_large(szone, ptr);
+}
+</code></pre>
+<p>同样，free的时候会先判断该内存是否属于tiny，small，large。则选取对应的free函数。这里以tiny为例</p>
+<pre><code class="c">void
+free_tiny(rack_t *rack, void *ptr, region_t tiny_region, size_t known_size)
+{
+    msize_t msize;
+    boolean_t is_free;
+    mag_index_t mag_index = MAGAZINE_INDEX_FOR_TINY_REGION(tiny_region);
+    magazine_t *tiny_mag_ptr = &amp;(rack-&gt;magazines[mag_index]);
+
+    MALLOC_TRACE(TRACE_tiny_free, (uintptr_t)rack, (uintptr_t)ptr, (uintptr_t)tiny_mag_ptr, known_size);
+
+    // ptr is known to be in tiny_region
+    if (known_size) {
+        msize = TINY_MSIZE_FOR_BYTES(known_size + TINY_QUANTUM - 1);
+    } else {
+        msize = get_tiny_meta_header(ptr, &amp;is_free);
+        if (is_free) {
+            free_tiny_botch(rack, ptr);
+            return;
+        }
+    }
+#if DEBUG_MALLOC
+    if (!msize) {
+        malloc_report(ASL_LEVEL_ERR, &quot;*** free_tiny() block in use is too large: %p\n&quot;, ptr);
+        return;
+    }
+#endif
+
+    SZONE_MAGAZINE_PTR_LOCK(tiny_mag_ptr);
+
+#if CONFIG_TINY_CACHE
+    // Depot does not participate in CONFIG_TINY_CACHE since it can&#39;t be directly malloc()&#39;d
+    if (DEPOT_MAGAZINE_INDEX != mag_index) {
+        if (msize &lt; TINY_QUANTUM) {                      // to see if the bits fit in the last 4 bits
+            void *ptr2 = tiny_mag_ptr-&gt;mag_last_free; // Might be NULL
+            msize_t msize2 = tiny_mag_ptr-&gt;mag_last_free_msize;
+            region_t rgn2 = tiny_mag_ptr-&gt;mag_last_free_rgn;
+
+            /* check that we don&#39;t already have this pointer in the cache */
+            if (ptr == ptr2) {
+                free_tiny_botch(rack, ptr);
+                return;
+            }
+
+            if ((rack-&gt;debug_flags &amp; MALLOC_DO_SCRIBBLE) &amp;&amp; msize) {
+                memset(ptr, SCRABBLE_BYTE, TINY_BYTES_FOR_MSIZE(msize));
+            }
+
+            tiny_mag_ptr-&gt;mag_last_free = ptr;
+            tiny_mag_ptr-&gt;mag_last_free_msize = msize;
+            tiny_mag_ptr-&gt;mag_last_free_rgn = tiny_region;
+
+            if (!ptr2) {
+                SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+                CHECK(szone, __PRETTY_FUNCTION__);
+                return;
+            }
+
+            msize = msize2;
+            ptr = ptr2;
+            tiny_region = rgn2;
+        }
+    }
+#endif /* CONFIG_TINY_CACHE */
+
+    // Now in the time it took to acquire the lock, the region may have migrated
+    // from one magazine to another. I.e. trailer-&gt;mag_index is volatile.
+    // In which case the magazine lock we obtained (namely magazines[mag_index].mag_lock)
+    // is stale. If so, keep on tryin&#39; ...
+    region_trailer_t *trailer = REGION_TRAILER_FOR_TINY_REGION(tiny_region);
+    mag_index_t refreshed_index;
+
+    while (mag_index != (refreshed_index = trailer-&gt;mag_index)) { // Note assignment
+        SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+        mag_index = refreshed_index;
+        tiny_mag_ptr = &amp;(rack-&gt;magazines[mag_index]);
+        SZONE_MAGAZINE_PTR_LOCK(tiny_mag_ptr);
+    }
+
+    if (tiny_free_no_lock(rack, tiny_mag_ptr, mag_index, tiny_region, ptr, msize)) {
+        SZONE_MAGAZINE_PTR_UNLOCK(tiny_mag_ptr);
+    }
+
+    CHECK(szone, __PRETTY_FUNCTION__);
+}
+</code></pre>
+<p>free的时候先将该内存缓存到<code>mag_last_free</code>，若之前<code>mag_last_free</code>为NULL，那么该内存暂时不会被free，仅仅是缓存到<code>mag_last_free</code>。反之，则会将<code>mag_last_free</code>之前的内存free。在free的时候会尝试向前向后合并。合并完成后设置其前后chunk指针等metadata后将其放入对应的free list大小之中。这里需要有注意以下几点</p>
+<ul>
+<li>最近free的内存会被缓存，不会立即合并</li>
+<li>在被free的块metadata是被保护的<ul>
+<li>前后指针按16字节大小对齐</li>
+<li>指针前4位为checksum</li>
+</ul>
+</li>
+</ul>
+<p>关于free块checksum计算如下：</p>
+<pre><code class="c">static MALLOC_INLINE uintptr_t
+free_list_checksum_ptr(rack_t *rack, void *ptr)
+{
+    uintptr_t p = (uintptr_t)ptr;
+    return (p &gt;&gt; NYBBLE) | ((free_list_gen_checksum(p ^ rack-&gt;cookie) &amp; (uintptr_t)0xF) &lt;&lt; ANTI_NYBBLE); // compiles to rotate instruction
+}
+</code></pre>
+<p>指针p与cookie异或然后计算checksum后左移到最高字节或上指针p右移4位得到checksumed后的指针。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>代码如下</p>
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+int main(int argc, char *argv[]) {
+
+    void *p1,*p2,*p3,*p4;
+
+    p1 = malloc(24);
+    p2 = malloc(24);
+    p3 = malloc(24);
+    p4 = malloc(24);
+
+    memset(p1,0xaa,24);
+    memset(p2,0xbb,24);
+    memset(p3,0xcc,24);
+
+    free(p1);
+    free(p3);
+    free(p2);
+    free(p4);
+
+}
+</code></pre>
+<p>free(p1)，直接将p1缓存，所以内存值不变</p>
+<pre><code class="c">(lldb) x/24gx p1
+0x1002001f0: 0xaaaaaaaaaaaaaaaa 0xaaaaaaaaaaaaaaaa
+0x100200200: 0xaaaaaaaaaaaaaaaa 0x00007fff5f94d99c
+0x100200210: 0xbbbbbbbbbbbbbbbb 0xbbbbbbbbbbbbbbbb
+0x100200220: 0xbbbbbbbbbbbbbbbb 0x0000000000000000
+0x100200230: 0xcccccccccccccccc 0xcccccccccccccccc
+0x100200240: 0xcccccccccccccccc 0x0000000000000000
+</code></pre>
+<p>free(p3)，p3放入缓存，p1放入大小为32字节的freelist，p1previous指针8字节设为NULL，next指针指向设为下一个free block，紧接着后面为该block大小，2*quantum=32字节</p>
+<pre><code>(lldb) x/24gx p1
+0x1002001f0: 0x0000000000000000 0x1000000010020108
+0x100200200: 0xaaaaaaaaaaaa0002 0x00027fff5f94d99c
+0x100200210: 0xbbbbbbbbbbbbbbbb 0xbbbbbbbbbbbbbbbb
+0x100200220: 0xbbbbbbbbbbbbbbbb 0x0000000000000000
+0x100200230: 0xcccccccccccccccc 0xcccccccccccccccc
+0x100200240: 0xcccccccccccccccc 0x0000000000000000
+</code></pre><p>free(p2)，p2放入缓存，p3放入大小为32字节的freelist，p3previous指针8字节设为NULL，next指针指向设为下一个p1</p>
+<pre><code>(lldb) x/24gx p1
+0x1002001f0: 0x3000000010020023 0x1000000010020108
+0x100200200: 0xaaaaaaaaaaaa0002 0x00027fff5f94d99c
+0x100200210: 0xbbbbbbbbbbbbbbbb 0xbbbbbbbbbbbbbbbb
+0x100200220: 0xbbbbbbbbbbbbbbbb 0x0000000000000000
+0x100200230: 0x0000000000000000 0x200000001002001f
+0x100200240: 0xcccccccccccc0002 0x0002000000000000
+0x100200250: 0x0000000000000000 0x0000000000000000
+0x100200260: 0x0000000000000029 0x0000000000000000
+</code></pre><p>free(p4)，p2向前向后合并，合并p1，p3。指向p1，大小为6*quantum=96字节。previous指针8字节设为NULL，next指针指向设为下一个大小为3Q的block</p>
+<pre><code>(lldb) x/24gx p1
+0x1002001f0: 0x0000000000000000 0x5000000010020048
+0x100200200: 0xaaaaaaaaaaaa0006 0x00027fff5f94d99c
+0x100200210: 0xbbbbbbbbbbbbbbbb 0xbbbbbbbbbbbbbbbb
+0x100200220: 0xbbbbbbbbbbbbbbbb 0x0000000000000000
+0x100200230: 0x0000000000000000 0x1000000010020108
+0x100200240: 0xcccccccccccc0002 0x0006000000000000
+0x100200250: 0x0000000000000000 0x0000000000000000
+0x100200260: 0x0000000000000029 0x0000000000000000
+</code></pre><p>上面可以看出previous和next指针前4位都包含checksum。与上面描述的一致。</p>
+<h4 id="libmalloc中一些结构体"><a href="#libmalloc中一些结构体" class="headerlink" title="libmalloc中一些结构体"></a>libmalloc中一些结构体</h4><h5 id="szone-s-magazine-zone-h"><a href="#szone-s-magazine-zone-h" class="headerlink" title="szone_s // magazine_zone.h"></a>szone_s // magazine_zone.h</h5><pre><code class="c">typedef struct szone_s {      // vm_allocate()&#39;d, so page-aligned to begin with.
+    malloc_zone_t basic_zone; // first page will be given read-only protection
+    uint8_t pad[PAGE_MAX_SIZE - sizeof(malloc_zone_t)];
+
+    unsigned long cpu_id_key; // unused
+    // remainder of structure is R/W (contains no function pointers)
+    unsigned debug_flags;
+    void *log_address;
+
+    /* Allocation racks per allocator type. */
+    struct rack_s tiny_rack;
+    struct rack_s small_rack;
+
+    /* large objects: all the rest */
+    _malloc_lock_s large_szone_lock MALLOC_CACHE_ALIGN; // One customer at a time for large
+    unsigned num_large_objects_in_use;
+    unsigned num_large_entries;
+    large_entry_t *large_entries; // hashed by location; null entries don&#39;t count
+    size_t num_bytes_in_large_objects;
+
+#if CONFIG_LARGE_CACHE
+    int large_entry_cache_oldest;
+    int large_entry_cache_newest;
+    large_entry_t large_entry_cache[LARGE_ENTRY_CACHE_SIZE]; // &quot;death row&quot; for large malloc/free
+    boolean_t large_legacy_reset_mprotect;
+    size_t large_entry_cache_reserve_bytes;
+    size_t large_entry_cache_reserve_limit;
+    size_t large_entry_cache_bytes; // total size of death row, bytes
+#endif
+
+    /* flag and limits pertaining to altered malloc behavior for systems with
+     * large amounts of physical memory */
+    unsigned is_largemem;
+    unsigned large_threshold;
+    unsigned vm_copy_threshold;
+
+    /* security cookie */
+    uintptr_t cookie;
+
+    /* The purgeable zone constructed by create_purgeable_zone() would like to hand off tiny and small
+     * allocations to the default scalable zone. Record the latter as the &quot;helper&quot; zone here. */
+    struct szone_s *helper_zone;
+
+    boolean_t flotsam_enabled;
+} szone_t;
+</code></pre>
+<h5 id="malloc-zone-t-malloc-h"><a href="#malloc-zone-t-malloc-h" class="headerlink" title="malloc_zone_t // malloc.h"></a>malloc_zone_t // malloc.h</h5><pre><code class="c">typedef struct _malloc_zone_t {
+    /* Only zone implementors should depend on the layout of this structure;
+    Regular callers should use the access functions below */
+    void    *reserved1;    /* RESERVED FOR CFAllocator DO NOT USE */
+    void    *reserved2;    /* RESERVED FOR CFAllocator DO NOT USE */
+    size_t     (* MALLOC_ZONE_FN_PTR(size))(struct _malloc_zone_t *zone, const void *ptr); /* returns the size of a block or 0 if not in this zone; must be fast, especially for negative answers */
+    void     *(* MALLOC_ZONE_FN_PTR(malloc))(struct _malloc_zone_t *zone, size_t size);
+    void     *(* MALLOC_ZONE_FN_PTR(calloc))(struct _malloc_zone_t *zone, size_t num_items, size_t size); /* same as malloc, but block returned is set to zero */
+    void     *(* MALLOC_ZONE_FN_PTR(valloc))(struct _malloc_zone_t *zone, size_t size); /* same as malloc, but block returned is set to zero and is guaranteed to be page aligned */
+    void     (* MALLOC_ZONE_FN_PTR(free))(struct _malloc_zone_t *zone, void *ptr);
+    void     *(* MALLOC_ZONE_FN_PTR(realloc))(struct _malloc_zone_t *zone, void *ptr, size_t size);
+    void     (* MALLOC_ZONE_FN_PTR(destroy))(struct _malloc_zone_t *zone); /* zone is destroyed and all memory reclaimed */g
+    const char    *zone_name;
+
+    /* Optional batch callbacks; these may be NULL */
+    unsigned    (* MALLOC_ZONE_FN_PTR(batch_malloc))(struct _malloc_zone_t *zone, size_t size, void **results, unsigned num_requested); /* given a size, returns pointers capable of holding that size; returns the number of pointers allocated (maybe 0 or less than num_requested) */
+    void    (* MALLOC_ZONE_FN_PTR(batch_free))(struct _malloc_zone_t *zone, void **to_be_freed, unsigned num_to_be_freed); /* frees all the pointers in to_be_freed; note that to_be_freed may be overwritten during the process */
+
+    struct malloc_introspection_t    * MALLOC_INTROSPECT_TBL_PTR(introspect);
+    unsigned    version;
+
+    /* aligned memory allocation. The callback may be NULL. Present in version &gt;= 5. */
+    void *(* MALLOC_ZONE_FN_PTR(memalign))(struct _malloc_zone_t *zone, size_t alignment, size_t size);
+
+    /* free a pointer known to be in zone and known to have the given size. The callback may be NULL. Present in version &gt;= 6.*/
+    void (* MALLOC_ZONE_FN_PTR(free_definite_size))(struct _malloc_zone_t *zone, void *ptr, size_t size);
+
+    /* Empty out caches in the face of memory pressure. The callback may be NULL. Present in version &gt;= 8. */
+    size_t     (* MALLOC_ZONE_FN_PTR(pressure_relief))(struct _malloc_zone_t *zone, size_t goal);
+
+    /*
+     * Checks whether an address might belong to the zone. May be NULL. Present in version &gt;= 10.
+     * False positives are allowed (e.g. the pointer was freed, or it&#39;s in zone space that has
+     * not yet been allocated. False negatives are not allowed.
+     */
+    boolean_t (* MALLOC_ZONE_FN_PTR(claimed_address))(struct _malloc_zone_t *zone, void *ptr);
+} malloc_zone_t;
+</code></pre>
+<h5 id="rack-t-magazine-rack-h"><a href="#rack-t-magazine-rack-h" class="headerlink" title="rack_t // magazine_rack.h"></a>rack_t // magazine_rack.h</h5><pre><code class="c">typedef struct rack_s {
+    /* Regions for tiny objects */
+    _malloc_lock_s region_lock MALLOC_CACHE_ALIGN;
+
+    rack_type_t type;
+    size_t num_regions;
+    size_t num_regions_dealloc;
+    region_hash_generation_t *region_generation;
+    region_hash_generation_t rg[2];
+    region_t initial_regions[INITIAL_NUM_REGIONS];
+
+    int num_magazines;
+    unsigned num_magazines_mask;
+    int num_magazines_mask_shift;
+    uint32_t debug_flags;
+
+    // array of per-processor magazines
+    magazine_t *magazines;
+
+    uintptr_t cookie;
+    uintptr_t last_madvise;
+} rack_t;
+</code></pre>
+<h5 id="magazine-t-magazine-zone-h"><a href="#magazine-t-magazine-zone-h" class="headerlink" title="magazine_t // magazine_zone.h"></a>magazine_t // magazine_zone.h</h5><pre><code class="c">typedef struct magazine_s { // vm_allocate()&#39;d, so the array of magazines is page-aligned to begin with.
+    // Take magazine_lock first,  Depot lock when needed for recirc, then szone-&gt;{tiny,small}_regions_lock when needed for alloc
+    _malloc_lock_s magazine_lock MALLOC_CACHE_ALIGN;
+    // Protection for the crtical section that does allocate_pages outside the magazine_lock
+    volatile boolean_t alloc_underway;
+
+    // One element deep &quot;death row&quot;, optimizes malloc/free/malloc for identical size.
+    void *mag_last_free;
+    msize_t mag_last_free_msize;    // msize for mag_last_free
+#if MALLOC_TARGET_64BIT
+    uint32_t _pad;
+#endif
+    region_t mag_last_free_rgn; // holds the region for mag_last_free
+
+    free_list_t mag_free_list[MAGAZINE_FREELIST_SLOTS];
+    uint32_t mag_bitmap[MAGAZINE_FREELIST_BITMAP_WORDS];
+
+    // the first and last free region in the last block are treated as big blocks in use that are not accounted for
+    size_t mag_bytes_free_at_end;
+    size_t mag_bytes_free_at_start;
+    region_t mag_last_region; // Valid iff mag_bytes_free_at_end || mag_bytes_free_at_start &gt; 0
+
+    // bean counting ...
+    size_t mag_num_bytes_in_objects;
+    size_t num_bytes_in_magazine;
+    unsigned mag_num_objects;
+
+    // recirculation list -- invariant: all regions owned by this magazine that meet the emptiness criteria
+    // are located nearer to the head of the list than any region that doesn&#39;t satisfy that criteria.
+    // Doubly linked list for efficient extraction.
+    unsigned recirculation_entries;
+    region_trailer_t *firstNode;
+    region_trailer_t *lastNode;
+
+#if MALLOC_TARGET_64BIT
+    uintptr_t pad[320 - 14 - MAGAZINE_FREELIST_SLOTS -
+            (MAGAZINE_FREELIST_BITMAP_WORDS + 1) / 2];
+#else
+    uintptr_t pad[320 - 16 - MAGAZINE_FREELIST_SLOTS -
+            MAGAZINE_FREELIST_BITMAP_WORDS];
+#endif
+
+} magazine_t;
+</code></pre>
+<h5 id="tiny-region-t-magazine-zone-h"><a href="#tiny-region-t-magazine-zone-h" class="headerlink" title="tiny_region_t //magazine_zone.h"></a>tiny_region_t //magazine_zone.h</h5><pre><code class="c">/*
+ * Layout of a tiny region
+ */
+typedef uint32_t tiny_block_t[4]; // assert(TINY_QUANTUM == sizeof(tiny_block_t))
+
+typedef struct tiny_header_inuse_pair {
+    uint32_t header;
+    uint32_t inuse;
+} tiny_header_inuse_pair_t;
+
+typedef struct region_trailer {
+    struct region_trailer *prev;
+    struct region_trailer *next;
+    boolean_t recirc_suitable;
+    volatile int pinned_to_depot;
+    unsigned bytes_used;
+    mag_index_t mag_index;
+} region_trailer_t;
+
+#define NUM_TINY_BLOCKS 64520
+
+typedef struct tiny_region {
+    tiny_block_t blocks[NUM_TINY_BLOCKS];
+
+    region_trailer_t trailer;
+
+    // The interleaved bit arrays comprising the header and inuse bitfields.
+    // The unused bits of each component in the last pair will be initialized to sentinel values.
+    tiny_header_inuse_pair_t pairs[CEIL_NUM_TINY_BLOCKS_WORDS];
+
+    uint8_t pad[TINY_REGION_SIZE - (NUM_TINY_BLOCKS * sizeof(tiny_block_t)) - TINY_METADATA_SIZE];
+} * tiny_region_t;
+</code></pre>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><p><a href="http://phrack.org/issues/63/5.html" target="_blank" rel="external">http://phrack.org/issues/63/5.html</a></p>
+</li>
+<li><p><a href="https://www.synacktiv.com/ressources/Sthack_2018_Heapple_Pie.pdf" target="_blank" rel="external">https://www.synacktiv.com/ressources/Sthack_2018_Heapple_Pie.pdf</a></p>
+</li>
+<li><p><a href="https://papers.put.as/papers/macosx/2016/Summercon-2016.pdf" target="_blank" rel="external">https://papers.put.as/papers/macosx/2016/Summercon-2016.pdf</a></p>
+</li>
+<li><p><a href="https://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html" target="_blank" rel="external">https://www.cocoawithlove.com/2010/05/look-at-how-malloc-works-on-mac.html</a></p>
+</li>
+<li><p>&lt;&lt;<a href="https://repo.zenk-security.com/Magazine%20E-book/The%20Mac%20Hacker&#39;s%20Handbook.pdf" target="_blank" rel="external">the Mac Hacker’s Handbook</a>&gt;&gt; 第8章Exploiting Heap Overflows</p>
+</li>
+<li><p><a href="https://opensource.apple.com/source/libmalloc/" target="_blank" rel="external">https://opensource.apple.com/source/libmalloc/</a> 源代码</p>
+</li>
+<li><p><a href="http://www.mindfiresolutions.com/mindfire/Mac_Memory_Manager.pdf" target="_blank" rel="external">http://www.mindfiresolutions.com/mindfire/Mac_Memory_Manager.pdf</a></p>
+</li>
+</ul>
+
+        </div>
+        <div class="post-reply">
+            
+            
+            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
+                <script>
+
+                    /**
+                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                    /*
+                     var disqus_config = function () {
+                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                     };
+                     */
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = 'https://4ch12dy.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            
+        </div>
+    </div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="../../../../../css/highlight_github.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
+
       </div>
   </div>
   <style>
@@ -188,8 +1054,8 @@
   </div>
 </footer>
 
-<script src="../../js/search_core.js"></script>
-<script src="../../js/script.js"></script>
+<script src="../../../../../js/search_core.js"></script>
+<script src="../../../../../js/script.js"></script>
 
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
