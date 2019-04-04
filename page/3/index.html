@@ -147,38 +147,36 @@
                 <!-- 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-7-desktop">
-        <a href="/2017/04/18/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">
+        <a href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/">
             <div class="full-height post-hover"
                  style="
-                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true');
+                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true');
                          height: 350px;
                          background-size: cover;
                          background-repeat: no-repeat;
                          ">
                     <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
                         <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            Protostar-堆溢出学习-覆盖堆函数指针劫持代码流
+                            深入理解Linux堆分配器-DLMalloc
                         </h1>
                         <div>
                         
                             `
-                                <span class="tag is-post-tag">Linux</span>
+                                <span class="tag is-post-tag">linux</span>
                             `
-                                <span class="tag is-post-tag">Protostar</span>
+                                <span class="tag is-post-tag">heap</span>
                             `
-                                <span class="tag is-post-tag">堆溢出</span>
+                                <span class="tag is-post-tag">malloc</span>
+                            `
+                                <span class="tag is-post-tag">free</span>
                             
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
                             0x00 序
- 学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-
-0x01 C语言源代码C代码
-#include &lt;stdlib.h&gt;
-#..
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的..
                         </p>
-                        <p class="date text-shadow">2017-04-18</p>
+                        <p class="date text-shadow">2017-04-23</p>
                         <button class="button is-info is-small">Read More</button>
                     </div>
             </div>
@@ -188,11 +186,11 @@
         <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
                 
-<a class="post-hover" href="/2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true')">
+<a class="post-hover" href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-printf格式%n任意地址写
+                Protostar-堆溢出学习-UAF(use after free)
             </h3>
             
             
@@ -200,28 +198,30 @@
             
             <span class="tag is-post-tag">Protostar</span>
             
-            <span class="tag is-post-tag">printf</span>
+            <span class="tag is-post-tag">堆溢出</span>
             
-            <span class="tag is-post-tag">format</span>
+            <span class="tag is-post-tag">UAF</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
-从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有..
+下面看一个堆中常见的漏洞-UAF(use after free)
+
+0x01 C语..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-17</p>
+            <p class="date text-shadow is-marginless">2017-04-21</p>
         </div>
     </div>
 </a>
             
             
                 
-<a class="post-hover" href="/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true')">
+<a class="post-hover" href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-ROP执行shellcode
+                Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写
             </h3>
             
             
@@ -229,15 +229,21 @@
             
             <span class="tag is-post-tag">Protostar</span>
             
-            <span class="tag is-post-tag">栈溢出</span>
+            <span class="tag is-post-tag">堆溢出</span>
+            
+            <span class="tag is-post-tag">strcpy</span>
+            
+            <span class="tag is-post-tag">GOT表</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
- 和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存..
+ 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+
+0x01 C语言..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-16</p>
+            <p class="date text-shadow is-marginless">2017-04-19</p>
         </div>
     </div>
 </a>
@@ -247,11 +253,11 @@
     <div class="column is-12 is-hidden-desktop">
         
         
-<a class="post-hover" href="/2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true')">
+<a class="post-hover" href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-printf格式%n任意地址写
+                Protostar-堆溢出学习-UAF(use after free)
             </h3>
             
             
@@ -259,28 +265,30 @@
             
             <span class="tag is-post-tag">Protostar</span>
             
-            <span class="tag is-post-tag">printf</span>
+            <span class="tag is-post-tag">堆溢出</span>
             
-            <span class="tag is-post-tag">format</span>
+            <span class="tag is-post-tag">UAF</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
-从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有..
+下面看一个堆中常见的漏洞-UAF(use after free)
+
+0x01 C语..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-17</p>
+            <p class="date text-shadow is-marginless">2017-04-21</p>
         </div>
     </div>
 </a>
         
         
         
-<a class="post-hover" href="/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true')">
+<a class="post-hover" href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-栈溢出学习-ROP执行shellcode
+                Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写
             </h3>
             
             
@@ -288,15 +296,21 @@
             
             <span class="tag is-post-tag">Protostar</span>
             
-            <span class="tag is-post-tag">栈溢出</span>
+            <span class="tag is-post-tag">堆溢出</span>
+            
+            <span class="tag is-post-tag">strcpy</span>
+            
+            <span class="tag is-post-tag">GOT表</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
- 和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存..
+ 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+
+0x01 C语言..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-16</p>
+            <p class="date text-shadow is-marginless">2017-04-19</p>
         </div>
     </div>
 </a>
@@ -305,6 +319,136 @@
 </div>
  -->
                     
+                    
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>深入理解Linux堆分配器-DLMalloc</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">linux</span>
+                                            
+                                                <span class="tag is-post-tag">heap</span>
+                                            
+                                                <span class="tag is-post-tag">malloc</span>
+                                            
+                                                <span class="tag is-post-tag">free</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 序
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
+
+0x..
+                                        </p>
+                                        <p>2017-04-23</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Protostar-堆溢出学习-UAF(use after free)</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">Linux</span>
+                                            
+                                                <span class="tag is-post-tag">Protostar</span>
+                                            
+                                                <span class="tag is-post-tag">堆溢出</span>
+                                            
+                                                <span class="tag is-post-tag">UAF</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 序
+下面看一个堆中常见的漏洞-UAF(use after free)
+
+0x01 C语言源代码#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;stdio...
+                                        </p>
+                                        <p>2017-04-21</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">Linux</span>
+                                            
+                                                <span class="tag is-post-tag">Protostar</span>
+                                            
+                                                <span class="tag is-post-tag">堆溢出</span>
+                                            
+                                                <span class="tag is-post-tag">strcpy</span>
+                                            
+                                                <span class="tag is-post-tag">GOT表</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 序
+ 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+
+0x01 C语言源代码#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;sys/types.h..
+                                        </p>
+                                        <p>2017-04-19</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
@@ -348,7 +492,7 @@
                     
                 
                     
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/">
                             <div class="columns" style="min-height: 230px;">
@@ -393,7 +537,7 @@
                     
                 
                     
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/">
                             <div class="columns" style="min-height: 230px;">
@@ -585,115 +729,14 @@ user..
                         </div>
                     
                 
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/03/21/gdb常用调试命令总结/gdb/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>gdb常用调试命令总结</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">gdb</span>
-                                            
-                                                <span class="tag is-post-tag">linux</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
-0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
-
-gdb命令行的 –args 参数
-gdb环境中 set args..
-                                        </p>
-                                        <p>2017-03-21</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/03/07/C++ Virtual table/详解virtual table/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>详解virtual table</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">C++</span>
-                                            
-                                                <span class="tag is-post-tag">vtable</span>
-                                            
-                                        </p>
-                                        <p>
-                                            详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时..
-                                        </p>
-                                        <p>2017-03-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2016/08/05/iOSCrackme/iOSCrackme/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/iOSCrackme/1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>看雪iOSCrackme破解报告</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">crackme</span>
-                                            
-                                                <span class="tag is-post-tag">看雪</span>
-                                            
-                                                <span class="tag is-post-tag">iOS</span>
-                                            
-                                        </p>
-                                        <p>
-                                            看雪iOSCrackme破解报告0x01.首先，利用classdump把crackme的头文件导出来，可以看到头文件只有6个，根据屏幕上的check按钮，很容易在控制器中找到如下函数
-0x02.然后将可执行文件拉入IDA分析，直接跳到check这个函数。可以猜测这个函数应该就是加密函数。下面重点对这个函数进行详细分析。
-0x03.在分析之前，先在手机屏幕..
-                                        </p>
-                                        <p>2016-08-05</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
                 <!--翻頁-->
                 <nav class="pagination is-flex" style="justify-content: flex-end">
                     
                         
                             <a class="pagination-previous" href="/page/2/">Previous</a>
                         
+                        
+                            <a class="pagination-next" href="/page/4/">Next page</a>
                         
                     
                 </nav>
@@ -827,11 +870,11 @@ gdb环境中 set args..
         <!--post数量和tag category 数量-->
         <div class="site-box is-flex">
             <div class="flex-1 is-flex flex-column center full-height right-line">
-                <strong>30</strong>
+                <strong>33</strong>
                 <p>Posts</p>
             </div>
             <div class="flex-1 is-flex flex-column center full-height">
-                <strong>45</strong>
+                <strong>47</strong>
                 <p>Tags</p>
             </div>
         </div>
@@ -846,6 +889,10 @@ gdb环境中 set args..
                     android
                 </a>
             
+                <a class="tags-item" href="tags/ida/" title="ida" rel="1">
+                    ida
+                </a>
+            
                 <a class="tags-item" href="tags/ARM64/" title="ARM64" rel="1">
                     ARM64
                 </a>
@@ -854,8 +901,12 @@ gdb环境中 set args..
                     C++
                 </a>
             
-                <a class="tags-item" href="tags/ida/" title="ida" rel="1">
-                    ida
+                <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="1">
+                    LLDB
+                </a>
+            
+                <a class="tags-item" href="tags/python/" title="python" rel="1">
+                    python
                 </a>
             
                 <a class="tags-item" href="tags/Linux/" title="Linux" rel="9">
@@ -870,20 +921,16 @@ gdb环境中 set args..
                     堆溢出
                 </a>
             
+                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
+                    strcpy
+                </a>
+            
+                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
+                    GOT表
+                </a>
+            
                 <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
                     UAF
-                </a>
-            
-                <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="1">
-                    LLDB
-                </a>
-            
-                <a class="tags-item" href="tags/python/" title="python" rel="1">
-                    python
-                </a>
-            
-                <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
-                    栈溢出
                 </a>
             
                 <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
@@ -894,12 +941,8 @@ gdb环境中 set args..
                     DLMalloc
                 </a>
             
-                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
-                    strcpy
-                </a>
-            
-                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
-                    GOT表
+                <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
+                    栈溢出
                 </a>
             
                 <a class="tags-item" href="tags/printf/" title="printf" rel="1">
@@ -908,6 +951,14 @@ gdb环境中 set args..
             
                 <a class="tags-item" href="tags/format/" title="format" rel="1">
                     format
+                </a>
+            
+                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
+                    gdb
+                </a>
+            
+                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
+                    linux
                 </a>
             
                 <a class="tags-item" href="tags/crackme/" title="crackme" rel="1">
@@ -922,12 +973,16 @@ gdb环境中 set args..
                     iOS
                 </a>
             
-                <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
-                    gdb
+                <a class="tags-item" href="tags/angr/" title="angr" rel="1">
+                    angr
                 </a>
             
-                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
-                    linux
+                <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
+                    CTF
+                </a>
+            
+                <a class="tags-item" href="tags/writeup/" title="writeup" rel="1">
+                    writeup
                 </a>
             
                 <a class="tags-item" href="tags/mach-o/" title="mach-o" rel="1">
@@ -942,14 +997,6 @@ gdb环境中 set args..
                     stub
                 </a>
             
-                <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
-                    CTF
-                </a>
-            
-                <a class="tags-item" href="tags/writeup/" title="writeup" rel="1">
-                    writeup
-                </a>
-            
                 <a class="tags-item" href="tags/math/" title="math" rel="1">
                     math
                 </a>
@@ -958,12 +1005,20 @@ gdb环境中 set args..
                     kext
                 </a>
             
+                <a class="tags-item" href="tags/unicorn/" title="unicorn" rel="1">
+                    unicorn
+                </a>
+            
                 <a class="tags-item" href="tags/LLVM/" title="LLVM" rel="1">
                     LLVM
                 </a>
             
                 <a class="tags-item" href="tags/obfuscation/" title="obfuscation" rel="1">
                     obfuscation
+                </a>
+            
+                <a class="tags-item" href="tags/vtable/" title="vtable" rel="1">
+                    vtable
                 </a>
             
                 <a class="tags-item" href="tags/heap/" title="heap" rel="2">
@@ -978,8 +1033,8 @@ gdb环境中 set args..
                     free
                 </a>
             
-                <a class="tags-item" href="tags/vtable/" title="vtable" rel="1">
-                    vtable
+                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
+                    x86
                 </a>
             
                 <a class="tags-item" href="tags/tctf/" title="tctf" rel="1">
@@ -996,10 +1051,6 @@ gdb环境中 set args..
             
                 <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
                     Kernel
-                </a>
-            
-                <a class="tags-item" href="tags/x86/" title="x86" rel="1">
-                    x86
                 </a>
             
                 <a class="tags-item" href="tags/Pegasus/" title="Pegasus" rel="1">
@@ -1029,7 +1080,7 @@ gdb环境中 set args..
             <strong>Categories</strong>
         </div>
         <div class="content-inner">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/CTF/">CTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/IDA/">IDA</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/LLVM/">LLVM</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/OS/">OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/assembly/">assembly</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/crackme/">crackme</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/ctf/">ctf</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSCVE/">iOSCVE</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSRE/">iOSRE</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/kext-iokit/">kext/iokit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/me/">me</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/misc/">misc</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/pwn/">pwn</a><span class="category-list-count">1</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/CTF/">CTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/IDA/">IDA</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/LLVM/">LLVM</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/OS/">OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/assembly/">assembly</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/crackme/">crackme</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/ctf/">ctf</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSCVE/">iOSCVE</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSRE/">iOSRE</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/kext-iokit/">kext/iokit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/me/">me</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/misc/">misc</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/pwn/">pwn</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/re/">re</a><span class="category-list-count">2</span></li></ul>
         </div>
     </div>
     <div class="content-inner content-box">
@@ -1037,7 +1088,7 @@ gdb环境中 set args..
             <strong>Archives</strong>
         </div>
         <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/04/">April 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/03/">March 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/04/">April 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/03/">March 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 </aside>
