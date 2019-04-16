@@ -27,7 +27,7 @@ It">
 <meta property="og:description" content="angr学习笔记安装macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。
 
 It">
-<meta property="og:updated_time" content="2019-04-08T07:14:33.512Z">
+<meta property="og:updated_time" content="2019-04-09T09:23:23.599Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="angr learning note">
 <meta name="twitter:description" content="angr学习笔记安装macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。
@@ -286,6 +286,70 @@ print(st2.posix.dumps(0))
 b&#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00SOSNEAKY\x00&#39;
 b&#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00S\x80\x80\x80@\x80\x80\x00\x00&#39;
 </code></pre><p>可以看出st1也就是成功授权的输入为SOSNEAKY。</p>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><h5 id="factory"><a href="#factory" class="headerlink" title="factory"></a>factory</h5><p>该对象提供了大多数的功能，能够将二进制对象分解为很方便处理的对象。</p>
+<ul>
+<li><p>blocks</p>
+<p><code>project.factory.block()</code>给定一个地址，返回其basic block，这里的block与llvm中的block一致。获取了block就能进一步对其指令等操作。</p>
+<pre><code class="python">block = proj.factory.block(proj.entry)
+block.pp() # 打印block反汇编代码
+block.instructions # 指令个数
+block.instruction_addrs # 指令地址list
+</code></pre>
+</li>
+<li><p>states</p>
+<p>angr里面很重要的一个对象，代表了程序的一个实例镜像，是模拟执行某个时刻的状态。</p>
+<pre><code class="python">state = proj.factory.entry_state()
+&lt;SimState @ 0x401670&gt;
+</code></pre>
+<p>既然是程序模拟运行过程中的某个状态，那么SimState就包含了程序内存，寄存器，文件系统等数据。而且这些数据是可以被修改。</p>
+<pre><code class="python"># 访问寄存器和内存
+&gt;&gt;&gt; state.regs.rip        # get the current instruction pointer
+&lt;BV64 0x401670&gt;
+&gt;&gt;&gt; state.regs.rax
+&lt;BV64 0x1c&gt;
+&gt;&gt;&gt; state.mem[proj.entry].int.resolved  # interpret the memory at the entry point as a C int
+&lt;BV32 0x8949ed31&gt;
+
+# 修改寄存器和内存
+&gt;&gt;&gt; state.regs.rsi = state.solver.BVV(3, 64)
+&gt;&gt;&gt; state.regs.rsi
+&lt;BV64 0x3&gt;
+
+&gt;&gt;&gt; state.mem[0x1000].long = 4
+&gt;&gt;&gt; state.mem[0x1000].long.resolved
+&lt;BV64 0x4&gt;
+</code></pre>
+<p>这些数据都是bitvectors，所以需要一个转换</p>
+<pre><code class="python">&gt;&gt;&gt; bv = state.solver.BVV(0x1234, 32)       # create a 32-bit-wide bitvector with value 0x1234
+&lt;BV32 0x1234&gt;                               # BVV stands for bitvector value
+&gt;&gt;&gt; state.solver.eval(bv)                # convert to python int
+0x1234
+</code></pre>
+<p><code>mem</code>有几点需要注意：</p>
+<ul>
+<li><code>.type</code>有<code>char, short, int, long, size_t, uint8_t, uint16_t</code>等</li>
+<li><code>.resolved</code>得到bitvector；<code>.concrete</code>得到int值</li>
+</ul>
+</li>
+<li><p>simulation managers</p>
+<p>state代表了某个时刻的程序状态，那么simulation managers就代表了程序如何进入下一个state。</p>
+<pre><code class="python">&gt;&gt;&gt; simgr = proj.factory.simulation_manager(state)
+&lt;SimulationManager with 1 active&gt;
+&gt;&gt;&gt; simgr.active
+[&lt;SimState @ 0x401670&gt;]
+</code></pre>
+<p>这里我们用state去初始化了simulation managers得到了一组state。<code>.active</code>返回当前state。</p>
+<pre><code class="python">&gt;&gt;&gt; simgr.step()
+&gt;&gt;&gt; simgr.active
+[&lt;SimState @ 0x1020300&gt;]
+&gt;&gt;&gt; simgr.active[0].regs.rip                 # new and exciting!
+&lt;BV64 0x1020300&gt;
+&gt;&gt;&gt; state.regs.rip                           # still the same!
+&lt;BV64 0x401670&gt;
+</code></pre>
+<p>通过上面的方法去执行程序，这样会得到下一个state，此时active的state已经变了，step方法会执行到下一个basic block。之前的state仍然保留不变。</p>
+</li>
+</ul>
 <h4 id="待更新"><a href="#待更新" class="headerlink" title="待更新"></a>待更新</h4><p>…</p>
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
 <li><a href="https://docs.angr.io/core-concepts/" target="_blank" rel="external">https://docs.angr.io/core-concepts/</a></li>

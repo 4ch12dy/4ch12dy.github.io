@@ -147,36 +147,38 @@
                 <!-- 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-7-desktop">
-        <a href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/">
+        <a href="/2017/05/01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/">
             <div class="full-height post-hover"
                  style="
-                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true');
+                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-0.png?raw=true');
                          height: 350px;
                          background-size: cover;
                          background-repeat: no-repeat;
                          ">
                     <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
                         <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            深入理解Linux堆分配器-DLMalloc
+                            Pegasus内核漏洞及PoC分析
                         </h1>
                         <div>
                         
                             `
-                                <span class="tag is-post-tag">linux</span>
+                                <span class="tag is-post-tag">Pegasus</span>
                             `
-                                <span class="tag is-post-tag">heap</span>
+                                <span class="tag is-post-tag">cve</span>
                             `
-                                <span class="tag is-post-tag">malloc</span>
+                                <span class="tag is-post-tag">CVE-2016-4655</span>
                             `
-                                <span class="tag is-post-tag">free</span>
+                                <span class="tag is-post-tag">CVE-2016-4656</span>
+                            `
+                                <span class="tag is-post-tag">PoC</span>
                             
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            0x00 序
- 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的..
+                            0x00 写在前面
+ 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS ..
                         </p>
-                        <p class="date text-shadow">2017-04-23</p>
+                        <p class="date text-shadow">2017-05-01</p>
                         <button class="button is-info is-small">Read More</button>
                     </div>
             </div>
@@ -186,11 +188,11 @@
         <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
                 
-<a class="post-hover" href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true')">
+<a class="post-hover" href="/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-堆溢出学习-UAF(use after free)
+                Protostar-堆溢出学习-滥用堆metadata重定向程序执行
             </h3>
             
             
@@ -200,50 +202,46 @@
             
             <span class="tag is-post-tag">堆溢出</span>
             
-            <span class="tag is-post-tag">UAF</span>
+            <span class="tag is-post-tag">metadata</span>
+            
+            <span class="tag is-post-tag">DLMalloc</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
-下面看一个堆中常见的漏洞-UAF(use after free)
-
-0x01 C语..
+ 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLM..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-21</p>
+            <p class="date text-shadow is-marginless">2017-04-26</p>
         </div>
     </div>
 </a>
             
             
                 
-<a class="post-hover" href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true')">
+<a class="post-hover" href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写
+                深入理解Linux堆分配器-DLMalloc
             </h3>
             
             
-            <span class="tag is-post-tag">Linux</span>
+            <span class="tag is-post-tag">linux</span>
             
-            <span class="tag is-post-tag">Protostar</span>
+            <span class="tag is-post-tag">heap</span>
             
-            <span class="tag is-post-tag">堆溢出</span>
+            <span class="tag is-post-tag">malloc</span>
             
-            <span class="tag is-post-tag">strcpy</span>
-            
-            <span class="tag is-post-tag">GOT表</span>
+            <span class="tag is-post-tag">free</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
- 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
-
-0x01 C语言..
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-19</p>
+            <p class="date text-shadow is-marginless">2017-04-23</p>
         </div>
     </div>
 </a>
@@ -253,11 +251,11 @@
     <div class="column is-12 is-hidden-desktop">
         
         
-<a class="post-hover" href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true')">
+<a class="post-hover" href="/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-堆溢出学习-UAF(use after free)
+                Protostar-堆溢出学习-滥用堆metadata重定向程序执行
             </h3>
             
             
@@ -267,50 +265,46 @@
             
             <span class="tag is-post-tag">堆溢出</span>
             
-            <span class="tag is-post-tag">UAF</span>
+            <span class="tag is-post-tag">metadata</span>
+            
+            <span class="tag is-post-tag">DLMalloc</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
-下面看一个堆中常见的漏洞-UAF(use after free)
-
-0x01 C语..
+ 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLM..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-21</p>
+            <p class="date text-shadow is-marginless">2017-04-26</p>
         </div>
     </div>
 </a>
         
         
         
-<a class="post-hover" href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true')">
+<a class="post-hover" href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
             <h3 class="title is-marginless text-shadow">
-                Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写
+                深入理解Linux堆分配器-DLMalloc
             </h3>
             
             
-            <span class="tag is-post-tag">Linux</span>
+            <span class="tag is-post-tag">linux</span>
             
-            <span class="tag is-post-tag">Protostar</span>
+            <span class="tag is-post-tag">heap</span>
             
-            <span class="tag is-post-tag">堆溢出</span>
+            <span class="tag is-post-tag">malloc</span>
             
-            <span class="tag is-post-tag">strcpy</span>
-            
-            <span class="tag is-post-tag">GOT表</span>
+            <span class="tag is-post-tag">free</span>
             
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
                 0x00 序
- 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
-
-0x01 C语言..
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux..
             </p>
-            <p class="date text-shadow is-marginless">2017-04-19</p>
+            <p class="date text-shadow is-marginless">2017-04-23</p>
         </div>
     </div>
 </a>
@@ -321,6 +315,90 @@
                     
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/05/01/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Pegasus%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E%E5%8F%8APoC%E5%88%86%E6%9E%90/pic/0-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Pegasus内核漏洞及PoC分析</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">Pegasus</span>
+                                            
+                                                <span class="tag is-post-tag">cve</span>
+                                            
+                                                <span class="tag is-post-tag">CVE-2016-4655</span>
+                                            
+                                                <span class="tag is-post-tag">CVE-2016-4656</span>
+                                            
+                                                <span class="tag is-post-tag">PoC</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 写在前面
+ 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“..
+                                        </p>
+                                        <p>2017-05-01</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Protostar-堆溢出学习-滥用堆metadata重定向程序执行</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">Linux</span>
+                                            
+                                                <span class="tag is-post-tag">Protostar</span>
+                                            
+                                                <span class="tag is-post-tag">堆溢出</span>
+                                            
+                                                <span class="tag is-post-tag">metadata</span>
+                                            
+                                                <span class="tag is-post-tag">DLMalloc</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 序
+ 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
+
+0x01 C语言源代码#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include..
+                                        </p>
+                                        <p>2017-04-26</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/">
                             <div class="columns" style="min-height: 230px;">
@@ -360,7 +438,7 @@
                     
                 
                     
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">
                             <div class="columns" style="min-height: 230px;">
@@ -404,7 +482,7 @@
                     
                 
                     
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">
                             <div class="columns" style="min-height: 230px;">
@@ -644,83 +722,6 @@ This level is at /..
 0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to ..
                                         </p>
                                         <p>2017-04-13</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-栈溢出学习-简单栈溢出修改局部变量值</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">栈溢出</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始吧！
-
-0x01 Protostar虚拟机环境搭建虚拟机下载地址
-虚拟机环境搭建视频教程
-默认用户名和密码:
-
-user..
-                                        </p>
-                                        <p>2017-04-11</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/10/mach-o动态链接/mach-o动态链接/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Mach-o动态链接</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">mach-o</span>
-                                            
-                                                <span class="tag is-post-tag">dyld</span>
-                                            
-                                                <span class="tag is-post-tag">stub</span>
-                                            
-                                        </p>
-                                        <p>
-                                            0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/us..
-                                        </p>
-                                        <p>2017-04-10</p>
                                         <button class="button is-small">Read More</button>
                                     </div>
                                 </div>
