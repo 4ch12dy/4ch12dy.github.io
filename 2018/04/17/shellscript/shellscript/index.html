@@ -17,16 +17,73 @@
   
   <title>shellscript总结 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="something you can not kown">
+  <meta name="description" content="shellscript总结变量name=&amp;quot;zhang&amp;quot;
+
+变量名和等号之间不能有空格
+
+英文，数字下划线，不能有空格，标点
+
+不能以数字开头
+
+不能是关键字
+
+
+单引号/双引号
+单引号会原样输出
+
+双引号里面可以有变量，转义字符
+
+
+字符串# 拼接
+name=&amp;#39;zhang&amp;#39;
+helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;!&amp;qu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="shellscript总结">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2018/04/17/shellscript/shellscript/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="something you can not kown">
-<meta property="og:updated_time" content="2019-04-18T03:41:19.955Z">
+<meta property="og:description" content="shellscript总结变量name=&amp;quot;zhang&amp;quot;
+
+变量名和等号之间不能有空格
+
+英文，数字下划线，不能有空格，标点
+
+不能以数字开头
+
+不能是关键字
+
+
+单引号/双引号
+单引号会原样输出
+
+双引号里面可以有变量，转义字符
+
+
+字符串# 拼接
+name=&amp;#39;zhang&amp;#39;
+helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;!&amp;qu">
+<meta property="og:updated_time" content="2019-04-19T11:32:58.508Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shellscript总结">
-<meta name="twitter:description" content="something you can not kown">
+<meta name="twitter:description" content="shellscript总结变量name=&amp;quot;zhang&amp;quot;
+
+变量名和等号之间不能有空格
+
+英文，数字下划线，不能有空格，标点
+
+不能以数字开头
+
+不能是关键字
+
+
+单引号/双引号
+单引号会原样输出
+
+双引号里面可以有变量，转义字符
+
+
+字符串# 拼接
+name=&amp;#39;zhang&amp;#39;
+helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;!&amp;qu">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -155,24 +212,95 @@
             
                 <div>
                     
+                         <a class="tag is-post-tag" href="/tags/shell/">shell</a>
+                    
                 </div>
             
         </div>
         <div class="content" style="overflow: auto">
-            <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<div id="hbe-security">
-  <div class="hbe-input-container">
-  <input type="password" class="hbe-form-control" id="pass" placeholder="Need password to decrypt!" />
-    <label for="pass">Need password to decrypt!</label>
-    <div class="bottom-line"></div>
-  </div>
-</div>
-<div id="decryptionError" style="display: none;">Incorrect Password!</div>
-<div id="noContentError" style="display: none;">No content to display!</div>
-<div id="encrypt-blog" style="display:none">
-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
-</div>
-<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+            <h3 id="shellscript总结"><a href="#shellscript总结" class="headerlink" title="shellscript总结"></a>shellscript总结</h3><h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><pre><code>name=&quot;zhang&quot;
+</code></pre><ul>
+<li><p>变量名和等号之间不能有空格</p>
+</li>
+<li><p>英文，数字下划线，不能有空格，标点</p>
+</li>
+<li><p>不能以数字开头</p>
+</li>
+<li><p>不能是关键字</p>
+</li>
+</ul>
+<h4 id="单引号-双引号"><a href="#单引号-双引号" class="headerlink" title="单引号/双引号"></a>单引号/双引号</h4><ul>
+<li><p>单引号会原样输出</p>
+</li>
+<li><p>双引号里面可以有变量，转义字符</p>
+</li>
+</ul>
+<h4 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h4><pre><code class="bash"># 拼接
+name=&#39;zhang&#39;
+helloname=&quot;hello, &quot;$name&quot;!&quot;
+helloname=&quot;hello, &quot;${name}&quot;!&quot;
+
+#获取长度
+echo ${#name}  # [out]:5
+
+#提取子字符串
+
+echo ${name:1:4} #[out]:hang
+</code></pre>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><pre><code class="bash">
+my_array=(A B C D)
+
+echo &quot;数组的元素为: ${my_array[1]}&quot;
+echo &quot;数组的元素为: ${my_array[@]}&quot;
+
+#[out]:
+#数组的元素为: B
+#数组的元素为: A B C D
+</code></pre>
+<h4 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h4><pre><code class="bash">#文件存在且为目录
+-d 
+
+#文件存在且为一般文件
+-f
+
+#文件存在且为链接文件
+-L
+</code></pre>
+<h4 id="if"><a href="#if" class="headerlink" title="if"></a>if</h4><pre><code class="bash">a=10
+b=20
+
+if [ $a == $b ];then
+    echo &quot;a 等于 b&quot;
+elif [ $a -gt $b ];then
+    echo &quot;a 大于 b&quot;
+elif [ $a -lt $b ];then
+    echo &quot;a 小于 b&quot;
+else
+    echo &quot;没有符合的条件&quot;
+fi    
+
+# [out]:a 等于 b
+</code></pre>
+<h4 id="for"><a href="#for" class="headerlink" title="for"></a>for</h4><pre><code class="bash"># for in
+for loop in 1 2 3 4 5;do
+    echo &quot;The value is: $loop&quot;
+done
+
+# [out]:The value is: 1 The value is: 2 The value is: 3 The value is: 4 The value is: 5
+</code></pre>
+<h4 id="xfind"><a href="#xfind" class="headerlink" title="xfind"></a>xfind</h4><pre><code class="shell">function xfind(){
+    find $1 -type f -regex &quot;.*&quot; -print0 | xargs -0  grep -i $2
+}
+
+if [ -z &quot;$1&quot; -o -z &quot;$2&quot; ]; then
+    echo &quot;[usage] xfind path_of_dir key_words_you_want_to_search&quot;
+else
+    xfind $1 $2
+fi
+</code></pre>
+<h4 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h4><pre><code>管道是标准输出到标准输入，但并不是所有命令都是从标准输入中取参数，所以需要xargs命令。使其从标准输出到命令参数
+</code></pre><p>更多细节点<a href="https://www.cnblogs.com/wangqiguo/p/6464234.html" target="_blank" rel="external">这里</a></p>
+
         </div>
         <div class="post-reply">
             
