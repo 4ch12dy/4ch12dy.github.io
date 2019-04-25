@@ -15,12 +15,12 @@
   </script>
 
   
-  <title>Tag: 堆溢出 | 4ch12dy</title>
+  <title>Tag: auto.js | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/堆溢出/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/auto-js/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="给我一点时间和power">
 <meta name="twitter:card" content="summary">
@@ -120,7 +120,7 @@
 
 <div class="container tag-cate-wrap">
     <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·堆溢出</strong></h1>
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·auto.js</strong></h1>
     </div>
 
     
@@ -128,121 +128,25 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
+                <a href="/2019/04/25/autojs加密分析/autojs加密分析/">
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>Protostar-堆溢出学习-滥用堆metadata重定向程序执行</strong> <small class="post-date">at: 2017-04-26</small>
+                                <strong>Android Auto.js脚本加密分析</strong> <small class="post-date">at: 2019-04-25</small>
                                 <br>
-                                0x00 序
- 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
+                                
 
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
+  
+  
+    show me the code
     
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-堆溢出学习-UAF(use after free)</strong> <small class="post-date">at: 2017-04-21</small>
-                                <br>
-                                0x00 序
-下面看一个堆中常见的漏洞-UAF(use after free)
+  
 
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;stdio...
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</strong> <small class="post-date">at: 2017-04-19</small>
-                                <br>
-                                0x00 序
- 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+Incorrect Password!
+No content to display!
 
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;sys/types.h..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/18/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-堆溢出学习-覆盖堆函数指针劫持代码流</strong> <small class="post-date">at: 2017-04-18</small>
-                                <br>
-                                0x00 序
- 学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-
-0x01 C语言源代码C代码
-#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include ..
+U2FsdGVkX18q73fkRk4ht7dTOCfSRvfIox9BLE19ZspdDc/p3joLEPqBR7ORv/ZcfaOynXzZWMUnyUq+rJ90vA/2+v8FJEdE..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>

@@ -57,7 +57,7 @@ Android系统的核心库，有core.jar, framework-res.apk, com.google.android.g
 
 
 /data">
-<meta property="og:updated_time" content="2019-04-19T11:33:27.455Z">
+<meta property="og:updated_time" content="2019-04-25T03:19:34.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android re basic">
 <meta name="twitter:description" content="Android系统简介文件目录
@@ -385,6 +385,33 @@ Android系统的核心库，有core.jar, framework-res.apk, com.google.android.g
 }
 </code></pre>
 <p>代码很简单，无解释。</p>
+<h5 id="hook多dex或动态load的dex"><a href="#hook多dex或动态load的dex" class="headerlink" title="hook多dex或动态load的dex"></a>hook多dex或动态load的dex</h5><pre><code class="java">XposedHelpers.findAndHookMethod(ClassLoader.class, &quot;loadClass&quot;, String.class, 
+                                new XC_MethodHook() {
+    @Override
+    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+        if (param.hasThrowable()) return;
+        Class&lt;?&gt; cls = (Class&lt;?&gt;) param.getResult();
+        String name = cls.getName();
+        if (name.contains(&quot;StringScriptSource&quot;)) {
+            XposedBridge.log(&quot;[xia0]: load class &quot;+ name);
+            XposedBridge.hookAllMethods(cls, &quot;getScript&quot;,new XC_MethodHook() {
+
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws 
+                  Throwable {
+                    // TODO
+                    super.afterHookedMethod(param);
+
+                    String ret = (String) param.getResult();
+
+                    XposedBridge.log(&quot;[xia0]: hook result :\n&quot;+ (String) ret);
+                }
+            } );
+        }
+    }
+});
+</code></pre>
+<p>原理就是hook classLoader的loadClass方法，然后再去hook目标class，这时候就能解决hook的时候class不存在的问题。</p>
 <h4 id="jni编程"><a href="#jni编程" class="headerlink" title="jni编程"></a>jni编程</h4><p>java文件</p>
 <pre><code class="java">package com.xia0.jni;
 
