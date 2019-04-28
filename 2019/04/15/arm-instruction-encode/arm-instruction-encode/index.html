@@ -15,17 +15,18 @@
   </script>
 
   
-  <title>Catégorie: ctf | 4ch12dy</title>
+  <title>再谈arm指令编码 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="给我一点时间和power">
-<meta property="og:type" content="website">
-<meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/categories/ctf/index.html">
+  <meta name="description" content="something you can not kown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="再谈arm指令编码">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/15/arm-instruction-encode/arm-instruction-encode/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="给我一点时间和power">
+<meta property="og:description" content="something you can not kown">
+<meta property="og:updated_time" content="2019-04-28T03:46:24.850Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4ch12dy">
-<meta name="twitter:description" content="给我一点时间和power">
+<meta name="twitter:title" content="再谈arm指令编码">
+<meta name="twitter:description" content="something you can not kown">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -33,9 +34,9 @@
     <link rel="icon" href="/favicon.png">
   
   
-  <link rel="stylesheet" href="../../css/common.css">
-<link rel="stylesheet" href="../../css/nav.css">
-<link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../../../../css/common.css">
+<link rel="stylesheet" href="../../../../../css/nav.css">
+<link rel="stylesheet" href="../../../../../css/layout.css">
   
 
 </head>
@@ -64,15 +65,15 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
             </a>
             
-            <a class="nav-item" href="../../index.html">
+            <a class="nav-item" href="../../../../../index.html">
                 Home
             </a>
             
-            <a class="nav-item" href="../../aboutme">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item" href="../../strike">
+            <a class="nav-item" href="../../../../../strike">
                 Strike
             </a>
             
@@ -84,15 +85,15 @@
         </span>
         <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
             
-            <a class="nav-item flex-1" href="../../index.html">
+            <a class="nav-item flex-1" href="../../../../../index.html">
                 Home
             </a>
             
-            <a class="nav-item flex-1" href="../../aboutme">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item flex-1" href="../../strike">
+            <a class="nav-item flex-1" href="../../../../../strike">
                 Strike
             </a>
             
@@ -103,55 +104,122 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .container.tag-cate-wrap {
-        min-height: 93vh;
+          <!--博文页面-->
+
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
+        background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .category-title-inner {
-        padding-top: 50px;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    strong {
-        text-transform: capitalize;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+    }
+
+    .flow-chart {
+        text-align: center;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
-
-
-<div class="container tag-cate-wrap">
-    <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·ctf</strong></h1>
-    </div>
-
-    
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2019/03/27/TCTF-Elements/TCTF-Elements/">
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>再谈arm指令编码</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/other/xia0.png?raw=true">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
+                <span class="post-date sub-title">at: 2019-04-15</span>
+            </div>
+            
+                <div>
                     
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>TCTF-Elements</strong> <small class="post-date">at: 2019-03-27</small>
-                                <br>
-                                TCTF-Elements
-这道题其实是一个数学问题，当时没有做出来，解题过程中走了很多弯路，踩了很多坑，不过也补了很多知识。
-
-Elements下面是main函数伪代码
-signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
-{
-  char v3; // bl
-  const ..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
+                         <a class="tag is-post-tag" href="/tags/arm/">arm</a>
+                    
+                </div>
+            
         </div>
-    
+        <div class="content" style="overflow: auto">
+            <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<div id="hbe-security">
+  <div class="hbe-input-container">
+  <input type="password" class="hbe-form-control" id="pass" placeholder="Need password to decrypt!" />
+    <label for="pass">Need password to decrypt!</label>
+    <div class="bottom-line"></div>
+  </div>
 </div>
+<div id="decryptionError" style="display: none;">Incorrect Password!</div>
+<div id="noContentError" style="display: none;">No content to display!</div>
+<div id="encrypt-blog" style="display:none">
+U2FsdGVkX18rMAZLTpbpm9d89f091rGWIxqy+szyNBbT6DoOxqaxtznrrZnrIahQ20LffYbQAJIOh/e3gsMppcRjKIjmC10UASCxbwcls3XyjmhDv3A+EfkWmbr7B4aSEKXft8EsXDgpAfqy7c4Psc+DaiwklvErLIF1yLtfdBU67WvNubI0oQGQ6U+vC2d3sAg5R+3nkh9L7iUrUd+cUGovd43o6jpHy9qjiHB1ibqE0JTKESud4UV1Ecs2ZToYwwUQk3mEoCjVR5qwyp0DaN0k0qvhHmlJWOoEclKnMDAsYEpueg3dw8VHZSq/t29Xy4PCnh+m6j+O5cVQuc6RuTOglLL7Ul/R/XlkeUKOV0bfen6K3D5xkVcgeXn8ib/n2jcSTo32QAhEzIOFwuDMlGBXSJcOwpwxDOz/gah/ujLrUqRR2dT0rMf6pUp7XH6LAeXfWeV9H0091h4CBqErfE9HE9VB5h8UpnkXrIwey8G1tTJPIkatNsI6x4Y401IFmRYAYoDo/yIe4nAigJ9Y3ZDZ8cNnC+0bRNRx6wtAzaA/6iXTTQkzO4AoyHIsX+nGl+fXwzfhqPOBTtenyNPziTuBVdl3HggGmOzYH8w6rOrF8wS8yZ01mPOdXO5BADp61iOTyKkpLUooH2tta5cpuCU3bOPBTkhL9YtRgOr/m4PruNq0G707Mgj0yYkGsZ72TarY87s1C+v/eAl8zyi0P3O/wFd7ge0Tg8/sGnbszZt3E44qeOPn19Ilru//LDxc8Zt0uMQsA3tst9Yk+ax8768mm/58kvAPb2FCyFJleMrw31zWB/kCzVnIMnHrngsrTFx5o3gN88n0EqsmvXP6lTBFrnTb0ZdT4aUOwPr6zv+mjdsIC06CWPKrAx1Rk7djocHuAOc9OBEa8VgplVRLhXhvSwa90FayPDOyFV5MgpAHjmDnVgVplK8AW0ylsdUjFhgIcu3783CLQgoJ6wXSju+JqL6YgpGOlV5h1ff4NGDdxgdUmJrObeCVHRZiR5XdVEygADLmjcs2I17kFucsEuzMcRJmVz24KVA5FggFLveqGy6/WW1ujUJtBhTDEdVX0hB0bjs4jttq96FyL7AFPUFamsX+ANa+pPDp+g9mnq4GUWWyNqMeoN1BxM0n41694EyBCFhfZESA/rlcI65rxZXDYfdLE0Xix2Hv3rgjfUSRZVaI2zYE+03nHLD1h/42
+</div>
+<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+        </div>
+        <div class="post-reply">
+            
+            
+            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
+                <script>
+
+                    /**
+                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                    /*
+                     var disqus_config = function () {
+                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                     };
+                     */
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = 'https://4ch12dy.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            
+        </div>
+    </div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="../../../../../css/highlight_github.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
+
       </div>
   </div>
   <style>
@@ -188,26 +256,13 @@ signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
   </div>
 </footer>
 
-<script src="../../js/search_core.js"></script>
-<script src="../../js/script.js"></script>
+<script src="../../../../../js/search_core.js"></script>
+<script src="../../../../../js/script.js"></script>
 
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {
             inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-</body>
-</html>lineMath: [ ["$","$"], ["\\(","\\)"] ],
             skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
             processEscapes: true
         }
