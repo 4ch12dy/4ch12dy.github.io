@@ -57,7 +57,7 @@ Android系统的核心库，有core.jar, framework-res.apk, com.google.android.g
 
 
 /data">
-<meta property="og:updated_time" content="2019-04-25T03:19:34.975Z">
+<meta property="og:updated_time" content="2019-05-29T06:52:30.488Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android re basic">
 <meta name="twitter:description" content="Android系统简介文件目录
@@ -587,6 +587,53 @@ APP_OPTIM := debug
 </tr>
 </tbody>
 </table>
+<h4 id="重打包"><a href="#重打包" class="headerlink" title="重打包"></a>重打包</h4><h5 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h5><p>生成keystore</p>
+<pre><code>keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
+</code></pre><p>签名apk</p>
+<pre><code>jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore my_application.apk alias_name
+</code></pre><p>验证签名</p>
+<pre><code>jarsigner -verify -verbose -certs my_application.apk
+</code></pre><p>zip</p>
+<pre><code>zipalign -v 4 your_project_name-unaligned.apk your_project_name.apk
+</code></pre><h4 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h4><ul>
+<li><p>jdb</p>
+<p>在AndroidManifest.xml的application中添加<code>android:debuggable=&quot;true&quot;</code> </p>
+<p><a href="https://github.com/wpvsyou/mprop">mprop</a></p>
+<p><a href="https://security.tencent.com/index.php/opensource/detail/17" target="_blank" rel="external">BDOpener</a></p>
+<p><a href="https://www.bodkin.ren/index.php/archives/533/" target="_blank" rel="external">参考</a></p>
+<pre><code>adb shell am start -D -n com.test.id/.MainActivity
+adb -d forward tcp:29882 jdwp:app_pid
+jdb -connect com.sun.jdi.SocketAttach:hostname=localhost,port=29882
+</code></pre></li>
+<li><p>ida</p>
+<pre><code>adb push dbgsrv/android_server /data/local/tmp
+./android_server
+
+adb forward tcp:23946 tcp:23946
+</code></pre></li>
+<li><p>lldb</p>
+<pre><code class="text">platform select remote-android
+adb push lldb-server /data/local/tmp/
+adb shell /data/local/tmp/lldb-server platform --server --listen unix-abstract:///data/local/tmp/debug.sock
+
+platform select remote-android
+platform connect unix-abstract-connect:///data/local/tmp/debug.sock
+</code></pre>
+</li>
+</ul>
+<h4 id="刷机-root-xposed"><a href="#刷机-root-xposed" class="headerlink" title="刷机/root/xposed"></a>刷机/root/xposed</h4><h5 id="Unlock-bootloader"><a href="#Unlock-bootloader" class="headerlink" title="Unlock bootloader"></a>Unlock bootloader</h5><p><a href="https://developers.google.com/android/images下载google原生镜像" target="_blank" rel="external">https://developers.google.com/android/images下载google原生镜像</a></p>
+<pre><code class="bash">adb reboot bootloader
+fastboot flashing unlock
+fastboot reboot
+
+fastboot boot twrp-3.2.3-0-blueline.img  // boot TWRP
+</code></pre>
+<p>注意点：</p>
+<ul>
+<li>在安装TWRP应用的时候不要安装为系统应用</li>
+<li>参考<a href="https://www.thecustomdroid.com/root-google-pixel-3-xl-guide/" target="_blank" rel="external">https://www.thecustomdroid.com/root-google-pixel-3-xl-guide/</a> </li>
+<li>xposed框架<a href="https://github.com/ElderDrivers/EdXposed">https://github.com/ElderDrivers/EdXposed</a></li>
+</ul>
 <h4 id="常见资源-索引"><a href="#常见资源-索引" class="headerlink" title="常见资源/索引"></a>常见资源/索引</h4><ul>
 <li><a href="https://source.android.com/setup/start/build-numbers" target="_blank" rel="external">平台代号、版本、API 级别和 NDK 版本</a></li>
 <li><a href="https://geneblue.github.io/2016/10/09/%E5%88%A9%E7%94%A8OLLVM%E6%B7%B7%E6%B7%86Android%20Native%E4%BB%A3%E7%A0%81%E7%AF%87%E4%B8%80/" target="_blank" rel="external">https://geneblue.github.io/2016/10/09/%E5%88%A9%E7%94%A8OLLVM%E6%B7%B7%E6%B7%86Android%20Native%E4%BB%A3%E7%A0%81%E7%AF%87%E4%B8%80/</a></li>

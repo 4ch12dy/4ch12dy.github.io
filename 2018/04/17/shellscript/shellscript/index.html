@@ -61,7 +61,7 @@ helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;!&amp;qu">
 字符串# 拼接
 name=&amp;#39;zhang&amp;#39;
 helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;!&amp;qu">
-<meta property="og:updated_time" content="2019-04-19T11:32:58.508Z">
+<meta property="og:updated_time" content="2019-05-10T08:14:52.874Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shellscript总结">
 <meta name="twitter:description" content="shellscript总结变量name=&amp;quot;zhang&amp;quot;
@@ -300,6 +300,19 @@ fi
 </code></pre>
 <h4 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h4><pre><code>管道是标准输出到标准输入，但并不是所有命令都是从标准输入中取参数，所以需要xargs命令。使其从标准输出到命令参数
 </code></pre><p>更多细节点<a href="https://www.cnblogs.com/wangqiguo/p/6464234.html" target="_blank" rel="external">这里</a></p>
+<h4 id="function"><a href="#function" class="headerlink" title="function"></a>function</h4><p>函数返回值只能输0-255数字，且用<code>$?</code>接收</p>
+<pre><code class="shell">function test(){
+    read num
+    return  $num
+}
+
+test
+if [ $? -eq 1 ];then
+    echo &quot;yes&quot;
+else
+    echo &quot;no&quot;
+fi
+</code></pre>
 
         </div>
         <div class="post-reply">
