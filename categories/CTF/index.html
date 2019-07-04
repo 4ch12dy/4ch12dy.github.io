@@ -15,12 +15,12 @@
   </script>
 
   
-  <title>Categorie: ctf | 4ch12dy</title>
+  <title>Category: CTF | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/categories/ctf/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/categories/CTF/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="给我一点时间和power">
 <meta name="twitter:card" content="summary">
@@ -128,7 +128,7 @@
 
 <div class="container tag-cate-wrap">
     <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·ctf</strong></h1>
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·CTF</strong></h1>
     </div>
 
     
@@ -136,21 +136,22 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2019/03/27/TCTF-Elements/TCTF-Elements/">
+                <a href="/2017/05/28/pwnhub-CTF-re150/pwnhub-CTF-re150/">
+                    
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/pwnhub-CTF-re150/0-0.png?raw=true" style="height: 100%; width: 100%">
+                        </figure>
+                    </div>
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>TCTF-Elements</strong> <small class="post-date">at: 2019-03-27</small>
+                                <strong>pwnhub-CTF re150</strong> <small class="post-date">at: 2017-05-28</small>
                                 <br>
-                                TCTF-Elements
-这道题其实是一个数学问题，当时没有做出来，解题过程中走了很多弯路，踩了很多坑，不过也补了很多知识。
-
-Elements下面是main函数伪代码
-signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
-{
-  char v3; // bl
-  const ..
+                                0x00 写在前面第一次做pwnhub题，最近参加了几场ctf比赛，pwnhub的题还是比较有一定难度的，这里记录下其中的一道逆向题。题目在这里
+0x01 简单分析拿到题目后试着在虚拟机里运行了一下，看下有什么提示
+然后转去hopper搜下相关字符串，并没有发现error相关字符串，syclover也没有相关printf等函数输出，看来只能上gdb调试看..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -203,19 +204,6 @@ signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
     MathJax.Hub.Config({
         tex2jax: {
             inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-</body>
-</html>lineMath: [ ["$","$"], ["\\(","\\)"] ],
             skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
             processEscapes: true
         }
