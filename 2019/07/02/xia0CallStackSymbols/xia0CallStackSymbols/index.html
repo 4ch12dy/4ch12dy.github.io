@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702181519237.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702181145710.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702181638614.png?raw=true">
-<meta property="og:updated_time" content="2019-07-02T13:02:07.540Z">
+<meta property="og:updated_time" content="2019-07-02T13:04:25.994Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Frida调用栈符号恢复">
 <meta name="twitter:description" content="Frida调用栈符号恢复开始搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增加了">
@@ -82,6 +82,10 @@
                 Strike
             </a>
             
+            <a class="nav-item" href="../../../../../re">
+                re
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -100,6 +104,10 @@
             
             <a class="nav-item flex-1" href="../../../../../strike">
                 Strike
+            </a>
+            
+            <a class="nav-item flex-1" href="../../../../../re">
+                re
             </a>
             
         </div>
@@ -168,7 +176,7 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="Frida调用栈符号恢复"><a href="#Frida调用栈符号恢复" class="headerlink" title="Frida调用栈符号恢复"></a>Frida调用栈符号恢复</h3><h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增加了分析的时间，想到之前解决过<a href="[http://4ch12dy.site/2018/10/03/LLDB%E8%B0%83%E8%AF%95%E5%99%A8%E6%A0%88%E7%AC%A6%E5%8F%B7%E5%8C%96/%E5%BC%BA%E5%8C%96%E4%BD%A0%E7%9A%84lldb%E8%B0%83%E8%AF%95%E5%99%A8/](http://4ch12dy.site/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">lldb调试器栈符号恢复</a>)方案，决定把lldb的栈符号恢复脚本移植到frida中。</p>
+            <h3 id="Frida调用栈符号恢复"><a href="#Frida调用栈符号恢复" class="headerlink" title="Frida调用栈符号恢复"></a>Frida调用栈符号恢复</h3><h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增加了分析的时间，想到之前解决<a href="[http://4ch12dy.site/2018/10/03/LLDB%E8%B0%83%E8%AF%95%E5%99%A8%E6%A0%88%E7%AC%A6%E5%8F%B7%E5%8C%96/%E5%BC%BA%E5%8C%96%E4%BD%A0%E7%9A%84lldb%E8%B0%83%E8%AF%95%E5%99%A8/](http://4ch12dy.site/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">lldb调试器栈符号恢复</a>)方案，决定把lldb的栈符号恢复脚本移植到frida中。</p>
 <h4 id="如何恢复已经去掉符号表的可执行文件？"><a href="#如何恢复已经去掉符号表的可执行文件？" class="headerlink" title="如何恢复已经去掉符号表的可执行文件？"></a>如何恢复已经去掉符号表的可执行文件？</h4><p>这里的符号恢复仅仅针对的是OC函数，C函数如果符号表被strip以后是没有办法恢复其符号信息的。为什么OC函数可以去做符号恢复呢？这里要涉及到macho文件的格式以及ObjectC这个语言自身设计相关。可以看到在macho文件中的_DATA数据段中有很多objc的节信息，里面保存了所有的类以及方法等元数据信息。既然如此，我们肯定能找到方法去恢复这些OC函数的符号。</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702172303432.png?raw=true" alt="image-20190702172303432"></p>
 <h4 id="OC函数符号恢复思路"><a href="#OC函数符号恢复思路" class="headerlink" title="OC函数符号恢复思路"></a>OC函数符号恢复思路</h4><p>首先我们只能得到一堆调用链的地址，这些地址肯定是函数里面的某个偏移地址。很容易想到这个地址往前推肯定就是这个函数的首地址及函数地址。如果我们拿到了所有函数的地址，然后每一个地址和目标地址比较，与目标地址距离最近的那个地址所对应的函数不就是我们想要的符号吗。</p>
