@@ -27,7 +27,7 @@
 理性分析再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1321564227655_.pic.jpg?raw=true">
-<meta property="og:updated_time" content="2019-07-27T12:09:23.553Z">
+<meta property="og:updated_time" content="2019-07-27T12:40:00.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信集赞/评论插件分析及开发">
 <meta name="twitter:description" content="微信集赞/评论插件分析及开发开始为什么要做这个集赞的插件呢？起因是上周去参加了某个会议，有一个集赞60领玩偶的活动，但是想到平时一条朋友圈也就几个赞，而且又不想找人点赞，领不到，很气。回去以后想着能不能写一个集赞的插件，在需要的时候直接输入想要的赞、评论数量，我发的朋友圈就能有多少赞。这样再有这样的活动岂不美哉。准备开干！
@@ -354,7 +354,8 @@ bDeleted: 0
   frame #24: [file:0x1ae78431c mem:0x1c1e1431c] UIKitCore`UIApplicationMain + 216
   frame #25: [file:0x100152b04 mem:0x104ac6b04] WeChat`main + 1387268
   frame #26: [file:0x1808ec020 mem:0x193f7c020] libdyld.dylib`start + 4
-</code></pre><p>里面有个很明显的方法</p>
+</code></pre><p>可以看到调用栈的符号已经恢复了，能够清晰的看出调用的过程</p>
+<p>其中里面有个很明显的方法</p>
 <p><code>-[WCTimelineMgr onDataUpdated:andData:andAdData:withChangedTime:]</code></p>
 <p>看名字就知道，这个应该就是我们需要的hook点。</p>
 <h5 id="整理思路"><a href="#整理思路" class="headerlink" title="整理思路"></a>整理思路</h5><p>整理一下目前的情况，首先拿到了赞和评论的模型，然后找到了hook点。下一步就是写代码去实现集赞的功能。</p>
@@ -366,7 +367,7 @@ bDeleted: 0
 </ul>
 <p>下面就是写代码实现就可以了。还有个情况是在你进入自己的朋友圈详情界面的时候，也就是看到点赞的人都是头像的界面。也需要做类似的操作才能实现集赞的功能。</p>
 <p>这里分析的过程和上面类似，我选择的hook点为：<br><code>-[WCCommentDetailViewControllerFB setDataItem:]</code></p>
-<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>具体的代码实现这里就不再去分析了，我把代码开源到了这里<a href="">fkwechatzan</a></p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>具体的代码实现这里就不再去分析了，我把代码开源到了这里<a href="https://github.com/4ch12dy/fkwechatzan">fkwechatzan</a></p>
 <h4 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h4><ul>
 <li><p>朋友圈详情界面</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true" width="400" hegiht="200" align="center"></p>
