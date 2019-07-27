@@ -25,14 +25,15 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="微信集赞/评论插件分析及开发开始为什么要做这个集赞的插件呢？起因是上周去参加了某个会议，有一个集赞60领玩偶的活动，但是想到平时一条朋友圈也就几个赞，而且又不想找人点赞，领不到，很气。回去以后想着能不能写一个集赞的插件，在需要的时候直接输入想要的赞、评论数量，我发的朋友圈就能有多少赞。这样再有这样的活动岂不美哉。准备开干！
 理性分析再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1361564255775_.pic.jpg?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1321564227655_.pic.jpg?raw=true">
-<meta property="og:updated_time" content="2019-07-27T12:48:33.510Z">
+<meta property="og:updated_time" content="2019-07-27T19:38:57.226Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信集赞/评论插件分析及开发">
 <meta name="twitter:description" content="微信集赞/评论插件分析及开发开始为什么要做这个集赞的插件呢？起因是上周去参加了某个会议，有一个集赞60领玩偶的活动，但是想到平时一条朋友圈也就几个赞，而且又不想找人点赞，领不到，很气。回去以后想着能不能写一个集赞的插件，在需要的时候直接输入想要的赞、评论数量，我发的朋友圈就能有多少赞。这样再有这样的活动岂不美哉。准备开干！
 理性分析再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直">
-<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1361564255775_.pic.jpg?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -232,7 +233,7 @@
 (lldb) pcc
 </code></pre><p>这里有两种方法：</p>
 <p>一种是用<code>xbr &quot;-[WCTimeLineViewController tableView:cellForRowAtIndexPath:]&quot;</code>下断点去查看；</p>
-<pre><code>// 对-[UITableView reloadData]方法下断点
+<pre><code>// 对-[WCTimeLineViewController tableView:cellForRowAtIndexPath:]方法下断点
 (lldb) xbr &quot;-[WCTimeLineViewController tableView:cellForRowAtIndexPath:]&quot;
 (lldb) c
 </code></pre><p>第二种是由于lldb支持choose命令，可以直接拿到<code>WCFacade</code>对象。既然如此选choose</p>
@@ -375,6 +376,10 @@ bDeleted: 0
 <p>这里分析的过程和上面类似，我选择的hook点为：<br><code>-[WCCommentDetailViewControllerFB setDataItem:]</code></p>
 <h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>具体的代码实现这里就不再去分析了，我把代码开源到了这里<a href="https://github.com/4ch12dy/fkwechatzan">fkwechatzan</a></p>
 <h4 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h4><ul>
+<li>集赞助手设置界面</li>
+</ul>
+<p>  <img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1361564255775_.pic.jpg?raw=true" alt="1361564255775_.pic"></p>
+<ul>
 <li><p>朋友圈详情界面</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true" width="400" hegiht="200" align="center"></p>
 </li>
