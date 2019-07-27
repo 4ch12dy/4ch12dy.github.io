@@ -27,7 +27,7 @@
 理性分析再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1321564227655_.pic.jpg?raw=true">
-<meta property="og:updated_time" content="2019-07-27T12:40:00.152Z">
+<meta property="og:updated_time" content="2019-07-27T12:48:33.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信集赞/评论插件分析及开发">
 <meta name="twitter:description" content="微信集赞/评论插件分析及开发开始为什么要做这个集赞的插件呢？起因是上周去参加了某个会议，有一个集赞60领玩偶的活动，但是想到平时一条朋友圈也就几个赞，而且又不想找人点赞，领不到，很气。回去以后想着能不能写一个集赞的插件，在需要的时候直接输入想要的赞、评论数量，我发的朋友圈就能有多少赞。这样再有这样的活动岂不美哉。准备开干！
@@ -223,7 +223,12 @@
 [I]:Run /iOSRE/tools/debugserver 127.0.0.1:1234 -a wechat
 </code></pre>
 <p>打开另一个终端进行调试（我的lldb已经安装了xia0LLDB脚本）</p>
-<pre><code>// 连接到远端
+<pre><code>xia0 ~ $ lldb
+&quot;xutil&quot; command installed -&gt; xutil
+&quot;choose&quot; command installed -&gt; choose
+&quot;xbr&quot; command installed --&gt; xbr -[UIView initWithFrame:]
+&quot;sbt&quot; command installed -&gt; sbt
+// 连接到远端
 (lldb) pcc
 </code></pre><p>这里有两种方法：</p>
 <p>一种是用<code>xbr &quot;-[WCTimeLineViewController tableView:cellForRowAtIndexPath:]&quot;</code>下断点去查看；</p>
@@ -326,7 +331,8 @@ bDeleted: 0
 </code></pre><p>但是用我写的sbt命令就能恢复oc符号，下面我们对<code>-[WCDataItem setCid:]</code>下断点，然后得到调用栈</p>
 <pre><code>(lldb) sbt
 ==========================================xia0LLDB==========================================
-  BlockSymbolFile    Not Set The Block Symbol Json File, Try &#39;sbt -f&#39;  ============================================================================================
+  BlockSymbolFile    Not Set The Block Symbol Json File, Try &#39;sbt -f&#39;
+============================================================================================
   frame #0: [file:0x103c094d0 mem:0x10857d4d0] WeChat`-[WCDataItem setCid:] + 0
   frame #1: [file:0x18193c638 mem:0x194fcc638] Foundation`_decodeObjectBinary + 2004
   frame #2: [file:0x18193bb6c mem:0x194fcbb6c] Foundation`_decodeObject + 340
