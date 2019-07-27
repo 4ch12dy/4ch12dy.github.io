@@ -25,14 +25,14 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="微信集赞/评论插件分析及开发开始为什么要做这个集赞的插件呢？起因是上周去参加了某个会议，有一个集赞60领玩偶的活动，但是想到平时一条朋友圈也就几个赞，而且又不想找人点赞，领不到，很气。回去以后想着能不能写一个集赞的插件，在需要的时候直接输入想要的赞、评论数量，我发的朋友圈就能有多少赞。这样再有这样的活动岂不美哉。准备开干！
 理性分析再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1331564227662_.pic.jpg?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1321564227655_.pic.jpg?raw=true">
-<meta property="og:updated_time" content="2019-07-27T11:54:47.394Z">
+<meta property="og:updated_time" content="2019-07-27T12:08:04.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信集赞/评论插件分析及开发">
 <meta name="twitter:description" content="微信集赞/评论插件分析及开发开始为什么要做这个集赞的插件呢？起因是上周去参加了某个会议，有一个集赞60领玩偶的活动，但是想到平时一条朋友圈也就几个赞，而且又不想找人点赞，领不到，很气。回去以后想着能不能写一个集赞的插件，在需要的时候直接输入想要的赞、评论数量，我发的朋友圈就能有多少赞。这样再有这样的活动岂不美哉。准备开干！
 理性分析再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直">
-<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1331564227662_.pic.jpg?raw=true">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -168,7 +168,7 @@
         </div>
         <div class="content" style="overflow: auto">
             <h3 id="微信集赞-评论插件分析及开发"><a href="#微信集赞-评论插件分析及开发" class="headerlink" title="微信集赞/评论插件分析及开发"></a>微信集赞/评论插件分析及开发</h3><h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>为什么要做这个集赞的插件呢？起因是上周去参加了某个会议，有一个集赞60领玩偶的活动，但是想到平时一条朋友圈也就几个赞，而且又不想找人点赞，领不到，很气。回去以后想着能不能写一个集赞的插件，在需要的时候直接输入想要的赞、评论数量，我发的朋友圈就能有多少赞。这样再有这样的活动岂不美哉。准备开干！</p>
-<h4 id="理性分析"><a href="#理性分析" class="headerlink" title="理性分析"></a>理性分析</h4><p>再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直接在view层去更改，但是这样得去处理界面的一些细节，一旦不注意，很容易崩溃。还有种思路是更改datasource或者说赞评论的模型。可以想到，最初一条朋友圈肯定是从服务器拿到数据并封装成对应的模型。一般来说，越改底层的数据或者说源头的数据，那么稳定性和真实性就更高。这里我的想法就是既不改view层，也不改源头层，就改封装好的模型那一层应该就很符合要求。接下来主要讲一下怎么我去实现这个需求的分析过程，可能写得有点乱。</p>
+<h4 id="理性分析"><a href="#理性分析" class="headerlink" title="理性分析"></a>理性分析</h4><p>再开始之前，先理性分析一波：如果想要集赞，这里有两种思路，一个是直接在view层去更改，但是这样得去处理界面的一些细节，一旦不注意，很容易崩溃。还有种思路是更改datasource或者说赞评论的模型。可以想到，最初一条朋友圈肯定是从服务器拿到数据并封装成对应的模型。一般来说，越改底层的数据或者说源头的数据，那么稳定性和真实性就更高。这里我的想法就是既不改view层，也不改源头层，就改封装好的模型那一层应该就很符合要求。接下来主要讲一下怎么我去实现这个需求的分析过程，因为本身功能不是很复杂，大佬随便看看就行。</p>
 <h4 id="准备条件"><a href="#准备条件" class="headerlink" title="准备条件"></a>准备条件</h4><ul>
 <li>一台mac</li>
 <li>一台越狱的iOS设备</li>
@@ -211,7 +211,7 @@
 <p><code>[[MMServiceCenter defaultCenter] getService:[WCFacade class]]</code>会得到一个<code>WCFacade</code>对象，然后通过</p>
 <p><code>[WCFacade getTimelineDataItemOfIndex:]</code>就能得到cell的数据</p>
 <p>看到这里，上调试器！看下都是什么数据…</p>
-<p>将设备用数据线连接上电脑（这里我推荐用数据线的方式，wifi延时太高，影响心情），手机上打开微信，然后上调试器！</p>
+<p>将设备用数据线连接上电脑（这里我推荐用数据线的方式，wifi延时太高，影响心情），手机上打开微信</p>
 <p>直接输入<code>issh debug -a wechat</code>就能挂上微信</p>
 <pre><code class="shell">xia0 ~ $ issh debug -a wechat
 [I]:iproxy process for 2222 port alive, pid=1382
@@ -225,12 +225,12 @@
 <p>打开另一个终端进行调试（我的lldb已经安装了xia0LLDB脚本）</p>
 <pre><code>// 连接到远端
 (lldb) pcc
-// 对-[UITableView reloadData]方法下断点
-(lldb) xbr &quot;-[WCTimeLineViewController tableView:cellForRowAtIndexPath:]&quot;
-(lldb) c
 </code></pre><p>这里有两种方法：</p>
 <p>一种是用<code>xbr &quot;-[WCTimeLineViewController tableView:cellForRowAtIndexPath:]&quot;</code>下断点去查看；</p>
-<p>第二种是由于lldb支持choose命令，所以可以直接拿到<code>WCFacade</code>对象</p>
+<pre><code>// 对-[UITableView reloadData]方法下断点
+(lldb) xbr &quot;-[WCTimeLineViewController tableView:cellForRowAtIndexPath:]&quot;
+(lldb) c
+</code></pre><p>第二种是由于lldb支持choose命令，可以直接拿到<code>WCFacade</code>对象。既然如此选choose</p>
 <pre><code>(lldb) choose WCFacade
 &lt;__NSArrayM 0x2823d9860&gt;(
 &lt;WCFacade: 0x139e1c030&gt;
@@ -367,9 +367,14 @@ bDeleted: 0
 <p>下面就是写代码实现就可以了。还有个情况是在你进入自己的朋友圈详情界面的时候，也就是看到点赞的人都是头像的界面。也需要做类似的操作才能实现集赞的功能。</p>
 <p>这里分析的过程和上面类似，我选择的hook点为：<br><code>-[WCCommentDetailViewControllerFB setDataItem:]</code></p>
 <h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>具体的代码实现这里就不再去分析了，我把代码开源到了这里<a href="">fkwechatzan</a></p>
-<h4 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h4><p><code>&lt;img src=&quot;/Users/didi/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/9385e8e9f8cd7979772efcee816df22a/Message/MessageTemp/6a08bee59031222896046abb84675bbc/Image/1321564227655_.pic.jpg&quot; width=&quot;500&quot; hegiht=&quot;313&quot; align=center /&gt;</code></p>
-<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1331564227662_.pic.jpg?raw=true" alt="1331564227662_.pic"></p>
-<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1321564227655_.pic.jpg?raw=true" alt="1321564227655_.pic"></p>
+<h4 id="完成效果"><a href="#完成效果" class="headerlink" title="完成效果"></a>完成效果</h4><ul>
+<li><p>朋友圈详情界面</p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1341564229215_.pic.jpg?raw=true" alt="1341564229215_.pic"></p>
+</li>
+<li><p>赞和评论</p>
+</li>
+</ul>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/fkwechatLike/1321564227655_.pic.jpg?raw=true" width="400" hegiht="200" align="center"></p>
 <h4 id="一点总结"><a href="#一点总结" class="headerlink" title="一点总结"></a>一点总结</h4><p>本文详细介绍了使用issh和xia0LLDB去完成一个集赞功能的逆向分析过程，这个功能本身不是很复杂，这里仅仅我在逆向过程中的一些理解和分析。每个人的逆向分析过程可能都不尽相同，我提供一个完整的分析步骤，而不是完全的去靠猜测，虽然逆向有时候猜测就能有一些意外惊喜，不过不确定性也同样会花费大量时间。</p>
 <p>最后，妈妈再也不用担心没有人赞我的朋友圈了~</p>
 <p>下次集赞领礼品的活动我要定了！</p>
