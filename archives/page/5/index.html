@@ -147,17 +147,17 @@
                 <!-- 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-7-desktop">
-        <a href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
+        <a href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/">
             <div class="full-height post-hover"
                  style="
-                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true');
+                         background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true');
                          height: 350px;
                          background-size: cover;
                          background-repeat: no-repeat;
                          ">
                     <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
                         <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            Protostar-栈溢出学习-简单栈溢出修改局部变量值
+                            Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip
                         </h1>
                         <div>
                         
@@ -171,10 +171,12 @@
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始..
+                            0x00 序
+ 接着之前的系列，下面研究两种控制eip的方式
+
+0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwri..
                         </p>
-                        <p class="date text-shadow">2017-04-11</p>
+                        <p class="date text-shadow">2017-04-13</p>
                         <button class="button is-info is-small">Read More</button>
                     </div>
             </div>
@@ -184,6 +186,33 @@
         <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
                 
+<a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                Protostar-栈溢出学习-简单栈溢出修改局部变量值
+            </h3>
+            
+            
+            <span class="tag is-post-tag">Linux</span>
+            
+            <span class="tag is-post-tag">Protostar</span>
+            
+            <span class="tag is-post-tag">栈溢出</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                0x01 序
+ 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简..
+            </p>
+            <p class="date text-shadow is-marginless">2017-04-11</p>
+        </div>
+    </div>
+</a>
+            
+            
+                
 <a class="post-hover" href="/2017/04/10/mach-o动态链接/mach-o动态链接/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -204,38 +233,6 @@
                 0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接..
             </p>
             <p class="date text-shadow is-marginless">2017-04-10</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2017/04/09/android-re-basic/android-re-basic/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                android re basic
-            </h3>
-            
-            
-            <span class="tag is-post-tag">android</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                Android系统简介文件目录
-
-
-目录
-说明
-
-
-
-
-/system/app
-预装的app(...
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-09</p>
         </div>
     </div>
 </a>
@@ -245,6 +242,33 @@
     <div class="column is-12 is-hidden-desktop">
         
         
+<a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                Protostar-栈溢出学习-简单栈溢出修改局部变量值
+            </h3>
+            
+            
+            <span class="tag is-post-tag">Linux</span>
+            
+            <span class="tag is-post-tag">Protostar</span>
+            
+            <span class="tag is-post-tag">栈溢出</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                0x01 序
+ 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简..
+            </p>
+            <p class="date text-shadow is-marginless">2017-04-11</p>
+        </div>
+    </div>
+</a>
+        
+        
+        
 <a class="post-hover" href="/2017/04/10/mach-o动态链接/mach-o动态链接/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -265,38 +289,6 @@
                 0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接..
             </p>
             <p class="date text-shadow is-marginless">2017-04-10</p>
-        </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2017/04/09/android-re-basic/android-re-basic/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                android re basic
-            </h3>
-            
-            
-            <span class="tag is-post-tag">android</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                Android系统简介文件目录
-
-
-目录
-说明
-
-
-
-
-/system/app
-预装的app(...
-            </p>
-            <p class="date text-shadow is-marginless">2017-04-09</p>
         </div>
     </div>
 </a>
@@ -307,6 +299,44 @@
                     
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">Linux</span>
+                                            
+                                                <span class="tag is-post-tag">Protostar</span>
+                                            
+                                                <span class="tag is-post-tag">栈溢出</span>
+                                            
+                                        </p>
+                                        <p>
+                                            0x00 序
+ 接着之前的系列，下面研究两种控制eip的方式
+
+0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to ..
+                                        </p>
+                                        <p>2017-04-13</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
                             <div class="columns" style="min-height: 230px;">
@@ -383,7 +413,7 @@ user..
                     
                 
                     
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/04/09/android-re-basic/android-re-basic/">
                             <div class="columns" style="min-height: 230px;">
@@ -516,7 +546,7 @@ gdb环境中 set args..
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX187uUNF0U457ystfLFWwg4smMTCPBIoR6GJ373Y7+bvJWPT6LLgJjxirPjcgOtGy9x/cCMCcJBnqWz..
+U2FsdGVkX19ImDVzRnrxOkQ0NgV+22H5IY2VJJdpdpnCLRxT+xDMima547Xn4wSoWWNrleaL9YxQKdUWbjTuRm7..
                                         </p>
                                         <p>2017-02-15</p>
                                         <button class="button is-small">Read More</button>
