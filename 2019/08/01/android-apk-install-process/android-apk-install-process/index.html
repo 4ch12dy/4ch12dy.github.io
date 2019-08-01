@@ -46,7 +46,7 @@
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152755489.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152858658.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152915992.png?raw=true">
-<meta property="og:updated_time" content="2019-08-01T07:46:31.205Z">
+<meta property="og:updated_time" content="2019-08-01T10:29:23.735Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android应用安装过程深度解析">
 <meta name="twitter:description" content="Android应用安装过程深度解析
@@ -203,7 +203,7 @@
 <li>第三方应用安装或双击安装包，会启动系统应用引导安装</li>
 </ul>
 <p>无论采用哪种安装方式，最终的安装过程都会走到 PackageManagerService，由这个类来完成一系列的工作。PackageManagerService 实际上是一个系统服务，负责提供系统上所有应用的管理，包括安装、优化、查询和卸载，这个类最终会通过 socket 与 installd 这个守护进程通信，真实对应用进行操作的其实是由 installd 这个进程完成。</p>
-<h4 id="场景一：系统应用安装"><a href="#场景一：系统应用安装" class="headerlink" title="场景一：系统应用安装"></a>场景一：系统应用安装</h4><p>在设备启动时，Linux 系统的用户空间进程 init （pid = 1）会孵化许多子进程，包括一系列守护进程，其中就有上面提到的 installd，然后会孵化许多重要的系统服务，如 servicemanager，这个进程会负责管理所有服务的 Binder 通信，此外 init 还会孵化mediaserver，此进程负责启动和管理 Framework 的 C 层的服务，最后 init 还会孵化 zygote 进程，这个进程是第一个 Java 进程，zygote 进程会孵化出许多应用程序进程，包括 launcher 进程，即桌面进程，zygote 还会孵化出 system_server 进程，这个进程与 mediaserver 对应，负责启动和管理 Framework 的 Java 层服务，包括 PackageManagerService、ActivityManagerService 等。</p>
+<h4 id="场景一：系统应用安装"><a href="#场景一：系统应用安装" class="headerlink" title="场景一：系统应用安装"></a>场景一：系统应用安装</h4><p>在设备启动时，Linux 系统的用户空间进程 init （pid = 1）会孵化许多子进程，包括一系列守护进程，其中就有上面提到的 installd，然后会孵化许多重要的系统服务，如 servicemanager，这个进程会负责管理所有服务的 Binder 通信，最后 init 还会孵化 zygote 进程，这个进程是第一个 Java 进程，zygote 进程会孵化出许多应用程序进程，包括 launcher 进程，即桌面进程，zygote 还会孵化出 system_server 进程，负责启动和管理 Framework 的 Java 层服务，包括 PackageManagerService、ActivityManagerService 等。</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801151901799.png?raw=true" alt="image-20190801151901799"></p>
 <p><strong>补充：system_server 的启动与运行流程</strong></p>
 <p>system_server 由 zygote 进程孵化，是整个 Android Framework 的基础</p>
