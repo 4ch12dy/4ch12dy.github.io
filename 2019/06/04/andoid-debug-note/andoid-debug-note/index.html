@@ -15,17 +15,18 @@
   </script>
 
   
-  <title>Mot-clé: iosre | 4ch12dy</title>
+  <title>android调试深度总结 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="给我一点时间和power">
-<meta property="og:type" content="website">
-<meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/iosre/index.html">
+  <meta name="description" content="something you can not kown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android调试深度总结">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/06/04/andoid-debug-note/andoid-debug-note/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="给我一点时间和power">
+<meta property="og:description" content="something you can not kown">
+<meta property="og:updated_time" content="2019-08-01T07:52:05.503Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4ch12dy">
-<meta name="twitter:description" content="给我一点时间和power">
+<meta name="twitter:title" content="android调试深度总结">
+<meta name="twitter:description" content="something you can not kown">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -33,9 +34,9 @@
     <link rel="icon" href="/favicon.png">
   
   
-  <link rel="stylesheet" href="../../css/common.css">
-<link rel="stylesheet" href="../../css/nav.css">
-<link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../../../../css/common.css">
+<link rel="stylesheet" href="../../../../../css/nav.css">
+<link rel="stylesheet" href="../../../../../css/layout.css">
   
 
 </head>
@@ -64,15 +65,15 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
             </a>
             
-            <a class="nav-item" href="../../re">
+            <a class="nav-item" href="../../../../../re">
                 re
             </a>
             
-            <a class="nav-item" href="../../aboutme">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item" href="../../strike">
+            <a class="nav-item" href="../../../../../strike">
                 Strike
             </a>
             
@@ -84,15 +85,15 @@
         </span>
         <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
             
-            <a class="nav-item flex-1" href="../../re">
+            <a class="nav-item flex-1" href="../../../../../re">
                 re
             </a>
             
-            <a class="nav-item flex-1" href="../../aboutme">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item flex-1" href="../../strike">
+            <a class="nav-item flex-1" href="../../../../../strike">
                 Strike
             </a>
             
@@ -103,54 +104,124 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .container.tag-cate-wrap {
-        min-height: 93vh;
+          <!--博文页面-->
+
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
+        background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .category-title-inner {
-        padding-top: 50px;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    strong {
-        text-transform: capitalize;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+    }
+
+    .flow-chart {
+        text-align: center;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
-
-
-<div class="container tag-cate-wrap">
-    <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·iosre</strong></h1>
-    </div>
-
-    
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2019/07/02/xia0CallStackSymbols/xia0CallStackSymbols/">
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>android调试深度总结</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/other/xia0.png?raw=true">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
+                <span class="post-date sub-title">at: 2019-06-04</span>
+            </div>
+            
+                <div>
                     
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702172303432.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
+                         <a class="tag is-post-tag" href="/tags/Android/">Android</a>
                     
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Frida调用栈符号恢复</strong> <small class="post-date">at: 2019-07-02</small>
-                                <br>
-                                Frida调用栈符号恢复开始搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去i..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
+                         <a class="tag is-post-tag" href="/tags/debug/">debug</a>
+                    
+                </div>
+            
         </div>
-    
+        <div class="content" style="overflow: auto">
+            <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<div id="hbe-security">
+  <div class="hbe-input-container">
+  <input type="password" class="hbe-form-control" id="pass" placeholder="Need password to decrypt!" />
+    <label for="pass">Need password to decrypt!</label>
+    <div class="bottom-line"></div>
+  </div>
 </div>
+<div id="decryptionError" style="display: none;">Incorrect Password!</div>
+<div id="noContentError" style="display: none;">No content to display!</div>
+<div id="encrypt-blog" style="display:none">
+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
+</div>
+<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+        </div>
+        <div class="post-reply">
+            
+            
+            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
+                <script>
+
+                    /**
+                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                    /*
+                     var disqus_config = function () {
+                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                     };
+                     */
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = 'https://4ch12dy.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            
+        </div>
+    </div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="../../../../../css/highlight_github.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
+
       </div>
   </div>
   <style>
@@ -187,8 +258,8 @@
   </div>
 </footer>
 
-<script src="../../js/search_core.js"></script>
-<script src="../../js/script.js"></script>
+<script src="../../../../../js/search_core.js"></script>
+<script src="../../../../../js/script.js"></script>
 
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
