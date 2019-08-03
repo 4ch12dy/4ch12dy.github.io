@@ -20,7 +20,7 @@
   <meta name="description" content="0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/usr/lib/dyld接管刚创建进程的控制权。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mach-o动态链接">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/10/mach-o动态链接/mach-o动态链接/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/10/macho-dyld-link/macho-dyld-link/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/usr/lib/dyld接管刚创建进程的控制权。">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/mach-o%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/stub%E5%8C%BA.png?raw=true">
