@@ -15,12 +15,12 @@
   </script>
 
   
-  <title>Mot-clé: android | 4ch12dy</title>
+  <title>Mot-clé: Android | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/android/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/Android/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="给我一点时间和power">
 <meta name="twitter:card" content="summary">
@@ -120,7 +120,7 @@
 
 <div class="container tag-cate-wrap">
     <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·android</strong></h1>
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·Android</strong></h1>
     </div>
 
     
@@ -128,20 +128,24 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/11/28/Android_JNI_掉坑笔记 /JNI/">
+                <a href="/2019/08/01/android-apk-install-process/android-apk-install-process/">
+                    
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801151901799.png?raw=true" style="height: 100%; width: 100%">
+                        </figure>
+                    </div>
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>Android JNI踩坑笔记</strong> <small class="post-date">at: 2017-11-28</small>
+                                <strong>Android应用安装过程深度解析</strong> <small class="post-date">at: 2019-08-01</small>
                                 <br>
-                                
+                                Android应用安装过程深度解析
+本文由我和willing对整个安装过程的原理梳理，感谢willing精心的绘图以及相关源码整理。
 
-最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
-
-
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
-jmethodID equals_id = env-&gt;GetMetho..
+开始关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。
+整体流程..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -153,28 +157,25 @@ jmethodID equals_id = env-&gt;GetMetho..
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/04/09/android-re-basic/android-re-basic/">
+                <a href="/2019/06/04/andoid-debug-note/andoid-debug-note/">
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>android re basic</strong> <small class="post-date">at: 2017-04-09</small>
+                                <strong>android调试深度总结</strong> <small class="post-date">at: 2019-06-04</small>
                                 <br>
-                                Android系统简介文件目录
+                                
 
+  
+  
+    Need password to decrypt!
+    
+  
 
-目录
-说明
+Incorrect Password!
+No content to display!
 
-
-
-
-/system/app
-预装的app(.apk)文件，如Alarm Clock, Browser, Contacts, Maps
-
-
-/system/framework
-Android系统的核心库，有core.jar, framework-res.apk, com.google.android.gt..
+U2FsdGVkX1+rDBMEafAs6eVPPzr81ErvykXl7Xe9AXhaGVcHAWELopZqCZNWsO3abd1T8IbtrVHIMLAr5rhnkMF..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
