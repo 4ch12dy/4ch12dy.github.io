@@ -363,7 +363,7 @@ signed __int64 __fastcall main(__int64 a1, char **a2, char **a3)
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX186i1Vsj7UCCbLNikTKMS939LJy8FMf5YMRmJ8bc2SNqWjdOvg88hBnEyNPb6XaNwiAtxjjaMm/EwS..
+U2FsdGVkX19amH1NogqnXl4xPohwOonaYEyWnPy+trz9oQ1/LpFEuGUESqfPJaOqaUq1DReRBWwtNFPxGYwXmfn..
                                         </p>
                                         <p>2019-03-07</p>
                                         <button class="button is-small">Read More</button>
@@ -399,7 +399,7 @@ U2FsdGVkX186i1Vsj7UCCbLNikTKMS939LJy8FMf5YMRmJ8bc2SNqWjdOvg88hBnEyNPb6XaNwiAtxjj
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX1+2vKjgSzWwU/P/sMQVhsB6UtfcoNI/NNnE4Mk/sEW6yPxD2THnFw1XeMUMZQ4kbN56p8hmKiF7LGq..
+U2FsdGVkX1/IEfJ0QYlHenjWynelz+QnJALwlr+sP5WWGC8v/SicGoOHkWwd0REvanCHJt8TsmzXZSZBkyP/N8C..
                                         </p>
                                         <p>2019-03-05</p>
                                         <button class="button is-small">Read More</button>
@@ -459,5 +459,20 @@ U2FsdGVkX1+2vKjgSzWwU/P/sMQVhsB6UtfcoNI/NNnE4Mk/sEW6yPxD2THnFw1XeMUMZQ4kbN56p8hm
 <script src="../../../js/search_core.js"></script>
 <script src="../../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
