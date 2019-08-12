@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/Arduino-ESP8266-bigstep/image-20190730144157955.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/Arduino-ESP8266-bigstep/image-20190730145128956.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/Arduino-ESP8266-bigstep/image-20190730145909934.png?raw=true">
-<meta property="og:updated_time" content="2019-07-30T16:32:08.675Z">
+<meta property="og:updated_time" content="2019-08-09T08:47:21.452Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Arduino ESP8266开发板上手实践">
 <meta name="twitter:description" content="Arduino ESP8266开发板上手实践环境搭建（macOS）官方说明：https://github.com/esp8266/Arduino
@@ -266,8 +266,13 @@ void loop() {
 3. 重启mac
 </code></pre></li>
 </ul>
-<h4 id="上手实践"><a href="#上手实践" class="headerlink" title="上手实践"></a>上手实践</h4><p>下面我们就来熟悉一下这个系统，包括代码环境，编译环境，常见库，开发相关。还是以一些demo代码作为学习。</p>
-<p>待续…</p>
+<h4 id="AVR逆向基础"><a href="#AVR逆向基础" class="headerlink" title="AVR逆向基础"></a>AVR逆向基础</h4><p>下面我们就来熟悉一下这个系统，包括代码环境，编译环境，常见库，开发相关。还是以一些demo代码作为学习。</p>
+<p>由于我们主要是研究iOT逆向，所以可能不会关注在实际开发上面。这里先学习下Arduino上面的执行文件格式，以及指令架构等。</p>
+<p>我们通常说的Arduino上面就运行的是一个AVR指令架构的处理器。</p>
+<blockquote>
+<p>AVR refers to the line of MCUs manufactured by Atmel and used in the original designs.</p>
+</blockquote>
+<p>由于ida对这个执行文件的支持不是很好，我们准备用<a href="https://github.com/radare/radare2">radare2</a>来分析这个bin文件。</p>
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
 <li><p><a href="https://blog.csdn.net/iotisan/article/details/78766463" target="_blank" rel="external">https://blog.csdn.net/iotisan/article/details/78766463</a></p>
 <p>和ESP8266 Arduino谈场恋爱 01 一条具有中国特色的开发环境安装道路</p>
