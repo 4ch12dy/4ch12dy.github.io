@@ -15,18 +15,24 @@
   </script>
 
   
-  <title>iOS中LLDB反反调试分析与实现 | 4ch12dy</title>
+  <title>iOS LLDB中反反调试分析与实现 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="something you can not kown">
+  <meta name="description" content="###iOS LLDB中反反调试分析与实现
+开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+目前反调试与反反调试情况">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS中LLDB反反调试分析与实现">
+<meta property="og:title" content="iOS LLDB中反反调试分析与实现">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="something you can not kown">
-<meta property="og:updated_time" content="2019-08-12T11:16:59.523Z">
+<meta property="og:description" content="###iOS LLDB中反反调试分析与实现
+开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+目前反调试与反反调试情况">
+<meta property="og:updated_time" content="2019-08-13T11:12:06.727Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS中LLDB反反调试分析与实现">
-<meta name="twitter:description" content="something you can not kown">
+<meta name="twitter:title" content="iOS LLDB中反反调试分析与实现">
+<meta name="twitter:description" content="###iOS LLDB中反反调试分析与实现
+开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+目前反调试与反反调试情况">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -144,7 +150,7 @@
     <div class="container post-box">
         <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
             <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
-                <strong>iOS中LLDB反反调试分析与实现</strong>
+                <strong>iOS LLDB中反反调试分析与实现</strong>
             </h1>
             
             <div class="is-flex align-center">
@@ -155,24 +161,185 @@
             
                 <div>
                     
+                         <a class="tag is-post-tag" href="/tags/RE/">RE</a>
+                    
+                         <a class="tag is-post-tag" href="/tags/LLDB/">LLDB</a>
+                    
                 </div>
             
         </div>
         <div class="content" style="overflow: auto">
-            <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<div id="hbe-security">
-  <div class="hbe-input-container">
-  <input type="password" class="hbe-form-control" id="pass" placeholder="Need password to decrypt!" />
-    <label for="pass">Need password to decrypt!</label>
-    <div class="bottom-line"></div>
-  </div>
-</div>
-<div id="decryptionError" style="display: none;">Incorrect Password!</div>
-<div id="noContentError" style="display: none;">No content to display!</div>
-<div id="encrypt-blog" style="display:none">
-U2FsdGVkX19ImBcBZHOjQ/kwHcLu3CX6QlQD6VNzIiI=
-</div>
-<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+            <p>###iOS LLDB中反反调试分析与实现</p>
+<h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。</p>
+<h4 id="目前反调试与反反调试情况"><a href="#目前反调试与反反调试情况" class="headerlink" title="目前反调试与反反调试情况"></a>目前反调试与反反调试情况</h4><p>这里庆哥写了一遍文章分析了 <a href="http://iosre.com/t/topic/8179" target="_blank" rel="external">关于反调试&amp;反反调试那些事</a></p>
+<p>这里简单归纳一下，有如下几种：</p>
+<ul>
+<li>ptrace</li>
+<li>sysctl</li>
+<li>syscall</li>
+<li>SIGTOP</li>
+<li>task_get_exception_ports</li>
+</ul>
+<p>这里实际上就大概三种，其他都是基于ptrace的变种。ptrace这个函数是linux就提供的一个接口，常常用作linux系的反调试，本质就是通过26号系统调用来完成的，目前大多反调试都利用该方案。</p>
+<p>后面看到庆哥同样提供了一个反反调试的LLDB脚本，不过看了下和我的思路还是不一样的。（<del>差点以为白做了）</del></p>
+<p>正如文章里面写到通过<code>lldb</code>下断点，然后修改参数，或者直接返回也可以达到反反调试的效果。由于要不断去检查执行状态等，或者程序有定时器定时检测，这个脚本影响性能及变得很卡影响调试体验。不过还是膜庆哥的方案，学习了。</p>
+<h4 id="内存patch实现反反调试"><a href="#内存patch实现反反调试" class="headerlink" title="内存patch实现反反调试"></a>内存patch实现反反调试</h4><p>说一下大概思路：</p>
+<ul>
+<li>内存中找到<code>ptrace</code>地址</li>
+<li>将该内存map为<code>rwx</code></li>
+<li><p>直接将首调指令修改为<code>ret</code>指令</p>
+<p>刚开始以为就这样简单就完了，结果实际写代码的时候才发现过程远比想象中复杂。</p>
+</li>
+</ul>
+<p>由于iOS不允许直接将代码段map为写权限，这里调用<code>mach_vm_protect</code>或<code>mprotect</code>都会异常。但是类似frida、substitute以及hookzz都能进行指令hook。这样说来，肯定是可以修改代码段的。看了下substitute以及frida中关于这块的实现，才发现可以用一种remap的方式修改代码段。</p>
+<p>大致的流程如下：</p>
+<ul>
+<li>使用mmap新建一块内存，把这块内存叫做new</li>
+<li>使用vm_copy把想要篡改的处于__text段内的内存（把这块内存叫target）拷贝到new里</li>
+<li>向new里写入想执行的代码</li>
+<li>调用mprotect把new改为rx。因为mmap出来的内存的max_protection是rwx，所以这里mprotect改权限没问题</li>
+<li>调用mach_vm_remap把new的内容反映回target里</li>
+</ul>
+<p>不过当我写代码测试的时候发现，remap以后整个页数据都变成了0。实在不清楚原因，向Zz求助，Zz直接扔了我他实现这块的代码。我看了以后收益匪浅，只怪之前没分析hookzz的具体实现。后面才知道由于我的设备是iOS12，Zz意思是codesign的问题，hookZz也没支持。于是换了一台iOS9的设备，果然就可以了，向Zz低头。</p>
+<p>期间还由于我手残忘记调用mprotect把new改为rx。导致直接执行异常，用<code>memory region</code>查看地址才知道页保护属性为<code>rw</code>。</p>
+<p>相关代码如下：</p>
+<p>1、map new page for patch</p>
+<pre><code class="c">    // map new page for patch
+    void *new = mmap(0, 0x1000, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED, -1, 0);
+    if (!new ){
+        NSLog(@&quot;[-] mmap failed!&quot;);
+        return;
+    }
+    NSLog(@&quot;[*] new map address:%p&quot;, new);
+</code></pre>
+<p>2、start patch</p>
+<pre><code class="c">    // start patch
+        kret = vm_copy(self_task, (unsigned long)page_start, 0x1000, (vm_address_t) new);
+    if (kret != KERN_SUCCESS){
+        NSLog(@&quot;[-] kr: %d, errno: %d&quot;, kret, errno);
+        return;
+    }
+
+    char patch_ret_ins_data[4] = {0xc0, 0x03, 0x5f, 0xd6}; // ret 
+    memcpy((void *)(new+patch_offset), patch_ret_ins_data, 4);
+
+    NSLog(@&quot;[*] new map+offset address:%p&quot;, (void *)(new+patch_offset));
+</code></pre>
+<p>3、set new page back to r-x</p>
+<pre><code class="c">    // set back to r-x
+    int ret = mprotect(new, 0x1000, PROT_READ | PROT_EXEC);
+    NSLog(@&quot;[*] ret: %d, errno: %d, addr: %p&quot;, ret, errno, new);
+</code></pre>
+<p>4、remap the target page</p>
+<pre><code class="c">    kret = mach_vm_remap(mach_task_self(), &amp;target, 0x1000, 0,
+                       VM_FLAGS_OVERWRITE, self_task,
+                       (mach_vm_address_t) new, TRUE,
+                       &amp;c, &amp;m, inherit);
+
+    if(kret != KERN_SUCCESS){
+        NSLog(@&quot;[-] kr: %d, errno: %d&quot;, kret, errno);
+        return;
+    }
+
+    NSLog(@&quot;[*] now ptrace_ptr address:%p&quot;, ptrace_ptr)
+</code></pre>
+<p>5、clear cache</p>
+<pre><code class="c">    void* clear_start_ = (void*)page_start + patch_offset;
+  sys_icache_invalidate (clear_start_, 4);
+  sys_dcache_flush (clear_start_, 4);
+</code></pre>
+<p>完整的代码在xia0LLDB里面已经集成：<a href="https://github.com/4ch12dy/xia0LLDB">https://github.com/4ch12dy/xia0LLDB</a></p>
+<h4 id="一个简单反反调试实验"><a href="#一个简单反反调试实验" class="headerlink" title="一个简单反反调试实验"></a>一个简单反反调试实验</h4><p>这里以爱奇艺为例子分析，爱奇艺在main函数里面动态调用了ptrace函数进行反调试。</p>
+<ul>
+<li><p>后台启动方式启动爱奇艺</p>
+<pre><code class="shell">xia0 ~ $ issh debug -x backboard /var/containers/Bundle/Application/F9D8AACA-30F0-4F26-96CA-5B06782CC903/iQiYiPhoneVideo.app/iQiYiPhoneVideo
+[I]:iproxy process for 2222 port alive, pid=16264 
+[I]:++++++++++++++++++ Nice to Work :) +++++++++++++++++++++ 
+[I]:iOSRE dir exist 
+[I]:iproxy process for 1234 port alive, pid=16428 
+[I]:Run ps -e | grep debugserver | grep -v grep; [[ 0 == 0 ]] &amp;&amp; (killall -9 debugserver 2&gt; /dev/null) 
+[I]:/iOSRE/tools/debugserver file exist, Start debug... 
+[I]:Run /iOSRE/tools/debugserver 127.0.0.1:1234 -x backboard /var/containers/Bundle/Application/F9D8AACA-30F0-4F26-96CA-5B06782CC903/iQiYiPhoneVideo.app/iQiYiPhoneVideo
+</code></pre>
+</li>
+<li><p>LLDB挂上以后在main函数下断点以后直接执行<code>debugme</code>命令</p>
+<pre><code>(lldb) debugme
+Kill antiDebug by xia0:
+[*] target address: 6501024128 and offset: 384
+[*] mmap new page: 4572217344 success! 
+[+] vm_copy success!
+[+] mach_vm_write success!
+[*] set new page back to r-x success!
+[*] vm_region_recurse_64 success!
+[*] get page info success!
+[+] remap success!
+[*] clear cache success!
+[+] all done! happy debug~
+</code></pre><p>下面查看对比下patch前后指令ptrace首指令的变化</p>
+<p>Patch之前</p>
+<pre><code>(lldb) x/12i 0x00000001837dc180
+    0x1837dc180: 0xf00f26a9   adrp   x9, 124119
+    0x1837dc184: 0x91034129   add    x9, x9, #0xd0             ; =0xd0 
+    0x1837dc188: 0xb900013f   str    wzr, [x9]
+    0x1837dc18c: 0xd2800350   mov    x16, #0x1a
+    0x1837dc190: 0xd4001001   svc    #0x80
+    0x1837dc194: 0x540000c3   b.lo   0x1837dc1ac               ; &lt;+44&gt;
+    0x1837dc198: 0xa9bf7bfd   stp    x29, x30, [sp, #-0x10]!
+    0x1837dc19c: 0x910003fd   mov    x29, sp
+    0x1837dc1a0: 0x97ff9b08   bl     0x1837c2dc0               ; cerror
+    0x1837dc1a4: 0x910003bf   mov    sp, x29
+    0x1837dc1a8: 0xa8c17bfd   ldp    x29, x30, [sp], #0x10
+    0x1837dc1ac: 0xd65f03c0   ret
+</code></pre><p>Patch之后</p>
+<pre><code>(lldb) x/12i 0x1837dc180
+    0x1837dc180: 0xd65f03c0   ret    
+    0x1837dc184: 0x91034129   add    x9, x9, #0xd0             ; =0xd0 
+    0x1837dc188: 0xb900013f   str    wzr, [x9]
+    0x1837dc18c: 0xd2800350   mov    x16, #0x1a
+    0x1837dc190: 0xd4001001   svc    #0x80
+    0x1837dc194: 0x540000c3   b.lo   0x1837dc1ac               ; &lt;+44&gt;
+    0x1837dc198: 0xa9bf7bfd   stp    x29, x30, [sp, #-0x10]!
+    0x1837dc19c: 0x910003fd   mov    x29, sp
+    0x1837dc1a0: 0x97ff9b08   bl     0x1837c2dc0               ; cerror
+    0x1837dc1a4: 0x910003bf   mov    sp, x29
+    0x1837dc1a8: 0xa8c17bfd   ldp    x29, x30, [sp], #0x10
+    0x1837dc1ac: 0xd65f03c0   ret
+</code></pre><p>可以发现首地址已经变成了ret指令。</p>
+</li>
+<li><p>执行continue命令，发现爱奇艺已经能够正常调试。</p>
+<pre><code>(lldb) c
+Process 3176 resuming
+2019-08-13 17:22:17.283 iQiYiPhoneVideo[3176:161840] [plcrash]: init ok
+2019-08-13 17:22:17.790 iQiYiPhoneVideo[3176:161840] -[QYBaikePageDurationManager bk_appDidBecomeActive:]
+2019-08-13 17:22:17.922 iQiYiPhoneVideo[3176:161840] CoreData: Failed to load optimized model at path &#39;/var/containers/Bundle/Application/F9D8AACA-30F0-4F26-96CA-5B06782CC903/iQiYiPhoneVideo.app/QYPGCDataModel.momd/QYPGCDataModel_970.omo&#39;
+2019-08-13 17:22:20.477 iQiYiPhoneVideo[3176:161840] OSStatus error: [-34018] Security error has occurred.
+2019-08-13 17:22:20.558 iQiYiPhoneVideo[3176:162000] OSStatus error: [-34018] Security error has occurred.
+3176:161840] Incorrect NSStringEncoding value 0x8000100 detected. Assuming NSASCIIStringEncoding. Will stop this compatiblity mapping behavior in the near future.
+ontainers/Data/Application/5C31FE18-9BA4-4B2D-80C6-68BF7F65855F/Library/Application Support/爱奇艺/0_im.sqlite
+</code></pre></li>
+</ul>
+<h4 id="总结-Todo"><a href="#总结-Todo" class="headerlink" title="总结/Todo"></a>总结/Todo</h4><p>这里只是简单的绕过了ptrace方式的反调试，针对直接用汇编写的反调试我的做法是静态内存搜索匹配svc位置，发现是调用26号系统调用则利用内存patch为nop。或者写一个简单的hook代码，hook所有的svc地址，判断寄存器的值然后进行hook即可，这样就能绕过这些反调试机制，再次向Zz和庆哥低头。</p>
+<h4 id="参考-致谢"><a href="#参考-致谢" class="headerlink" title="参考/致谢"></a>参考/致谢</h4><ul>
+<li><p><a href="https://gist.github.com/piaoger/4ba83f6a954bca113505" target="_blank" rel="external">https://gist.github.com/piaoger/4ba83f6a954bca113505</a></p>
+</li>
+<li><p><a href="https://github.com/comex/substitute/blob/master/lib/darwin/execmem.c">https://github.com/comex/substitute/blob/master/lib/darwin/execmem.c</a></p>
+</li>
+<li><p><a href="https://www.codercto.com/a/63507.html" target="_blank" rel="external">https://www.codercto.com/a/63507.html</a></p>
+</li>
+<li><p><a href="https://github.com/jmpews/HookZz/blob/dev/srcxx/UserMode/ExecMemory/code-patch-tool-darwin.cc#L26">https://github.com/jmpews/HookZz/blob/dev/srcxx/UserMode/ExecMemory/code-patch-tool-darwin.cc#L26</a></p>
+</li>
+<li><p><a href="https://github.com/gdbinit/readmem/blob/master/readmem/main.c">https://github.com/gdbinit/readmem/blob/master/readmem/main.c</a></p>
+</li>
+<li><p><a href="https://github.com/frida/frida-gum/blob/master/gum/backend-darwin/machexc.h">https://github.com/frida/frida-gum/blob/master/gum/backend-darwin/machexc.h</a></p>
+</li>
+<li><p><a href="http://newosxbook.com/src.jl?tree=xnu&amp;file=/libsyscall/mach/mach_vm.c" target="_blank" rel="external">http://newosxbook.com/src.jl?tree=xnu&amp;file=/libsyscall/mach/mach_vm.c</a></p>
+</li>
+<li><p><a href="https://github.com/DaKnOb/memscan/blob/master/main.mm">https://github.com/DaKnOb/memscan/blob/master/main.mm</a></p>
+</li>
+<li><p><a href="http://iosre.com/t/topic/8179" target="_blank" rel="external">http://iosre.com/t/topic/8179</a></p>
+</li>
+</ul>
+
         </div>
         <div class="post-reply">
             
