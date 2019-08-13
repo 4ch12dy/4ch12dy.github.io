@@ -17,22 +17,19 @@
   
   <title>iOS LLDB中反反调试分析与实现 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###iOS LLDB中反反调试分析与实现
-开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
-目前反调试与反反调试情况">
+  <meta name="description" content="iOS LLDB中反反调试分析与实现开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+目前反调试与反反调试情况这里庆哥">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS LLDB中反反调试分析与实现">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="###iOS LLDB中反反调试分析与实现
-开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
-目前反调试与反反调试情况">
-<meta property="og:updated_time" content="2019-08-13T11:13:28.900Z">
+<meta property="og:description" content="iOS LLDB中反反调试分析与实现开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+目前反调试与反反调试情况这里庆哥">
+<meta property="og:updated_time" content="2019-08-13T11:15:10.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS LLDB中反反调试分析与实现">
-<meta name="twitter:description" content="###iOS LLDB中反反调试分析与实现
-开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
-目前反调试与反反调试情况">
+<meta name="twitter:description" content="iOS LLDB中反反调试分析与实现开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+目前反调试与反反调试情况这里庆哥">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -169,8 +166,7 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <p>###iOS LLDB中反反调试分析与实现</p>
-<h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。</p>
+            <h3 id="iOS-LLDB中反反调试分析与实现"><a href="#iOS-LLDB中反反调试分析与实现" class="headerlink" title="iOS LLDB中反反调试分析与实现"></a>iOS LLDB中反反调试分析与实现</h3><h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。</p>
 <h4 id="目前反调试与反反调试情况"><a href="#目前反调试与反反调试情况" class="headerlink" title="目前反调试与反反调试情况"></a>目前反调试与反反调试情况</h4><p>这里庆哥写了一遍文章分析了 <a href="http://iosre.com/t/topic/8179" target="_blank" rel="external">关于反调试&amp;反反调试那些事</a></p>
 <p>这里简单归纳一下，有如下几种：</p>
 <ul>
