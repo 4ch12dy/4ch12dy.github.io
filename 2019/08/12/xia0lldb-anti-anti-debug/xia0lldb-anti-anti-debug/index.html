@@ -25,7 +25,7 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="iOS LLDB中反反调试分析与实现开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
 目前反调试与反反调试情况这里庆哥">
-<meta property="og:updated_time" content="2019-08-13T11:15:10.973Z">
+<meta property="og:updated_time" content="2019-08-13T17:41:50.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS LLDB中反反调试分析与实现">
 <meta name="twitter:description" content="iOS LLDB中反反调试分析与实现开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
@@ -261,14 +261,13 @@
 <li><p>LLDB挂上以后在main函数下断点以后直接执行<code>debugme</code>命令</p>
 <pre><code>(lldb) debugme
 Kill antiDebug by xia0:
-[*] target address: 6501024128 and offset: 384
-[*] mmap new page: 4572217344 success! 
-[+] vm_copy success!
-[+] mach_vm_write success!
+[*] ptrace target address: 0x1837dc180 and offset: 0x180
+[*] mmap new page: 0x1021ec000 success. 
+[+] vm_copy target to new page.
+[+] patch ret[0xc0 0x03 0x5f 0xd6] with memcpy
 [*] set new page back to r-x success!
-[*] vm_region_recurse_64 success!
-[*] get page info success!
-[+] remap success!
+[*] get page info done.
+[+] remap to target success!
 [*] clear cache success!
 [+] all done! happy debug~
 </code></pre><p>下面查看对比下patch前后指令ptrace首指令的变化</p>
