@@ -17,22 +17,19 @@
   
   <title>iOS12内存patch remap bug分析 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="iOS12内存patch remap bug分析iOS12 MSHookFunction分析在iOS12越狱上面CydiaSubstrate指向的是libsubstrate.dylib
-/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate -&amp;gt; ../../../usr/lib/libsubstrate.dylib
-我们常用的">
+  <meta name="description" content="iOS12内存patch remap bug分析
+之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS12内存patch remap bug分析">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/16/iOS12-remap-bug-analyze/iOS12-remap-bug-analyze/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="iOS12内存patch remap bug分析iOS12 MSHookFunction分析在iOS12越狱上面CydiaSubstrate指向的是libsubstrate.dylib
-/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate -&amp;gt; ../../../usr/lib/libsubstrate.dylib
-我们常用的">
-<meta property="og:updated_time" content="2019-08-19T09:59:29.587Z">
+<meta property="og:description" content="iOS12内存patch remap bug分析
+之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的">
+<meta property="og:updated_time" content="2019-08-19T12:46:30.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS12内存patch remap bug分析">
-<meta name="twitter:description" content="iOS12内存patch remap bug分析iOS12 MSHookFunction分析在iOS12越狱上面CydiaSubstrate指向的是libsubstrate.dylib
-/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate -&amp;gt; ../../../usr/lib/libsubstrate.dylib
-我们常用的">
+<meta name="twitter:description" content="iOS12内存patch remap bug分析
+之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -169,7 +166,10 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="iOS12内存patch-remap-bug分析"><a href="#iOS12内存patch-remap-bug分析" class="headerlink" title="iOS12内存patch remap bug分析"></a>iOS12内存patch remap bug分析</h3><h4 id="iOS12-MSHookFunction分析"><a href="#iOS12-MSHookFunction分析" class="headerlink" title="iOS12 MSHookFunction分析"></a>iOS12 MSHookFunction分析</h4><p>在iOS12越狱上面<code>CydiaSubstrate</code>指向的是<code>libsubstrate.dylib</code></p>
+            <h3 id="iOS12内存patch-remap-bug分析"><a href="#iOS12内存patch-remap-bug分析" class="headerlink" title="iOS12内存patch remap bug分析"></a>iOS12内存patch remap bug分析</h3><blockquote>
+<p>之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的hook框架是如何实现内存patch和hook的。</p>
+</blockquote>
+<h4 id="iOS12-MSHookFunction分析-CoolStar越狱工具"><a href="#iOS12-MSHookFunction分析-CoolStar越狱工具" class="headerlink" title="iOS12 MSHookFunction分析(CoolStar越狱工具)"></a>iOS12 MSHookFunction分析(CoolStar越狱工具)</h4><p>在iOS12越狱上面<code>CydiaSubstrate</code>指向的是<code>libsubstrate.dylib</code></p>
 <p><code>/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate -&gt; ../../../usr/lib/libsubstrate.dylib</code></p>
 <p>我们常用的<code>MSHookFunction</code>函数的实现就是在<code>libsubstrate.dylib</code>这里面，不过在这里仅仅是<code>SubHookFunction</code>的封装。而<code>SubHookFunction</code>的实现却是在<code>/usr/lib/libsubstitute.0.dylib</code>这里</p>
 <p><code>/usr/lib/libsubstitute.0.dylib</code>是一个软连接指向<code>libsubstitute.dylib</code>。这里的<code>libsubstitute.dylib</code>就是coolstar维护的版本。下面分析<code>libsubstitute.dylib</code>的inlinehook实现细节。</p>
@@ -285,6 +285,8 @@ General Purpose Registers:
 0x106e3800c: 0xf2c00029   movk   x9, #0x1, lsl #32
 0x106e38010: 0x911a4129   add    x9, x9, #0x690            ; =0x690
 </code></pre><p>稍加思索就知道，虽然指令不一样，但是结果却是一样的。为什么不直接写入原三条指令呢？这里涉及到<code>adrp</code>这个指令的相对寻址问题。由于<code>adrp</code>会根据当前pc值来计算，这样直接复制的话pc值已经变化，所以这里不得不重新计算X9的值。到这里，<code>MSHookFunction</code>的hook过程我们已经完全清楚了。</p>
+<h4 id="iOS12-MSHookFunction分析-unc0ver越狱工具"><a href="#iOS12-MSHookFunction分析-unc0ver越狱工具" class="headerlink" title="iOS12 MSHookFunction分析(unc0ver越狱工具)"></a>iOS12 MSHookFunction分析(unc0ver越狱工具)</h4><p>由于saurik不给CoolStar的越狱工具提供substrate和cydia的支持，导致现在越狱工具出现了两种hook框架。以Coolstar团队基于开源代码substitute和pwn20wnd团队的substrate两种hook框架。上面分析了substitute的hook原理。下面分析substrate的hook相关细节。这里多说两句，关于整个事件，可以访问CoolStar的博客<a href="https://coolstarorg.tumblr.com/" target="_blank" rel="external">https://coolstarorg.tumblr.com/</a>他介绍了整个事件以及自己开发移植substitute的完整过程。我个人来说，还是十分崇拜CoolStar那份创新和坚持。自己动手完成了最新越狱的substitute移植，tweak注入，以及Sileo的开发。在这中间的过程，正如他在博客里面提到的那样，十分曲折，令人佩服。</p>
+<p>待完成…</p>
 <p>####MSHookFunction如何解决内存patch的问题</p>
 <p>由于<code>substitute</code>开源的，所以可以结合源码分析。源码在<a href="https://github.com/coolstar/substitute">这里</a></p>
 <p><code>SubHookFunction</code>函数伪代码，此时的函数参数为</p>
