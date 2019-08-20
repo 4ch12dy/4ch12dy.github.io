@@ -76,6 +76,10 @@
                 Strike
             </a>
             
+            <a class="nav-item" href="../../../note">
+                note
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -94,6 +98,10 @@
             
             <a class="nav-item flex-1" href="../../../strike">
                 Strike
+            </a>
+            
+            <a class="nav-item flex-1" href="../../../note">
+                note
             </a>
             
         </div>
@@ -383,7 +391,7 @@ I..
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX1821FigKxm3jR7K1flJAXtkzqD2DhuruQusAlQQdcecSZv485BGSOV5faycfg58Iwpad0Jb0UgOHyy..
+U2FsdGVkX1+3tK5oQluKcXoenQm7Dszx1YXcJ7w+PjmVZFFi/WTja0xRX5i1vvFQDZAyq6uenWDN4DDPTUTjptJ..
                                         </p>
                                         <p>2019-07-29</p>
                                         <button class="button is-small">Read More</button>
@@ -423,7 +431,7 @@ U2FsdGVkX1821FigKxm3jR7K1flJAXtkzqD2DhuruQusAlQQdcecSZv485BGSOV5faycfg58Iwpad0Jb
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX19uTLL3xgI00sLKyslWwMVjchF7Uoj8M+Z2j46RnUZhHq3jEeiwvVYoFQoA9B2KSv75luD0QPoX9SF..
+U2FsdGVkX1+qMmxbtaHXfeNiEOjO0Wedm40YUxfdZDCTeVRr0Qm6KNQ02b3+Q51QJFhnbc+YPRCkXAsXI7R4Vxb..
                                         </p>
                                         <p>2019-07-24</p>
                                         <button class="button is-small">Read More</button>
@@ -548,5 +556,20 @@ U2FsdGVkX19uTLL3xgI00sLKyslWwMVjchF7Uoj8M+Z2j46RnUZhHq3jEeiwvVYoFQoA9B2KSv75luD0
 <script src="../../../js/search_core.js"></script>
 <script src="../../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

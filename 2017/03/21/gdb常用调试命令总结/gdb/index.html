@@ -98,6 +98,10 @@ show args查看程序参数
                 Strike
             </a>
             
+            <a class="nav-item" href="../../../../../note">
+                note
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -116,6 +120,10 @@ show args查看程序参数
             
             <a class="nav-item flex-1" href="../../../../../strike">
                 Strike
+            </a>
+            
+            <a class="nav-item flex-1" href="../../../../../note">
+                note
             </a>
             
         </div>
@@ -338,5 +346,20 @@ End with a line saying just &quot;end&quot;.
 <script src="../../../../../js/search_core.js"></script>
 <script src="../../../../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

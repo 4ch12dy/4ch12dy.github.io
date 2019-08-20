@@ -76,6 +76,10 @@
                 Strike
             </a>
             
+            <a class="nav-item" href="../../note">
+                note
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -94,6 +98,10 @@
             
             <a class="nav-item flex-1" href="../../strike">
                 Strike
+            </a>
+            
+            <a class="nav-item flex-1" href="../../note">
+                note
             </a>
             
         </div>
@@ -146,7 +154,7 @@
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX18zJ0VIYgyc0vNUdfa69r0lAIjl02kbD6lkwYcT/82VNjJDL86I9DXy5IXDsvHm8CmriOI9pmWeJRY..
+U2FsdGVkX19nG1mEp4WvqyPa1BCu1DibJ6z6V5mBpeuNEFBp2eJGfp+1VeSwozY6+t5ZzhQzBRzfgaUUr5f7UNb..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -195,5 +203,20 @@ U2FsdGVkX18zJ0VIYgyc0vNUdfa69r0lAIjl02kbD6lkwYcT/82VNjJDL86I9DXy5IXDsvHm8CmriOI9
 <script src="../../js/search_core.js"></script>
 <script src="../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

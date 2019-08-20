@@ -76,6 +76,10 @@
                 Strike
             </a>
             
+            <a class="nav-item" href="../../../../note">
+                note
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -94,6 +98,10 @@
             
             <a class="nav-item flex-1" href="../../../../strike">
                 Strike
+            </a>
+            
+            <a class="nav-item flex-1" href="../../../../note">
+                note
             </a>
             
         </div>
@@ -176,7 +184,7 @@
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX19bk307ORwhxuZGXi+..
+U2FsdGVkX181Kw3yPydQDZ9VkX2..
                         </p>
                         <p class="date text-shadow">2017-04-29</p>
                         <button class="button is-info is-small">Read More</button>
@@ -338,7 +346,7 @@ U2FsdGVkX19bk307ORwhxuZGXi+..
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX19bk307ORwhxuZGXi+z85DNW0dHc9aKkgfducQqmJ+t147T871t+oz7Vysf1+Pp2tGpwcnXGx+g34J..
+U2FsdGVkX181Kw3yPydQDZ9VkX27uyJ0ypmoa4tq0eTzcI0x4U7mnq8xOCjo7Js/ObUK8l3twjSpcxbswhdaZ11..
                                         </p>
                                         <p>2017-04-29</p>
                                         <button class="button is-small">Read More</button>
@@ -775,5 +783,20 @@ This level is at /..
 <script src="../../../../js/search_core.js"></script>
 <script src="../../../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

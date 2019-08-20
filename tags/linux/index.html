@@ -76,6 +76,10 @@
                 Strike
             </a>
             
+            <a class="nav-item" href="../../note">
+                note
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -94,6 +98,10 @@
             
             <a class="nav-item flex-1" href="../../strike">
                 Strike
+            </a>
+            
+            <a class="nav-item flex-1" href="../../note">
+                note
             </a>
             
         </div>
@@ -216,21 +224,23 @@ gdb环境中 set args..
 <script src="../../js/search_core.js"></script>
 <script src="../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
-</html>ar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</strong> <small class="post-date">at: 2017-04-19</small>
-                                <br>
-                                0x00 序
- 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
-
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;sys/types.h..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
+</html>         </div>
                 </a>
             </article>
         </div>
@@ -458,5 +468,20 @@ user..
 <script src="../../js/search_core.js"></script>
 <script src="../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
