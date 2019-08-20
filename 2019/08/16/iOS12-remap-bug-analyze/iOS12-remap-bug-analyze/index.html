@@ -25,7 +25,7 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="iOS12内存patch remap bug分析
 之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的">
-<meta property="og:updated_time" content="2019-08-19T12:46:30.046Z">
+<meta property="og:updated_time" content="2019-08-20T07:18:00.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS12内存patch remap bug分析">
 <meta name="twitter:description" content="iOS12内存patch remap bug分析
@@ -287,8 +287,7 @@ General Purpose Registers:
 </code></pre><p>稍加思索就知道，虽然指令不一样，但是结果却是一样的。为什么不直接写入原三条指令呢？这里涉及到<code>adrp</code>这个指令的相对寻址问题。由于<code>adrp</code>会根据当前pc值来计算，这样直接复制的话pc值已经变化，所以这里不得不重新计算X9的值。到这里，<code>MSHookFunction</code>的hook过程我们已经完全清楚了。</p>
 <h4 id="iOS12-MSHookFunction分析-unc0ver越狱工具"><a href="#iOS12-MSHookFunction分析-unc0ver越狱工具" class="headerlink" title="iOS12 MSHookFunction分析(unc0ver越狱工具)"></a>iOS12 MSHookFunction分析(unc0ver越狱工具)</h4><p>由于saurik不给CoolStar的越狱工具提供substrate和cydia的支持，导致现在越狱工具出现了两种hook框架。以Coolstar团队基于开源代码substitute和pwn20wnd团队的substrate两种hook框架。上面分析了substitute的hook原理。下面分析substrate的hook相关细节。这里多说两句，关于整个事件，可以访问CoolStar的博客<a href="https://coolstarorg.tumblr.com/" target="_blank" rel="external">https://coolstarorg.tumblr.com/</a>他介绍了整个事件以及自己开发移植substitute的完整过程。我个人来说，还是十分崇拜CoolStar那份创新和坚持。自己动手完成了最新越狱的substitute移植，tweak注入，以及Sileo的开发。在这中间的过程，正如他在博客里面提到的那样，十分曲折，令人佩服。</p>
 <p>待完成…</p>
-<p>####MSHookFunction如何解决内存patch的问题</p>
-<p>由于<code>substitute</code>开源的，所以可以结合源码分析。源码在<a href="https://github.com/coolstar/substitute">这里</a></p>
+<h4 id="MSHookFunction如何解决内存patch的问题"><a href="#MSHookFunction如何解决内存patch的问题" class="headerlink" title="MSHookFunction如何解决内存patch的问题"></a>MSHookFunction如何解决内存patch的问题</h4><p>由于<code>substitute</code>开源的，所以可以结合源码分析。源码在<a href="https://github.com/coolstar/substitute">这里</a></p>
 <p><code>SubHookFunction</code>函数伪代码，此时的函数参数为</p>
 <pre><code>x0 = 0x00000001005de068  Filza`ZTL7624417887
 x1 = 0x0000000102c9bbec  xkfilza.dylib`new_ZTL7624417887(int, int, int) at Tweak.xm:19
@@ -335,6 +334,17 @@ void SubHookFunction(void *symbol, void *replace, void **result) {
 <p>再跟一下到<code>substitute_hook_functions</code>函数。</p>
 <p>对应源码<code>substitute/lib/hook-functions.c</code></p>
 <p>还在分析中…</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a href="https://github.com/coolstar/electra/issues/233">https://github.com/coolstar/electra/issues/233</a></li>
+<li><a href="https://github.com/coolstar/electra/blob/master/docs/getting-started.md#platformizing-a-binary">https://github.com/coolstar/electra/blob/master/docs/getting-started.md#platformizing-a-binary</a></li>
+<li><a href="https://github.com/ipasimulator/lldb">https://github.com/ipasimulator/lldb</a></li>
+<li><a href="https://github.com/BishopFox/bfinject">https://github.com/BishopFox/bfinject</a></li>
+<li><a href="https://coolstarorg.tumblr.com/" target="_blank" rel="external">https://coolstarorg.tumblr.com/</a></li>
+<li><a href="http://www.newosxbook.com/articles/CodeSigning.pdf" target="_blank" rel="external">http://www.newosxbook.com/articles/CodeSigning.pdf</a></li>
+<li><a href="https://github.com/frida/frida-gum/commit/30deb2c29f060948407b585c4b23475ea60b965b">https://github.com/frida/frida-gum/commit/30deb2c29f060948407b585c4b23475ea60b965b</a></li>
+<li><a href="https://github.com/Siguza/ios-resources/blob/master/bits/arm64.md">https://github.com/Siguza/ios-resources/blob/master/bits/arm64.md</a></li>
+<li><a href="https://github.com/comex/substitute/blob/master/lib/darwin/execmem.c">https://github.com/comex/substitute/blob/master/lib/darwin/execmem.c</a></li>
+</ul>
 
         </div>
         <div class="post-reply">
@@ -420,20 +430,5 @@ void SubHookFunction(void *symbol, void *replace, void **result) {
 <script src="../../../../../js/search_core.js"></script>
 <script src="../../../../../js/script.js"></script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
