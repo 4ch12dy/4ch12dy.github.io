@@ -25,7 +25,7 @@
 <meta property="og:description" content="BootCamp安装Windows笔记开始mac安装Windows？这个话题你出来肯定就有人跳出来说，mac装什么Windows？或者说用虚拟机不行吗？这里并不想去讨论这个问题。对于我来说，装Windows双系统主要是为了用IDA。而虚拟机太慢太卡，不太适合，所以我准备用mac装Windows系统试试。这也是我第一次装Windows双系统，基本把所有的坑踩了一遍。如果你现在想装Windows或者正">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/mac-install-windows/image-20190822003218038.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/mac-install-windows/image-20190822004521105.png?raw=true">
-<meta property="og:updated_time" content="2019-08-21T17:16:56.461Z">
+<meta property="og:updated_time" content="2019-08-21T17:17:25.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BootCamp安装Windows笔记">
 <meta name="twitter:description" content="BootCamp安装Windows笔记开始mac安装Windows？这个话题你出来肯定就有人跳出来说，mac装什么Windows？或者说用虚拟机不行吗？这里并不想去讨论这个问题。对于我来说，装Windows双系统主要是为了用IDA。而虚拟机太慢太卡，不太适合，所以我准备用mac装Windows系统试试。这也是我第一次装Windows双系统，基本把所有的坑踩了一遍。如果你现在想装Windows或者正">
@@ -190,9 +190,9 @@
 <li><p><strong>制作启动盘</strong></p>
 <p>这里可以找一个U盘来制作win10的启动盘，由于我这里是移动硬盘，所以我分了一个10G的区来作为启动盘。这里制作需要<a href="https://unetbootin.github.io/" target="_blank" rel="external">unetbootin</a>来完成制作，这个软件支持mac、win、linux平台。我下载了mac版的。</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/mac-install-windows/image-20190822003218038.png?raw=true" width="500" hegiht="187" align="left"></p>
-<p>分别选择win10的iso镜像，以及选择对应的设备。如果不清楚你的设备是哪一个，可以输入<code>diskutil list</code>去找到对应的设备名，点击ok等待一会，就这样启动盘就制作完成了。</p>
 </li>
 </ul>
+<p>  分别选择win10的iso镜像，以及选择对应的设备。如果不清楚你的设备是哪一个，可以输入<code>diskutil list</code>去找到对应的设备名，点击ok等待一会，就这样启动盘就制作完成了。</p>
 <ul>
 <li><p><strong>手动分区</strong></p>
 <p>这里的分区是指将mac主硬盘分一个区来安装Windows，由于这里需要安装Windows，所以只能用Windows支持的磁盘格式，最开始我分了一个50G的FAT32分区，然后用启动盘安装发现不能选择该磁盘。后面经过一番研究，才发现。Windows磁盘需要NTFS格式的分区，但是这里有个问题在于mac不支持NTFS格式的操作。于是乎，搜索了一番，发现可以安装一些软件、驱动让mac支持NTFS格式。这里提供两种软件供参考<a href="http://www.ntfsformac.cn/xiazai.html" target="_blank" rel="external">ParagonNTFS</a>和<a href="https://www.tuxera.com/products/tuxera-ntfs-for-mac-cn/" target="_blank" rel="external">tuxera-ntfs</a>但都是收费的。安装完以后终于能分NTFS格式的区了，但是有个头疼的问题在于只能分30G以下才会成功，大于30G就提示失败。但是如果分区是30G的话，启动盘选择磁盘的时候又会提示需要大于40G的磁盘，这里不是矛盾了吗。</p>
