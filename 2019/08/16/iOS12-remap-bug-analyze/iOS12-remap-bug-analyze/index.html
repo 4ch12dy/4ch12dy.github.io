@@ -18,18 +18,18 @@
   <title>iOS12内存patch remap bug分析 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="iOS12内存patch remap bug分析
-之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的">
+之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是目前我也还么搞清楚原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的ho">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS12内存patch remap bug分析">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/16/iOS12-remap-bug-analyze/iOS12-remap-bug-analyze/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="iOS12内存patch remap bug分析
-之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的">
-<meta property="og:updated_time" content="2019-08-20T07:18:00.086Z">
+之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是目前我也还么搞清楚原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的ho">
+<meta property="og:updated_time" content="2019-08-22T06:24:35.844Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS12内存patch remap bug分析">
 <meta name="twitter:description" content="iOS12内存patch remap bug分析
-之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的">
+之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是目前我也还么搞清楚原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的ho">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -175,9 +175,12 @@
         </div>
         <div class="content" style="overflow: auto">
             <h3 id="iOS12内存patch-remap-bug分析"><a href="#iOS12内存patch-remap-bug分析" class="headerlink" title="iOS12内存patch remap bug分析"></a>iOS12内存patch remap bug分析</h3><blockquote>
-<p>之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是在目前为止我也没有弄懂原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的hook框架是如何实现内存patch和hook的。</p>
+<p>之前在做LLDB中的内存patch的时候提到在iOS12(包括iOS11)上面remap会出现bug的问题，一直相当困扰。其他hook框架都能在最新越狱上面正常patch，为什么我写的就不行？所以这篇文章准备一探究竟，但是目前我也还么搞清楚原因。不过这里会先分析最新系统上面两张hook框架对于inlinehook的原理及其相关细节。先看下他们的hook框架是如何实现内存patch和hook的。</p>
 </blockquote>
-<h4 id="iOS12-MSHookFunction分析-CoolStar越狱工具"><a href="#iOS12-MSHookFunction分析-CoolStar越狱工具" class="headerlink" title="iOS12 MSHookFunction分析(CoolStar越狱工具)"></a>iOS12 MSHookFunction分析(CoolStar越狱工具)</h4><p>在iOS12越狱上面<code>CydiaSubstrate</code>指向的是<code>libsubstrate.dylib</code></p>
+<h4 id="iOS12-MSHookFunction分析-CoolStar越狱工具"><a href="#iOS12-MSHookFunction分析-CoolStar越狱工具" class="headerlink" title="iOS12 MSHookFunction分析(CoolStar越狱工具)"></a>iOS12 MSHookFunction分析(CoolStar越狱工具)</h4><blockquote>
+<p>环境：iPhoneXS A12 iOS12 jailbreak by Chimera</p>
+</blockquote>
+<p>在iOS12越狱上面<code>CydiaSubstrate</code>指向的是<code>libsubstrate.dylib</code></p>
 <p><code>/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate -&gt; ../../../usr/lib/libsubstrate.dylib</code></p>
 <p>我们常用的<code>MSHookFunction</code>函数的实现就是在<code>libsubstrate.dylib</code>这里面，不过在这里仅仅是<code>SubHookFunction</code>的封装。而<code>SubHookFunction</code>的实现却是在<code>/usr/lib/libsubstitute.0.dylib</code>这里</p>
 <p><code>/usr/lib/libsubstitute.0.dylib</code>是一个软连接指向<code>libsubstitute.dylib</code>。这里的<code>libsubstitute.dylib</code>就是coolstar维护的版本。下面分析<code>libsubstitute.dylib</code>的inlinehook实现细节。</p>
@@ -293,8 +296,205 @@ General Purpose Registers:
 0x106e3800c: 0xf2c00029   movk   x9, #0x1, lsl #32
 0x106e38010: 0x911a4129   add    x9, x9, #0x690            ; =0x690
 </code></pre><p>稍加思索就知道，虽然指令不一样，但是结果却是一样的。为什么不直接写入原三条指令呢？这里涉及到<code>adrp</code>这个指令的相对寻址问题。由于<code>adrp</code>会根据当前pc值来计算，这样直接复制的话pc值已经变化，所以这里不得不重新计算X9的值。到这里，<code>MSHookFunction</code>的hook过程我们已经完全清楚了。</p>
-<h4 id="iOS12-MSHookFunction分析-unc0ver越狱工具"><a href="#iOS12-MSHookFunction分析-unc0ver越狱工具" class="headerlink" title="iOS12 MSHookFunction分析(unc0ver越狱工具)"></a>iOS12 MSHookFunction分析(unc0ver越狱工具)</h4><p>由于saurik不给CoolStar的越狱工具提供substrate和cydia的支持，导致现在越狱工具出现了两种hook框架。以Coolstar团队基于开源代码substitute和pwn20wnd团队的substrate两种hook框架。上面分析了substitute的hook原理。下面分析substrate的hook相关细节。这里多说两句，关于整个事件，可以访问CoolStar的博客<a href="https://coolstarorg.tumblr.com/" target="_blank" rel="external">https://coolstarorg.tumblr.com/</a>他介绍了整个事件以及自己开发移植substitute的完整过程。我个人来说，还是十分崇拜CoolStar那份创新和坚持。自己动手完成了最新越狱的substitute移植，tweak注入，以及Sileo的开发。在这中间的过程，正如他在博客里面提到的那样，十分曲折，令人佩服。</p>
-<p>待完成…</p>
+<h4 id="iOS12-MSHookFunction分析-unc0ver越狱工具"><a href="#iOS12-MSHookFunction分析-unc0ver越狱工具" class="headerlink" title="iOS12 MSHookFunction分析(unc0ver越狱工具)"></a>iOS12 MSHookFunction分析(unc0ver越狱工具)</h4><blockquote>
+<p>环境：iPhone6+ iOS12 jailbreak by unc0ver</p>
+</blockquote>
+<p>由于saurik不给CoolStar的越狱工具提供substrate和cydia的支持，导致现在越狱工具出现了两种hook框架。以Coolstar团队基于开源代码substitute和pwn20wnd团队的substrate两种hook框架。上面分析了substitute的hook原理。下面分析substrate的hook相关细节。这里多说两句，关于整个事件，可以访问CoolStar的博客<a href="https://coolstarorg.tumblr.com/" target="_blank" rel="external">https://coolstarorg.tumblr.com/</a>他介绍了整个事件以及自己开发移植substitute的完整过程。我个人来说，还是十分崇拜CoolStar那份创新和坚持。自己动手完成了最新越狱的substitute移植，tweak注入，以及Sileo的开发。在这中间的过程，正如他在博客里面提到的那样，十分曲折，令人佩服。</p>
+<p>在unc0ver中有如下dylib和hook相关</p>
+<pre><code>/usr/lib/substrate/SubstrateInserter.dylib
+/usr/lib/libsubstrate.dylib
+/Library/MobileSubstrate/MobileSubstrate.dylib
+/Library/Caches/cy-8lteBy.dylib
+</code></pre><p>作为对比，这里同样以上面的tweak代码为例，hook了<code>_ZTL7624417887</code>函数。</p>
+<pre><code class="c">static BOOL (*original_ZTL7624417887)(int a1, int a2, int a3); 
+
+BOOL new_ZTL7624417887(int a1, int a2, int a3){
+    NSLog(@&quot;====xxxx===hook ZTL7624417887---&gt;%d&quot;, 0);
+    return 0;
+}
+
+%ctor{    
+    MSImageRef  image =  MSGetImageByName(&quot;/Applications/Filza.app/Filza&quot;);
+    NSLog(@&quot;===xxx===image:%p&quot;, image);
+    void* ZTL7624417887 = (void*)MSFindSymbol(image, &quot;_ZTL7624417887&quot;);
+    NSLog(@&quot;===xxx===ZTL7624417887:%p&quot;, ZTL7624417887);
+    MSHookFunction((void*)ZTL7624417887, (void*)new_ZTL7624417887, (void**)&amp;original_ZTL7624417887);
+}
+</code></pre>
+<p><strong>调试分析</strong></p>
+<p>对<code>MSHookFunction</code>下断点，发现断在了如下位置</p>
+<pre><code>// 调用栈
+*libsubstrate.dylib`MSHookFunction
+ SubstrateInserter.dylib`___lldb_unnamed_symbol6$$SubstrateInserter.dylib + 76
+ cy-8lteBy.dylib`ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&amp;) + 412
+ cy-8lteBy.dylib`ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&amp;) + 36
+
+//下面可以看出来是hook了posix_spawn这个函数
+x0 = 0x00000001be287310  libsystem_kernel.dylib`posix_spawn
+x1 = 0x000000010194a4c0  SubstrateInserter.dylib`___lldb_unnamed_symbol2
+x2 = 0x0000000101950258
+</code></pre><p>这里可以暂时不用管，同样下面的hook函数都忽略先。</p>
+<pre><code>//================================ execve ========================================
+//调用栈
+*libsubstrate.dylib`MSHookFunction
+ SubstrateInserter.dylib`___lldb_unnamed_symbol6$$SubstrateInserter.dylib + 100
+ cy-8lteBy.dylib`ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&amp;) + 412
+ cy-8lteBy.dylib`ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&amp;) + 36
+
+//下面可以看出来是hook了execve这个函数
+x0 = 0x00000001be290034  libsystem_kernel.dylib`execve
+x1 = 0x000000010194a4fc  SubstrateInserter.dylib`___lldb_unnamed_symbol3
+x2 = 0x0000000101950260  
+
+//================================ __vfork ========================================
+//调用栈
+*libsubstrate.dylib`MSHookFunction
+ cy-8lteBy.dylib`ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&amp;) + 412
+ cy-8lteBy.dylib`ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&amp;) + 36
+
+//下面可以看出来是hook了__vfork这个函数
+x0 = 0x00000001be28fa80  libsystem_kernel.dylib`__vfork
+x1 = 0x000000010194a5d4  SubstrateInserter.dylib`___lldb_unnamed_symbol4
+x2 = 0x0000000101950268
+</code></pre><p>通过上面可以看出，substrate会hook一些多进程启动相关的函数。这里我们都暂时不用分析，进行执行就到了我们自己写的hook点。</p>
+<pre><code>x0 = 0x0000000100f52068  Filza`ZTL7624417887
+x1 = 0x0000000104a3fba4  xkfilza.dylib`new_ZTL7624417887(int, int, int) at Tweak.xm:19
+x2 = 0x0000000104a40148  xkfilza.dylib`original_ZTL7624417887
+
+libsubstrate.dylib`MSHookFunction:
+-&gt;  0x101d244dc &lt;+0&gt;:   stp    x29, x30, [sp, #-0x10]!
+    0x101d244e0 &lt;+4&gt;:   mov    x29, sp
+    0x101d244e4 &lt;+8&gt;:   stp    x20, x19, [sp, #-0x10]!
+    0x101d244e8 &lt;+12&gt;:  stp    x22, x21, [sp, #-0x10]!
+    0x101d244ec &lt;+16&gt;:  sub    sp, sp, #0x20             ; =0x20 
+    0x101d244f0 &lt;+20&gt;:  mov    x21, x2
+    0x101d244f4 &lt;+24&gt;:  mov    x19, x1
+    0x101d244f8 &lt;+28&gt;:  mov    x20, x0
+    0x101d244fc &lt;+32&gt;:  cbz    x20, 0x101d24514          ; &lt;+56&gt;
+    0x101d24500 &lt;+36&gt;:  mov    x1, #0x0
+    0x101d24504 &lt;+40&gt;:  mov    x0, x19
+    0x101d24508 &lt;+44&gt;:  bl     0x101d29150               ; symbol223$$libsubstrate.dylib
+    0x101d2450c &lt;+48&gt;:  cmp    x0, #0x0                  ; =0x0 
+    0x101d24510 &lt;+52&gt;:  csel   x19, x0, x19, ne
+    0x101d24514 &lt;+56&gt;:  adrp   x8, 265
+    0x101d24518 &lt;+60&gt;:  add    x8, x8, #0x498            ; =0x498 
+    0x101d2451c &lt;+64&gt;:  ldrb   w8, [x8]
+    0x101d24520 &lt;+68&gt;:  cbz    w8, 0x101d24538           ; &lt;+92&gt;
+    0x101d24524 &lt;+72&gt;:  str    x19, [sp]
+    0x101d24528 &lt;+76&gt;:  adr    x1, #0xc8d10              ; &quot;  &lt;=  %p&quot;
+    0x101d2452c &lt;+80&gt;:  nop    
+    0x101d24530 &lt;+84&gt;:  orr    w0, wzr, #0x2
+    0x101d24534 &lt;+88&gt;:  bl     0x101d10ad4               ; symbol80$$libsubstrate.dylib
+    0x101d24538 &lt;+92&gt;:  adrp   x8, 240
+    0x101d2453c &lt;+96&gt;:  add    x8, x8, #0xa80            ; =0xa80 
+    0x101d24540 &lt;+100&gt;: add    x8, x8, #0x10             ; =0x10 
+    0x101d24544 &lt;+104&gt;: stp    x21, x8, [sp, #0x8]
+    0x101d24548 &lt;+108&gt;: cmp    x21, #0x0                 ; =0x0 
+    0x101d2454c &lt;+112&gt;: add    x8, sp, #0x8              ; =0x8 
+    0x101d24550 &lt;+116&gt;: csel   x8, xzr, x8, eq
+    0x101d24554 &lt;+120&gt;: str    x8, [sp, #0x18]
+    0x101d24558 &lt;+124&gt;: mov    x0, #0x0
+    0x101d2455c &lt;+128&gt;: add    x4, sp, #0x10             ; =0x10 
+    0x101d24560 &lt;+132&gt;: mov    x1, x20
+    0x101d24564 &lt;+136&gt;: mov    x2, x20
+    0x101d24568 &lt;+140&gt;: mov    x3, x19
+    0x101d2456c &lt;+144&gt;: bl     0x101d23f3c                           ;&lt;----------------hook实现函数
+    0x101d24570 &lt;+148&gt;: sub    sp, x29, #0x20            ; =0x20 
+    0x101d24574 &lt;+152&gt;: ldp    x22, x21, [sp], #0x10
+    0x101d24578 &lt;+156&gt;: ldp    x20, x19, [sp], #0x10
+    0x101d2457c &lt;+160&gt;: ldp    x29, x30, [sp], #0x10
+    0x101d24580 &lt;+164&gt;: ret
+</code></pre><p>从这里就可以看出和substitute的差别还是挺大的。先看下hook前三个地址的数据情况</p>
+<pre><code>// ZTL7624417887 函数指令
+(lldb) x/5i 0x0000000100f52068
+    0x100f52068: 0xd2800008   mov    x8, #0x0
+    0x100f5206c: 0xf0003489   adrp   x9, 1683
+    0x100f52070: 0x911a4129   add    x9, x9, #0x690            ; =0x690 
+    0x100f52074: 0xb868792a   ldr    w10, [x9, x8, lsl #2]
+    0x100f52078: 0x6b00015f   cmp    w10, w0
+
+// new_ZTL7624417887 函数指令
+(lldb) x/5i 0x0000000104a3fba4
+    0x104a3fba4: 0xd100c3ff   sub    sp, sp, #0x30             ; =0x30 
+    0x104a3fba8: 0xa9027bfd   stp    x29, x30, [sp, #0x20]
+    0x104a3fbac: 0x910083fd   add    x29, sp, #0x20            ; =0x20 
+    0x104a3fbb0: 0xb81fc3a0   stur   w0, [x29, #-0x4]
+    0x104a3fbb4: 0xb81f83a1   stur   w1, [x29, #-0x8]
+
+// original_ZTL7624417887 是一个函数指针
+(lldb) x/5g 0x0000000104a40148
+0x104a40148: 0x0000000000000000 0x0000000000000000
+0x104a40158: 0x0000000000000000 0x0000000000000000
+0x104a40168: 0x0000000000000000
+</code></pre><p>下面我们执行完这个函数，再观察hook以后三个地址的数据情况</p>
+<pre><code>// ZTL7624417887 函数指令
+(lldb) x/10i 0x0000000100f52068
+    0x100f52068: 0x58000050   ldr    x16, #0x8                 ; &lt;+8&gt;
+    0x100f5206c: 0xd61f0200   br     x16
+    0x100f52070: 0x7ff00040   .long  0x7ff00040                ; unknown opcode
+    0x100f52074: 0x00000001   .long  0x00000001                ; unknown opcode
+    0x100f52078: 0x6b00015f   cmp    w10, w0
+    0x100f5207c: 0x540000c0   b.eq   0x100f52094               ; &lt;+44&gt;
+    0x100f52080: 0x91000508   add    x8, x8, #0x1              ; =0x1 
+    0x100f52084: 0xf100311f   cmp    x8, #0xc                  ; =0xc 
+    0x100f52088: 0x54ffff69   b.ls   0x100f52074               ; &lt;+12&gt;
+    0x100f5208c: 0x52800008   mov    w8, #0x0
+
+// new_ZTL7624417887 函数指令
+(lldb)  x/5i 0x0000000104a3fba4
+    0x104a3fba4: 0xd100c3ff   sub    sp, sp, #0x30             ; =0x30 
+    0x104a3fba8: 0xa9027bfd   stp    x29, x30, [sp, #0x20]
+    0x104a3fbac: 0x910083fd   add    x29, sp, #0x20            ; =0x20 
+    0x104a3fbb0: 0xb81fc3a0   stur   w0, [x29, #-0x4]
+    0x104a3fbb4: 0xb81f83a1   stur   w1, [x29, #-0x8]
+
+// original_ZTL7624417887 是一个函数指针
+(lldb) x/5g 0x0000000104a40148
+0x104a40148: 0x0000000104a53fe8 0x0000000000000000
+0x104a40158: 0x0000000000000000 0x0000000000000000
+0x104a40168: 0x0000000000000000
+</code></pre><p>这里可以发现，和substitute一样，原函数ZTL7624417887和original_ZTL7624417887函数都发生了变化，但是ZTL7624417887的改动却不一样。substrate这里首先占用了四条指令大小（这里也可以知道用substate进行hook的时候函数至少满足4个字节），其中后两条指令其实是存得一个地址占用8个字节。</p>
+<pre><code>(lldb) x/g 0x100f52070
+0x100f52070: 0x000000017ff00040
+</code></pre><p>按地址大小解析出来，目标跳转的地址为<code>0x000000017ff00040</code>现在去看下这个地址里面是什么</p>
+<pre><code>(lldb) x/12i 0x000000017ff00040
+    0x17ff00040: 0x10020010   adr    x16, #0x4000
+    0x17ff00044: 0xa9404610   ldp    x16, x17, [x16]
+    0x17ff00048: 0xd61f0220   br     x17
+    0x17ff0004c: 0xd503201f   nop    
+    0x17ff00050: 0x10020010   adr    x16, #0x4000
+    0x17ff00054: 0xa9404610   ldp    x16, x17, [x16]
+    0x17ff00058: 0xd61f0220   br     x17
+    0x17ff0005c: 0xd503201f   nop    
+    0x17ff00060: 0x10020010   adr    x16, #0x4000
+    0x17ff00064: 0xa9404610   ldp    x16, x17, [x16]
+    0x17ff00068: 0xd61f0220   br     x17
+    0x17ff0006c: 0xd503201f   nop
+</code></pre><p>这里可以发现又会进行一些跳转</p>
+<pre><code>(lldb) p/x 0x17ff00040+0x4000
+(long) $2 = 0x000000017ff04040
+
+(lldb) x/5g 0x000000017ff04040
+0x17ff04040: 0x0000000000000000 0x0000000104a3fba4
+</code></pre><p>这里计算出来<code>X16=0 X17=0x0000000104a3fba4</code>所以这里会跳转到<code>0x0000000104a3fba4</code>这个地址。等下！这个地址不就是new_ZTL7624417887的地址吗，这样进过两次跳转就跳到了我们写的hook函数了，完成了对原函数的hook。下面再分析如何又执行原函数，分析original_ZTL7624417887函数数据</p>
+<pre><code>(lldb) x/12i 0x0000000104a53fe8
+    0x104a53fe8: 0xd2800008   mov    x8, #0x0
+    0x104a53fec: 0x580000e9   ldr    x9, #0x1c
+    0x104a53ff0: 0x911a4129   add    x9, x9, #0x690            ; =0x690 
+    0x104a53ff4: 0xb868792a   ldr    w10, [x9, x8, lsl #2]
+    0x104a53ff8: 0x58000050   ldr    x16, #0x8
+    0x104a53ffc: 0xd61f0200   br     x16
+    0x104a54000: 0x00f52078   .long  0x00f52078                ; unknown opcode
+    0x104a54004: 0x00000001   .long  0x00000001                ; unknown opcode
+</code></pre><p>从上面可以发现前四条指令正是原函数new_ZTL7624417887的前四条指令等价指令，然后再进行跳转</p>
+<pre><code>0x104a53ff8: 0x58000050   ldr    x16, #0x8
+0x104a53ffc: 0xd61f0200   br     x16
+0x104a54000: 0x00f52078   .long  0x00f52078                ; unknown opcode
+0x104a54004: 0x00000001   .long  0x00000001                ; unknown opcode
+
+(lldb) x/g 0x104a54000
+0x104a54000: 0x0000000100f52078
+</code></pre><p>这里跳转的地址就是原函数new_ZTL7624417887的第五条指令地址，这样整个调用原函数的过程就结束了。</p>
 <h4 id="MSHookFunction如何解决内存patch的问题"><a href="#MSHookFunction如何解决内存patch的问题" class="headerlink" title="MSHookFunction如何解决内存patch的问题"></a>MSHookFunction如何解决内存patch的问题</h4><p>由于<code>substitute</code>开源的，所以可以结合源码分析。源码在<a href="https://github.com/coolstar/substitute">这里</a></p>
 <p><code>SubHookFunction</code>函数伪代码，此时的函数参数为</p>
 <pre><code>x0 = 0x00000001005de068  Filza`ZTL7624417887
