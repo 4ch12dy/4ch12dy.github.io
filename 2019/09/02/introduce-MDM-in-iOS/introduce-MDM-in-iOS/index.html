@@ -29,15 +29,15 @@
 本文只介绍在iOS平台搭建MDM相关
 
 开始MDM全称是移动设备管理，方便企业对员工的移动设备管理。在iOS中同样支持MDM功能，本文就介绍如何搭建MDM整个架构。实际上在2018年的时候我通过翻阅为数不多的资料，经过一番折腾才最终走通了整个流程。然而当时过于激动并没有写相关文档记录，经过一年没想到签名证书过期了，却忘记了整个搭建流程。于是重新回顾了一下，所以这次记录下">
-<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png">
-<meta property="og:updated_time" content="2019-09-02T06:26:30.850Z">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/introduce-MDM-in-iOS/image-20190829194559215.png?raw=true">
+<meta property="og:updated_time" content="2019-09-02T06:33:32.187Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS MDM搭建实践指南">
 <meta name="twitter:description" content="iOS MDM搭建实践指南
 本文只介绍在iOS平台搭建MDM相关
 
 开始MDM全称是移动设备管理，方便企业对员工的移动设备管理。在iOS中同样支持MDM功能，本文就介绍如何搭建MDM整个架构。实际上在2018年的时候我通过翻阅为数不多的资料，经过一番折腾才最终走通了整个流程。然而当时过于激动并没有写相关文档记录，经过一年没想到签名证书过期了，却忘记了整个搭建流程。于是重新回顾了一下，所以这次记录下">
-<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/introduce-MDM-in-iOS/image-20190829194559215.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -245,7 +245,7 @@
 </code></pre>
 <h5 id="从apple获取推送证书"><a href="#从apple获取推送证书" class="headerlink" title="从apple获取推送证书"></a>从apple获取推送证书</h5><p>将上面生成的<code>applepush.csr</code>文件上传到<a href="https://identity.apple.com/pushcert/" target="_blank" rel="external">Apple’s Push Certificates Portal</a></p>
 <p>然后下载推送证书，下载回来的证书在钥匙串中打开，你会看到以下信息</p>
-<p><img src="/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png" alt="image-20190829194559215"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/introduce-MDM-in-iOS/image-20190829194559215.png?raw=true" alt="image-20190829194559215"></p>
 <p>其中用户ID需要保存下来，后面会用到。并右键导出p12私钥。存为<code>mdm.p12</code></p>
 <p>将导出的p12私钥用下面命令生成服务器推送证书</p>
 <pre><code>openssl pkcs12 -in mdm.p12 -out PushCert.pem -nodes
@@ -657,6 +657,7 @@
 <li><a href="https://micromdm.io/blog/certificates/" target="_blank" rel="external">https://micromdm.io/blog/certificates/</a></li>
 <li><a href="https://osxdominion.wordpress.com/2015/04/21/signing-mobileconfig-profiles-with-keychain-certificates/" target="_blank" rel="external">https://osxdominion.wordpress.com/2015/04/21/signing-mobileconfig-profiles-with-keychain-certificates/</a></li>
 <li><a href="https://micromdm.io/blog/certificates/" target="_blank" rel="external">https://micromdm.io/blog/certificates/</a> &gt;!!!&lt;</li>
+<li><a href="https://github.com/micromdm/micromdm">https://github.com/micromdm/micromdm</a></li>
 </ul>
 
         </div>
