@@ -15,17 +15,27 @@
   </script>
 
   
-  <title>Archives: 2018/9 | 4ch12dy</title>
+  <title>企业MDM搭建最佳指南 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="给我一点时间和power">
-<meta property="og:type" content="website">
-<meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/archives/2018/09/index.html">
+  <meta name="description" content="本文只介绍在iOS平台搭建MDM相关
+
+开始MDM全称是移动设备管理，方便企业对员工的移动设备管理。在iOS中同样支持MDM功能，本文就介绍如何搭建MDM整个架构。实际上在2018年的时候我通过翻阅为数不多的资料，经过一番折腾才最终走通了整个流程。然而当时过于激动并没有写相关文档记录，经过一年没想到签名证书过期了，却忘记了整个搭建流程。于是重新回顾了一下，所以这次记录下整个过程，希望对后面的人有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="企业MDM搭建最佳指南">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="给我一点时间和power">
+<meta property="og:description" content="本文只介绍在iOS平台搭建MDM相关
+
+开始MDM全称是移动设备管理，方便企业对员工的移动设备管理。在iOS中同样支持MDM功能，本文就介绍如何搭建MDM整个架构。实际上在2018年的时候我通过翻阅为数不多的资料，经过一番折腾才最终走通了整个流程。然而当时过于激动并没有写相关文档记录，经过一年没想到签名证书过期了，却忘记了整个搭建流程。于是重新回顾了一下，所以这次记录下整个过程，希望对后面的人有">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png">
+<meta property="og:updated_time" content="2019-09-02T04:04:03.567Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="4ch12dy">
-<meta name="twitter:description" content="给我一点时间和power">
+<meta name="twitter:title" content="企业MDM搭建最佳指南">
+<meta name="twitter:description" content="本文只介绍在iOS平台搭建MDM相关
+
+开始MDM全称是移动设备管理，方便企业对员工的移动设备管理。在iOS中同样支持MDM功能，本文就介绍如何搭建MDM整个架构。实际上在2018年的时候我通过翻阅为数不多的资料，经过一番折腾才最终走通了整个流程。然而当时过于激动并没有写相关文档记录，经过一年没想到签名证书过期了，却忘记了整个搭建流程。于是重新回顾了一下，所以这次记录下整个过程，希望对后面的人有">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -33,9 +43,9 @@
     <link rel="icon" href="/favicon.png">
   
   
-  <link rel="stylesheet" href="../../../css/common.css">
-<link rel="stylesheet" href="../../../css/nav.css">
-<link rel="stylesheet" href="../../../css/layout.css">
+  <link rel="stylesheet" href="../../../../../css/common.css">
+<link rel="stylesheet" href="../../../../../css/nav.css">
+<link rel="stylesheet" href="../../../../../css/layout.css">
   
 
 </head>
@@ -64,19 +74,19 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
             </a>
             
-            <a class="nav-item" href="../../../re">
+            <a class="nav-item" href="../../../../../re">
                 re
             </a>
             
-            <a class="nav-item" href="../../../aboutme">
+            <a class="nav-item" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item" href="../../../strike">
+            <a class="nav-item" href="../../../../../strike">
                 Strike
             </a>
             
-            <a class="nav-item" href="../../../note">
+            <a class="nav-item" href="../../../../../note">
                 note
             </a>
             
@@ -88,19 +98,19 @@
         </span>
         <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
             
-            <a class="nav-item flex-1" href="../../../re">
+            <a class="nav-item flex-1" href="../../../../../re">
                 re
             </a>
             
-            <a class="nav-item flex-1" href="../../../aboutme">
+            <a class="nav-item flex-1" href="../../../../../aboutme">
                 About
             </a>
             
-            <a class="nav-item flex-1" href="../../../strike">
+            <a class="nav-item flex-1" href="../../../../../strike">
                 Strike
             </a>
             
-            <a class="nav-item flex-1" href="../../../note">
+            <a class="nav-item flex-1" href="../../../../../note">
                 note
             </a>
             
@@ -111,149 +121,1066 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .post-hover:hover {
-        box-shadow: inset 0 0 100px #000;
-        transition: box-shadow .2s;
-    }
+          <!--博文页面-->
 
-    .sub-post-container .post-hover:hover h3 {
-        text-decoration: underline gray;
-    }
-
-
-    .primary-item-main {
-        height: 330px;
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
         background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .primary-container .title,
-    .primary-container .sub-title,
-    .primary-container .post-content-text,
-    .primary-container .date {
-        color: #fff;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    .post-content-text {
-        color: #f1f1f1!important;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
     }
 
-    .primary-container .post-hover {
-        background: black;
+    .flow-chart {
+        text-align: center;
     }
 
-    .content-bg-mask {
-        background: rgba(0,0,0,.4);
+    img[alt="post-cover"] {
+        display: none;
     }
-
 </style>
-
-<div style="background: #f5f8f9;">
-    <div id="main-container" class="container" style="padding-top: 20px;">
-        <div class="is-flex main-content justify-center">
-            <section class="column is-9">
-                <!-- 
-<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
-    <div class="column  is-12">
-        <a href="/2018/09/13/unicorn/unicorn/">
-            <div class="full-height post-hover"
-                 style="
-                         background-image: url('');
-                         height: 350px;
-                         background-size: cover;
-                         background-repeat: no-repeat;
-                         ">
-                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
-                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            unicorn
-                        </h1>
-                        <div>
-                        
-                            `
-                                <span class="tag is-post-tag">unicorn</span>
-                            
-                        
-                        </div>
-                        <p class="post-content-text is-marginless has-padding text-shadow">
-                            
-
-  
-  
-    Need password to decrypt!
-    
-  
-
-Incorrect Password!
-No content to display!
-
-U2FsdGVkX19KJm3RsWAo9nHQ8cw..
-                        </p>
-                        <p class="date text-shadow">2018-09-13</p>
-                        <button class="button is-info is-small">Read More</button>
-                    </div>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>企业MDM搭建最佳指南</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/other/xia0.png?raw=true">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
+                <span class="post-date sub-title">at: 2019-09-02</span>
             </div>
-        </a>
-    </div>
-    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
-        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
+                <div>
+                    
+                         <a class="tag is-post-tag" href="/tags/wiki/">wiki</a>
+                    
+                         <a class="tag is-post-tag" href="/tags/MDM/">MDM</a>
+                    
+                </div>
+            
+        </div>
+        <div class="content" style="overflow: auto">
+            <blockquote>
+<p>本文只介绍在iOS平台搭建MDM相关</p>
+</blockquote>
+<h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>MDM全称是移动设备管理，方便企业对员工的移动设备管理。在iOS中同样支持MDM功能，本文就介绍如何搭建MDM整个架构。实际上在2018年的时候我通过翻阅为数不多的资料，经过一番折腾才最终走通了整个流程。然而当时过于激动并没有写相关文档记录，经过一年没想到签名证书过期了，却忘记了整个搭建流程。于是重新回顾了一下，所以这次记录下整个过程，希望对后面的人有所帮助。</p>
+<h4 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h4><ul>
+<li><p>获取Vendor p12证书</p>
+</li>
+<li><p>制作服务端推送证书</p>
+</li>
+<li><p>生成并签名设备描述文件</p>
+</li>
+<li><p>MDM通信指令结构及原理分析</p>
+</li>
+<li><p>企业MDM最佳方案</p>
+</li>
+</ul>
+<h4 id="获取Vendor-p12证书"><a href="#获取Vendor-p12证书" class="headerlink" title="获取Vendor p12证书"></a>获取Vendor p12证书</h4><ul>
+<li><p>制作MDM Vendor CSR</p>
+<p>1、打开钥匙串</p>
+<p>2、选择钥匙串访问-&gt;证书助理-&gt;从证书颁发机构请求证书</p>
+<p>3、填写相关信息</p>
+<p>4 、保存在本地</p>
+</li>
+<li><p>上传CSR文件到Apple</p>
+<p>访问<a href="https://developer.apple.com/account/ios/certificate/create页面" target="_blank" rel="external">https://developer.apple.com/account/ios/certificate/create页面</a></p>
+<p>将CSR文件上传到页面，等待1-2个工作日。</p>
+<p>这时候你下载<code>.cer</code>文件，保存为<code>mdmvendor.cer</code></p>
+</li>
+<li><p>导出MDM私钥</p>
+<p>在钥匙串中打开<code>mdmvendor.cer</code>文件，然后右键选择导出并保存为<code>private.p12</code>文件</p>
+</li>
+</ul>
+<p><strong>注意：这里生成的文件很重要，建议新建一个MDM目录保存</strong></p>
+<h4 id="制作服务端推送证书"><a href="#制作服务端推送证书" class="headerlink" title="制作服务端推送证书"></a>制作服务端推送证书</h4><h5 id="生成证书签名请求文件"><a href="#生成证书签名请求文件" class="headerlink" title="生成证书签名请求文件"></a>生成证书签名请求文件</h5><ul>
+<li>选择钥匙串访问-&gt;证书助理-&gt;从证书颁发机构请求证书</li>
+<li>输入邮箱，姓名等信息</li>
+<li>保存到本地为<code>push.csr</code></li>
+</ul>
+<h5 id="导出MDM私钥和Vendor证书"><a href="#导出MDM私钥和Vendor证书" class="headerlink" title="导出MDM私钥和Vendor证书"></a>导出MDM私钥和Vendor证书</h5><ul>
+<li><p>取出私钥</p>
+<p>执行下面的命令会要求输入<code>private.p12</code>的密码</p>
+<pre><code class="bash">openssl pkcs12 -in private.p12 -nocerts -out key.pem
+</code></pre>
+</li>
+<li><p>去掉<code>private.p12</code>密码</p>
+<pre><code class="bash">openssl rsa -in key.pem -out private.key
+</code></pre>
+</li>
+<li><p>取出证书文件</p>
+<p>执行下面的命令会要求输入<code>private.p12</code>的密码</p>
+<pre><code class="bash">openssl pkcs12 -in private.p12 -clcerts -nokeys -out cert.pem
+</code></pre>
+</li>
+<li><p>转为DES加密</p>
+<pre><code class="bash">openssl x509 -in cert.pem -inform PEM -out mdm.cer -outform DES
+</code></pre>
+</li>
+</ul>
+<h5 id="用mdmvendorsign工具生成applepush-csr"><a href="#用mdmvendorsign工具生成applepush-csr" class="headerlink" title="用mdmvendorsign工具生成applepush.csr"></a>用mdmvendorsign工具生成applepush.csr</h5><p>我们需要<a href="https://github.com/vineetchoudhary/Apple-iOS-MDM-Server">mdmvendorsign</a>工具中的<code>/vendor/</code>的相关代码文件，这里将上面的<code>private.key</code>, <code>push.csr</code>, 以及<code>mdm.cer</code>文件都复制到<code>/vendor/</code>目录。然后执行下面的命令</p>
+<pre><code class="bash">python mdm_vendor_sign.py --key private.key --csr push.csr --mdm mdm.cer --out applepush.csr
+</code></pre>
+<h5 id="从apple获取推送证书"><a href="#从apple获取推送证书" class="headerlink" title="从apple获取推送证书"></a>从apple获取推送证书</h5><p>将上面生成的<code>applepush.csr</code>文件上传到<a href="https://identity.apple.com/pushcert/" target="_blank" rel="external">Apple’s Push Certificates Portal</a></p>
+<p>然后下载推送证书，下载回来的证书在钥匙串中打开，你会看到以下信息</p>
+<p><img src="/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png" alt="image-20190829194559215"></p>
+<p>其中用户ID需要保存下来，后面会用到。并右键导出p12私钥。存为<code>mdm.p12</code></p>
+<p>将导出的p12私钥用下面命令生成服务器推送证书</p>
+<pre><code>openssl pkcs12 -in mdm.p12 -out PushCert.pem -nodes
+</code></pre><p>然后将<code>PushCert.pem</code>拷贝到<code>./Apple-iOS-MDM-Server/scripts/</code>目录</p>
+<h4 id="生成并签名设备描述文件"><a href="#生成并签名设备描述文件" class="headerlink" title="生成并签名设备描述文件"></a>生成并签名设备描述文件</h4><h5 id="生成设备描述文件"><a href="#生成设备描述文件" class="headerlink" title="生成设备描述文件"></a>生成设备描述文件</h5><p> 用这个软件来制作<a href="https://itunes.apple.com/in/app/apple-configurator-2/id1037126344?mt=12" target="_blank" rel="external">Apple Configurator 2</a>描述文件，但是现在新版本不支持直接生产MDM的描述文件，只能先做一个通用的描述文件，然后再增加MDM相关的字段。</p>
+<p>生成的大概模板如下：</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+    &lt;key&gt;ConsentText&lt;/key&gt;
+    &lt;dict&gt;
+        &lt;key&gt;default&lt;/key&gt;
+        &lt;string&gt;install to enble DiDi manage your device&lt;/string&gt;
+    &lt;/dict&gt;
+    &lt;key&gt;PayloadContent&lt;/key&gt;
+    &lt;array&gt;
+        &lt;dict&gt;
+            &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+            &lt;string&gt;DevAuthCA.cer.der&lt;/string&gt;
+            &lt;key&gt;PayloadContent&lt;/key&gt;
+            &lt;data&gt;
+            MIIEFzCCAv+gAwIBAgIIZylBveTSpRowDQYJKoZIhvcNAQELBQAw
+            YjELMAkGA1UEBhMCVVMxEzARBgNVBAoTCkFwcGxlIEluYy4xJjAk
+            BgNVBAsTHUFwcGxlIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRYw
+            FAYDVQQDEw1BcHBsZSBSb290IENBMB4XDTEzMDQyOTE4NDA1NFoX
+            DTI4MDQyOTE4NDA1NFowgYsxOTA3BgNVBAMMMERldmVsb3BlciBB
+            dXRoZW50aWNhdGlvbiBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEs
+            MCoGA1UECwwjQXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxh
+            dGlvbnMxEzARBgNVBAoMCkFwcGxlIEluYy4xCzAJBgNVBAYTAlVT
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6rDzm76u
+            93aLqrS9hopNDa9oIjbzlWn62CLEsB4+GmzBJR6qK+ITfjbh6G0a
+            /etrPsB/LYqUU4WAJiiZZqMWCLTkvD061OoGQFlZEt7fJu0plH49
+            08rzTUA4nd81towql+yjYJH9wSGgvDfg2QpsvXd5c2ITTjgSUfZR
+            wSFHTYHA3Eoj/rpDuuar1RHxZsswxrdB8o8lHJuaShGHWFbsYfNC
+            FUmFMAxZbA3ppTYwcaAD8/KjUM3AeJbVqToz81QhEYmfMYFpsb8x
+            I5ae3MNmOlBaL169c+hUHFTtoUmzbRI1gnrXVKhLMsIpCngAvNEp
+            X85mEOCnN2NCJQrk3Ig5cQIDAQABo4GmMIGjMB0GA1UdDgQWBBRJ
+            9jYJuBsj+gNbtuqCoNldEBhnBjAPBgNVHRMBAf8EBTADAQH/MB8G
+            A1UdIwQYMBaAFCvQaUeUdgn+9GuNLkCm90dNfwheMC4GA1UdHwQn
+            MCUwI6AhoB+GHWh0dHA6Ly9jcmwuYXBwbGUuY29tL3Jvb3QuY3Js
+            MA4GA1UdDwEB/wQEAwIBBjAQBgoqhkiG92NkBgILBAIFADANBgkq
+            hkiG9w0BAQsFAAOCAQEA1fKJRhfZZspW9+GqK8+E6ciXbsABciYm
+            IvGy0snmeRN+e1KuFsoQmOXmdNY7SFvdb+2ZN/doOd5Es8hAih+3
+            VwHbac8YiFDXphpQshJJrtiOSBSsXBDgz0b4LjRqhtXdU9BB67nD
+            Q2/zZSNKxvIqXqqsPQiKv/tctQH7kr3ogmZ4GkqjGgHWEocbTfOF
+            pioDQ1xXP0eF/jn02cp9vnyAuyqpkybJYkaIAVUq2bRWV+9D6WLo
+            6/3X8AWOCj65GPgx+DLIDAD2yHJu1D9JuSqD5cD1AChpPUregUvi
+            Uszq4TyJ7LjHi4/w1jbWrlbeObEp2lNcKFTKIkeSZ88IE2b25g==
+            &lt;/data&gt;
+            &lt;key&gt;PayloadDescription&lt;/key&gt;
+            &lt;string&gt;添加 PKCS#1 格式的证书&lt;/string&gt;
+            &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+            &lt;string&gt;Developer Authentication Certification Authority&lt;/string&gt;
+            &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+            &lt;string&gt;com.apple.security.pkcs1.A742C668-A859-4DB9-B7AD-5913CDACD1C9&lt;/string&gt;
+            &lt;key&gt;PayloadType&lt;/key&gt;
+            &lt;string&gt;com.apple.security.pkcs1&lt;/string&gt;
+            &lt;key&gt;PayloadUUID&lt;/key&gt;
+            &lt;string&gt;A742C668-A859-4DB9-B7AD-5913CDACD1C9&lt;/string&gt;
+            &lt;key&gt;PayloadVersion&lt;/key&gt;
+            &lt;integer&gt;1&lt;/integer&gt;
+        &lt;/dict&gt;
+        &lt;dict&gt;
+            &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+            &lt;string&gt;AppleWWDRCAG2.cer&lt;/string&gt;
+            &lt;key&gt;PayloadContent&lt;/key&gt;
+            &lt;data&gt;
+            MIIC9zCCAnygAwIBAgIIb+/Y9emjp+4wCgYIKoZIzj0EAwIwZzEb
+            MBkGA1UEAwwSQXBwbGUgUm9vdCBDQSAtIEczMSYwJAYDVQQLDB1B
+            cHBsZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTETMBEGA1UECgwK
+            QXBwbGUgSW5jLjELMAkGA1UEBhMCVVMwHhcNMTQwNTA2MjM0MzI0
+            WhcNMjkwNTA2MjM0MzI0WjCBgDE0MDIGA1UEAwwrQXBwbGUgV29y
+            bGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ0EgLSBHMjEmMCQG
+            A1UECwwdQXBwbGUgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxEzAR
+            BgNVBAoMCkFwcGxlIEluYy4xCzAJBgNVBAYTAlVTMFkwEwYHKoZI
+            zj0CAQYIKoZIzj0DAQcDQgAE3fC3BkvP3XMEE8RDiQOTgPte9nSt
+            QmFSWAImUxnIYyIHCVJhysTZV+9tJmiLdJGMxPmAaCj8CWjwENrp
+            0C7JGqOB9zCB9DBGBggrBgEFBQcBAQQ6MDgwNgYIKwYBBQUHMAGG
+            Kmh0dHA6Ly9vY3NwLmFwcGxlLmNvbS9vY3NwMDQtYXBwbGVyb290
+            Y2FnMzAdBgNVHQ4EFgQUhLaEzDqGYnIWWZToGqO9SN863wswDwYD
+            VR0TAQH/BAUwAwEB/zAfBgNVHSMEGDAWgBS7sN6hWDOImqSKmd6+
+            veuv2sskqzA3BgNVHR8EMDAuMCygKqAohiZodHRwOi8vY3JsLmFw
+            cGxlLmNvbS9hcHBsZXJvb3RjYWczLmNybDAOBgNVHQ8BAf8EBAMC
+            AQYwEAYKKoZIhvdjZAYCDwQCBQAwCgYIKoZIzj0EAwIDaQAwZgIx
+            ANmxxzHGI/ZPTdDZR8V9GGkRh3En02it4Jtlmr5s3z9GppAJvm6h
+            OyywUYlBPIfSvwIxAPxkUolLPF2/axzCiZgvcq61m6oaCyNUd1To
+            FUOixRLal1BzfF7QbrJcYlDXUfE6Wg==
+            &lt;/data&gt;
+            &lt;key&gt;PayloadDescription&lt;/key&gt;
+            &lt;string&gt;添加 PKCS#1 格式的证书&lt;/string&gt;
+            &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+            &lt;string&gt;Apple Worldwide Developer Relations CA - G2&lt;/string&gt;
+            &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+            &lt;string&gt;com.apple.security.pkcs1.32A40F6B-24FA-4026-9BF6-66AED47CEC40&lt;/string&gt;
+            &lt;key&gt;PayloadType&lt;/key&gt;
+            &lt;string&gt;com.apple.security.pkcs1&lt;/string&gt;
+            &lt;key&gt;PayloadUUID&lt;/key&gt;
+            &lt;string&gt;32A40F6B-24FA-4026-9BF6-66AED47CEC40&lt;/string&gt;
+            &lt;key&gt;PayloadVersion&lt;/key&gt;
+            &lt;integer&gt;1&lt;/integer&gt;
+        &lt;/dict&gt;
+        &lt;dict&gt;
+            &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+            &lt;string&gt;AppleRootCA-G2.cer&lt;/string&gt;
+            &lt;key&gt;PayloadContent&lt;/key&gt;
+            &lt;data&gt;
+            MIIFkjCCA3qgAwIBAgIIAeDltYNno+AwDQYJKoZIhvcNAQEMBQAw
+            ZzEbMBkGA1UEAwwSQXBwbGUgUm9vdCBDQSAtIEcyMSYwJAYDVQQL
+            DB1BcHBsZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTETMBEGA1UE
+            CgwKQXBwbGUgSW5jLjELMAkGA1UEBhMCVVMwHhcNMTQwNDMwMTgx
+            MDA5WhcNMzkwNDMwMTgxMDA5WjBnMRswGQYDVQQDDBJBcHBsZSBS
+            b290IENBIC0gRzIxJjAkBgNVBAsMHUFwcGxlIENlcnRpZmljYXRp
+            b24gQXV0aG9yaXR5MRMwEQYDVQQKDApBcHBsZSBJbmMuMQswCQYD
+            VQQGEwJVUzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIB
+            ANgREkhI2imKScUcx+xuM23+TfvgHN6sXuI2pyT5f1BrTM65MFQn
+            5bPW7SXmMLYFN14UIhHF6Kob0vuy0gmVOKTvKkmMXT5xZgM4+xb1
+            hYjkWpIMBDLyyED7Ul+f9sDx47pFoFDVEovy3d6RhiPw9bZyLgHa
+            C/YuOQhfGaFjQQscp5TBhsRTL3b2CtcM0YM/GlMZ81fVJ3/8E7j4
+            ko380yhDPLVoACVdJ2LT3VXdRCCQgzWTxb+4Gftr49wIQuavbfqe
+            QMpOhYV4SbHXw8EwOTKrfl+q04tvny0aIWhwZ7Oj8ZhBbZF8+Nfb
+            qOdfIRqMM78xdLe40fTgIvS/cjTf94FNcX1RoeKz8NMoFnNvzcyt
+            N31O661A4T+B/fc9Cj6i8b0xlilZ3MIZgIxbdMYs0xBTJh0UT8TU
+            gWY8h2czJxQI6bR3hDRSj4n4aJgXv8O7qhOTH11UL6jHfPsNFL4V
+            PSQ08prcdUFmIrQB1guvkJ4M6mL4m1k8COKWNORj3rw31OsMiAND
+            C1CvoDTdUE0V+1ok2Az6DGOeHwOx4e7hqkP0ZmUoNwIx7wHHHtHM
+            n23KVDpA287PT0aLSmWaasZobNfMmRtHsHLDd4/E92GcdB/O/Wuh
+            wpyUgquUoue9G7q5cDmVF8Up8zlYNPXEpMZ7YLlmQ1A/bmH8DvmG
+            qmAMQ0uVAgMBAAGjQjBAMB0GA1UdDgQWBBTEmRNsGAPCe8CjoA1/
+            coB6HHcmjTAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB
+            BjANBgkqhkiG9w0BAQwFAAOCAgEAUabz4vS4PZO/Lc4Pu1vhVRRO
+            TtHlznldgX/+tvCHM/jvlOV+3Gp5pxy+8JS3ptEwnMgNCnWefZKV
+            fhidfsJxaXwU6s+DDuQUQp50DhDNqxq6EWGBeNjxtUVAeKuowM77
+            fWM3aPbn+6/Gw0vsHzYmE1SGlHKy6gLti23kDKaQwFd1z4xCfVzm
+            MX3zybKSaUYOiPjjLUKyOKimGY3xn83uamW8GrAlvacp/fQ+onVJ
+            v57byfenHmOZ4VxG/5IFjPoeIPmGlFYl5bRXOJ3riGQUIUkhOb9i
+            ZqmxospvPyFgxYnURTbImHy99v6ZSYA7LNKmp4gDBDEZt7Y6YUX6
+            yfIjyGNzv1aJMbDZfGKnexWoiIqrOEDCzBL/FePwN983csvMmOa/
+            orz6JopxVtfnJBtIRD6e/J/JzBrsQzwBvDR4yGn1xuZW7AYJNpDr
+            FEobXsmII9oDMJELuDY++ee1KG++P+w8j2Ud5cAeh6Squpj9kuNs
+            JnfdBrRkBof0Tta6SqoWqPQFZ2aWuuJVecMsXUmPgEkrihLHdoBR
+            37q9ZV0+N0djMenl9MU/S60EinpxLK8JQzcPqOMyT/RFtm2XNuyE
+            9QoB6he7hY1Ck3DDUOUUi78/w0EP3SIEIwiKum1xRKtzCTrJ+VKA
+            Cd+66eYWyi4uTLLT3OUEVLLUNIAytbwPF+E=
+            &lt;/data&gt;
+            &lt;key&gt;PayloadDescription&lt;/key&gt;
+            &lt;string&gt;添加 CA 根证书&lt;/string&gt;
+            &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+            &lt;string&gt;Apple Root CA - G2&lt;/string&gt;
+            &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+            &lt;string&gt;com.apple.security.root.A0BB6B15-2A9E-47B8-9EC2-871F1C04DE8E&lt;/string&gt;
+            &lt;key&gt;PayloadType&lt;/key&gt;
+            &lt;string&gt;com.apple.security.root&lt;/string&gt;
+            &lt;key&gt;PayloadUUID&lt;/key&gt;
+            &lt;string&gt;A0BB6B15-2A9E-47B8-9EC2-871F1C04DE8E&lt;/string&gt;
+            &lt;key&gt;PayloadVersion&lt;/key&gt;
+            &lt;integer&gt;1&lt;/integer&gt;
+        &lt;/dict&gt;
+        &lt;dict&gt;
+            &lt;key&gt;Password&lt;/key&gt;
+            &lt;string&gt;yourPWD&lt;/string&gt;
+            &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+            &lt;string&gt;Identity.p12&lt;/string&gt;
+            &lt;key&gt;PayloadContent&lt;/key&gt;
+            &lt;data&gt;
+            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
+            e96ah6AF/AQIVFgg47LiiYwCAggA
+            &lt;/data&gt;
+            &lt;key&gt;PayloadDescription&lt;/key&gt;
+            &lt;string&gt;添加 PKCS#12 格式的证书&lt;/string&gt;
+            &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+            &lt;string&gt;Identity.p12&lt;/string&gt;
+            &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+            &lt;string&gt;com.apple.security.pkcs12.E61D7ED5-850A-4F2E-B191-F99E40846FF6&lt;/string&gt;
+            &lt;key&gt;PayloadType&lt;/key&gt;
+            &lt;string&gt;com.apple.security.pkcs12&lt;/string&gt;
+            &lt;key&gt;PayloadUUID&lt;/key&gt;
+            &lt;string&gt;E61D7ED5-850A-4F2E-B191-F99E40846FF6&lt;/string&gt;
+            &lt;key&gt;PayloadVersion&lt;/key&gt;
+            &lt;integer&gt;1&lt;/integer&gt;
+        &lt;/dict&gt;
+    &lt;/array&gt;
+    &lt;key&gt;PayloadDescription&lt;/key&gt;
+    &lt;string&gt;MDM enbale server manage your device&lt;/string&gt;
+    &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+    &lt;string&gt;XXX MDM&lt;/string&gt;
+    &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+    &lt;string&gt;com.apple.mgmt.External.3a3c70d4-cc4f-4713-xxxx-f38d6fd7xxxx&lt;/string&gt;
+    &lt;key&gt;PayloadOrganization&lt;/key&gt;
+    &lt;string&gt;XXX&lt;/string&gt;
+    &lt;key&gt;PayloadRemovalDisallowed&lt;/key&gt;
+    &lt;false/&gt;
+    &lt;key&gt;PayloadType&lt;/key&gt;
+    &lt;string&gt;Configuration&lt;/string&gt;
+    &lt;key&gt;PayloadUUID&lt;/key&gt;
+    &lt;string&gt;D633CDFE-9806-4224-AD38-7FE0CAB12163&lt;/string&gt;
+    &lt;key&gt;PayloadVersion&lt;/key&gt;
+    &lt;integer&gt;1&lt;/integer&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+<p>上面直接用那个工具填写相关信息并导入相关证书就能生成，但是真正的MDM策略相关需要手动添加一个字典如下：</p>
+<pre><code class="xml">&lt;dict&gt;
+            &lt;key&gt;AccessRights&lt;/key&gt;
+            &lt;integer&gt;8191&lt;/integer&gt;
+            &lt;key&gt;CheckInURL&lt;/key&gt;
+            &lt;string&gt;https://mdmapi.demo.com/checkin&lt;/string&gt;
+            &lt;key&gt;CheckOutWhenRemoved&lt;/key&gt;
+            &lt;true/&gt;
+            &lt;key&gt;IdentityCertificateUUID&lt;/key&gt;
+            &lt;string&gt;E61D7ED5-850A-4F2E-B191-F99E40846FF6&lt;/string&gt;
+            &lt;key&gt;PayloadDescription&lt;/key&gt;
+            &lt;string&gt;Configures MobileDeviceManagement.&lt;/string&gt;
+            &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+            &lt;string&gt;com.apple.mdm.2C62A547-9CA9-4D5A-AF86-0DF2467274EF&lt;/string&gt;
+            &lt;key&gt;PayloadOrganization&lt;/key&gt;
+            &lt;string&gt;Developer Insider&lt;/string&gt;
+            &lt;key&gt;PayloadType&lt;/key&gt;
+            &lt;string&gt;com.apple.mdm&lt;/string&gt;
+            &lt;key&gt;PayloadUUID&lt;/key&gt;
+            &lt;string&gt;E7438708-331E-4E68-99BC-3B9B435DF3DC&lt;/string&gt;
+            &lt;key&gt;PayloadVersion&lt;/key&gt;
+            &lt;integer&gt;1&lt;/integer&gt;
+            &lt;key&gt;ServerURL&lt;/key&gt;
+            &lt;string&gt;https://mdmapi.demo.com/server&lt;/string&gt;
+            &lt;key&gt;SignMessage&lt;/key&gt;
+            &lt;true/&gt;
+            &lt;key&gt;Topic&lt;/key&gt;
+            &lt;string&gt;com.apple.mgmt.External.3a3c70d4-cc4f-4713-xxxx-f38d6fd7xxxx&lt;/string&gt;
+            &lt;key&gt;UseDevelopmentAPNS&lt;/key&gt;
+            &lt;false/&gt;
+        &lt;/dict&gt;
+</code></pre>
+<p>这里简单说几个比较重点的字段</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">KEY</th>
+<th style="text-align:left">TYPE</th>
+<th style="text-align:left">DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">IdentityCertificateUUID</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> UUID of the certificate payload for the device’s identity. It may also point to a SCEP payload. You need to use the <code>PayloadUUID</code> of the <code>identity.p12</code> in this field.</td>
+</tr>
+<tr>
+<td style="text-align:left">PayloadUUID</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> Here you need to generate a UUID. You can use <code>uuidgen</code> to generate an UUID and then copy paste that UUID in this field. UUID looks like this 34995C2E-XXXX-XXXX-XXXX-D6DB637A1D6E</td>
+</tr>
+<tr>
+<td style="text-align:left">PayloadIdentifier</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">Here you need to append the UUID in after <code>com.apple.mdm.</code> which we generated in last step. Your payload identifier looks like this com.apple.mdm.34995C2E-XXXX-XXXX-XXXX-D6DB637A1D6E</td>
+</tr>
+<tr>
+<td style="text-align:left">Topic</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> The topic that MDM listens to for push notifications. The certificate that the server uses to send push notifications must have the same topic in its subject. The topic must begin with the <code>com.apple.mgmt.External.hexstuffhere...</code> prefix.</td>
+</tr>
+<tr>
+<td style="text-align:left">ServerURL</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> The URL that the device contacts to retrieve device management instructions. Must begin with the <code>https://</code> URL scheme, and may contain a port number (<code>https://YOUR_HOSTNAME_OR_IP:PORT/server</code>, for example).</td>
+</tr>
+<tr>
+<td style="text-align:left">CheckInURL</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Optional.</em> The URL that the device should use to check in during installation. Must begin with the <code>https://</code> URL scheme and may contain a port number (<code>https://YOUR_HOSTNAME_OR_IP:8080/checkin</code>, for example). If this URL is not given, the <code>ServerURL</code> is used for both purposes.</td>
+</tr>
+<tr>
+<td style="text-align:left">CheckOutWhenRemoved</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left"><em>Optional.</em> If <code>true</code>, the device attempts to send a <code>CheckOut</code>message to the check-in server when the profile is removed. Defaults to <code>false</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left">AccessRights</td>
+<td style="text-align:left">Integer, flags</td>
+<td style="text-align:left"><em>Required.</em> Logical OR of the following bit-flags:1: Allow inspection of installed configuration profiles.2: Allow installation and removal of configuration profiles.4: Allow device lock and passcode removal.8: Allow device erase.16: Allow query of Device Information (device capacity, serial number).32: Allow query of Network Information (phone/SIM numbers, MAC addresses).64: Allow inspection of installed provisioning profiles.128: Allow installation and removal of provisioning profiles.256: Allow inspection of installed applications.512: Allow restriction-related queries.1024: Allow security-related queries.2048: Allow manipulation of settings.4096: Allow app management.May not be zero. If 2 is specified, 1 must also be specified. If 128 is specified, 64 must also be specified.</td>
+</tr>
+<tr>
+<td style="text-align:left">UseDevelopmentAPNS</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left"><em>Optional.</em> If <code>true</code>, the device uses the development APNS servers. Otherwise, the device uses the production servers. Defaults to <code>false</code>. Note that this property must be set to false if your Apple Push Notification Service certificate was issued by the <a href="https://identity.apple.com/pushcert" target="_blank" rel="external">Apple Push Certificate Portal</a>. That portal only issues certificates for the production push environment.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>IdentityCertificateUUID：这个UUID是<code>identity.p12</code>的<code>PayloadUUID</code>。关于<code>identity.p12</code>这里其实是一个设备标识的证书，这个证书可能不知道怎么制作。其实用自签的签名就行。制作流程如下</p>
+<p>生成自签证书（生成2046位的加密私钥）</p>
+<pre><code>openssl genrsa -out server.key 2048
+</code></pre><p>生成自签证书（生成证书签名请求）</p>
+<pre><code>openssl req -new -key server.key -out server.csr
+</code></pre><p>生成自签证书（生成类型为X509的自签名证书）</p>
+<pre><code>openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
+</code></pre><p>这时候我们有<code>server.key</code>、<code>server.csr</code>、<code>server.crt</code>三个文件</p>
+<p>然后将<code>server.crt</code>复制生成两个文件并命名：<code>identity.crt</code>、<code>server.crt</code></p>
+<p>同样将<code>server.key</code>复制生成两个文件并命名：<code>cakey.key</code>、<code>identity.key</code></p>
+<p>最后将<code>server.csr</code>重命名为<code>identity.csr</code></p>
+<p>然后用<a href="https://github.com/vineetchoudhary/Apple-iOS-MDM-Server/blob/master/scripts/make_certs.sh">make_certs.sh</a>生成<code>Identity.p12</code></p>
+</li>
+<li><p>AccessRights：这个字段会在安装描述文件的时候提示申请了哪些权限，并且这里是按位与运算</p>
+</li>
+<li><p>CheckInURL以及ServerURL涉及到后面MDM设备、苹果APNS、服务器三方通信相关</p>
+</li>
+</ul>
+<h5 id="签名描述文件"><a href="#签名描述文件" class="headerlink" title="签名描述文件"></a>签名描述文件</h5><p>在签名前建议先对未签名的描述文件进行通信测试，保证在未签名之前安装描述文件以后服务端能够正常发送指令通信。</p>
+<p>这里的签名仅仅是为了部署描述文件，和MDM本身并不相关，所以事实上可以用任意一个证书进行签名，但为了保证是公司发布的描述文件，建议用公司的iOS开发证书即可。这里提供两个工具</p>
+<ul>
+<li><a href="https://github.com/JeremyAgost/Hancock">Hancock App</a></li>
+<li><a href="https://github.com/nmcspadden/ProfileSigner">ProfileSigner</a></li>
+</ul>
+<p>使用比较简单，这里不再介绍。</p>
+<h4 id="MDM通信指令结构及原理分析"><a href="#MDM通信指令结构及原理分析" class="headerlink" title="MDM通信指令结构及原理分析"></a>MDM通信指令结构及原理分析</h4><p>暂位，后面有时间再补充</p>
+<h4 id="企业MDM最佳方案"><a href="#企业MDM最佳方案" class="headerlink" title="企业MDM最佳方案"></a>企业MDM最佳方案</h4><p>虽然MDM自身提供了很多远程指令相关的移动设备管理功能，但是在实际上企业管理中还远远不够，所以建议配合一个agent之类的app辅助。在我们实现中，采用安装描述文件的时候就推送安装agent，然后用户后续的所有交互都由app负责。app主要作用在于能够获取定位，账号设备绑定，安全准入，扫码登录等等。以及能够提供公司级的VPN等相关公司配置。这里能做的还有很多，可以和企业实际的管理结合。</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><p><a href="https://developerinsider.co/how-to-create-a-verified-ios-mobile-device-management-mdm-profile/" target="_blank" rel="external">https://developerinsider.co/how-to-create-a-verified-ios-mobile-device-management-mdm-profile/</a></p>
+</li>
+<li><p><a href="https://github.com/vineetchoudhary/Apple-iOS-MDM-Server">https://github.com/vineetchoudhary/Apple-iOS-MDM-Server</a></p>
+</li>
+<li><p><a href="https://micromdm.io/blog/certificates/" target="_blank" rel="external">https://micromdm.io/blog/certificates/</a></p>
+</li>
+<li><p><a href="https://osxdominion.wordpress.com/2015/04/21/signing-mobileconfig-profiles-with-keychain-certificates/" target="_blank" rel="external">https://osxdominion.wordpress.com/2015/04/21/signing-mobileconfig-profiles-with-keychain-certificates/</a></p>
+</li>
+<li><p><a href="https://micromdm.io/blog/certificates/" target="_blank" rel="external">https://micromdm.io/blog/certificates/</a> &gt;!!!&lt;企业MDM搭建最佳指南</p>
+<blockquote>
+<p>本文只介绍在iOS平台搭建MDM相关</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="开始-1"><a href="#开始-1" class="headerlink" title="开始"></a>开始</h4><p>  MDM全称是移动设备管理，方便企业对员工的移动设备管理。在iOS中同样支持MDM功能，本文就介绍如何搭建MDM整个架构。实际上在2018年的时候我通过翻阅为数不多的资料，经过一番折腾才最终走通了整个流程。然而当时过于激动并没有写相关文档记录，经过一年没想到签名证书过期了，却忘记了整个搭建流程。于是重新回顾了一下，所以这次记录下整个过程，希望对后面的人有所帮助。</p>
+<h4 id="整体流程-1"><a href="#整体流程-1" class="headerlink" title="整体流程"></a>整体流程</h4><ul>
+<li><p>获取Vendor p12证书</p>
+</li>
+<li><p>制作服务端推送证书</p>
+</li>
+<li><p>生成并签名设备描述文件</p>
+</li>
+<li><p>MDM通信指令结构及原理分析</p>
+</li>
+<li><p>企业MDM最佳方案</p>
+</li>
+</ul>
+<h4 id="获取Vendor-p12证书-1"><a href="#获取Vendor-p12证书-1" class="headerlink" title="获取Vendor p12证书"></a>获取Vendor p12证书</h4><ul>
+<li><p>制作MDM Vendor CSR</p>
+<p>1、打开钥匙串</p>
+<p>2、选择钥匙串访问-&gt;证书助理-&gt;从证书颁发机构请求证书</p>
+<p>3、填写相关信息</p>
+<p>4 、保存在本地</p>
+</li>
+<li><p>上传CSR文件到Apple</p>
+<p>访问<a href="https://developer.apple.com/account/ios/certificate/create页面" target="_blank" rel="external">https://developer.apple.com/account/ios/certificate/create页面</a></p>
+<p>将CSR文件上传到页面，等待1-2个工作日。</p>
+<p>这时候你下载<code>.cer</code>文件，保存为<code>mdmvendor.cer</code></p>
+</li>
+<li><p>导出MDM私钥</p>
+<p>在钥匙串中打开<code>mdmvendor.cer</code>文件，然后右键选择导出并保存为<code>private.p12</code>文件</p>
+<p><strong>注意：这里生成的文件很重要，建议新建一个MDM目录保存</strong></p>
+</li>
+</ul>
+<h4 id="制作服务端推送证书-1"><a href="#制作服务端推送证书-1" class="headerlink" title="制作服务端推送证书"></a>制作服务端推送证书</h4><h5 id="生成证书签名请求文件-1"><a href="#生成证书签名请求文件-1" class="headerlink" title="生成证书签名请求文件"></a>生成证书签名请求文件</h5><ul>
+<li>选择钥匙串访问-&gt;证书助理-&gt;从证书颁发机构请求证书</li>
+<li>输入邮箱，姓名等信息</li>
+<li><p>保存到本地为<code>push.csr</code></p>
+<h5 id="导出MDM私钥和Vendor证书-1"><a href="#导出MDM私钥和Vendor证书-1" class="headerlink" title="导出MDM私钥和Vendor证书"></a>导出MDM私钥和Vendor证书</h5></li>
+<li><p>取出私钥</p>
+<p>执行下面的命令会要求输入<code>private.p12</code>的密码</p>
+<pre><code class="bash">openssl pkcs12 -in private.p12 -nocerts -out key.pem
+</code></pre>
+</li>
+<li><p>去掉<code>private.p12</code>密码</p>
+<pre><code class="bash">openssl rsa -in key.pem -out private.key
+</code></pre>
+</li>
+<li><p>取出证书文件</p>
+<p>执行下面的命令会要求输入<code>private.p12</code>的密码</p>
+<pre><code class="bash">openssl pkcs12 -in private.p12 -clcerts -nokeys -out cert.pem
+</code></pre>
+</li>
+<li><p>转为DES加密</p>
+<pre><code class="bash">openssl x509 -in cert.pem -inform PEM -out mdm.cer -outform DES
+</code></pre>
+<h5 id="用mdmvendorsign工具生成applepush-csr-1"><a href="#用mdmvendorsign工具生成applepush-csr-1" class="headerlink" title="用mdmvendorsign工具生成applepush.csr"></a>用mdmvendorsign工具生成applepush.csr</h5><p>我们需要<a href="https://github.com/vineetchoudhary/Apple-iOS-MDM-Server">mdmvendorsign</a>工具中的<code>/vendor/</code>的相关代码文件，这里将上面的<code>private.key</code>, <code>push.csr</code>, 以及<code>mdm.cer</code>文件都复制到<code>/vendor/</code>目录。然后执行下面的命令</p>
+<pre><code class="bash">python mdm_vendor_sign.py --key private.key --csr push.csr --mdm mdm.cer --out applepush.csr
+</code></pre>
+<h5 id="从apple获取推送证书-1"><a href="#从apple获取推送证书-1" class="headerlink" title="从apple获取推送证书"></a>从apple获取推送证书</h5><p>将上面生成的<code>applepush.csr</code>文件上传到<a href="https://identity.apple.com/pushcert/" target="_blank" rel="external">Apple’s Push Certificates Portal</a></p>
+<p>然后下载推送证书，下载回来的证书在钥匙串中打开，你会看到以下信息</p>
+<p><img src="/4ch12dy/4ch12dy.github.io.git/2019/09/02/introduce-MDM-in-iOS/introduce-MDM-in-iOS/didi/Library/Application%20Support/typora-user-images/image-20190829194559215.png" alt="image-20190829194559215"></p>
+<p>其中用户ID需要保存下来，后面会用到。并右键导出p12私钥。存为<code>mdm.p12</code></p>
+<p>将导出的p12私钥用下面命令生成服务器推送证书</p>
+<pre><code>openssl pkcs12 -in mdm.p12 -out PushCert.pem -nodes
+</code></pre><p>然后将<code>PushCert.pem</code>拷贝到<code>./Apple-iOS-MDM-Server/scripts/</code>目录</p>
+</li>
+</ul>
+<h4 id="生成并签名设备描述文件-1"><a href="#生成并签名设备描述文件-1" class="headerlink" title="生成并签名设备描述文件"></a>生成并签名设备描述文件</h4><h5 id="生成设备描述文件-1"><a href="#生成设备描述文件-1" class="headerlink" title="生成设备描述文件"></a>生成设备描述文件</h5><p>   用这个软件来制作<a href="https://itunes.apple.com/in/app/apple-configurator-2/id1037126344?mt=12" target="_blank" rel="external">Apple Configurator 2</a>描述文件，但是现在新版本不支持直接生产MDM的描述文件，只能先做一个通用的描述文件，然后再增加MDM相关的字段。</p>
+<p>  生成的大概模板如下：</p>
+<pre><code class="xml">  &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+  &lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+  &lt;plist version=&quot;1.0&quot;&gt;
+  &lt;dict&gt;
+      &lt;key&gt;ConsentText&lt;/key&gt;
+      &lt;dict&gt;
+          &lt;key&gt;default&lt;/key&gt;
+          &lt;string&gt;install to enble DiDi manage your device&lt;/string&gt;
+      &lt;/dict&gt;
+      &lt;key&gt;PayloadContent&lt;/key&gt;
+      &lt;array&gt;
+          &lt;dict&gt;
+              &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+              &lt;string&gt;DevAuthCA.cer.der&lt;/string&gt;
+              &lt;key&gt;PayloadContent&lt;/key&gt;
+              &lt;data&gt;
+              MIIEFzCCAv+gAwIBAgIIZylBveTSpRowDQYJKoZIhvcNAQELBQAw
+              YjELMAkGA1UEBhMCVVMxEzARBgNVBAoTCkFwcGxlIEluYy4xJjAk
+              BgNVBAsTHUFwcGxlIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRYw
+              FAYDVQQDEw1BcHBsZSBSb290IENBMB4XDTEzMDQyOTE4NDA1NFoX
+              DTI4MDQyOTE4NDA1NFowgYsxOTA3BgNVBAMMMERldmVsb3BlciBB
+              dXRoZW50aWNhdGlvbiBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEs
+              MCoGA1UECwwjQXBwbGUgV29ybGR3aWRlIERldmVsb3BlciBSZWxh
+              dGlvbnMxEzARBgNVBAoMCkFwcGxlIEluYy4xCzAJBgNVBAYTAlVT
+              MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6rDzm76u
+              93aLqrS9hopNDa9oIjbzlWn62CLEsB4+GmzBJR6qK+ITfjbh6G0a
+              /etrPsB/LYqUU4WAJiiZZqMWCLTkvD061OoGQFlZEt7fJu0plH49
+              08rzTUA4nd81towql+yjYJH9wSGgvDfg2QpsvXd5c2ITTjgSUfZR
+              wSFHTYHA3Eoj/rpDuuar1RHxZsswxrdB8o8lHJuaShGHWFbsYfNC
+              FUmFMAxZbA3ppTYwcaAD8/KjUM3AeJbVqToz81QhEYmfMYFpsb8x
+              I5ae3MNmOlBaL169c+hUHFTtoUmzbRI1gnrXVKhLMsIpCngAvNEp
+              X85mEOCnN2NCJQrk3Ig5cQIDAQABo4GmMIGjMB0GA1UdDgQWBBRJ
+              9jYJuBsj+gNbtuqCoNldEBhnBjAPBgNVHRMBAf8EBTADAQH/MB8G
+              A1UdIwQYMBaAFCvQaUeUdgn+9GuNLkCm90dNfwheMC4GA1UdHwQn
+              MCUwI6AhoB+GHWh0dHA6Ly9jcmwuYXBwbGUuY29tL3Jvb3QuY3Js
+              MA4GA1UdDwEB/wQEAwIBBjAQBgoqhkiG92NkBgILBAIFADANBgkq
+              hkiG9w0BAQsFAAOCAQEA1fKJRhfZZspW9+GqK8+E6ciXbsABciYm
+              IvGy0snmeRN+e1KuFsoQmOXmdNY7SFvdb+2ZN/doOd5Es8hAih+3
+              VwHbac8YiFDXphpQshJJrtiOSBSsXBDgz0b4LjRqhtXdU9BB67nD
+              Q2/zZSNKxvIqXqqsPQiKv/tctQH7kr3ogmZ4GkqjGgHWEocbTfOF
+              pioDQ1xXP0eF/jn02cp9vnyAuyqpkybJYkaIAVUq2bRWV+9D6WLo
+              6/3X8AWOCj65GPgx+DLIDAD2yHJu1D9JuSqD5cD1AChpPUregUvi
+              Uszq4TyJ7LjHi4/w1jbWrlbeObEp2lNcKFTKIkeSZ88IE2b25g==
+              &lt;/data&gt;
+              &lt;key&gt;PayloadDescription&lt;/key&gt;
+              &lt;string&gt;添加 PKCS#1 格式的证书&lt;/string&gt;
+              &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+              &lt;string&gt;Developer Authentication Certification Authority&lt;/string&gt;
+              &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+              &lt;string&gt;com.apple.security.pkcs1.A742C668-A859-4DB9-B7AD-5913CDACD1C9&lt;/string&gt;
+              &lt;key&gt;PayloadType&lt;/key&gt;
+              &lt;string&gt;com.apple.security.pkcs1&lt;/string&gt;
+              &lt;key&gt;PayloadUUID&lt;/key&gt;
+              &lt;string&gt;A742C668-A859-4DB9-B7AD-5913CDACD1C9&lt;/string&gt;
+              &lt;key&gt;PayloadVersion&lt;/key&gt;
+              &lt;integer&gt;1&lt;/integer&gt;
+          &lt;/dict&gt;
+          &lt;dict&gt;
+              &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+              &lt;string&gt;AppleWWDRCAG2.cer&lt;/string&gt;
+              &lt;key&gt;PayloadContent&lt;/key&gt;
+              &lt;data&gt;
+              MIIC9zCCAnygAwIBAgIIb+/Y9emjp+4wCgYIKoZIzj0EAwIwZzEb
+              MBkGA1UEAwwSQXBwbGUgUm9vdCBDQSAtIEczMSYwJAYDVQQLDB1B
+              cHBsZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTETMBEGA1UECgwK
+              QXBwbGUgSW5jLjELMAkGA1UEBhMCVVMwHhcNMTQwNTA2MjM0MzI0
+              WhcNMjkwNTA2MjM0MzI0WjCBgDE0MDIGA1UEAwwrQXBwbGUgV29y
+              bGR3aWRlIERldmVsb3BlciBSZWxhdGlvbnMgQ0EgLSBHMjEmMCQG
+              A1UECwwdQXBwbGUgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxEzAR
+              BgNVBAoMCkFwcGxlIEluYy4xCzAJBgNVBAYTAlVTMFkwEwYHKoZI
+              zj0CAQYIKoZIzj0DAQcDQgAE3fC3BkvP3XMEE8RDiQOTgPte9nSt
+              QmFSWAImUxnIYyIHCVJhysTZV+9tJmiLdJGMxPmAaCj8CWjwENrp
+              0C7JGqOB9zCB9DBGBggrBgEFBQcBAQQ6MDgwNgYIKwYBBQUHMAGG
+              Kmh0dHA6Ly9vY3NwLmFwcGxlLmNvbS9vY3NwMDQtYXBwbGVyb290
+              Y2FnMzAdBgNVHQ4EFgQUhLaEzDqGYnIWWZToGqO9SN863wswDwYD
+              VR0TAQH/BAUwAwEB/zAfBgNVHSMEGDAWgBS7sN6hWDOImqSKmd6+
+              veuv2sskqzA3BgNVHR8EMDAuMCygKqAohiZodHRwOi8vY3JsLmFw
+              cGxlLmNvbS9hcHBsZXJvb3RjYWczLmNybDAOBgNVHQ8BAf8EBAMC
+              AQYwEAYKKoZIhvdjZAYCDwQCBQAwCgYIKoZIzj0EAwIDaQAwZgIx
+              ANmxxzHGI/ZPTdDZR8V9GGkRh3En02it4Jtlmr5s3z9GppAJvm6h
+              OyywUYlBPIfSvwIxAPxkUolLPF2/axzCiZgvcq61m6oaCyNUd1To
+              FUOixRLal1BzfF7QbrJcYlDXUfE6Wg==
+              &lt;/data&gt;
+              &lt;key&gt;PayloadDescription&lt;/key&gt;
+              &lt;string&gt;添加 PKCS#1 格式的证书&lt;/string&gt;
+              &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+              &lt;string&gt;Apple Worldwide Developer Relations CA - G2&lt;/string&gt;
+              &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+              &lt;string&gt;com.apple.security.pkcs1.32A40F6B-24FA-4026-9BF6-66AED47CEC40&lt;/string&gt;
+              &lt;key&gt;PayloadType&lt;/key&gt;
+              &lt;string&gt;com.apple.security.pkcs1&lt;/string&gt;
+              &lt;key&gt;PayloadUUID&lt;/key&gt;
+              &lt;string&gt;32A40F6B-24FA-4026-9BF6-66AED47CEC40&lt;/string&gt;
+              &lt;key&gt;PayloadVersion&lt;/key&gt;
+              &lt;integer&gt;1&lt;/integer&gt;
+          &lt;/dict&gt;
+          &lt;dict&gt;
+              &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+              &lt;string&gt;AppleRootCA-G2.cer&lt;/string&gt;
+              &lt;key&gt;PayloadContent&lt;/key&gt;
+              &lt;data&gt;
+              MIIFkjCCA3qgAwIBAgIIAeDltYNno+AwDQYJKoZIhvcNAQEMBQAw
+              ZzEbMBkGA1UEAwwSQXBwbGUgUm9vdCBDQSAtIEcyMSYwJAYDVQQL
+              DB1BcHBsZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTETMBEGA1UE
+              CgwKQXBwbGUgSW5jLjELMAkGA1UEBhMCVVMwHhcNMTQwNDMwMTgx
+              MDA5WhcNMzkwNDMwMTgxMDA5WjBnMRswGQYDVQQDDBJBcHBsZSBS
+              b290IENBIC0gRzIxJjAkBgNVBAsMHUFwcGxlIENlcnRpZmljYXRp
+              b24gQXV0aG9yaXR5MRMwEQYDVQQKDApBcHBsZSBJbmMuMQswCQYD
+              VQQGEwJVUzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIB
+              ANgREkhI2imKScUcx+xuM23+TfvgHN6sXuI2pyT5f1BrTM65MFQn
+              5bPW7SXmMLYFN14UIhHF6Kob0vuy0gmVOKTvKkmMXT5xZgM4+xb1
+              hYjkWpIMBDLyyED7Ul+f9sDx47pFoFDVEovy3d6RhiPw9bZyLgHa
+              C/YuOQhfGaFjQQscp5TBhsRTL3b2CtcM0YM/GlMZ81fVJ3/8E7j4
+              ko380yhDPLVoACVdJ2LT3VXdRCCQgzWTxb+4Gftr49wIQuavbfqe
+              QMpOhYV4SbHXw8EwOTKrfl+q04tvny0aIWhwZ7Oj8ZhBbZF8+Nfb
+              qOdfIRqMM78xdLe40fTgIvS/cjTf94FNcX1RoeKz8NMoFnNvzcyt
+              N31O661A4T+B/fc9Cj6i8b0xlilZ3MIZgIxbdMYs0xBTJh0UT8TU
+              gWY8h2czJxQI6bR3hDRSj4n4aJgXv8O7qhOTH11UL6jHfPsNFL4V
+              PSQ08prcdUFmIrQB1guvkJ4M6mL4m1k8COKWNORj3rw31OsMiAND
+              C1CvoDTdUE0V+1ok2Az6DGOeHwOx4e7hqkP0ZmUoNwIx7wHHHtHM
+              n23KVDpA287PT0aLSmWaasZobNfMmRtHsHLDd4/E92GcdB/O/Wuh
+              wpyUgquUoue9G7q5cDmVF8Up8zlYNPXEpMZ7YLlmQ1A/bmH8DvmG
+              qmAMQ0uVAgMBAAGjQjBAMB0GA1UdDgQWBBTEmRNsGAPCe8CjoA1/
+              coB6HHcmjTAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIB
+              BjANBgkqhkiG9w0BAQwFAAOCAgEAUabz4vS4PZO/Lc4Pu1vhVRRO
+              TtHlznldgX/+tvCHM/jvlOV+3Gp5pxy+8JS3ptEwnMgNCnWefZKV
+              fhidfsJxaXwU6s+DDuQUQp50DhDNqxq6EWGBeNjxtUVAeKuowM77
+              fWM3aPbn+6/Gw0vsHzYmE1SGlHKy6gLti23kDKaQwFd1z4xCfVzm
+              MX3zybKSaUYOiPjjLUKyOKimGY3xn83uamW8GrAlvacp/fQ+onVJ
+              v57byfenHmOZ4VxG/5IFjPoeIPmGlFYl5bRXOJ3riGQUIUkhOb9i
+              ZqmxospvPyFgxYnURTbImHy99v6ZSYA7LNKmp4gDBDEZt7Y6YUX6
+              yfIjyGNzv1aJMbDZfGKnexWoiIqrOEDCzBL/FePwN983csvMmOa/
+              orz6JopxVtfnJBtIRD6e/J/JzBrsQzwBvDR4yGn1xuZW7AYJNpDr
+              FEobXsmII9oDMJELuDY++ee1KG++P+w8j2Ud5cAeh6Squpj9kuNs
+              JnfdBrRkBof0Tta6SqoWqPQFZ2aWuuJVecMsXUmPgEkrihLHdoBR
+              37q9ZV0+N0djMenl9MU/S60EinpxLK8JQzcPqOMyT/RFtm2XNuyE
+              9QoB6he7hY1Ck3DDUOUUi78/w0EP3SIEIwiKum1xRKtzCTrJ+VKA
+              Cd+66eYWyi4uTLLT3OUEVLLUNIAytbwPF+E=
+              &lt;/data&gt;
+              &lt;key&gt;PayloadDescription&lt;/key&gt;
+              &lt;string&gt;添加 CA 根证书&lt;/string&gt;
+              &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+              &lt;string&gt;Apple Root CA - G2&lt;/string&gt;
+              &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+              &lt;string&gt;com.apple.security.root.A0BB6B15-2A9E-47B8-9EC2-871F1C04DE8E&lt;/string&gt;
+              &lt;key&gt;PayloadType&lt;/key&gt;
+              &lt;string&gt;com.apple.security.root&lt;/string&gt;
+              &lt;key&gt;PayloadUUID&lt;/key&gt;
+              &lt;string&gt;A0BB6B15-2A9E-47B8-9EC2-871F1C04DE8E&lt;/string&gt;
+              &lt;key&gt;PayloadVersion&lt;/key&gt;
+              &lt;integer&gt;1&lt;/integer&gt;
+          &lt;/dict&gt;
+          &lt;dict&gt;
+              &lt;key&gt;Password&lt;/key&gt;
+              &lt;string&gt;yourPWD&lt;/string&gt;
+              &lt;key&gt;PayloadCertificateFileName&lt;/key&gt;
+              &lt;string&gt;Identity.p12&lt;/string&gt;
+              &lt;key&gt;PayloadContent&lt;/key&gt;
+              &lt;data&gt;
+              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
+              e96ah6AF/AQIVFgg47LiiYwCAggA
+              &lt;/data&gt;
+              &lt;key&gt;PayloadDescription&lt;/key&gt;
+              &lt;string&gt;添加 PKCS#12 格式的证书&lt;/string&gt;
+              &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+              &lt;string&gt;Identity.p12&lt;/string&gt;
+              &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+              &lt;string&gt;com.apple.security.pkcs12.E61D7ED5-850A-4F2E-B191-F99E40846FF6&lt;/string&gt;
+              &lt;key&gt;PayloadType&lt;/key&gt;
+              &lt;string&gt;com.apple.security.pkcs12&lt;/string&gt;
+              &lt;key&gt;PayloadUUID&lt;/key&gt;
+              &lt;string&gt;E61D7ED5-850A-4F2E-B191-F99E40846FF6&lt;/string&gt;
+              &lt;key&gt;PayloadVersion&lt;/key&gt;
+              &lt;integer&gt;1&lt;/integer&gt;
+          &lt;/dict&gt;
+      &lt;/array&gt;
+      &lt;key&gt;PayloadDescription&lt;/key&gt;
+      &lt;string&gt;MDM enbale server manage your device&lt;/string&gt;
+      &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+      &lt;string&gt;XXX MDM&lt;/string&gt;
+      &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+      &lt;string&gt;com.apple.mgmt.External.3a3c70d4-cc4f-4713-xxxx-f38d6fd7xxxx&lt;/string&gt;
+      &lt;key&gt;PayloadOrganization&lt;/key&gt;
+      &lt;string&gt;XXX&lt;/string&gt;
+      &lt;key&gt;PayloadRemovalDisallowed&lt;/key&gt;
+      &lt;false/&gt;
+      &lt;key&gt;PayloadType&lt;/key&gt;
+      &lt;string&gt;Configuration&lt;/string&gt;
+      &lt;key&gt;PayloadUUID&lt;/key&gt;
+      &lt;string&gt;D633CDFE-9806-4224-AD38-7FE0CAB12163&lt;/string&gt;
+      &lt;key&gt;PayloadVersion&lt;/key&gt;
+      &lt;integer&gt;1&lt;/integer&gt;
+  &lt;/dict&gt;
+  &lt;/plist&gt;
+</code></pre>
+<p>  上面直接用那个工具填写相关信息并导入相关证书就能生成，但是真正的MDM策略相关需要手动添加一个字典如下：</p>
+<pre><code class="xml">  &lt;dict&gt;
+              &lt;key&gt;AccessRights&lt;/key&gt;
+              &lt;integer&gt;8191&lt;/integer&gt;
+              &lt;key&gt;CheckInURL&lt;/key&gt;
+              &lt;string&gt;https://mdmapi.demo.com/checkin&lt;/string&gt;
+              &lt;key&gt;CheckOutWhenRemoved&lt;/key&gt;
+              &lt;true/&gt;
+              &lt;key&gt;IdentityCertificateUUID&lt;/key&gt;
+              &lt;string&gt;E61D7ED5-850A-4F2E-B191-F99E40846FF6&lt;/string&gt;
+              &lt;key&gt;PayloadDescription&lt;/key&gt;
+              &lt;string&gt;Configures MobileDeviceManagement.&lt;/string&gt;
+              &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+              &lt;string&gt;com.apple.mdm.2C62A547-9CA9-4D5A-AF86-0DF2467274EF&lt;/string&gt;
+              &lt;key&gt;PayloadOrganization&lt;/key&gt;
+              &lt;string&gt;Developer Insider&lt;/string&gt;
+              &lt;key&gt;PayloadType&lt;/key&gt;
+              &lt;string&gt;com.apple.mdm&lt;/string&gt;
+              &lt;key&gt;PayloadUUID&lt;/key&gt;
+              &lt;string&gt;E7438708-331E-4E68-99BC-3B9B435DF3DC&lt;/string&gt;
+              &lt;key&gt;PayloadVersion&lt;/key&gt;
+              &lt;integer&gt;1&lt;/integer&gt;
+              &lt;key&gt;ServerURL&lt;/key&gt;
+              &lt;string&gt;https://mdmapi.demo.com/server&lt;/string&gt;
+              &lt;key&gt;SignMessage&lt;/key&gt;
+              &lt;true/&gt;
+              &lt;key&gt;Topic&lt;/key&gt;
+              &lt;string&gt;com.apple.mgmt.External.3a3c70d4-cc4f-4713-xxxx-f38d6fd7xxxx&lt;/string&gt;
+              &lt;key&gt;UseDevelopmentAPNS&lt;/key&gt;
+              &lt;false/&gt;
+          &lt;/dict&gt;
+</code></pre>
+<p>  这里简单说几个比较重点的字段</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">KEY</th>
+<th style="text-align:left">TYPE</th>
+<th style="text-align:left">DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">IdentityCertificateUUID</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> UUID of the certificate payload for the device’s identity. It may also point to a SCEP payload. You need to use the <code>PayloadUUID</code> of the <code>identity.p12</code> in this field.</td>
+</tr>
+<tr>
+<td style="text-align:left">PayloadUUID</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> Here you need to generate a UUID. You can use <code>uuidgen</code> to generate an UUID and then copy paste that UUID in this field. UUID looks like this 34995C2E-XXXX-XXXX-XXXX-D6DB637A1D6E</td>
+</tr>
+<tr>
+<td style="text-align:left">PayloadIdentifier</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">Here you need to append the UUID in after <code>com.apple.mdm.</code> which we generated in last step. Your payload identifier looks like this com.apple.mdm.34995C2E-XXXX-XXXX-XXXX-D6DB637A1D6E</td>
+</tr>
+<tr>
+<td style="text-align:left">Topic</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> The topic that MDM listens to for push notifications. The certificate that the server uses to send push notifications must have the same topic in its subject. The topic must begin with the <code>com.apple.mgmt.External.hexstuffhere...</code> prefix.</td>
+</tr>
+<tr>
+<td style="text-align:left">ServerURL</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Mandatory.</em> The URL that the device contacts to retrieve device management instructions. Must begin with the <code>https://</code> URL scheme, and may contain a port number (<code>https://YOUR_HOSTNAME_OR_IP:PORT/server</code>, for example).</td>
+</tr>
+<tr>
+<td style="text-align:left">CheckInURL</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left"><em>Optional.</em> The URL that the device should use to check in during installation. Must begin with the <code>https://</code> URL scheme and may contain a port number (<code>https://YOUR_HOSTNAME_OR_IP:8080/checkin</code>, for example). If this URL is not given, the <code>ServerURL</code> is used for both purposes.</td>
+</tr>
+<tr>
+<td style="text-align:left">CheckOutWhenRemoved</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left"><em>Optional.</em> If <code>true</code>, the device attempts to send a <code>CheckOut</code>message to the check-in server when the profile is removed. Defaults to <code>false</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left">AccessRights</td>
+<td style="text-align:left">Integer, flags</td>
+<td style="text-align:left"><em>Required.</em> Logical OR of the following bit-flags:1: Allow inspection of installed configuration profiles.2: Allow installation and removal of configuration profiles.4: Allow device lock and passcode removal.8: Allow device erase.16: Allow query of Device Information (device capacity, serial number).32: Allow query of Network Information (phone/SIM numbers, MAC addresses).64: Allow inspection of installed provisioning profiles.128: Allow installation and removal of provisioning profiles.256: Allow inspection of installed applications.512: Allow restriction-related queries.1024: Allow security-related queries.2048: Allow manipulation of settings.4096: Allow app management.May not be zero. If 2 is specified, 1 must also be specified. If 128 is specified, 64 must also be specified.</td>
+</tr>
+<tr>
+<td style="text-align:left">UseDevelopmentAPNS</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left"><em>Optional.</em> If <code>true</code>, the device uses the development APNS servers. Otherwise, the device uses the production servers. Defaults to <code>false</code>. Note that this property must be set to false if your Apple Push Notification Service certificate was issued by the <a href="https://identity.apple.com/pushcert" target="_blank" rel="external">Apple Push Certificate Portal</a>. That portal only issues certificates for the production push environment.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>IdentityCertificateUUID：这个UUID是<code>identity.p12</code>的<code>PayloadUUID</code>。关于<code>identity.p12</code>这里其实是一个设备标识的证书，这个证书可能不知道怎么制作。其实用自签的签名就行。制作流程如下</p>
+<p>生成自签证书（生成2046位的加密私钥）</p>
+<pre><code>openssl genrsa -out server.key 2048
+</code></pre><p>生成自签证书（生成证书签名请求）</p>
+<pre><code>openssl req -new -key server.key -out server.csr
+</code></pre><p>生成自签证书（生成类型为X509的自签名证书）</p>
+<pre><code>openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
+</code></pre><p>这时候我们有<code>server.key</code>、<code>server.csr</code>、<code>server.crt</code>三个文件</p>
+<p>然后将<code>server.crt</code>复制生成两个文件并命名：<code>identity.crt</code>、<code>server.crt</code></p>
+<p>同样将<code>server.key</code>复制生成两个文件并命名：<code>cakey.key</code>、<code>identity.key</code></p>
+<p>最后将<code>server.csr</code>重命名为<code>identity.csr</code></p>
+<p>然后用<a href="https://github.com/vineetchoudhary/Apple-iOS-MDM-Server/blob/master/scripts/make_certs.sh">make_certs.sh</a>生成<code>Identity.p12</code></p>
+</li>
+<li><p>AccessRights：这个字段会在安装描述文件的时候提示申请了哪些权限，并且这里是按位与运算</p>
+</li>
+<li><p>CheckInURL以及ServerURL涉及到后面MDM设备、苹果APNS、服务器三方通信相关</p>
+<h5 id="签名描述文件-1"><a href="#签名描述文件-1" class="headerlink" title="签名描述文件"></a>签名描述文件</h5><p>在签名前建议先对未签名的描述文件进行通信测试，保证在未签名之前安装描述文件以后服务端能够正常发送指令通信。</p>
+<p>这里的签名仅仅是为了部署描述文件，和MDM本身并不相关，所以事实上可以用任意一个证书进行签名，但为了保证是公司发布的描述文件，建议用公司的iOS开发证书即可。这里提供两个工具</p>
+</li>
+<li><p><a href="https://github.com/JeremyAgost/Hancock">Hancock App</a></p>
+</li>
+<li><p><a href="https://github.com/nmcspadden/ProfileSigner">ProfileSigner</a></p>
+<p>使用比较简单，这里不再介绍。</p>
+</li>
+</ul>
+<h4 id="MDM通信指令结构及原理分析-1"><a href="#MDM通信指令结构及原理分析-1" class="headerlink" title="MDM通信指令结构及原理分析"></a>MDM通信指令结构及原理分析</h4><p>  暂位，后面有时间再补充</p>
+<h4 id="企业MDM最佳方案-1"><a href="#企业MDM最佳方案-1" class="headerlink" title="企业MDM最佳方案"></a>企业MDM最佳方案</h4><p>  虽然MDM自身提供了很多远程指令相关的移动设备管理功能，但是在实际上企业管理中还远远不够，所以建议配合一个agent之类的app辅助。在我们实现中，采用安装描述文件的时候就推送安装agent，然后用户后续的所有交互都由app负责。app主要作用在于能够获取定位，账号设备绑定，安全准入，扫码登录等等。以及能够提供公司级的VPN等相关公司配置。这里能做的还有很多，可以和企业实际的管理结合。</p>
+<h4 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a href="https://developerinsider.co/how-to-create-a-verified-ios-mobile-device-management-mdm-profile/" target="_blank" rel="external">https://developerinsider.co/how-to-create-a-verified-ios-mobile-device-management-mdm-profile/</a></li>
+<li><a href="https://github.com/vineetchoudhary/Apple-iOS-MDM-Server">https://github.com/vineetchoudhary/Apple-iOS-MDM-Server</a></li>
+<li><a href="https://micromdm.io/blog/certificates/" target="_blank" rel="external">https://micromdm.io/blog/certificates/</a></li>
+<li><a href="https://osxdominion.wordpress.com/2015/04/21/signing-mobileconfig-profiles-with-keychain-certificates/" target="_blank" rel="external">https://osxdominion.wordpress.com/2015/04/21/signing-mobileconfig-profiles-with-keychain-certificates/</a></li>
+<li><a href="https://micromdm.io/blog/certificates/" target="_blank" rel="external">https://micromdm.io/blog/certificates/</a> &gt;!!!&lt;</li>
+</ul>
+
+        </div>
+        <div class="post-reply">
+            
+            
+            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
+                <script>
+
+                    /**
+                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                    /*
+                     var disqus_config = function () {
+                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                     };
+                     */
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = 'https://4ch12dy.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
             
         </div>
     </div>
-    <div class="column is-12 is-hidden-desktop">
-        
-        
-    </div>
-</div>
- -->
-                    
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2018/09/13/unicorn/unicorn/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>unicorn</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">unicorn</span>
-                                            
-                                        </p>
-                                        <p>
-                                            
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
 
-  
-  
-    Need password to decrypt!
-    
-  
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
 
-Incorrect Password!
-No content to display!
-
-U2FsdGVkX19KJm3RsWAo9nHQ8cwSWnUzeA6aXPtSYQXSoutzBkHG3mDjbkb1vqTd2jq6ek+Z+yGsh7vtTGiGt2m..
-                                        </p>
-                                        <p>2018-09-13</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                <!--翻頁-->
-                <nav class="pagination is-flex" style="justify-content: flex-end">
-                    
-                </nav>
-            </section>
-            
-        </div>
-    </div>
-</div>
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="../../../../../css/highlight_github.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
       </div>
   </div>
@@ -291,8 +1218,8 @@ U2FsdGVkX19KJm3RsWAo9nHQ8cwSWnUzeA6aXPtSYQXSoutzBkHG3mDjbkb1vqTd2jq6ek+Z+yGsh7vt
   </div>
 </footer>
 
-<script src="../../../js/search_core.js"></script>
-<script src="../../../js/script.js"></script>
+<script src="../../../../../js/search_core.js"></script>
+<script src="../../../../../js/script.js"></script>
 
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
