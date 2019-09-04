@@ -25,7 +25,7 @@
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="iOS LLDB中反反调试分析与实现开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
 目前反调试与反反调试情况这里庆哥">
-<meta property="og:updated_time" content="2019-08-13T17:41:50.131Z">
+<meta property="og:updated_time" content="2019-09-04T08:31:03.902Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS LLDB中反反调试分析与实现">
 <meta name="twitter:description" content="iOS LLDB中反反调试分析与实现开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
@@ -209,7 +209,7 @@
 <p>相关代码如下：</p>
 <p>1、map new page for patch</p>
 <pre><code class="c">    // map new page for patch
-    void *new = mmap(0, 0x1000, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED, -1, 0);
+    void *new = mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED, -1, 0);
     if (!new ){
         NSLog(@&quot;[-] mmap failed!&quot;);
         return;
@@ -218,7 +218,7 @@
 </code></pre>
 <p>2、start patch</p>
 <pre><code class="c">    // start patch
-        kret = vm_copy(self_task, (unsigned long)page_start, 0x1000, (vm_address_t) new);
+        kret = vm_copy(self_task, (unsigned long)page_start, PAGE_SIZE, (vm_address_t) new);
     if (kret != KERN_SUCCESS){
         NSLog(@&quot;[-] kr: %d, errno: %d&quot;, kret, errno);
         return;
@@ -231,11 +231,11 @@
 </code></pre>
 <p>3、set new page back to r-x</p>
 <pre><code class="c">    // set back to r-x
-    int ret = mprotect(new, 0x1000, PROT_READ | PROT_EXEC);
+    int ret = mprotect(new, PAGE_SIZE, PROT_READ | PROT_EXEC);
     NSLog(@&quot;[*] ret: %d, errno: %d, addr: %p&quot;, ret, errno, new);
 </code></pre>
 <p>4、remap the target page</p>
-<pre><code class="c">    kret = mach_vm_remap(mach_task_self(), &amp;target, 0x1000, 0,
+<pre><code class="c">    kret = mach_vm_remap(mach_task_self(), &amp;target, PAGE_SIZE, 0,
                        VM_FLAGS_OVERWRITE, self_task,
                        (mach_vm_address_t) new, TRUE,
                        &amp;c, &amp;m, inherit);
