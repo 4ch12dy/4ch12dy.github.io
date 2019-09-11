@@ -17,16 +17,26 @@
   
   <title>再谈arm指令编码 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="something you can not kown">
+  <meta name="description" content="再谈arm指令编码背景最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
+arm指令编码与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="再谈arm指令编码">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/15/arm-instruction-encode/arm-instruction-encode/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="something you can not kown">
-<meta property="og:updated_time" content="2019-04-29T11:59:18.079Z">
+<meta property="og:description" content="再谈arm指令编码背景最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
+arm指令编码与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140548217.png?raw=true?raw=true?raw=true?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140740378.png?raw=true?raw=true?raw=true?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140801936.png?raw=true?raw=true?raw=true?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428142331693.png?raw=true?raw=true?raw=true?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428142349612.png?raw=true?raw=true?raw=true?raw=true">
+<meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428153426483.png?raw=true?raw=true?raw=true?raw=true">
+<meta property="og:updated_time" content="2019-09-11T08:02:53.919Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="再谈arm指令编码">
-<meta name="twitter:description" content="something you can not kown">
+<meta name="twitter:description" content="再谈arm指令编码背景最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
+arm指令编码与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：">
+<meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140548217.png?raw=true?raw=true?raw=true?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -161,20 +171,151 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<div id="hbe-security">
-  <div class="hbe-input-container">
-  <input type="password" class="hbe-form-control" id="pass" placeholder="Need password to decrypt!" />
-    <label for="pass">Need password to decrypt!</label>
-    <div class="bottom-line"></div>
-  </div>
-</div>
-<div id="decryptionError" style="display: none;">Incorrect Password!</div>
-<div id="noContentError" style="display: none;">No content to display!</div>
-<div id="encrypt-blog" style="display:none">
-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
-</div>
-<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+            <h3 id="再谈arm指令编码"><a href="#再谈arm指令编码" class="headerlink" title="再谈arm指令编码"></a>再谈arm指令编码</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。</p>
+<h4 id="arm指令编码"><a href="#arm指令编码" class="headerlink" title="arm指令编码"></a>arm指令编码</h4><p>与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">31 30 29 28</th>
+<th style="text-align:center">27 26 25</th>
+<th style="text-align:center">24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5</th>
+<th>4</th>
+<th>3 2 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">cond</td>
+<td style="text-align:center">op1</td>
+<td style="text-align:center"></td>
+<td>op</td>
+</tr>
+</tbody>
+</table>
+<p>arm指令按照功能可以分为以下几类：</p>
+<ul>
+<li>数据处理与杂项指令</li>
+<li>加载存储指令</li>
+<li>媒介指令</li>
+<li>分支、块数据传输指令</li>
+<li>软中断与协处理指令</li>
+<li>无条件指令指令</li>
+</ul>
+<p>每一类指令有有着自己的位域分布，具体的常见指令格式如下：</p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140548217.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428140548217"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140740378.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428140740378"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140801936.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428140801936"></p>
+<h4 id="thumb指令编码"><a href="#thumb指令编码" class="headerlink" title="thumb指令编码"></a>thumb指令编码</h4><p>和arm指令类似，thumb指令集作为arm指令集的一个子集，它具有16位的指令宽度，与arm指令的32位宽度想必，thumb指令集保留了32位宽度的优势下节省了系统的储存空间。</p>
+<table>
+<thead>
+<tr>
+<th>15 14 13 12 11 10</th>
+<th>9 8 7 6 5 4 3 2 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>opcode</td>
+</tr>
+</tbody>
+</table>
+<p>thumb常见的指令编码</p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428142331693.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428142331693"></p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428142349612.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428142349612"></p>
+<p>有了上面的指令表，就可以对一个具体的指令进行分析了。</p>
+<p>下面以实际的指令例子分析：</p>
+<ul>
+<li><p>mov</p>
+<p>根据上面可得其位域分布如下</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>15 14 13 12</th>
+<th>11</th>
+<th>10 9 8</th>
+<th>7 6 5 4 3 2 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 0 1 0</td>
+<td>op</td>
+<td>Ld/Ln</td>
+<td>Immed8</td>
+</tr>
+</tbody>
+</table>
+<p>分析如下汇编代码</p>
+<pre><code class="assembly">MOVS R3, #0
+</code></pre>
+<p>  上面的的thumb指令对应16 进制为<code>0x2300</code>，对应的位域分布如下</p>
+<table>
+<thead>
+<tr>
+<th>15 14 13 12</th>
+<th>11</th>
+<th>10 9 8</th>
+<th>7 6 5 4 3 2 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 0 1 0</td>
+<td>0</td>
+<td>0 1 1</td>
+<td>0 0 0 0 0 0 0</td>
+</tr>
+</tbody>
+</table>
+<p>  <code>011</code>对应R3寄存器，立即数为<code>0</code>，与我们分析得一致</p>
+<ul>
+<li><p>b</p>
+<p>分支指令对应的位域分布如下<br>| 15 14 13 12 | 11   | 10 9 8 7 6 5 4 3 2 1 |<br>| ———– | —- | ——————– |<br>| 1 1 1 0     | 0    | singed 11bit offset  |</p>
+<p>这里的偏移计算公式如下：</p>
+<pre><code>B ins_address+4+offset*2
+</code></pre><p>假设有如下指令：<code>0xE7FF</code>，其当前地址为<code>0xBE86</code>，所以offset为0x7ff，由于7ff对应的有符号数为-1</p>
+<p>所以跳转到地址为：<code>0xBE86+(-1)*2=0xBE88</code>，也可以解释为跳转到下一条指令。</p>
+</li>
+<li><p>it</p>
+<p>由于thumb指令只有16位长，所以需要一条条件执行指令即IT，这条指令并没有出现在上面之中，下面解释一下该指令，这条指令最多可以条件执行4条指令，第一条指令默认是If。</p>
+<p>现在有<code>IT NE</code>指令对应的16进制为<code>0x8F18</code><br>| 15 14 13 12 | 11 10 9 8 | 7 6 5 4 | 3    | 2 1 0   |<br>| ———– | ——— | ——- | —- | ——- |<br>| 1 0 1 1     | 1 1 1 1   | cond    | 1    | If/else |</p>
+<p>根据上面格式可知，4-7位为条件值，0-3位位需要条件指令的指令情况。</p>
+<p>条件值对应表如下</p>
+<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428153426483.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428153426483"></p>
+<p><code>0x8F18</code>对应的二进制如下</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>15 14 13 12</th>
+<th>11 10 9 8</th>
+<th>7 6 5 4</th>
+<th>3</th>
+<th>2 1 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 0 1 1</td>
+<td>1 1 1 1</td>
+<td>0 0 0 1</td>
+<td>1</td>
+<td>0 0 0</td>
+</tr>
+</tbody>
+</table>
+<p>  所以条件为<code>0001=NE</code>，<code>条件执行=000</code>，即只有下一条指令需要条件执行，所以该指令为<code>IT NE</code></p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a href="https://alisdair.mcdiarmid.org/arm-immediate-value-encoding/" target="_blank" rel="external">https://alisdair.mcdiarmid.org/arm-immediate-value-encoding/</a></li>
+<li><a href="http://engold.ui.ac.ir/~nikmehr/Appendix_B2.pdf" target="_blank" rel="external">http://engold.ui.ac.ir/~nikmehr/Appendix_B2.pdf</a> 指令对应表</li>
+<li><a href="http://armconverter.com/" target="_blank" rel="external">http://armconverter.com/</a> 在线转换</li>
+<li><a href="http://hermes.wings.cs.wisc.edu/files/Thumb-2SupplementReferenceManual.pdf" target="_blank" rel="external">http://hermes.wings.cs.wisc.edu/files/Thumb-2SupplementReferenceManual.pdf</a></li>
+<li><a href="http://www.binaryconvert.com/convert_signed_short.html" target="_blank" rel="external">http://www.binaryconvert.com/convert_signed_short.html</a> 二进制位查看</li>
+</ul>
+
         </div>
         <div class="post-reply">
             
