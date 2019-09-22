@@ -31,7 +31,7 @@
 使用由于在LLDB中脱壳的特殊性，所以这样我介绍下如何去使用这个脱壳工具
 
 以下命令已集成到xia">
-<meta property="og:updated_time" content="2019-09-22T17:14:42.134Z">
+<meta property="og:updated_time" content="2019-09-22T17:17:09.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="又又又又一个脱壳工具来了">
 <meta name="twitter:description" content="又又又又一个脱壳工具来了是的，又又又又一个脱壳工具来了：LLDB调试器版本的脱壳工具
@@ -175,9 +175,9 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="又又又又一个脱壳工具来了"><a href="#又又又又一个脱壳工具来了" class="headerlink" title="又又又又一个脱壳工具来了"></a>又又又又一个脱壳工具来了</h2><p>是的，又又又又一个脱壳工具来了：LLDB调试器版本的脱壳工具</p>
-<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>我能想到的场景就是最近分析一个app的时候会在<code>mod_init_func</code>的时候crash，这样导致现有的脱壳工具无法正常脱壳，或者之前Frida没兼容iOS12以及其他特殊场景。所以就做了LLDB中的脱壳工具。</p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>由于在LLDB中脱壳的特殊性，所以这样我介绍下如何去使用这个脱壳工具</p>
+            <h3 id="又又又又一个脱壳工具来了"><a href="#又又又又一个脱壳工具来了" class="headerlink" title="又又又又一个脱壳工具来了"></a>又又又又一个脱壳工具来了</h3><p>是的，又又又又一个脱壳工具来了：LLDB调试器版本的脱壳工具</p>
+<h4 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h4><p>我能想到的场景就是最近分析一个app的时候会在<code>mod_init_func</code>的时候crash，这样导致现有的脱壳工具无法正常脱壳，或者之前Frida没兼容iOS12以及其他特殊场景。所以就做了LLDB中的脱壳工具。</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>由于在LLDB中脱壳的特殊性，所以这样我介绍下如何去使用这个脱壳工具</p>
 <blockquote>
 <p>以下命令已集成到<a href="https://github.com/4ch12dy/xia0LLDB">xia0LLDB</a>或<a href="https://github.com/4ch12dy/issh">issh</a></p>
 </blockquote>
@@ -214,13 +214,13 @@ libsystem_kernel.dylib</code><strong>getpid:<br>-&gt;  0x181ceb570 &lt;+0&gt;:  
 
 - 取回脱壳后的文件到本地，这里用到了issh一条命令取回
 </code></pre><p>xia0 ~ $ issh scp /var/mobile/Containers/Data/Application/9649276C-C413-4916-B5AB-AE13C8D7B652/Documents/WeChat.decrypted /tmp<br>[<em>]:iproxy process for 2222 port alive, pid=1830<br>[</em>]:++++++++++++++++++ Nice to Work :) +++++++++++++++++++++<br>[*]:/var/mobile/Containers/Data/Application/9649276C-C413-4916-B5AB-AE13C8D7B652/Documents/WeChat.decrypted is remote file, so cp it from device<br>WeChat.decrypted                                                                                             100%  122MB  11.7MB/s   00:10<br>```</p>
-<h3 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h3><p>目标App文件过大，可能会出现加密段会有内存读取错误，解决办法就是手动在LLDB里面读取一下这个段内容，然后再执行就没问题了。</p>
+<h4 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h4><p>目标App文件过大，可能会出现加密段会有内存读取错误，解决办法就是手动在LLDB里面读取一下这个段内容，然后再执行就没问题了。</p>
 <p>用到两个工具：</p>
 <ul>
 <li><a href="https://github.com/4ch12dy/issh">https://github.com/4ch12dy/issh</a></li>
 <li><a href="https://github.com/4ch12dy/xia0LLDB">https://github.com/4ch12dy/xia0LLDB</a></li>
 </ul>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
 <li><a href="https://github.com/stefanesser/dumpdecrypted">https://github.com/stefanesser/dumpdecrypted</a></li>
 <li><a href="https://github.com/AloneMonkey/dumpdecrypted">https://github.com/AloneMonkey/dumpdecrypted</a></li>
 </ul>
