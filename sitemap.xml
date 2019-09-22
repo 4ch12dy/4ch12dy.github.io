@@ -2,23 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/14/iOS-dyld-dynamic-link/iOS-dyld-dynamic-link/</loc>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/23/lldb-dumpdecrypted/lldb-dumpdecrypted/</loc>
     
-    <lastmod>2019-09-15T18:30:27.336Z</lastmod>
+    <lastmod>2019-09-22T17:14:42.134Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/re/index.html</loc>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/16/iOS12-remap-bug-analyze/iOS12-remap-bug-analyze/</loc>
     
-    <lastmod>2019-09-15T16:53:35.357Z</lastmod>
+    <lastmod>2019-09-21T17:31:17.127Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/11/appre-wechat-rename/appre-wechat-rename/</loc>
     
-    <lastmod>2019-09-13T06:16:14.477Z</lastmod>
+    <lastmod>2019-09-18T08:53:04.265Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/re/index.html</loc>
+    
+    <lastmod>2019-09-17T08:37:11.319Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/14/iOS-dyld-dynamic-link/iOS-dyld-dynamic-link/</loc>
+    
+    <lastmod>2019-09-16T03:03:52.135Z</lastmod>
     
   </url>
   
@@ -47,13 +61,6 @@
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/</loc>
     
     <lastmod>2019-09-04T08:31:03.902Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/16/iOS12-remap-bug-analyze/iOS12-remap-bug-analyze/</loc>
-    
-    <lastmod>2019-09-04T08:29:05.812Z</lastmod>
     
   </url>
   
