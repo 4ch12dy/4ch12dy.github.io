@@ -31,7 +31,7 @@
 使用由于在LLDB中脱壳的特殊性，所以这样我介绍下如何去使用这个脱壳工具
 
 以下命令已集成到xia">
-<meta property="og:updated_time" content="2019-09-22T17:25:45.087Z">
+<meta property="og:updated_time" content="2019-09-22T17:28:40.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="又又又又一个脱壳工具来了">
 <meta name="twitter:description" content="又又又又一个脱壳工具来了是的，又又又又一个脱壳工具来了：LLDB调试器版本的脱壳工具
@@ -206,13 +206,38 @@ dyld`_dyld_start:
   0x1200f501c &lt;+28&gt;: ldr    x0, [x28]
 Target 0: (dyld) stopped.
 </code></pre></li>
-<li>一些断点设置情况<br>```<br>(lldb) b getpid<br>Breakpoint 1: no locations (pending).<br>WARNING:  Unable to resolve breakpoint to any actual locations.<br>(lldb) c<br>Process 19633 resuming<br>1 location added to breakpoint 1<br>Process 19633 stopped<br>thread #1, queue = ‘com.apple.main-thread’, stop reason = breakpoint 1.1<br>  frame #0: 0x0000000181ceb570 libsystem_kernel.dylib <strong>getpid<br>libsystem_kernel.dylib </strong>getpid:<br>  0x181ceb570 &lt;+0&gt;:  adrp   x9, 124120<br>  0x181ceb574 &lt;+4&gt;:  add    x9, x9, #0x90             ; =0x90<br>  0x181ceb578 &lt;+8&gt;:  ldr    w0, [x9]<br>  0x181ceb57c &lt;+12&gt;: cmp    w0, #0x0                  ; =0x0<br>  0x181ceb580 &lt;+16&gt;: b.ls   0x181ceb588               ; &lt;+24&gt;<br>  0x181ceb584 &lt;+20&gt;: ret<br>  0x181ceb588 &lt;+24&gt;: mov    x16, #0x14<br>  0x181ceb58c &lt;+28&gt;: svc    #0x80<br>Target 0: (WeChat) stopped.<br>(lldb) xbr -E init<br>[*] breakpoint at mod int first function:0x1034c7db8<br>Breakpoint 2: where = WeChat ___lldb_unnamed_symbol143521$$WeChat, address = 0x00000001034c7db8<br>(lldb) br disable 1<br>1 breakpoints disabled.<br>(lldb) c<br>Process 19633 resuming</li>
+<li>一些断点设置情况<pre><code>(lldb) b getpid
+Breakpoint 1: no locations (pending).
+WARNING:  Unable to resolve breakpoint to any actual locations.
+(lldb) c
+Process 19633 resuming
+1 location added to breakpoint 1
+Process 19633 stopped
+thread #1, queue = &#39;com.apple.main-thread&#39;, stop reason = breakpoint 1.1
+  frame #0: 0x0000000181ceb570 libsystem_kernel.dylib getpid
+libsystem_kernel.dylib getpid:
+  0x181ceb570 &lt;+0&gt;:  adrp   x9, 124120
+  0x181ceb574 &lt;+4&gt;:  add    x9, x9, #0x90             ; =0x90
+  0x181ceb578 &lt;+8&gt;:  ldr    w0, [x9]
+  0x181ceb57c &lt;+12&gt;: cmp    w0, #0x0                  ; =0x0
+  0x181ceb580 &lt;+16&gt;: b.ls   0x181ceb588               ; &lt;+24&gt;
+  0x181ceb584 &lt;+20&gt;: ret
+  0x181ceb588 &lt;+24&gt;: mov    x16, #0x14
+  0x181ceb58c &lt;+28&gt;: svc    #0x80
+Target 0: (WeChat) stopped.
+(lldb) xbr -E init
+[*] breakpoint at mod int first function:0x1034c7db8
+Breakpoint 2: where = WeChat ___lldb_unnamed_symbol143521$$WeChat, address = 0x00000001034c7db8
+(lldb) br disable 1
+1 breakpoints disabled.
+(lldb) c
+Process 19633 resuming
+</code></pre></li>
 </ul>
-<pre><code>这里解释一下为什么需要这么设置断点：`b getpid`这个断点主要是保证`xbr -E init`这个命令在断点触发的时候能够顺利执行，`xbr -E init`这个命令能够解析内存中的MachO格式找到`mod_init_func`然后对第一个init函数下断点，这样保证是目前app的最早执行时机，另外还能指定下断点到main函数`xbr -E main`，由于main函数在init之后，所以一般就对init下断点（有种情况在于app可能没有init函数，这时候就需要对main下断点，这里按实际情况处理）。
-这样下好断点以后，禁用或者删除第一个断点（第一个断点调用很频繁且后面不再需要），这样让程序继续执行，等待断点触发。
-
-- 执行dumpdecrypted命令进行脱壳
-</code></pre><p>(lldb) dumpdecrypted<br>[+] Dumping WeChat<br>[+] detected 64bit ARM binary in memory.<br>[+] offset to cryptid found: @0x100018d48(from 0x100018000) = d48<br>[+] Found encrypted data at address 00004000 of length 101662720 bytes - type 1.<br>[+] Opening /private/var/containers/Bundle/Application/86E712C8-84CA-49AF-B2EA-01C37395A746/WeChat.app/WeChat for reading.<br>[+] Reading header<br>[+] Detecting header type<br>[+] Executable is a plain MACH-O image<br>[+] Opening /var/mobile/Containers/Data/Application/9649276C-C413-4916-B5AB-AE13C8D7B652/Documents/WeChat.decrypted for writing.<br>[+] Copying the not encrypted start of the file<br>[+] Dumping the decrypted data into the file<br>[+] Copying the not encrypted remainder of the file<br>[+] Setting the LC_ENCRYPTION_INFO-&gt;cryptid to 0 at offset d48<br>[+] Closing original file<br>[+] Closing dump file<br>[*] This mach-o file decrypted done.</p>
+<p>这里解释一下为什么需要这么设置断点：<code>b getpid</code>这个断点主要是保证<code>xbr -E init</code>这个命令在断点触发的时候能够顺利执行，<code>xbr -E init</code>这个命令能够解析内存中的MachO格式找到<code>mod_init_func</code>然后对第一个init函数下断点，这样保证是目前app的最早执行时机，另外还能指定下断点到main函数<code>xbr -E main</code>，由于main函数在init之后，所以一般就对init下断点（有种情况在于app可能没有init函数，这时候就需要对main下断点，这里按实际情况处理）。<br>这样下好断点以后，禁用或者删除第一个断点（第一个断点调用很频繁且后面不再需要），这样让程序继续执行，等待断点触发。</p>
+<ul>
+<li>执行dumpdecrypted命令进行脱壳<br>```<br>(lldb) dumpdecrypted<br>[+] Dumping WeChat<br>[+] detected 64bit ARM binary in memory.<br>[+] offset to cryptid found: @0x100018d48(from 0x100018000) = d48<br>[+] Found encrypted data at address 00004000 of length 101662720 bytes - type 1.<br>[+] Opening /private/var/containers/Bundle/Application/86E712C8-84CA-49AF-B2EA-01C37395A746/WeChat.app/WeChat for reading.<br>[+] Reading header<br>[+] Detecting header type<br>[+] Executable is a plain MACH-O image<br>[+] Opening /var/mobile/Containers/Data/Application/9649276C-C413-4916-B5AB-AE13C8D7B652/Documents/WeChat.decrypted for writing.<br>[+] Copying the not encrypted start of the file<br>[+] Dumping the decrypted data into the file<br>[+] Copying the not encrypted remainder of the file<br>[+] Setting the LC_ENCRYPTION_INFO-&gt;cryptid to 0 at offset d48<br>[+] Closing original file<br>[+] Closing dump file<br>[*] This mach-o file decrypted done.</li>
+</ul>
 <p>Developed By xia0@2019</p>
 <pre><code>如果一切顺利，就能顺利完成脱壳，这里目标文件在`/var/mobile/Containers/Data/Application/9649276C-C413-4916-B5AB-AE13C8D7B652/Documents/WeChat.decrypted`
 
@@ -313,20 +338,5 @@ Target 0: (dyld) stopped.
 <script src="../../../../../js/search_core.js"></script>
 <script src="../../../../../js/script.js"></script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
