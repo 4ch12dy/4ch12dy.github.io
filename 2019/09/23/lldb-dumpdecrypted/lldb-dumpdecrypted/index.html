@@ -31,7 +31,7 @@
 使用由于在LLDB中脱壳的特殊性，所以这样我介绍下如何去使用这个脱壳工具
 
 以下命令已集成到xia">
-<meta property="og:updated_time" content="2019-09-22T17:17:09.679Z">
+<meta property="og:updated_time" content="2019-09-22T17:19:06.293Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="又又又又一个脱壳工具来了">
 <meta name="twitter:description" content="又又又又一个脱壳工具来了是的，又又又又一个脱壳工具来了：LLDB调试器版本的脱壳工具
@@ -195,14 +195,14 @@
 </ul>
 <ul>
 <li>thread #1, stop reason = signal SIGSTOP<br>  frame #0: 0x00000001200f5000 dyld<code>_dyld_start
-dyld</code>_dyld_start:<br>-&gt;  0x1200f5000 &lt;+0&gt;:  mov    x28, sp<br>  0x1200f5004 &lt;+4&gt;:  and    sp, x28, #0xfffffffffffffff0<br>  0x1200f5008 &lt;+8&gt;:  mov    x0, #0x0<br>  0x1200f500c &lt;+12&gt;: mov    x1, #0x0<br>  0x1200f5010 &lt;+16&gt;: stp    x1, x0, [sp, #-0x10]!<br>  0x1200f5014 &lt;+20&gt;: mov    x29, sp<br>  0x1200f5018 &lt;+24&gt;: sub    sp, sp, #0x10             ; =0x10<br>  0x1200f501c &lt;+28&gt;: ldr    x0, [x28]<br>Target 0: (dyld) stopped.<br>```</li>
+dyld</code>_dyld_start:<br>  0x1200f5000 &lt;+0&gt;:  mov    x28, sp<br>  0x1200f5004 &lt;+4&gt;:  and    sp, x28, #0xfffffffffffffff0<br>  0x1200f5008 &lt;+8&gt;:  mov    x0, #0x0<br>  0x1200f500c &lt;+12&gt;: mov    x1, #0x0<br>  0x1200f5010 &lt;+16&gt;: stp    x1, x0, [sp, #-0x10]!<br>  0x1200f5014 &lt;+20&gt;: mov    x29, sp<br>  0x1200f5018 &lt;+24&gt;: sub    sp, sp, #0x10             ; =0x10<br>  0x1200f501c &lt;+28&gt;: ldr    x0, [x28]<br>Target 0: (dyld) stopped.<br>```</li>
 </ul>
 <ul>
 <li>一些断点设置情况<br>```<br>(lldb) b getpid<br>Breakpoint 1: no locations (pending).<br>WARNING:  Unable to resolve breakpoint to any actual locations.<br>(lldb) c<br>Process 19633 resuming<br>1 location added to breakpoint 1<br>Process 19633 stopped</li>
 </ul>
 <ul>
 <li>thread #1, queue = ‘com.apple.main-thread’, stop reason = breakpoint 1.1<br>  frame #0: 0x0000000181ceb570 libsystem_kernel.dylib<code>__getpid
-libsystem_kernel.dylib</code><strong>getpid:<br>-&gt;  0x181ceb570 &lt;+0&gt;:  adrp   x9, 124120<br>  0x181ceb574 &lt;+4&gt;:  add    x9, x9, #0x90             ; =0x90<br>  0x181ceb578 &lt;+8&gt;:  ldr    w0, [x9]<br>  0x181ceb57c &lt;+12&gt;: cmp    w0, #0x0                  ; =0x0<br>  0x181ceb580 &lt;+16&gt;: b.ls   0x181ceb588               ; &lt;+24&gt;<br>  0x181ceb584 &lt;+20&gt;: ret<br>  0x181ceb588 &lt;+24&gt;: mov    x16, #0x14<br>  0x181ceb58c &lt;+28&gt;: svc    #0x80<br>Target 0: (WeChat) stopped.<br>(lldb) xbr -E init<br>[*] breakpoint at mod int first function:0x1034c7db8<br>Breakpoint 2: where = WeChat`_</strong>lldb_unnamed_symbol143521$$WeChat, address = 0x00000001034c7db8<br>(lldb) br disable 1<br>1 breakpoints disabled.<br>(lldb) c<br>Process 19633 resuming</li>
+libsystem_kernel.dylib</code><strong>getpid:<br>  0x181ceb570 &lt;+0&gt;:  adrp   x9, 124120<br>  0x181ceb574 &lt;+4&gt;:  add    x9, x9, #0x90             ; =0x90<br>  0x181ceb578 &lt;+8&gt;:  ldr    w0, [x9]<br>  0x181ceb57c &lt;+12&gt;: cmp    w0, #0x0                  ; =0x0<br>  0x181ceb580 &lt;+16&gt;: b.ls   0x181ceb588               ; &lt;+24&gt;<br>  0x181ceb584 &lt;+20&gt;: ret<br>  0x181ceb588 &lt;+24&gt;: mov    x16, #0x14<br>  0x181ceb58c &lt;+28&gt;: svc    #0x80<br>Target 0: (WeChat) stopped.<br>(lldb) xbr -E init<br>[*] breakpoint at mod int first function:0x1034c7db8<br>Breakpoint 2: where = WeChat`_</strong>lldb_unnamed_symbol143521$$WeChat, address = 0x00000001034c7db8<br>(lldb) br disable 1<br>1 breakpoints disabled.<br>(lldb) c<br>Process 19633 resuming</li>
 </ul>
 <pre><code>这里解释一下为什么需要这么设置断点：`b getpid`这个断点主要是保证`xbr -E init`这个命令在断点触发的时候能够顺利执行，`xbr -E init`这个命令能够解析内存中的MachO格式找到`mod_init_func`然后对第一个init函数下断点，这样保证是目前app的最早执行时机，另外还能指定下断点到main函数`xbr -E main`，由于main函数在init之后，所以一般就对init下断点（有种情况在于app可能没有init函数，这时候就需要对main下断点，这里按实际情况处理）。
 这样下好断点以后，禁用或者删除第一个断点（第一个断点调用很频繁且后面不再需要），这样让程序继续执行，等待断点触发。
