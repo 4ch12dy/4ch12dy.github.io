@@ -31,7 +31,7 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428142331693.png?raw=true?raw=true?raw=true?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428142349612.png?raw=true?raw=true?raw=true?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428153426483.png?raw=true?raw=true?raw=true?raw=true">
-<meta property="og:updated_time" content="2019-09-11T08:02:53.919Z">
+<meta property="og:updated_time" content="2019-09-23T09:37:57.806Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="再谈arm指令编码">
 <meta name="twitter:description" content="再谈arm指令编码背景最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
@@ -224,11 +224,8 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428142349612.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428142349612"></p>
 <p>有了上面的指令表，就可以对一个具体的指令进行分析了。</p>
 <p>下面以实际的指令例子分析：</p>
-<ul>
-<li><p>mov</p>
+<p><strong>mov</strong></p>
 <p>根据上面可得其位域分布如下</p>
-</li>
-</ul>
 <table>
 <thead>
 <tr>
@@ -270,23 +267,55 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 </tbody>
 </table>
 <p>  <code>011</code>对应R3寄存器，立即数为<code>0</code>，与我们分析得一致</p>
-<ul>
-<li><p>b</p>
-<p>分支指令对应的位域分布如下<br>| 15 14 13 12 | 11   | 10 9 8 7 6 5 4 3 2 1 |<br>| ———– | —- | ——————– |<br>| 1 1 1 0     | 0    | singed 11bit offset  |</p>
-<p>这里的偏移计算公式如下：</p>
-<pre><code>B ins_address+4+offset*2
-</code></pre><p>假设有如下指令：<code>0xE7FF</code>，其当前地址为<code>0xBE86</code>，所以offset为0x7ff，由于7ff对应的有符号数为-1</p>
-<p>所以跳转到地址为：<code>0xBE86+(-1)*2=0xBE88</code>，也可以解释为跳转到下一条指令。</p>
-</li>
-<li><p>it</p>
+<p><strong>b</strong></p>
+<p>分支指令对应的位域分布如下</p>
+<table>
+<thead>
+<tr>
+<th>15 14 13 12</th>
+<th>11</th>
+<th>10 9 8 7 6 5 4 3 2 1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 1 1 0</td>
+<td>0</td>
+<td>singed 11bit offset</td>
+</tr>
+</tbody>
+</table>
+<p>  这里的偏移计算公式如下：</p>
+<pre><code>  B ins_address+4+offset*2
+</code></pre><p>  假设有如下指令：<code>0xE7FF</code>，其当前地址为<code>0xBE86</code>，所以offset为0x7ff，由于7ff对应的有符号数为-1</p>
+<p>  所以跳转到地址为：<code>0xBE86+(-1)*2=0xBE88</code>，也可以解释为跳转到下一条指令。</p>
+<p><strong>it</strong></p>
 <p>由于thumb指令只有16位长，所以需要一条条件执行指令即IT，这条指令并没有出现在上面之中，下面解释一下该指令，这条指令最多可以条件执行4条指令，第一条指令默认是If。</p>
-<p>现在有<code>IT NE</code>指令对应的16进制为<code>0x8F18</code><br>| 15 14 13 12 | 11 10 9 8 | 7 6 5 4 | 3    | 2 1 0   |<br>| ———– | ——— | ——- | —- | ——- |<br>| 1 0 1 1     | 1 1 1 1   | cond    | 1    | If/else |</p>
-<p>根据上面格式可知，4-7位为条件值，0-3位位需要条件指令的指令情况。</p>
-<p>条件值对应表如下</p>
-<p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428153426483.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428153426483"></p>
-<p><code>0x8F18</code>对应的二进制如下</p>
-</li>
-</ul>
+<p>现在有<code>IT NE</code>指令对应的16进制为<code>0x8F18</code></p>
+<table>
+<thead>
+<tr>
+<th>15 14 13 12</th>
+<th>11 10 9 8</th>
+<th>7 6 5 4</th>
+<th>3</th>
+<th>2 1 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 0 1 1</td>
+<td>1 1 1 1</td>
+<td>cond</td>
+<td>1</td>
+<td>If/else</td>
+</tr>
+</tbody>
+</table>
+<p>  根据上面格式可知，4-7位为条件值，0-3位位需要条件指令的指令情况。</p>
+<p>  条件值对应表如下</p>
+<p>  <img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428153426483.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428153426483"></p>
+<p>  <code>0x8F18</code>对应的二进制如下</p>
 <table>
 <thead>
 <tr>
@@ -308,6 +337,18 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 </tbody>
 </table>
 <p>  所以条件为<code>0001=NE</code>，<code>条件执行=000</code>，即只有下一条指令需要条件执行，所以该指令为<code>IT NE</code></p>
+<h4 id="arm-arm64-online-assemble-disassemble"><a href="#arm-arm64-online-assemble-disassemble" class="headerlink" title="arm/arm64 online assemble/disassemble"></a>arm/arm64 online assemble/disassemble</h4><ul>
+<li><p><a href="https://azm.azerialabs.com/" target="_blank" rel="external">https://azm.azerialabs.com/</a></p>
+</li>
+<li><p><a href="https://wunkolo.github.io/OakSim/" target="_blank" rel="external">https://wunkolo.github.io/OakSim/</a></p>
+</li>
+<li><p><a href="http://shell-storm.org/online/Online-Assembler-and-Disassembler/" target="_blank" rel="external">http://shell-storm.org/online/Online-Assembler-and-Disassembler/</a></p>
+</li>
+<li><p><a href="https://onlinedisassembler.com/" target="_blank" rel="external">https://onlinedisassembler.com</a></p>
+</li>
+<li><p><a href="https://salmanarif.bitbucket.io/visual/index.html" target="_blank" rel="external">https://salmanarif.bitbucket.io/visual/index.html</a></p>
+</li>
+</ul>
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
 <li><a href="https://alisdair.mcdiarmid.org/arm-immediate-value-encoding/" target="_blank" rel="external">https://alisdair.mcdiarmid.org/arm-immediate-value-encoding/</a></li>
 <li><a href="http://engold.ui.ac.ir/~nikmehr/Appendix_B2.pdf" target="_blank" rel="external">http://engold.ui.ac.ir/~nikmehr/Appendix_B2.pdf</a> 指令对应表</li>
