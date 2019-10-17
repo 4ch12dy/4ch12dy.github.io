@@ -15,12 +15,12 @@
   </script>
 
   
-  <title>Label: Linux | 4ch12dy</title>
+  <title>Tag: linux | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/Linux/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/linux/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="给我一点时间和power">
 <meta name="twitter:card" content="summary">
@@ -120,7 +120,7 @@
 
 <div class="container tag-cate-wrap">
     <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·Linux</strong></h1>
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·linux</strong></h1>
     </div>
 
     
@@ -128,25 +128,23 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/">
+                <a href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/">
                     
                     <div class="media-left">
                         <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true" style="height: 100%; width: 100%">
+                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true" style="height: 100%; width: 100%">
                         </figure>
                     </div>
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>Protostar-堆溢出学习-滥用堆metadata重定向程序执行</strong> <small class="post-date">at: 2017-04-26</small>
+                                <strong>深入理解Linux堆分配器-DLMalloc</strong> <small class="post-date">at: 2017-04-23</small>
                                 <br>
                                 0x00 序
- 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include..
+0x..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -158,27 +156,18 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
+                <a href="/2017/03/21/gdb常用调试命令总结/gdb/">
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>Protostar-堆溢出学习-UAF(use after free)</strong> <small class="post-date">at: 2017-04-21</small>
+                                <strong>gdb常用调试命令总结</strong> <small class="post-date">at: 2017-03-21</small>
                                 <br>
-                                0x00 序
-下面看一个堆中常见的漏洞-UAF(use after free)
+                                0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
+0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
 
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;stdio...
+gdb命令行的 –args 参数
+gdb环境中 set args..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -187,34 +176,63 @@
             </article>
         </div>
     
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</strong> <small class="post-date">at: 2017-04-19</small>
-                                <br>
-                                0x00 序
- 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
+</div>
+      </div>
+  </div>
+  <style>
+  #footer {
+    min-height: 10vh;
+    background: black;
+    color: #fff;
+  }
 
-0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;sys/types.h..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
+  #footer a {
+    color: #e1e1e1;
+  }
+</style>
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer" class="has-text-centered is-flex center">
+  <div class="container has-padding">
+    <div>
+      <div>
+        <!--请您保留作者署名, 主题制作来之不易-->
+        Theme by <a href="https://github.com/haojen">Haojen Ma</a> | xia0定制版
+        <br>
+        Copyright © 4ch12dy 2019
+        <br>
+        <span id="busuanzi_container_site_uv">
+            本站访客数<span id="busuanzi_value_site_uv"></span>人次
+        </span>
+
+        <span id="busuanzi_container_site_pv">
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../../js/search_core.js"></script>
+<script src="../../js/script.js"></script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>         </div>
                 </a>
             </article>
         </div>

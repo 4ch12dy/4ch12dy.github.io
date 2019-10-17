@@ -2,9 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/aboutme/index.html</loc>
+    
+    <lastmod>2019-10-17T11:58:50.579Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/14/iOS-dyld-dynamic-link/iOS-dyld-dynamic-link/</loc>
+    
+    <lastmod>2019-10-17T11:58:34.880Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/10/17/cocos2d-x-game-re/cocos2d-x-game-re/</loc>
+    
+    <lastmod>2019-10-17T11:57:57.349Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/10/14/cpp-in-iOS-arm64/cpp-in-iOS-arm64/</loc>
+    
+    <lastmod>2019-10-17T11:52:44.649Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/10/14/cocos2d-x-dev-note/cocos2d-x-dev-note/</loc>
+    
+    <lastmod>2019-10-17T11:51:46.697Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/15/antiOLLVM/antiOLLVM/</loc>
+    
+    <lastmod>2019-10-16T04:40:37.491Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/re/index.html</loc>
     
-    <lastmod>2019-09-26T07:59:22.000Z</lastmod>
+    <lastmod>2019-10-12T06:47:38.950Z</lastmod>
     
   </url>
   
@@ -33,13 +75,6 @@
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/11/appre-wechat-rename/appre-wechat-rename/</loc>
     
     <lastmod>2019-09-18T08:53:04.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/14/iOS-dyld-dynamic-link/iOS-dyld-dynamic-link/</loc>
-    
-    <lastmod>2019-09-15T18:40:48.000Z</lastmod>
     
   </url>
   
@@ -96,13 +131,6 @@
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/note/index.html</loc>
     
     <lastmod>2019-08-23T08:12:52.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/aboutme/index.html</loc>
-    
-    <lastmod>2019-08-12T04:30:34.000Z</lastmod>
     
   </url>
   
@@ -166,13 +194,6 @@
     <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/09/android-re-basic/android-re-basic/</loc>
     
     <lastmod>2019-05-29T06:52:30.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/15/antiOLLVM/antiOLLVM/</loc>
-    
-    <lastmod>2019-05-17T08:47:41.000Z</lastmod>
     
   </url>
   
