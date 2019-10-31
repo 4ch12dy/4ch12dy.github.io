@@ -17,7 +17,7 @@
   
   <title>初-LLVM的代码混淆 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 目录#
+  <meta name="description" content="#0x00 目录
 
 断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
 
@@ -27,12 +27,12 @@ LLVM简介
 一个基于LLVM简单的代码混淆例子
 参考链接
 
-0x01 LLVM简介#LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能">
+#0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初-LLVM的代码混淆">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 目录#
+<meta property="og:description" content="#0x00 目录
 
 断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
 
@@ -42,7 +42,7 @@ LLVM简介
 一个基于LLVM简单的代码混淆例子
 参考链接
 
-0x01 LLVM简介#LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能">
+#0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-1.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-2.png?raw=true">
@@ -50,7 +50,7 @@ LLVM简介
 <meta property="og:updated_time" content="2019-02-21T09:55:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初-LLVM的代码混淆">
-<meta name="twitter:description" content="0x00 目录#
+<meta name="twitter:description" content="#0x00 目录
 
 断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
 
@@ -60,7 +60,7 @@ LLVM简介
 一个基于LLVM简单的代码混淆例子
 参考链接
 
-0x01 LLVM简介#LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能">
+#0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -198,7 +198,7 @@ LLVM简介
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><span id="0x00-mu-lu">0x00 目录</span><a href="#0x00-mu-lu" class="header-anchor">#</a></h2><blockquote>
+            <h2><a href="#0x00-mu-lu" class="header-anchor">#</a><span id="0x00-mu-lu">0x00 目录</span></h2><blockquote>
 <blockquote>
 <p>断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新</p>
 </blockquote>
@@ -208,14 +208,14 @@ LLVM简介
 <li>一个基于LLVM简单的代码混淆例子</li>
 <li>参考链接</li>
 </ul>
-<h2><span id="0x01-llvm-jian-jie">0x01 LLVM简介</span><a href="#0x01-llvm-jian-jie" class="header-anchor">#</a></h2><p>LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。<br>LLVM的主要架构如下：</p>
+<h2><a href="#0x01-llvm-jian-jie" class="header-anchor">#</a><span id="0x01-llvm-jian-jie">0x01 LLVM简介</span></h2><p>LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言无关的优化和针对多种cpu的代码生成功能。<br>LLVM的主要架构如下：</p>
 <ul>
 <li>前端：前端用来获取源代码然后将它转变为某种中间表示，我们可以选择不同的编译器来作为LLVM的前端，如gcc，clang。</li>
 <li>Pass：Pass是LLVM优化工作的一个节点，一个节点做些事，一起加起来就构成了LLVM完整的优化和转化。</li>
 <li>后端：后端用来生成实际的机器码，一般情况下不会关注这一部分。</li>
 </ul>
-<h3><span id="llvm-kuang-jia">LLVM框架：</span><a href="#llvm-kuang-jia" class="header-anchor">#</a></h3><p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true" alt="0-0"><br>这里与传统的编译器不同，LLVM采用了一种统一的中间表示：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-1.png?raw=true" alt="0-1"></p>
-<h3><span id="an-zhuang-yu-shi-yong">安装与使用</span><a href="#an-zhuang-yu-shi-yong" class="header-anchor">#</a></h3><p>首先下载LLVM  </p>
+<h3><a href="#llvm-kuang-jia" class="header-anchor">#</a><span id="llvm-kuang-jia">LLVM框架：</span></h3><p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true" alt="0-0"><br>这里与传统的编译器不同，LLVM采用了一种统一的中间表示：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-1.png?raw=true" alt="0-1"></p>
+<h3><a href="#an-zhuang-yu-shi-yong" class="header-anchor">#</a><span id="an-zhuang-yu-shi-yong">安装与使用</span></h3><p>首先下载LLVM  </p>
 <pre><code>$ cd where-you-want-llvm-to-live
 $ svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
 </code></pre><p>我们选择clang作为LLVM前端，然后下载clang  </p>
@@ -239,7 +239,7 @@ int main(){
     printf(&quot;hello LLVM\n&quot;);
     return 0;
 }
-</code></pre><h2><span id="0x02-yi-ge-ji-yu-llvm-jian-dan-de-dai-ma-hun-yao-li-zi">0x02 一个基于LLVM简单的代码混淆例子</span><a href="#0x02-yi-ge-ji-yu-llvm-jian-dan-de-dai-ma-hun-yao-li-zi" class="header-anchor">#</a></h2><p>Pass是LLVM中一个很重要的部分，每个Pass都是做优化或者转换的工作，LLVM的优化和转换工作就是由很多个Pass一起完成的。我们通过继承指定的类以及实现相关的虚函数来实现具体的Pass，具体的类型主要有以下几种：  </p>
+</code></pre><h2><a href="#0x02-yi-ge-ji-yu-llvm-jian-dan-de-dai-ma-hun-yao-li-zi" class="header-anchor">#</a><span id="0x02-yi-ge-ji-yu-llvm-jian-dan-de-dai-ma-hun-yao-li-zi">0x02 一个基于LLVM简单的代码混淆例子</span></h2><p>Pass是LLVM中一个很重要的部分，每个Pass都是做优化或者转换的工作，LLVM的优化和转换工作就是由很多个Pass一起完成的。我们通过继承指定的类以及实现相关的虚函数来实现具体的Pass，具体的类型主要有以下几种：  </p>
 <ul>
 <li>ImmutablePass</li>
 <li>MoudlePass</li>
@@ -356,7 +356,7 @@ int main()
     return c;
 }
 </code></pre><p>先按照一般的编译源代码，查看关键汇编代码：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-2.png?raw=true" alt="0-2"><br>然后运行我们的pass进行编译<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-3.png?raw=true" alt="0-3"><br>很明显，汇编代码发生了改变，当然这里仅仅是一个简单的混淆，感兴趣的可以研究下<a href="https://github.com/obfuscator-llvm">obfuscator-llvm</a>这个项目。</p>
-<h2><span id="0x03-can-kao-lian-jie">0x03 参考链接</span><a href="#0x03-can-kao-lian-jie" class="header-anchor">#</a></h2><p><a href="http://www.tuicool.com/articles/2meqIjq" target="_blank" rel="external">深入剖析 iOS 编译 Clang / LLVM</a><br><a href="http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/" target="_blank" rel="external">http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/</a></p>
+<h2><a href="#0x03-can-kao-lian-jie" class="header-anchor">#</a><span id="0x03-can-kao-lian-jie">0x03 参考链接</span></h2><p><a href="http://www.tuicool.com/articles/2meqIjq" target="_blank" rel="external">深入剖析 iOS 编译 Clang / LLVM</a><br><a href="http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/" target="_blank" rel="external">http://zke1ev3n.me/2016/01/18/%E5%9F%BA%E4%BA%8ELLVM%E7%9A%84%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86/</a></p>
 
         </div>
         <div class="post-reply">

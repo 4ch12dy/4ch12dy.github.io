@@ -17,19 +17,19 @@
   
   <title>iOS LLDB中反反调试分析与实现 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="iOS LLDB中反反调试分析与实现#开始#关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
-目前反调试与反反调试情况#这">
+  <meta name="description" content="#iOS LLDB中反反调试分析与实现#开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+#目前反调试与反反调试情况这">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS LLDB中反反调试分析与实现">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="iOS LLDB中反反调试分析与实现#开始#关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
-目前反调试与反反调试情况#这">
+<meta property="og:description" content="#iOS LLDB中反反调试分析与实现#开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+#目前反调试与反反调试情况这">
 <meta property="og:updated_time" content="2019-09-04T08:31:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS LLDB中反反调试分析与实现">
-<meta name="twitter:description" content="iOS LLDB中反反调试分析与实现#开始#关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
-目前反调试与反反调试情况#这">
+<meta name="twitter:description" content="#iOS LLDB中反反调试分析与实现#开始关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。
+#目前反调试与反反调试情况这">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -166,8 +166,8 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3><span id="ios-lldb-zhong-fan-fan-diao-shi-fen-xi-yu-shi-xian">iOS LLDB中反反调试分析与实现</span><a href="#ios-lldb-zhong-fan-fan-diao-shi-fen-xi-yu-shi-xian" class="header-anchor">#</a></h3><h4><span id="kai-shi">开始</span><a href="#kai-shi" class="header-anchor">#</a></h4><p>关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。</p>
-<h4><span id="mu-qian-fan-diao-shi-yu-fan-fan-diao-shi-qing-kuang">目前反调试与反反调试情况</span><a href="#mu-qian-fan-diao-shi-yu-fan-fan-diao-shi-qing-kuang" class="header-anchor">#</a></h4><p>这里庆哥写了一遍文章分析了 <a href="http://iosre.com/t/topic/8179" target="_blank" rel="external">关于反调试&amp;反反调试那些事</a></p>
+            <h3><a href="#ios-lldb-zhong-fan-fan-diao-shi-fen-xi-yu-shi-xian" class="header-anchor">#</a><span id="ios-lldb-zhong-fan-fan-diao-shi-fen-xi-yu-shi-xian">iOS LLDB中反反调试分析与实现</span></h3><h4><a href="#kai-shi" class="header-anchor">#</a><span id="kai-shi">开始</span></h4><p>关于反调试和反反调试，已经有很多人分析过了，也有很多解决方案。但是在LLDB中做反反调试还没人做过，这也是我一直想解决的一个方案，毕竟本身就是为了调试，那么在LLDB直接输入一行命令就能反反调试应该相对酸爽。本文将介绍一种基于内存单指令patch的方式进行反反调试的方案，大概意思就是通过直接修改代码段的指令来绕过反调试机制。</p>
+<h4><a href="#mu-qian-fan-diao-shi-yu-fan-fan-diao-shi-qing-kuang" class="header-anchor">#</a><span id="mu-qian-fan-diao-shi-yu-fan-fan-diao-shi-qing-kuang">目前反调试与反反调试情况</span></h4><p>这里庆哥写了一遍文章分析了 <a href="http://iosre.com/t/topic/8179" target="_blank" rel="external">关于反调试&amp;反反调试那些事</a></p>
 <p>这里简单归纳一下，有如下几种：</p>
 <ul>
 <li>ptrace</li>
@@ -179,7 +179,7 @@
 <p>这里实际上就大概三种，其他都是基于ptrace的变种。ptrace这个函数是linux就提供的一个接口，常常用作linux系的反调试，本质就是通过26号系统调用来完成的，目前大多反调试都利用该方案。</p>
 <p>后面看到庆哥同样提供了一个反反调试的LLDB脚本，不过看了下和我的思路还是不一样的。（<del>差点以为白做了）</del></p>
 <p>正如文章里面写到通过<code>lldb</code>下断点，然后修改参数，或者直接返回也可以达到反反调试的效果。由于要不断去检查执行状态等，或者程序有定时器定时检测，这个脚本影响性能及变得很卡影响调试体验。不过还是膜庆哥的方案，学习了。</p>
-<h4><span id="nei-cun-patch-shi-xian-fan-fan-diao-shi">内存patch实现反反调试</span><a href="#nei-cun-patch-shi-xian-fan-fan-diao-shi" class="header-anchor">#</a></h4><p>说一下大概思路：</p>
+<h4><a href="#nei-cun-patch-shi-xian-fan-fan-diao-shi" class="header-anchor">#</a><span id="nei-cun-patch-shi-xian-fan-fan-diao-shi">内存patch实现反反调试</span></h4><p>说一下大概思路：</p>
 <ul>
 <li>内存中找到<code>ptrace</code>地址</li>
 <li>将该内存map为<code>rwx</code></li>
@@ -245,7 +245,7 @@
   sys_dcache_flush (clear_start_, 4);
 </code></pre>
 <p>完整的代码在xia0LLDB里面已经集成：<a href="https://github.com/4ch12dy/xia0LLDB">https://github.com/4ch12dy/xia0LLDB</a></p>
-<h4><span id="yi-ge-jian-dan-fan-fan-diao-shi-shi-yan">一个简单反反调试实验</span><a href="#yi-ge-jian-dan-fan-fan-diao-shi-shi-yan" class="header-anchor">#</a></h4><p>这里以爱奇艺为例子分析，爱奇艺在main函数里面动态调用了ptrace函数进行反调试。</p>
+<h4><a href="#yi-ge-jian-dan-fan-fan-diao-shi-shi-yan" class="header-anchor">#</a><span id="yi-ge-jian-dan-fan-fan-diao-shi-shi-yan">一个简单反反调试实验</span></h4><p>这里以爱奇艺为例子分析，爱奇艺在main函数里面动态调用了ptrace函数进行反调试。</p>
 <ul>
 <li><p>后台启动方式启动爱奇艺</p>
 <pre><code class="shell">xia0 ~ $ issh debug -x backboard /var/containers/Bundle/Application/F9D8AACA-30F0-4F26-96CA-5B06782CC903/iQiYiPhoneVideo.app/iQiYiPhoneVideo
@@ -313,8 +313,8 @@ Process 3176 resuming
 ontainers/Data/Application/5C31FE18-9BA4-4B2D-80C6-68BF7F65855F/Library/Application Support/爱奇艺/0_im.sqlite
 </code></pre></li>
 </ul>
-<h4><span id="zong-jie-todo">总结/Todo</span><a href="#zong-jie-todo" class="header-anchor">#</a></h4><p>这里只是简单的绕过了ptrace方式的反调试，针对直接用汇编写的反调试我的做法是静态内存搜索匹配svc位置，发现是调用26号系统调用则利用内存patch为nop。或者写一个简单的hook代码，hook所有的svc地址，判断寄存器的值然后进行hook即可，这样就能绕过这些反调试机制，再次向Zz和庆哥低头。</p>
-<h4><span id="can-kao-zhi-xie">参考/致谢</span><a href="#can-kao-zhi-xie" class="header-anchor">#</a></h4><ul>
+<h4><a href="#zong-jie-todo" class="header-anchor">#</a><span id="zong-jie-todo">总结/Todo</span></h4><p>这里只是简单的绕过了ptrace方式的反调试，针对直接用汇编写的反调试我的做法是静态内存搜索匹配svc位置，发现是调用26号系统调用则利用内存patch为nop。或者写一个简单的hook代码，hook所有的svc地址，判断寄存器的值然后进行hook即可，这样就能绕过这些反调试机制，再次向Zz和庆哥低头。</p>
+<h4><a href="#can-kao-zhi-xie" class="header-anchor">#</a><span id="can-kao-zhi-xie">参考/致谢</span></h4><ul>
 <li><p><a href="https://gist.github.com/piaoger/4ba83f6a954bca113505" target="_blank" rel="external">https://gist.github.com/piaoger/4ba83f6a954bca113505</a></p>
 </li>
 <li><p><a href="https://github.com/comex/substitute/blob/master/lib/darwin/execmem.c">https://github.com/comex/substitute/blob/master/lib/darwin/execmem.c</a></p>

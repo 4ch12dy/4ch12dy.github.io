@@ -17,8 +17,8 @@
   
   <title>Protostar-堆溢出系列学习-heap UAF | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序#下面看一个堆中常见的漏洞-UAF(use after free)
-0x01 C语言源代码##include &amp;lt;stdlib.h&amp;gt;
+  <meta name="description" content="#0x00 序下面看一个堆中常见的漏洞-UAF(use after free)
+#0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
 #include &amp;lt;sys/types.h&amp;gt;
@@ -30,8 +30,8 @@ struct auth {">
 <meta property="og:title" content="Protostar-堆溢出系列学习-heap UAF">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序#下面看一个堆中常见的漏洞-UAF(use after free)
-0x01 C语言源代码##include &amp;lt;stdlib.h&amp;gt;
+<meta property="og:description" content="#0x00 序下面看一个堆中常见的漏洞-UAF(use after free)
+#0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
 #include &amp;lt;sys/types.h&amp;gt;
@@ -47,8 +47,8 @@ struct auth {">
 <meta property="og:updated_time" content="2017-04-21T15:13:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-堆溢出系列学习-heap UAF">
-<meta name="twitter:description" content="0x00 序#下面看一个堆中常见的漏洞-UAF(use after free)
-0x01 C语言源代码##include &amp;lt;stdlib.h&amp;gt;
+<meta name="twitter:description" content="#0x00 序下面看一个堆中常见的漏洞-UAF(use after free)
+#0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
 #include &amp;lt;sys/types.h&amp;gt;
@@ -193,8 +193,8 @@ struct auth {">
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><p>下面看一个堆中常见的漏洞-UAF(use after free)</p>
-<h2><span id="0x01-c-yu-yan-yuan-dai-ma">0x01 C语言源代码</span><a href="#0x01-c-yu-yan-yuan-dai-ma" class="header-anchor">#</a></h2><pre><code>#include &lt;stdlib.h&gt;
+            <h2><a href="#0x00-xu" class="header-anchor">#</a><span id="0x00-xu">0x00 序</span></h2><p>下面看一个堆中常见的漏洞-UAF(use after free)</p>
+<h2><a href="#0x01-c-yu-yan-yuan-dai-ma" class="header-anchor">#</a><span id="0x01-c-yu-yan-yuan-dai-ma">0x01 C语言源代码</span></h2><pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;string.h&gt;
 #include &lt;sys/types.h&gt;
@@ -239,10 +239,10 @@ int main(int argc, char **argv)
       }
   }
 }
-</code></pre><h2><span id="0x02-fen-xi-amp-si-kao">0x02 分析&amp;思考</span><a href="#0x02-fen-xi-amp-si-kao" class="header-anchor">#</a></h2><p>程序有4个命令，对<code>auth</code>这个结构体进行分配内存以及释放内存，然后有结构体里的<code>auth-&gt;auth</code>来决定是否授权。很明显让我们修改<code>auth-&gt;auth</code>的值。<br>reset命令释放<code>auth</code>但没有设为null，后面<code>auth-&gt;auth</code>发生引用。所以这里有个UAF漏洞。</p>
-<h2><span id="0x03-diao-shi-amp-hack">0x03 调试&amp;hack</span><a href="#0x03-diao-shi-amp-hack" class="header-anchor">#</a></h2><p>1.在第一个printf处下个断点，观察每次分配和释放后堆，auth以及service的情况</p>
+</code></pre><h2><a href="#0x02-fen-xi-amp-si-kao" class="header-anchor">#</a><span id="0x02-fen-xi-amp-si-kao">0x02 分析&amp;思考</span></h2><p>程序有4个命令，对<code>auth</code>这个结构体进行分配内存以及释放内存，然后有结构体里的<code>auth-&gt;auth</code>来决定是否授权。很明显让我们修改<code>auth-&gt;auth</code>的值。<br>reset命令释放<code>auth</code>但没有设为null，后面<code>auth-&gt;auth</code>发生引用。所以这里有个UAF漏洞。</p>
+<h2><a href="#0x03-diao-shi-amp-hack" class="header-anchor">#</a><span id="0x03-diao-shi-amp-hack">0x03 调试&amp;hack</span></h2><p>1.在第一个printf处下个断点，观察每次分配和释放后堆，auth以及service的情况</p>
 <p>2.先输入<code>auth admin</code>，然后输入<code>login</code>试试<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-0.png" alt="0-0"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/nologin.png" alt="nologin"><br>3.再输入<code>reset</code>释放堆内存<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-1.png" alt="0-1"><br>4.输入<code>service</code>分配内存<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-2.png" alt="0-2"><br>5.以上我们可以发现，给service分配的内存居然也指向auth的地址？因为之前free了auth，所以系统认为这段内存为可用，当再次分配的时候就会返回对应内存。基于此，我们继续给service分配内存，让其覆盖<code>auth-&gt;auth</code>的内存值。<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-3.png" alt="0-3"><br>6.再次输入<code>login</code>命令<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 2/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 2/0-4.png" alt="0-4"></p>
-<h2><span id="0x04-yi-dian-gan-shou">0x04 一点感受</span><a href="#0x04-yi-dian-gan-shou" class="header-anchor">#</a></h2><p>通过这个例子简单的学习了UAF漏洞后，无疑free后不设为null，后果是不敢想象的。继续学习堆相关的漏洞利用。keep hack！</p>
+<h2><a href="#0x04-yi-dian-gan-shou" class="header-anchor">#</a><span id="0x04-yi-dian-gan-shou">0x04 一点感受</span></h2><p>通过这个例子简单的学习了UAF漏洞后，无疑free后不设为null，后果是不敢想象的。继续学习堆相关的漏洞利用。keep hack！</p>
 
         </div>
         <div class="post-reply">

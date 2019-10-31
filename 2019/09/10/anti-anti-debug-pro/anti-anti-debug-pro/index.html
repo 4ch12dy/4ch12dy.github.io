@@ -17,19 +17,19 @@
   
   <title>iOS inlinehook绕过反调试 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="iOS inlinehook绕过反调试#开始#之前写过一篇iOS LLDB中基于内存单指令patch实现反反调试介绍了在LLDB中如何通过单指令patch的方式去绕过ptrace来反调试。但后面还有一些情况没有解决：如果不是调用ptrace函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。
-两种绕过">
+  <meta name="description" content="#iOS inlinehook绕过反调试#开始之前写过一篇iOS LLDB中基于内存单指令patch实现反反调试介绍了在LLDB中如何通过单指令patch的方式去绕过ptrace来反调试。但后面还有一些情况没有解决：如果不是调用ptrace函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。
+#两种绕">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS inlinehook绕过反调试">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/10/anti-anti-debug-pro/anti-anti-debug-pro/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="iOS inlinehook绕过反调试#开始#之前写过一篇iOS LLDB中基于内存单指令patch实现反反调试介绍了在LLDB中如何通过单指令patch的方式去绕过ptrace来反调试。但后面还有一些情况没有解决：如果不是调用ptrace函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。
-两种绕过">
+<meta property="og:description" content="#iOS inlinehook绕过反调试#开始之前写过一篇iOS LLDB中基于内存单指令patch实现反反调试介绍了在LLDB中如何通过单指令patch的方式去绕过ptrace来反调试。但后面还有一些情况没有解决：如果不是调用ptrace函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。
+#两种绕">
 <meta property="og:updated_time" content="2019-09-10T09:14:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS inlinehook绕过反调试">
-<meta name="twitter:description" content="iOS inlinehook绕过反调试#开始#之前写过一篇iOS LLDB中基于内存单指令patch实现反反调试介绍了在LLDB中如何通过单指令patch的方式去绕过ptrace来反调试。但后面还有一些情况没有解决：如果不是调用ptrace函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。
-两种绕过">
+<meta name="twitter:description" content="#iOS inlinehook绕过反调试#开始之前写过一篇iOS LLDB中基于内存单指令patch实现反反调试介绍了在LLDB中如何通过单指令patch的方式去绕过ptrace来反调试。但后面还有一些情况没有解决：如果不是调用ptrace函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。
+#两种绕">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -168,13 +168,13 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><span id="ios-inlinehook-rao-guo-fan-diao-shi">iOS inlinehook绕过反调试</span><a href="#ios-inlinehook-rao-guo-fan-diao-shi" class="header-anchor">#</a></h2><h3><span id="kai-shi">开始</span><a href="#kai-shi" class="header-anchor">#</a></h3><p>之前写过一篇<a href="http://4ch12dy.site/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/" target="_blank" rel="external">iOS LLDB中基于内存单指令patch实现反反调试</a>介绍了在LLDB中如何通过单指令patch的方式去绕过<code>ptrace</code>来反调试。但后面还有一些情况没有解决：如果不是调用<code>ptrace</code>函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。</p>
-<h3><span id="liang-chong-rao-guo-fang-an">两种绕过方案</span><a href="#liang-chong-rao-guo-fang-an" class="header-anchor">#</a></h3><p>这里有两种方案去绕过这种反调试：</p>
+            <h2><a href="#ios-inlinehook-rao-guo-fan-diao-shi" class="header-anchor">#</a><span id="ios-inlinehook-rao-guo-fan-diao-shi">iOS inlinehook绕过反调试</span></h2><h3><a href="#kai-shi" class="header-anchor">#</a><span id="kai-shi">开始</span></h3><p>之前写过一篇<a href="http://4ch12dy.site/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/" target="_blank" rel="external">iOS LLDB中基于内存单指令patch实现反反调试</a>介绍了在LLDB中如何通过单指令patch的方式去绕过<code>ptrace</code>来反调试。但后面还有一些情况没有解决：如果不是调用<code>ptrace</code>函数，而是直接编写内联汇编的方式，调用对应的系统调用来间接实现反调试，那么这种方式之前的那种办法就不再可行。本文就准备解决那种用内联汇编的反调试方式。</p>
+<h3><a href="#liang-chong-rao-guo-fang-an" class="header-anchor">#</a><span id="liang-chong-rao-guo-fang-an">两种绕过方案</span></h3><p>这里有两种方案去绕过这种反调试：</p>
 <ul>
 <li>静态内存匹配特征patch</li>
 <li>实现一个简单的inlinehook动态hook绕过</li>
 </ul>
-<h3><span id="jing-tai-nei-cun-pi-pei-te-zheng-patch">静态内存匹配特征patch</span><a href="#jing-tai-nei-cun-pi-pei-te-zheng-patch" class="header-anchor">#</a></h3><p>在介绍思路之前，先看下一遍内联汇编去实现反调试的代码</p>
+<h3><a href="#jing-tai-nei-cun-pi-pei-te-zheng-patch" class="header-anchor">#</a><span id="jing-tai-nei-cun-pi-pei-te-zheng-patch">静态内存匹配特征patch</span></h3><p>在介绍思路之前，先看下一遍内联汇编去实现反调试的代码</p>
 <pre><code class="assembly">    asm volatile(
                  &quot;mov x0,#31\n&quot;
                  &quot;mov x1,#0\n&quot;
@@ -185,7 +185,7 @@
                  );
 </code></pre>
 <p>这里可以看出原理就是调用了26号系统调用，那么我们是不是可以去代码段里面去搜索，找到满足该特征的代码位置，然后直接将<code>svc</code>置为 <code>nop</code>不就可以了？下面引出两个问题，如何去遍历代码段以及如何去修改？</p>
-<h4><span id="huo-qu-dai-ma-duan-wei-zhi-yi-ji-da-xiao">获取代码段位置以及大小</span><a href="#huo-qu-dai-ma-duan-wei-zhi-yi-ji-da-xiao" class="header-anchor">#</a></h4><pre><code class="c">void getTextSegmentAddr(struct segmentRange *textSegRange){
+<h4><a href="#huo-qu-dai-ma-duan-wei-zhi-yi-ji-da-xiao" class="header-anchor">#</a><span id="huo-qu-dai-ma-duan-wei-zhi-yi-ji-da-xiao">获取代码段位置以及大小</span></h4><pre><code class="c">void getTextSegmentAddr(struct segmentRange *textSegRange){
 
     int offset = 0;
     struct mach_header_64* header = (struct mach_header_64*)_dyld_get_image_header(0);
@@ -220,7 +220,7 @@
 }
 </code></pre>
 <p>代码不复杂，就是动态解析了自身内存里面的macho文件，根据macho文件格式找到代码段<code>LC_SEGMENT_64(_TEXT)</code>然后就能得到<code>__text</code>的开始位置以及大小。</p>
-<h4><span id="nei-cun-sou-suo-pi-pei-ptrace-nei-lian-hui-bian-dai-ma">内存搜索匹配ptrace内联汇编代码</span><a href="#nei-cun-sou-suo-pi-pei-ptrace-nei-lian-hui-bian-dai-ma" class="header-anchor">#</a></h4><pre><code class="c">void* lookup_ptrace_svc(void* target_addr, uint64_t size){
+<h4><a href="#nei-cun-sou-suo-pi-pei-ptrace-nei-lian-hui-bian-dai-ma" class="header-anchor">#</a><span id="nei-cun-sou-suo-pi-pei-ptrace-nei-lian-hui-bian-dai-ma">内存搜索匹配ptrace内联汇编代码</span></h4><pre><code class="c">void* lookup_ptrace_svc(void* target_addr, uint64_t size){
     uint8_t * p = (uint8_t*)target_addr;
 
     for(int i = 0; i &lt; size ;i++ ){
@@ -241,7 +241,7 @@
  svc        #0x80 -&gt; 0xd4001001
 </code></pre>
 <p>然后就返回该地址。</p>
-<h4><span id="patch-dai-ma-jiang-svc-gai-wei-nop">patch代码（将svc改为nop）</span><a href="#patch-dai-ma-jiang-svc-gai-wei-nop" class="header-anchor">#</a></h4><p><a href="http://4ch12dy.site/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/" target="_blank" rel="external">iOS LLDB中基于内存单指令patch实现反反调试</a>这篇文章介绍了如何去patch代码的原理，但当时遇到一个bug：在iOS11/12上面patch会失败，后面我花了一段时间去分析了失败的原因，后来也写了一篇文章去记录了分析的过程，感兴趣的可以访问<a href="http://4ch12dy.site/2019/08/16/iOS12-remap-bug-analyze/iOS12-remap-bug-analyze/" target="_blank" rel="external">iOS12内存patch remap bug分析</a></p>
+<h4><a href="#patch-dai-ma-jiang-svc-gai-wei-nop" class="header-anchor">#</a><span id="patch-dai-ma-jiang-svc-gai-wei-nop">patch代码（将svc改为nop）</span></h4><p><a href="http://4ch12dy.site/2019/08/12/xia0lldb-anti-anti-debug/xia0lldb-anti-anti-debug/" target="_blank" rel="external">iOS LLDB中基于内存单指令patch实现反反调试</a>这篇文章介绍了如何去patch代码的原理，但当时遇到一个bug：在iOS11/12上面patch会失败，后面我花了一段时间去分析了失败的原因，后来也写了一篇文章去记录了分析的过程，感兴趣的可以访问<a href="http://4ch12dy.site/2019/08/16/iOS12-remap-bug-analyze/iOS12-remap-bug-analyze/" target="_blank" rel="external">iOS12内存patch remap bug分析</a></p>
 <p>这里我就直接给出patch的代码</p>
 <pre><code class="c">uint8_t patch_ins_data[4] = {0x1f, 0x20, 0x03, 0xd5}; // nop
 patchCode(ptrace_svc_p+4, patch_ins_data , 4);
@@ -279,7 +279,7 @@ patchCode(ptrace_svc_p+4, patch_ins_data , 4);
 }
 </code></pre>
 <p>通过比对前后的代码就发现<code>svc</code>出地址的代码已经变成了<code>nop</code>从而绕过了反调试</p>
-<h3><span id="inlinehook-dong-tai-hook-rao-guo">inlinehook动态hook绕过</span><a href="#inlinehook-dong-tai-hook-rao-guo" class="header-anchor">#</a></h3><p>这种方式主要针对那些混淆了系统调用号或者其他编译版本，其绕过原理是直接hook svc指令，然后判断是否为26号系统调用（让其他系统调用正常执行），若满足就直接跳过svc指令。</p>
+<h3><a href="#inlinehook-dong-tai-hook-rao-guo" class="header-anchor">#</a><span id="inlinehook-dong-tai-hook-rao-guo">inlinehook动态hook绕过</span></h3><p>这种方式主要针对那些混淆了系统调用号或者其他编译版本，其绕过原理是直接hook svc指令，然后判断是否为26号系统调用（让其他系统调用正常执行），若满足就直接跳过svc指令。</p>
 <p>整体流程代码如下</p>
 <pre><code class="c">  struct segmentRange textSegRange;
   getTextSegmentAddr(&amp;textSegRange);
@@ -389,13 +389,13 @@ patchCode(ptrace_svc_p+4, patch_ins_data , 4);
 <li><p>最后将new这页设置为可读不可写可执行的页属性</p>
 </li>
 </ul>
-<h3><span id="zong-jie-todo">总结/Todo</span><a href="#zong-jie-todo" class="header-anchor">#</a></h3><p>其实对于这种inlinehook去绕过调试，后面发现已经有人已经实现了，因为只要实现了inlinehook，肯定能hook代码绕过。不过我这里主要是想去自己分析以及实现这里面的很多细节。因为hook框架由于要考虑到稳定，兼容等等因素，所以往往代码不是很直接。而这里通过仅仅实现绕过反调试的需求，所以代码都比较通俗易懂，原理来说都是一样的。只有自己去动手写了代码才发现里面的乐趣所在，比如如何去实现系统调用的判断？如何解决寄存器污染?如何去实现代码段patch？当然还有很多汇编级别的坑存在，踩坑解决坑同样有意思，这里就不一一介绍。</p>
+<h3><a href="#zong-jie-todo" class="header-anchor">#</a><span id="zong-jie-todo">总结/Todo</span></h3><p>其实对于这种inlinehook去绕过调试，后面发现已经有人已经实现了，因为只要实现了inlinehook，肯定能hook代码绕过。不过我这里主要是想去自己分析以及实现这里面的很多细节。因为hook框架由于要考虑到稳定，兼容等等因素，所以往往代码不是很直接。而这里通过仅仅实现绕过反调试的需求，所以代码都比较通俗易懂，原理来说都是一样的。只有自己去动手写了代码才发现里面的乐趣所在，比如如何去实现系统调用的判断？如何解决寄存器污染?如何去实现代码段patch？当然还有很多汇编级别的坑存在，踩坑解决坑同样有意思，这里就不一一介绍。</p>
 <p>后面主要还有两个事需要做：</p>
 <ul>
 <li>相对寻址指令的修复问题，以及hook代码的稳定兼容扩展问题。</li>
 <li>抽离相关代码，集成到<a href="https://github.com/4ch12dy/xia0LLDB">xia0LLDB</a>之中，真正实现调试器中一键绕过反调试。</li>
 </ul>
-<h3><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h3><ul>
+<h3><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h3><ul>
 <li><a href="https://stackoverflow.com/questions/25286221/how-to-find-text-segment-range-in-ios" target="_blank" rel="external">https://stackoverflow.com/questions/25286221/how-to-find-text-segment-range-in-ios</a></li>
 <li><a href="https://github.com/coolstar/substitute">https://github.com/coolstar/substitute</a></li>
 <li><a href="http://jmpews.github.io/2017/08/09/darwin/反调试及绕过/" target="_blank" rel="external">http://jmpews.github.io/2017/08/09/darwin/%E5%8F%8D%E8%B0%83%E8%AF%95%E5%8F%8A%E7%BB%95%E8%BF%87/</a></li>

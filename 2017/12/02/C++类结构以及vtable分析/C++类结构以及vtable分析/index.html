@@ -17,10 +17,10 @@
   
   <title>C++类结构以及vtable分析 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="C++类结构以及vtable分析#
+  <meta name="description" content="#C++类结构以及vtable分析
 通过实验自己对一些C++数据结构的理解
 
-实验一##include &amp;lt;iostream&amp;gt;
+#实验一#include &amp;lt;iostream&amp;gt;
 
 using namespace std;
 
@@ -37,10 +37,10 @@ class Shape
 <meta property="og:title" content="C++类结构以及vtable分析">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/12/02/C++类结构以及vtable分析/C++类结构以及vtable分析/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="C++类结构以及vtable分析#
+<meta property="og:description" content="#C++类结构以及vtable分析
 通过实验自己对一些C++数据结构的理解
 
-实验一##include &amp;lt;iostream&amp;gt;
+#实验一#include &amp;lt;iostream&amp;gt;
 
 using namespace std;
 
@@ -56,10 +56,10 @@ class Shape
 <meta property="og:updated_time" content="2019-03-01T02:51:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++类结构以及vtable分析">
-<meta name="twitter:description" content="C++类结构以及vtable分析#
+<meta name="twitter:description" content="#C++类结构以及vtable分析
 通过实验自己对一些C++数据结构的理解
 
-实验一##include &amp;lt;iostream&amp;gt;
+#实验一#include &amp;lt;iostream&amp;gt;
 
 using namespace std;
 
@@ -206,10 +206,10 @@ class Shape
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3><span id="c-lei-jie-gou-yi-ji-vtable-fen-xi">C++类结构以及vtable分析</span><a href="#c-lei-jie-gou-yi-ji-vtable-fen-xi" class="header-anchor">#</a></h3><blockquote>
+            <h3><a href="#c-lei-jie-gou-yi-ji-vtable-fen-xi" class="header-anchor">#</a><span id="c-lei-jie-gou-yi-ji-vtable-fen-xi">C++类结构以及vtable分析</span></h3><blockquote>
 <p>通过实验自己对一些C++数据结构的理解</p>
 </blockquote>
-<h3><span id="shi-yan-yi">实验一</span><a href="#shi-yan-yi" class="header-anchor">#</a></h3><pre><code class="c++">#include &lt;iostream&gt;
+<h3><a href="#shi-yan-yi" class="header-anchor">#</a><span id="shi-yan-yi">实验一</span></h3><pre><code class="c++">#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -298,7 +298,7 @@ int main(void)
 }
 </code></pre>
 <p>这里将 Rectangle Rect改为Rectangle *Rect = new Rectangle()在堆上申请内存可以看出，在类初始化的时候，仅仅申请了一块8字节空间，正好是两个int的大小，仅此而已。</p>
-<h3><span id="shi-yan-er">实验二</span><a href="#shi-yan-er" class="header-anchor">#</a></h3><pre><code class="c++">#include &lt;iostream&gt;
+<h3><a href="#shi-yan-er" class="header-anchor">#</a><span id="shi-yan-er">实验二</span></h3><pre><code class="c++">#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -428,7 +428,7 @@ __data:0000000100002118                 dq offset __ZTI9Rectangle ; `typeinfo fo
 __data:0000000100002120                 dq offset __ZN9Rectangle7getAreaEv ; Rectangle::getArea(void)
 </code></pre>
 <p>就是_DATA段中的数据结构，现在我们可以清晰的理解C++类在内存的数据结构了。</p>
-<h3><span id="yi-dian-li-jie">一点理解</span><a href="#yi-dian-li-jie" class="header-anchor">#</a></h3><p>C++这个语言特性非常多，如果不能理解其本质很容易造成bug。这里想把C++和OC做一个简单的对比，C++的很多实现都是在编译时就确定的，C++中的类我更愿意理解成为C中的结构体。而OC这语言，大多都是在运行时才能确定，方法转化为消息处理。在可执行文件中也有专门的段存储其复杂的类数据结构，也因为这样，OC在运行时可以做很多hack操作，比如hook其方法实现等等。</p>
+<h3><a href="#yi-dian-li-jie" class="header-anchor">#</a><span id="yi-dian-li-jie">一点理解</span></h3><p>C++这个语言特性非常多，如果不能理解其本质很容易造成bug。这里想把C++和OC做一个简单的对比，C++的很多实现都是在编译时就确定的，C++中的类我更愿意理解成为C中的结构体。而OC这语言，大多都是在运行时才能确定，方法转化为消息处理。在可执行文件中也有专门的段存储其复杂的类数据结构，也因为这样，OC在运行时可以做很多hack操作，比如hook其方法实现等等。</p>
 
         </div>
         <div class="post-reply">

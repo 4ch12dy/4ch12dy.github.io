@@ -17,12 +17,12 @@
   
   <title>Frida调用栈符号恢复 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Frida调用栈符号恢复#开始#搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增">
+  <meta name="description" content="#Frida调用栈符号恢复#开始搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Frida调用栈符号恢复">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/07/02/xia0CallStackSymbols/xia0CallStackSymbols/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="Frida调用栈符号恢复#开始#搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增">
+<meta property="og:description" content="#Frida调用栈符号恢复#开始搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702172303432.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702181519237.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702181145710.png?raw=true">
@@ -30,7 +30,7 @@
 <meta property="og:updated_time" content="2019-09-03T05:23:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Frida调用栈符号恢复">
-<meta name="twitter:description" content="Frida调用栈符号恢复#开始#搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增">
+<meta name="twitter:description" content="#Frida调用栈符号恢复#开始搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702172303432.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -168,10 +168,10 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3><span id="frida-diao-yong-zhan-fu-hao-hui-fu">Frida调用栈符号恢复</span><a href="#frida-diao-yong-zhan-fu-hao-hui-fu" class="header-anchor">#</a></h3><h4><span id="kai-shi">开始</span><a href="#kai-shi" class="header-anchor">#</a></h4><p>搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增加了分析的时间，想到之前解决<a href="[http://4ch12dy.site/2018/10/03/LLDB%E8%B0%83%E8%AF%95%E5%99%A8%E6%A0%88%E7%AC%A6%E5%8F%B7%E5%8C%96/%E5%BC%BA%E5%8C%96%E4%BD%A0%E7%9A%84lldb%E8%B0%83%E8%AF%95%E5%99%A8/](http://4ch12dy.site/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">lldb调试器栈符号恢复</a>)方案，决定把lldb的栈符号恢复脚本移植到frida中。</p>
-<h4><span id="ru-he-hui-fu-yi-jing-qu-diao-fu-hao-biao-de-ke-zhi-xing-wen-jian">如何恢复已经去掉符号表的可执行文件？</span><a href="#ru-he-hui-fu-yi-jing-qu-diao-fu-hao-biao-de-ke-zhi-xing-wen-jian" class="header-anchor">#</a></h4><p>这里的符号恢复仅仅针对的是OC函数，C函数如果符号表被strip以后是没有办法恢复其符号信息的。为什么OC函数可以去做符号恢复呢？这里要涉及到macho文件的格式以及ObjectC这个语言自身设计相关。可以看到在macho文件中的_DATA数据段中有很多objc的节信息，里面保存了所有的类以及方法等元数据信息。既然如此，我们肯定能找到方法去恢复这些OC函数的符号。</p>
+            <h3><a href="#frida-diao-yong-zhan-fu-hao-hui-fu" class="header-anchor">#</a><span id="frida-diao-yong-zhan-fu-hao-hui-fu">Frida调用栈符号恢复</span></h3><h4><a href="#kai-shi" class="header-anchor">#</a><span id="kai-shi">开始</span></h4><p>搞了一阵子的Android方向的逆向研究，发现用frida去做一些hook等测试十分方便。最近自己想在iOS平台实现短视频下载去水印的问题，所以也想用frida来试试。但是测试过程中当我想去看下hook点的调用栈的时候，发现只有一些栈地址，基本没有符号信息，估计符号表被strip了。这里通常的做法就是用这些地址减去偏移然后去ida里面找到对应的方法。这样无疑是大大增加了分析的时间，想到之前解决<a href="[http://4ch12dy.site/2018/10/03/LLDB%E8%B0%83%E8%AF%95%E5%99%A8%E6%A0%88%E7%AC%A6%E5%8F%B7%E5%8C%96/%E5%BC%BA%E5%8C%96%E4%BD%A0%E7%9A%84lldb%E8%B0%83%E8%AF%95%E5%99%A8/](http://4ch12dy.site/2018/10/03/LLDB调试器栈符号化/强化你的lldb调试器/">lldb调试器栈符号恢复</a>)方案，决定把lldb的栈符号恢复脚本移植到frida中。</p>
+<h4><a href="#ru-he-hui-fu-yi-jing-qu-diao-fu-hao-biao-de-ke-zhi-xing-wen-jian" class="header-anchor">#</a><span id="ru-he-hui-fu-yi-jing-qu-diao-fu-hao-biao-de-ke-zhi-xing-wen-jian">如何恢复已经去掉符号表的可执行文件？</span></h4><p>这里的符号恢复仅仅针对的是OC函数，C函数如果符号表被strip以后是没有办法恢复其符号信息的。为什么OC函数可以去做符号恢复呢？这里要涉及到macho文件的格式以及ObjectC这个语言自身设计相关。可以看到在macho文件中的_DATA数据段中有很多objc的节信息，里面保存了所有的类以及方法等元数据信息。既然如此，我们肯定能找到方法去恢复这些OC函数的符号。</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/xia0CallStackSymbols/image-20190702172303432.png?raw=true" alt="image-20190702172303432"></p>
-<h4><span id="oc-han-shu-fu-hao-hui-fu-si-lu">OC函数符号恢复思路</span><a href="#oc-han-shu-fu-hao-hui-fu-si-lu" class="header-anchor">#</a></h4><p>首先我们只能得到一堆调用链的地址，这些地址肯定是函数里面的某个偏移地址。很容易想到这个地址往前推肯定就是这个函数的首地址及函数地址。如果我们拿到了所有函数的地址，然后每一个地址和目标地址比较，与目标地址距离最近的那个地址所对应的函数不就是我们想要的符号吗。</p>
+<h4><a href="#oc-han-shu-fu-hao-hui-fu-si-lu" class="header-anchor">#</a><span id="oc-han-shu-fu-hao-hui-fu-si-lu">OC函数符号恢复思路</span></h4><p>首先我们只能得到一堆调用链的地址，这些地址肯定是函数里面的某个偏移地址。很容易想到这个地址往前推肯定就是这个函数的首地址及函数地址。如果我们拿到了所有函数的地址，然后每一个地址和目标地址比较，与目标地址距离最近的那个地址所对应的函数不就是我们想要的符号吗。</p>
 <p>根据上面提到的思路，目前需要解决几个问题，怎么拿到所有OC方法的地址? 以及对应的类名和方法名?如何设计匹配算法等？</p>
 <p>这里有两种办法：</p>
 <ul>
@@ -179,7 +179,7 @@
 <li>第二种是利用已有的objc提供的接口objc_去拿到所有的class以及对应method的方法名和IMP。这里主要用的的API有<code>objc_copyClassNamesForImage</code>、<code>class_copyMethodList</code> 、<code>objc_getClass</code>、<code>method_getImplementation</code>、<code>method_getName</code>、<code>objc_getClass</code>、<code>objc_getMetaClass</code></li>
 </ul>
 <p>现在已经能拿到所有的类方法、方法名、方法实现地址了，接下来要解决的就是怎么通过调用栈的地址去找到对应的方法，这里的思路就是遍历所有的方法地址与调用栈的地址比较并计算距离，如果方法地址小于目标地址且距离最小，那么该方法就是我们要找到的符号。最后将调用栈上面的所有地址都进行该操作即可。</p>
-<h4><span id="frida-de-js-huan-jing-bian-xie-dai-ma">frida的js环境编写代码</span><a href="#frida-de-js-huan-jing-bian-xie-dai-ma" class="header-anchor">#</a></h4><p>由于我之前在lldb的python脚本中写过该过程代码(<del>lldb内置的OC解释器语法要求十分严格，调试了很久的代码</del>)</p>
+<h4><a href="#frida-de-js-huan-jing-bian-xie-dai-ma" class="header-anchor">#</a><span id="frida-de-js-huan-jing-bian-xie-dai-ma">frida的js环境编写代码</span></h4><p>由于我之前在lldb的python脚本中写过该过程代码(<del>lldb内置的OC解释器语法要求十分严格，调试了很久的代码</del>)</p>
 <p>按照上面的思路理论上代码很好写，也不是很复杂。如果是直接写OC代码应该很好写，但是在frida中写这些还是挺折腾的。</p>
 <p>主要的代码如下：</p>
 <p>根据模块路径获取其所有的类</p>
@@ -370,7 +370,7 @@
 </code></pre>
 <p>在匹配算法的最后还进行了一些判断，当解析出来的方法名包含<code>.cxx</code>方法的时候说明没找到符号，可能是一个C函数。当解析出来的方法地址距离目标地址距离大于3000的时候会提示可能会C函数。</p>
 <p>最后完整的项目地址：<a href="https://github.com/4ch12dy/xia0FridaScript">https://github.com/4ch12dy/xia0FridaScript</a></p>
-<h4><span id="ce-shi">测试</span><a href="#ce-shi" class="header-anchor">#</a></h4><p>我这里写了一个简单的frida脚本去测试如何导入符号恢复的js脚本</p>
+<h4><a href="#ce-shi" class="header-anchor">#</a><span id="ce-shi">测试</span></h4><p>我这里写了一个简单的frida脚本去测试如何导入符号恢复的js脚本</p>
 <pre><code class="python">#!/usr/bin/python
 import frida
 import sys 
@@ -491,13 +491,13 @@ load_js = your_frida_js_hook_script+source
 <li><p>xia0CallStackSymbols()接口可以传递一个bool参数，true为仅仅解析主模块的地址，false为所有模块都需要解析。实际在逆向过程中一般只需要主模块的符号信息，其他系统函数没很大必要。</p>
 </li>
 </ul>
-<h4><span id="yi-liu-wen-ti-todo">遗留问题/Todo</span><a href="#yi-liu-wen-ti-todo" class="header-anchor">#</a></h4><ul>
+<h4><a href="#yi-liu-wen-ti-todo" class="header-anchor">#</a><span id="yi-liu-wen-ti-todo">遗留问题/Todo</span></h4><ul>
 <li>在执行恢复符号的过程中时间相对较长，主要原因在于每一个地址都要和所有方法比较，这里建议xia0CallStackSymbols传入true，这样只解析主模块的地址。耗时的原因还在于每一个地址解析的时候都会去调用接口获取所有方法信息，实际上每个模块只需要一次就能拿到所有方法信息，接下来要做的就是优化相关代码，缓存模块的所有方法信息，下次解析的地址为该模块时直接去缓存里面匹配查找。</li>
 <li>在匹配符号的过程中，判断是否为C函数需要更多的原则，3000的阈值需要后面再调下。</li>
 <li>关于block的符号恢复，目前只有在lldb中实现了，下一步准备在xia0CallStackSymbols中也支持恢复block函数符号</li>
 </ul>
-<h4><span id="ti-wai-hua">题外话</span><a href="#ti-wai-hua" class="header-anchor">#</a></h4><p>短视频下载去水印如果有人感兴趣的话，可以点<a href="https://github.com/4ch12dy/fkwatermark">这里</a>，目前支持的有皮皮搞笑、抖音、皮皮虾、Tiktok</p>
-<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
+<h4><a href="#ti-wai-hua" class="header-anchor">#</a><span id="ti-wai-hua">题外话</span></h4><p>短视频下载去水印如果有人感兴趣的话，可以点<a href="https://github.com/4ch12dy/fkwatermark">这里</a>，目前支持的有皮皮搞笑、抖音、皮皮虾、Tiktok</p>
+<h4><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h4><ul>
 <li><a href="https://github.com/poxyran/misc">https://github.com/poxyran/misc</a></li>
 <li>&lt; <a href="https://github.com/iddoeldor/frida-snippets">https://github.com/iddoeldor/frida-snippets</a> &gt;</li>
 <li><a href="http://www.blogfshare.com/ioss-validate-address.html" target="_blank" rel="external">http://www.blogfshare.com/ioss-validate-address.html</a></li>

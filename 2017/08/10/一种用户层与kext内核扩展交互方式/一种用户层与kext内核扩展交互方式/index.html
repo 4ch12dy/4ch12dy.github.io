@@ -166,7 +166,7 @@
 <p>最近在学习一个Mac平台上开源的rootKit框架，里面确实有很多干货，本文就来分析其中与用户层交互的部分。<br>简单说下rootKit原理：<br>利用kext驻留在内核，完成实际的各种功能：<br><code>sys_ptrace</code>过滤 <code>PT_DENY_ATTACH</code>反调试<br>hook系统调用防止<code>sys_kil</code>（很强大有木有）<br>隐藏自身进程，文件监控，网络监控，提权等等<br>可谓是相当可怕。这些功能都可以通过一个用户进程来控制，所以这里必须有一种机制来提供kext与用户层的交互方式，这就是本文重点。</p>
 </blockquote>
 </blockquote>
-<h3><span id="0x01-yi-ge-li-zi-jin-ru-kext-kai-fa">0x01 一个例子进入kext开发</span><a href="#0x01-yi-ge-li-zi-jin-ru-kext-kai-fa" class="header-anchor">#</a></h3><p>在这之前，简单的用一个例子来学习下kext开发。下面关于xcode中的操作都很明显，故忽略。</p>
+<h3><a href="#0x01-yi-ge-li-zi-jin-ru-kext-kai-fa" class="header-anchor">#</a><span id="0x01-yi-ge-li-zi-jin-ru-kext-kai-fa">0x01 一个例子进入kext开发</span></h3><p>在这之前，简单的用一个例子来学习下kext开发。下面关于xcode中的操作都很明显，故忽略。</p>
 <p>打开xcode创建一个Generic Kernel Extension工程，完成之后会出现一个kext模板，如下</p>
 <pre><code>#include &lt;mach/mach_types.h&gt;
 #include &lt;libkern/libkern.h&gt;
@@ -190,8 +190,8 @@ kern_return_t TestExtension_stop(kmod_info_t *ki, void *d)
 <p>加载内核扩展，如果一切没错的话，这时你在系统日志中就会出现hello kext这句话。同理你可以输入下面的命令</p>
 <p><code>sudo kextunload TestExtension.kext</code></p>
 <p>来卸载该内核扩展，你同样会看到bye kext这句话。</p>
-<h3><span id="0x02-yong-hu-ceng-yu-nei-he-kuo-zhan-jian-de-jiao-hu">0x02 用户层与内和扩展间的交互</span><a href="#0x02-yong-hu-ceng-yu-nei-he-kuo-zhan-jian-de-jiao-hu" class="header-anchor">#</a></h3><p>下面要介绍的是一种类似于socket机制的交互机制，通常kext在加载的时候会建立一个socket服务器，然后用户层程序去打开这个socket（使用<code>PF_SYSTEM</code>协议）。接下来kext就会处理来至用户端的命令。下面同样通过一个例子来表明他们之间的交互，这里分为kext和客户端两部分。</p>
-<h4><span id="kext-shi-li-dai-ma">kext 示例代码</span><a href="#kext-shi-li-dai-ma" class="header-anchor">#</a></h4><pre><code>#include &lt;sys/systm.h&gt;
+<h3><a href="#0x02-yong-hu-ceng-yu-nei-he-kuo-zhan-jian-de-jiao-hu" class="header-anchor">#</a><span id="0x02-yong-hu-ceng-yu-nei-he-kuo-zhan-jian-de-jiao-hu">0x02 用户层与内和扩展间的交互</span></h3><p>下面要介绍的是一种类似于socket机制的交互机制，通常kext在加载的时候会建立一个socket服务器，然后用户层程序去打开这个socket（使用<code>PF_SYSTEM</code>协议）。接下来kext就会处理来至用户端的命令。下面同样通过一个例子来表明他们之间的交互，这里分为kext和客户端两部分。</p>
+<h4><a href="#kext-shi-li-dai-ma" class="header-anchor">#</a><span id="kext-shi-li-dai-ma">kext 示例代码</span></h4><pre><code>#include &lt;sys/systm.h&gt;
 #include &lt;mach/mach_types.h&gt;
 #include &lt;mach/kern_return.h&gt; 
 #include &lt;sys/kern_control.h&gt;
@@ -246,7 +246,7 @@ kern_return_t start(kmod_info_t *info, void *data)
     ctl_setopt_func    ctl_setopt; //当client调用setsockopt时调用
     ctl_getopt_func    ctl_getopt;//当client调用getsockopt时调用
 };
-</code></pre><h4><span id="client-shi-li-dai-ma">client 示例代码</span><a href="#client-shi-li-dai-ma" class="header-anchor">#</a></h4><pre><code>#include &lt;socket.h&gt;
+</code></pre><h4><a href="#client-shi-li-dai-ma" class="header-anchor">#</a><span id="client-shi-li-dai-ma">client 示例代码</span></h4><pre><code>#include &lt;socket.h&gt;
 #include &lt;string.h&gt;
 #include &lt;sys/kern_control.h&gt;
 #include &lt;sys/ioctl.h&gt;
@@ -341,8 +341,8 @@ void get_data()
     }
 }
 </code></pre><p>代码不是很复杂，先通过kext名去获取一个id建立一个socket，然后通过这个socket去发送和接受kext的数据。</p>
-<h3><span id="0x03-zong-jie">0x03 总结</span><a href="#0x03-zong-jie" class="header-anchor">#</a></h3><p>在这个rootKit框架中还有很多可以挖掘的东西，里面hook系统调用来达到反kill等功能很是实用，以及一些内核操作手段都值得学习和借鉴，待续…</p>
-<h3><span id="0x04-can-kao">0x04 参考</span><a href="#0x04-can-kao" class="header-anchor">#</a></h3><ul>
+<h3><a href="#0x03-zong-jie" class="header-anchor">#</a><span id="0x03-zong-jie">0x03 总结</span></h3><p>在这个rootKit框架中还有很多可以挖掘的东西，里面hook系统调用来达到反kill等功能很是实用，以及一些内核操作手段都值得学习和借鉴，待续…</p>
+<h3><a href="#0x04-can-kao" class="header-anchor">#</a><span id="0x04-can-kao">0x04 参考</span></h3><ul>
 <li><a href="http://www.tanhao.me/pieces/1515.html/" target="_blank" rel="external">http://www.tanhao.me/pieces/1515.html/</a></li>
 <li><a href="https://urchin.earth.li/~twic/Kernel_Extensions_for_OS_X.html" target="_blank" rel="external">https://urchin.earth.li/~twic/Kernel_Extensions_for_OS_X.html</a></li>
 <li><a href="https://github.com/enzolovesbacon/inficere">https://github.com/enzolovesbacon/inficere</a></li>

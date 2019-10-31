@@ -18,8 +18,8 @@
   <title>4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06T00:34:52.000Z
-tags: macOS内核 xnu BSD#macOS内核架构&amp;amp;功能知识点整理
-XNU源码树#
+#tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+#XNU源码树
 
 
 目录
@@ -47,8 +47,8 @@ libkern
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/macOS内核架构-功能/macOS内核架构-功能.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06T00:34:52.000Z
-tags: macOS内核 xnu BSD#macOS内核架构&amp;amp;功能知识点整理
-XNU源码树#
+#tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+#XNU源码树
 
 
 目录
@@ -75,8 +75,8 @@ libkern
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="4ch12dy">
 <meta name="twitter:description" content="title: macOS内核架构&amp;amp;功能知识点整理date: 2016-12-06T00:34:52.000Z
-tags: macOS内核 xnu BSD#macOS内核架构&amp;amp;功能知识点整理
-XNU源码树#
+#tags: macOS内核 xnu BSDmacOS内核架构&amp;amp;功能知识点整理
+#XNU源码树
 
 
 目录
@@ -228,8 +228,8 @@ libkern
         <div class="content" style="overflow: auto">
             <hr>
 <p>title: macOS内核架构&amp;功能知识点整理<br>date: 2016-12-06T00:34:52.000Z</p>
-<h2><span id="tags-macos-nei-he-xnu-bsd">tags: macOS内核 xnu BSD</span><a href="#tags-macos-nei-he-xnu-bsd" class="header-anchor">#</a></h2><p>macOS内核架构&amp;功能知识点整理</p>
-<h3><span id="xnu-yuan-ma-shu">XNU源码树</span><a href="#xnu-yuan-ma-shu" class="header-anchor">#</a></h3><table>
+<h2><a href="#tags-macos-nei-he-xnu-bsd" class="header-anchor">#</a><span id="tags-macos-nei-he-xnu-bsd">tags: macOS内核 xnu BSD</span></h2><p>macOS内核架构&amp;功能知识点整理</p>
+<h3><a href="#xnu-yuan-ma-shu" class="header-anchor">#</a><span id="xnu-yuan-ma-shu">XNU源码树</span></h3><table>
 <thead>
 <tr>
 <th>目录</th>
@@ -267,7 +267,7 @@ libkern
 </tr>
 </tbody>
 </table>
-<h3><span id="bsd-zi-mu-lu">BSD子目录</span><a href="#bsd-zi-mu-lu" class="header-anchor">#</a></h3><table>
+<h3><a href="#bsd-zi-mu-lu" class="header-anchor">#</a><span id="bsd-zi-mu-lu">BSD子目录</span></h3><table>
 <thead>
 <tr>
 <th>子目录</th>
@@ -333,7 +333,7 @@ libkern
 </tr>
 </tbody>
 </table>
-<h3><span id="osfmk-zi-mu-lu">osfmk子目录</span><a href="#osfmk-zi-mu-lu" class="header-anchor">#</a></h3><table>
+<h3><a href="#osfmk-zi-mu-lu" class="header-anchor">#</a><span id="osfmk-zi-mu-lu">osfmk子目录</span></h3><table>
 <thead>
 <tr>
 <th>子目录</th>
@@ -375,7 +375,7 @@ libkern
 </tr>
 </tbody>
 </table>
-<h3><span id="the-xnu-kernal-of-following-component">the xnu Kernal of following component</span><a href="#the-xnu-kernal-of-following-component" class="header-anchor">#</a></h3><ul>
+<h3><a href="#the-xnu-kernal-of-following-component" class="header-anchor">#</a><span id="the-xnu-kernal-of-following-component">the xnu Kernal of following component</span></h3><ul>
 <li>Mach servers layer</li>
 <li>BSD primary systerm programming interface provide</li>
 <li>The I/OKit runtime environment for drivers</li>
@@ -384,7 +384,7 @@ libkern
 <li>the platform expert hardware abstraction module</li>
 <li>kernel extension various I/OKit family,the majority of loadable device drivers,and some non* I/O Kit extention</li>
 </ul>
-<h2><span id="mach">Mach</span><a href="#mach" class="header-anchor">#</a></h2><p><strong>If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu</strong>.</p>
+<h2><a href="#mach" class="header-anchor">#</a><span id="mach">Mach</span></h2><p><strong>If the xnu kernel is the core of Mac OS X, then Mach may be considered the core of xnu</strong>.</p>
 <ul>
 <li>hardware abstraction to some extent</li>
 <li>processor management including symmetric mutiprocessing * and scheduling</li>
@@ -396,7 +396,7 @@ libkern
 </li>
 <li>Console I/O</li>
 </ul>
-<h2><span id="bsd">BSD</span><a href="#bsd" class="header-anchor">#</a></h2><ul>
+<h2><a href="#bsd" class="header-anchor">#</a><span id="bsd">BSD</span></h2><ul>
 <li>BSD-style process model</li>
 <li>Signals</li>
 <li>User IDs, permissions, and basic security policies</li>
@@ -413,7 +413,7 @@ libkern
 <li>Access control lists (ACLs) and the kauth authorization framework</li>
 <li>Various synchronization primitives</li>
 </ul>
-<h2><span id="the-i-o-kit">The I/O Kit</span><a href="#the-i-o-kit" class="header-anchor">#</a></h2><ul>
+<h2><a href="#the-i-o-kit" class="header-anchor">#</a><span id="the-i-o-kit">The I/O Kit</span></h2><ul>
 <li>Extensive programming interfaces, including interfaces for applications and user* space drivers to communicate with the I/O Kit</li>
 <li>Numerous device families such as ATA/ATAPI, FireWire, Graphics, HID, Network, PCI, and USB</li>
 <li>Object* oriented abstractions of devices</li>
@@ -427,14 +427,14 @@ libkern
 </ul>
 </li>
 </ul>
-<h2><span id="the-libkern-library">The libkern Library</span><a href="#the-libkern-library" class="header-anchor">#</a></h2><ul>
+<h2><a href="#the-libkern-library" class="header-anchor">#</a><span id="the-libkern-library">The libkern Library</span></h2><ul>
 <li>Dynamic allocation, construction, and destruction objects, with support for a variety of built-in object types such as Arrays, Booleans, and Dictionaries</li>
 <li>Atomic operations and miscellaneous functions such as bcmp(), memcmp(), and strlen()</li>
 <li>Functions for byte-swapping</li>
 <li>Provisions for tracking the number of current instances for each class</li>
 <li>Mechanisms that help alleviate the C++ fragile base-class problem</li>
 </ul>
-<h2><span id="the-libsa-library">The libsa Library</span><a href="#the-libsa-library" class="header-anchor">#</a></h2><p><strong>libsa is an in-kernel support library essentially an in* kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone,Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</strong></p>
+<h2><a href="#the-libsa-library" class="header-anchor">#</a><span id="the-libsa-library">The libsa Library</span></h2><p><strong>libsa is an in-kernel support library essentially an in* kernel linkerused during early system startup for loading kernel extensions,sa=stand-alone,Mac OS X kernel extensions are normally loaded on demand through the kexTD user-space daemon (/usr/libexec/kextd). During early stages of bootstrapping, kextd is not yet available. libsa provides a subset of kextd’s capabilities to the kernel. Examples of specific functionality implemented by libsa for loading, linking, and recording kernel extension object files include the following:</strong></p>
 <ul>
 <li>Simple memory allocation</li>
 <li>Binary searching</li>
@@ -443,7 +443,7 @@ libkern
 <li>A dependency graph package used while determining kernel extension dependencies</li>
 <li>Decompression of compressed kernels and verification of checksums</li>
 </ul>
-<h2><span id="the-platform-expert">The Platform Expert</span><a href="#the-platform-expert" class="header-anchor">#</a></h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
+<h2><a href="#the-platform-expert" class="header-anchor">#</a><span id="the-platform-expert">The Platform Expert</span></h2><p><strong>Nubs[In the context of the I/O Kit, a nub is an object that defines an access point and communication channel for a physical device or a logical service. A physical device could be a bus, a disk drive or partition, a graphics card, and so on. Examples of logical services include arbitration, driver matching, and power management.]</strong></p>
 <ul>
 <li><p>Constructing device trees</p>
 </li>
@@ -470,7 +470,7 @@ libkern
 <li><p>Reading and writing the parameter memory (PRAM)</p>
 </li>
 </ul>
-<h2><span id="task-and-thread">task and thread</span><a href="#task-and-thread" class="header-anchor">#</a></h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
+<h2><a href="#task-and-thread" class="header-anchor">#</a><span id="task-and-thread">task and thread</span></h2><p>任务是一个包含一个或多个可执行线程的任务组，这些线程共享资源和内存空间。Mach的任务是将一对一映射到Unix BSD层的进程。XNU内核也是一个包含多个线程的任务。</p>
 
         </div>
         <div class="post-reply">

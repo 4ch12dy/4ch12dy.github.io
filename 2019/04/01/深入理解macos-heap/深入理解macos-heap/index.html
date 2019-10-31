@@ -17,25 +17,25 @@
   
   <title>源码解读macOS/iOS Heap | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="源码解读macOS/iOS Heap#
+  <meta name="description" content="#源码解读macOS/iOS Heap
 关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。
 
-从malloc说起#malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就">
+#从malloc说起malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就">
 <meta property="og:type" content="article">
 <meta property="og:title" content="源码解读macOS/iOS Heap">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/01/深入理解macos-heap/深入理解macos-heap/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="源码解读macOS/iOS Heap#
+<meta property="og:description" content="#源码解读macOS/iOS Heap
 关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。
 
-从malloc说起#malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就">
+#从malloc说起malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就">
 <meta property="og:updated_time" content="2019-04-02T05:50:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="源码解读macOS/iOS Heap">
-<meta name="twitter:description" content="源码解读macOS/iOS Heap#
+<meta name="twitter:description" content="#源码解读macOS/iOS Heap
 关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。
 
-从malloc说起#malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就">
+#从malloc说起malloc是我们经常使用的函数，这里也是libmalloc.dylib暴露出来的接口，另外苹果开源了libmalloc代码。所以接下来我们就">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -170,10 +170,10 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3><span id="yuan-ma-jie-du-macos-ios-heap">源码解读macOS/iOS Heap</span><a href="#yuan-ma-jie-du-macos-ios-heap" class="header-anchor">#</a></h3><blockquote>
+            <h3><a href="#yuan-ma-jie-du-macos-ios-heap" class="header-anchor">#</a><span id="yuan-ma-jie-du-macos-ios-heap">源码解读macOS/iOS Heap</span></h3><blockquote>
 <p>关于linux的堆管理已经有很多人写了很多相关的分析，但在mac平台的堆相关的资料却很少。本文由tctf的一道mac平台pwn题目引起，是我对macOS/iOS的堆管理的一些理解，希望有所帮助。</p>
 </blockquote>
-<h4><span id="cong-malloc-shuo-qi">从malloc说起</span><a href="#cong-malloc-shuo-qi" class="header-anchor">#</a></h4><p><code>malloc</code>是我们经常使用的函数，这里也是<code>libmalloc.dylib</code>暴露出来的接口，另外苹果开源了<a href="https://opensource.apple.com/source/libmalloc/" target="_blank" rel="external">libmalloc代码</a>。所以接下来我们就从源码的角度深入下去。</p>
+<h4><a href="#cong-malloc-shuo-qi" class="header-anchor">#</a><span id="cong-malloc-shuo-qi">从malloc说起</span></h4><p><code>malloc</code>是我们经常使用的函数，这里也是<code>libmalloc.dylib</code>暴露出来的接口，另外苹果开源了<a href="https://opensource.apple.com/source/libmalloc/" target="_blank" rel="external">libmalloc代码</a>。所以接下来我们就从源码的角度深入下去。</p>
 <pre><code class="c">void *
 malloc(size_t size)
 {
@@ -376,7 +376,7 @@ create_scalable_szone(size_t initial_size, unsigned debug_flags)
     frame #10: 0x00007fff5f959279 libobjc.A.dylib`map_images + 68
     ....
 </code></pre>
-<h4><span id="scalable-zone">scalable zone</span><a href="#scalable-zone" class="header-anchor">#</a></h4><p>szone包含两个racks，分别是tiny和small rack</p>
+<h4><a href="#scalable-zone" class="header-anchor">#</a><span id="scalable-zone">scalable zone</span></h4><p>szone包含两个racks，分别是tiny和small rack</p>
 <table>
 <thead>
 <tr>
@@ -405,7 +405,7 @@ create_scalable_szone(size_t initial_size, unsigned debug_flags)
 <li>每个region被分为quantum，tiny(16B，64520 Q/region)、small(512B，16319 Q/region)</li>
 </ul>
 <p>具体可以从后面结构体中看出来其包含关系。</p>
-<h5><span id="malloc-gt-szone-malloc-gt-szone-malloc-should-clear">malloc-&gt;szone_malloc-&gt;szone_malloc_should_clear</span><a href="#malloc-gt-szone-malloc-gt-szone-malloc-should-clear" class="header-anchor">#</a></h5><pre><code class="c">MALLOC_NOINLINE void *
+<h5><a href="#malloc-gt-szone-malloc-gt-szone-malloc-should-clear" class="header-anchor">#</a><span id="malloc-gt-szone-malloc-gt-szone-malloc-should-clear">malloc-&gt;szone_malloc-&gt;szone_malloc_should_clear</span></h5><pre><code class="c">MALLOC_NOINLINE void *
 szone_malloc_should_clear(szone_t *szone, size_t size, boolean_t cleared_requested)
 {
     void *ptr;
@@ -441,7 +441,7 @@ szone_malloc_should_clear(szone_t *szone, size_t size, boolean_t cleared_request
 }
 </code></pre>
 <p>上面可以清楚看出会根据其申请内存大小从tiny、small、large三种方式分配。这里以tiny为例</p>
-<h5><span id="tiny-malloc-should-clear">tiny_malloc_should_clear</span><a href="#tiny-malloc-should-clear" class="header-anchor">#</a></h5><pre><code class="c">void *
+<h5><a href="#tiny-malloc-should-clear" class="header-anchor">#</a><span id="tiny-malloc-should-clear">tiny_malloc_should_clear</span></h5><pre><code class="c">void *
 tiny_malloc_should_clear(rack_t *rack, msize_t msize, boolean_t cleared_requested)
 {
     void *ptr;
@@ -553,7 +553,7 @@ tiny_malloc_should_clear(rack_t *rack, msize_t msize, boolean_t cleared_requeste
 }
 </code></pre>
 <p>这里的<code>if (tiny_mag_ptr-&gt;mag_last_free_msize == msize)</code>是判断申请大小是否和缓存的大小相同，如果相同，则直接把该内存返回给程序。反之则从<code>ptr = tiny_malloc_from_free_list(rack, tiny_mag_ptr, mag_index, msize);</code>free list中去获取刚好大于该大小的free list。这里的free list是按quantum的倍数递增的一个链表。若还是不能满足则去freelist中由合并得到的较大block中去分配。还不能满足则去region剩余部分申请。最后还不满足则申请新的一个region。申请失败则返回NULL。</p>
-<h5><span id="free-gt-malloc-zone-free-gt-szone-free">free-&gt;malloc_zone_free-&gt;szone_free</span><a href="#free-gt-malloc-zone-free-gt-szone-free" class="header-anchor">#</a></h5><pre><code class="c">void
+<h5><a href="#free-gt-malloc-zone-free-gt-szone-free" class="header-anchor">#</a><span id="free-gt-malloc-zone-free-gt-szone-free">free-&gt;malloc_zone_free-&gt;szone_free</span></h5><pre><code class="c">void
 szone_free(szone_t *szone, void *ptr)
 {
     region_t tiny_region;
@@ -711,7 +711,7 @@ free_list_checksum_ptr(rack_t *rack, void *ptr)
 }
 </code></pre>
 <p>指针p与cookie异或然后计算checksum后左移到最高字节或上指针p右移4位得到checksumed后的指针。</p>
-<h4><span id="shi-yan">实验</span><a href="#shi-yan" class="header-anchor">#</a></h4><p>代码如下</p>
+<h4><a href="#shi-yan" class="header-anchor">#</a><span id="shi-yan">实验</span></h4><p>代码如下</p>
 <pre><code class="c">#include &lt;stdio.h&gt;
 
 int main(int argc, char *argv[]) {
@@ -772,7 +772,7 @@ int main(int argc, char *argv[]) {
 0x100200250: 0x0000000000000000 0x0000000000000000
 0x100200260: 0x0000000000000029 0x0000000000000000
 </code></pre><p>上面可以看出previous和next指针前4位都包含checksum。与上面描述的一致。</p>
-<h4><span id="libmalloc-zhong-yi-xie-jie-gou-ti">libmalloc中一些结构体</span><a href="#libmalloc-zhong-yi-xie-jie-gou-ti" class="header-anchor">#</a></h4><h5><span id="szone-s-magazine-zone-h">szone_s // magazine_zone.h</span><a href="#szone-s-magazine-zone-h" class="header-anchor">#</a></h5><pre><code class="c">typedef struct szone_s {      // vm_allocate()&#39;d, so page-aligned to begin with.
+<h4><a href="#libmalloc-zhong-yi-xie-jie-gou-ti" class="header-anchor">#</a><span id="libmalloc-zhong-yi-xie-jie-gou-ti">libmalloc中一些结构体</span></h4><h5><a href="#szone-s-magazine-zone-h" class="header-anchor">#</a><span id="szone-s-magazine-zone-h">szone_s // magazine_zone.h</span></h5><pre><code class="c">typedef struct szone_s {      // vm_allocate()&#39;d, so page-aligned to begin with.
     malloc_zone_t basic_zone; // first page will be given read-only protection
     uint8_t pad[PAGE_MAX_SIZE - sizeof(malloc_zone_t)];
 
@@ -818,7 +818,7 @@ int main(int argc, char *argv[]) {
     boolean_t flotsam_enabled;
 } szone_t;
 </code></pre>
-<h5><span id="malloc-zone-t-malloc-h">malloc_zone_t // malloc.h</span><a href="#malloc-zone-t-malloc-h" class="header-anchor">#</a></h5><pre><code class="c">typedef struct _malloc_zone_t {
+<h5><a href="#malloc-zone-t-malloc-h" class="header-anchor">#</a><span id="malloc-zone-t-malloc-h">malloc_zone_t // malloc.h</span></h5><pre><code class="c">typedef struct _malloc_zone_t {
     /* Only zone implementors should depend on the layout of this structure;
     Regular callers should use the access functions below */
     void    *reserved1;    /* RESERVED FOR CFAllocator DO NOT USE */
@@ -856,7 +856,7 @@ int main(int argc, char *argv[]) {
     boolean_t (* MALLOC_ZONE_FN_PTR(claimed_address))(struct _malloc_zone_t *zone, void *ptr);
 } malloc_zone_t;
 </code></pre>
-<h5><span id="rack-t-magazine-rack-h">rack_t // magazine_rack.h</span><a href="#rack-t-magazine-rack-h" class="header-anchor">#</a></h5><pre><code class="c">typedef struct rack_s {
+<h5><a href="#rack-t-magazine-rack-h" class="header-anchor">#</a><span id="rack-t-magazine-rack-h">rack_t // magazine_rack.h</span></h5><pre><code class="c">typedef struct rack_s {
     /* Regions for tiny objects */
     _malloc_lock_s region_lock MALLOC_CACHE_ALIGN;
 
@@ -879,7 +879,7 @@ int main(int argc, char *argv[]) {
     uintptr_t last_madvise;
 } rack_t;
 </code></pre>
-<h5><span id="magazine-t-magazine-zone-h">magazine_t // magazine_zone.h</span><a href="#magazine-t-magazine-zone-h" class="header-anchor">#</a></h5><pre><code class="c">typedef struct magazine_s { // vm_allocate()&#39;d, so the array of magazines is page-aligned to begin with.
+<h5><a href="#magazine-t-magazine-zone-h" class="header-anchor">#</a><span id="magazine-t-magazine-zone-h">magazine_t // magazine_zone.h</span></h5><pre><code class="c">typedef struct magazine_s { // vm_allocate()&#39;d, so the array of magazines is page-aligned to begin with.
     // Take magazine_lock first,  Depot lock when needed for recirc, then szone-&gt;{tiny,small}_regions_lock when needed for alloc
     _malloc_lock_s magazine_lock MALLOC_CACHE_ALIGN;
     // Protection for the crtical section that does allocate_pages outside the magazine_lock
@@ -923,7 +923,7 @@ int main(int argc, char *argv[]) {
 
 } magazine_t;
 </code></pre>
-<h5><span id="tiny-region-t-magazine-zone-h">tiny_region_t //magazine_zone.h</span><a href="#tiny-region-t-magazine-zone-h" class="header-anchor">#</a></h5><pre><code class="c">/*
+<h5><a href="#tiny-region-t-magazine-zone-h" class="header-anchor">#</a><span id="tiny-region-t-magazine-zone-h">tiny_region_t //magazine_zone.h</span></h5><pre><code class="c">/*
  * Layout of a tiny region
  */
 typedef uint32_t tiny_block_t[4]; // assert(TINY_QUANTUM == sizeof(tiny_block_t))
@@ -956,7 +956,7 @@ typedef struct tiny_region {
     uint8_t pad[TINY_REGION_SIZE - (NUM_TINY_BLOCKS * sizeof(tiny_block_t)) - TINY_METADATA_SIZE];
 } * tiny_region_t;
 </code></pre>
-<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
+<h4><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h4><ul>
 <li><p><a href="http://phrack.org/issues/63/5.html" target="_blank" rel="external">http://phrack.org/issues/63/5.html</a></p>
 </li>
 <li><p><a href="https://www.synacktiv.com/ressources/Sthack_2018_Heapple_Pie.pdf" target="_blank" rel="external">https://www.synacktiv.com/ressources/Sthack_2018_Heapple_Pie.pdf</a></p>

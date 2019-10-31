@@ -17,19 +17,19 @@
   
   <title>Protostar-栈溢出学习-ret跳转到自定义shellcode | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序#
+  <meta name="description" content="#0x00 序
  经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
 
-0x01 C语言源代码#Stack5 is a standard buffer overflow, this time introducing shellcode.
+#0x01 C语言源代码Stack5 is a standard buffer overflow, this time introducing shellcode.
 This level is at /opt/protostar/bin/st">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Protostar-栈溢出学习-ret跳转到自定义shellcode">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序#
+<meta property="og:description" content="#0x00 序
  经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
 
-0x01 C语言源代码#Stack5 is a standard buffer overflow, this time introducing shellcode.
+#0x01 C语言源代码Stack5 is a standard buffer overflow, this time introducing shellcode.
 This level is at /opt/protostar/bin/st">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-1.png?raw=true">
@@ -44,10 +44,10 @@ This level is at /opt/protostar/bin/st">
 <meta property="og:updated_time" content="2017-05-02T14:33:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出学习-ret跳转到自定义shellcode">
-<meta name="twitter:description" content="0x00 序#
+<meta name="twitter:description" content="#0x00 序
  经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
 
-0x01 C语言源代码#Stack5 is a standard buffer overflow, this time introducing shellcode.
+#0x01 C语言源代码Stack5 is a standard buffer overflow, this time introducing shellcode.
 This level is at /opt/protostar/bin/st">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true">
   
@@ -188,10 +188,10 @@ This level is at /opt/protostar/bin/st">
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><blockquote>
+            <h2><a href="#0x00-xu" class="header-anchor">#</a><span id="0x00-xu">0x00 序</span></h2><blockquote>
 <p> 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。</p>
 </blockquote>
-<h2><span id="0x01-c-yu-yan-yuan-dai-ma">0x01 C语言源代码</span><a href="#0x01-c-yu-yan-yuan-dai-ma" class="header-anchor">#</a></h2><p>Stack5 is a standard buffer overflow, this time introducing shellcode.</p>
+<h2><a href="#0x01-c-yu-yan-yuan-dai-ma" class="header-anchor">#</a><span id="0x01-c-yu-yan-yuan-dai-ma">0x01 C语言源代码</span></h2><p>Stack5 is a standard buffer overflow, this time introducing shellcode.</p>
 <p>This level is at /opt/protostar/bin/stack5</p>
 <p>Hints:<br>At this point in time, it might be easier to use someone elses shellcode<br>If debugging the shellcode, use \xcc (int3) to stop the program executing and return to the debugger<br>remove the int3s once your shellcode is done.</p>
 <pre><code>#include &lt;stdlib.h&gt;
@@ -205,8 +205,8 @@ int main(int argc, char **argv)
 
   gets(buffer);
 }
-</code></pre><h2><span id="0x02-si-lu-amp-fen-xi">0x02 思路&amp;分析</span><a href="#0x02-si-lu-amp-fen-xi" class="header-anchor">#</a></h2><p>和前面的一样，我们可以通过覆盖返回地址然后由ret指令跳转到目标地址，但这次我们没有了win()函数，那我们应该跳转到哪里呢？没错，还是跳到栈上。要达到执行代码的目的，所以我们需要在栈上写入shellcode。Here we go！</p>
-<h2><span id="0x03-diao-shi-amp-hack">0x03 调试&amp;hack</span><a href="#0x03-diao-shi-amp-hack" class="header-anchor">#</a></h2><ul>
+</code></pre><h2><a href="#0x02-si-lu-amp-fen-xi" class="header-anchor">#</a><span id="0x02-si-lu-amp-fen-xi">0x02 思路&amp;分析</span></h2><p>和前面的一样，我们可以通过覆盖返回地址然后由ret指令跳转到目标地址，但这次我们没有了win()函数，那我们应该跳转到哪里呢？没错，还是跳到栈上。要达到执行代码的目的，所以我们需要在栈上写入shellcode。Here we go！</p>
+<h2><a href="#0x03-diao-shi-amp-hack" class="header-anchor">#</a><span id="0x03-diao-shi-amp-hack">0x03 调试&amp;hack</span></h2><ul>
 <li>对应汇编，我们在<code>0x080483da &lt;main+22&gt;:    ret</code>处下个断点</li>
 </ul>
 <pre><code>(gdb) disassemble 
@@ -238,7 +238,7 @@ Dump of assembler code for function main:
 <p>那怎么才能让执行后输入数据呢？<br>这里有一个小技巧，在执行后用<code>cat</code>指令，将输入转到输出<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-9.png?raw=true" alt="2-9"></p>
 </li>
 </ul>
-<h4><span id="so-cool-make-it">so cool! make it!</span><a href="#so-cool-make-it" class="header-anchor">#</a></h4><h2><span id="0x04-fu-lu">0x04 附录</span><a href="#0x04-fu-lu" class="header-anchor">#</a></h2><p>INT 3 CC</p>
+<h4><a href="#so-cool-make-it" class="header-anchor">#</a><span id="so-cool-make-it">so cool! make it!</span></h4><h2><a href="#0x04-fu-lu" class="header-anchor">#</a><span id="0x04-fu-lu">0x04 附录</span></h2><p>INT 3 CC</p>
 <p>详细分分析可以看这边文章<a href="http://blog.csdn.net/trochiluses/article/details/20209593" target="_blank" rel="external">int 3中断与软件调试</a></p>
 <p>简单的理解就是:当我们调试程序时，可以在可能有问题的地方插入一条INT 3指令，使CPU执行到这一点时停下来。这便是软件调试中经常用到的断点（breakpoint）功能，因此INT 3指令又被称为断点指令。</p>
 

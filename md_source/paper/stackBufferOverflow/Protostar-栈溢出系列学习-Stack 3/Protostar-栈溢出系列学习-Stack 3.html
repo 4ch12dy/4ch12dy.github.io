@@ -17,8 +17,8 @@
   
   <title>Protostar-栈溢出系列学习-Stack 3 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序#前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
-0x01 stack3#stack3
+  <meta name="description" content="#0x00 序前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
+#0x01 stack3stack3
 #include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;s">
@@ -27,8 +27,8 @@
 <meta property="og:title" content="Protostar-栈溢出系列学习-Stack 3">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序#前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
-0x01 stack3#stack3
+<meta property="og:description" content="#0x00 序前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
+#0x01 stack3stack3
 #include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;s">
@@ -41,8 +41,8 @@
 <meta property="og:updated_time" content="2017-04-16T16:00:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出系列学习-Stack 3">
-<meta name="twitter:description" content="0x00 序#前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
-0x01 stack3#stack3
+<meta name="twitter:description" content="#0x00 序前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
+#0x01 stack3stack3
 #include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;s">
@@ -184,8 +184,8 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><p>前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。</p>
-<h2><span id="0x01-stack3">0x01 stack3</span><a href="#0x01-stack3" class="header-anchor">#</a></h2><p><code>stack3</code></p>
+            <h2><a href="#0x00-xu" class="header-anchor">#</a><span id="0x00-xu">0x00 序</span></h2><p>前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。</p>
+<h2><a href="#0x01-stack3" class="header-anchor">#</a><span id="0x01-stack3">0x01 stack3</span></h2><p><code>stack3</code></p>
 <pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;stdio.h&gt;
@@ -216,9 +216,9 @@ int main(int argc, char **argv)
   getpath();
 
 }
-</code></pre><h2><span id="0x02-si-lu-amp-fen-xi">0x02 思路&amp;分析</span><a href="#0x02-si-lu-amp-fen-xi" class="header-anchor">#</a></h2><p>整体上和前面的没太大区别，现在有个问题在于<code>__builtin_return_address()</code>会返回当前的返回地址值，然后后面<code>ret &amp; 0xbf000000) == 0xbf000000</code>对其返回地址进行了限制–返回地址不能是<code>0xbf</code>为前缀，正好是栈的前缀。这样的话就不能像之前那样直接返回到栈中，也不能执行栈上的shellcode。</p>
+</code></pre><h2><a href="#0x02-si-lu-amp-fen-xi" class="header-anchor">#</a><span id="0x02-si-lu-amp-fen-xi">0x02 思路&amp;分析</span></h2><p>整体上和前面的没太大区别，现在有个问题在于<code>__builtin_return_address()</code>会返回当前的返回地址值，然后后面<code>ret &amp; 0xbf000000) == 0xbf000000</code>对其返回地址进行了限制–返回地址不能是<code>0xbf</code>为前缀，正好是栈的前缀。这样的话就不能像之前那样直接返回到栈中，也不能执行栈上的shellcode。</p>
 <p>怎么绕过呢？</p>
-<h3><span id="ret2libc-or-rop-return-orientated-programming">Ret2libc or ROP(return orientated programming)</span><a href="#ret2libc-or-rop-return-orientated-programming" class="header-anchor">#</a></h3><h2><span id="0x03-rop">0x03 ROP</span><a href="#0x03-rop" class="header-anchor">#</a></h2><ul>
+<h3><a href="#ret2libc-or-rop-return-orientated-programming" class="header-anchor">#</a><span id="ret2libc-or-rop-return-orientated-programming">Ret2libc or ROP(return orientated programming)</span></h3><h2><a href="#0x03-rop" class="header-anchor">#</a><span id="0x03-rop">0x03 ROP</span></h2><ul>
 <li>一个巧妙的方法在于我们不直接返回到栈中执行shellcode，而是返回到原本的程序之中。这里我们返回到<code>getpath()</code>的ret指令处。在后面在存放shellcode，而再次执行ret时就会跳转到后面执行我们的shellcode。</li>
 </ul>
 <ul>
@@ -274,7 +274,7 @@ print padding+ret+eip_after_ret+nopslide+payload
 <p> here we go!</p>
 <p> <img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 3/3-0.png" alt="3-0"></p>
 <p>成功运行bash！</p>
-<h2><span id="0x04-ret2libc">0x04 Ret2libc</span><a href="#0x04-ret2libc" class="header-anchor">#</a></h2><ul>
+<h2><a href="#0x04-ret2libc" class="header-anchor">#</a><span id="0x04-ret2libc">0x04 Ret2libc</span></h2><ul>
 <li>这次我们通过返回到libc里面的函数达到执行shell的目的。这里采用<code>system(&quot;/bin/sh&quot;)</code>。所以我们需要跳转到system函数，但同时要满足x86传参方式即要先将字符串<code>&quot;/bin/sh&quot;</code>压入栈中。下面我们就来做两件事：<ul>
 <li>1，找到system在内存中的地址</li>
 <li>2，找到字符串<code>&quot;/bin/sh&quot;</code>在内存中的地址</li>
@@ -297,7 +297,7 @@ print padding+system+ret_after_system+bin_sh
 <li>测试</li>
 </ul>
 <p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 3/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 3/3-5.png" alt="3-5"></p>
-<h3><span id="cooooool-make-it">cooooool! make it!</span><a href="#cooooool-make-it" class="header-anchor">#</a></h3>
+<h3><a href="#cooooool-make-it" class="header-anchor">#</a><span id="cooooool-make-it">cooooool! make it!</span></h3>
         </div>
         <div class="post-reply">
             

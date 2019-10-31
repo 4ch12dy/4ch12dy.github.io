@@ -17,7 +17,7 @@
   
   <title>shellscript总结 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="shellscript总结#变量#name=&amp;quot;zhang&amp;quot;
+  <meta name="description" content="#shellscript总结#变量name=&amp;quot;zhang&amp;quot;
 
 变量名和等号之间不能有空格
 
@@ -28,20 +28,20 @@
 不能是关键字
 
 
-单引号/双引号#
+#单引号/双引号
 单引号会原样输出
 
 双引号里面可以有变量，转义字符
 
 
-字符串## 拼接
+#字符串# 拼接
 name=&amp;#39;zhang&amp;#39;
 helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="shellscript总结">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2018/04/17/shellscript/shellscript/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="shellscript总结#变量#name=&amp;quot;zhang&amp;quot;
+<meta property="og:description" content="#shellscript总结#变量name=&amp;quot;zhang&amp;quot;
 
 变量名和等号之间不能有空格
 
@@ -52,19 +52,19 @@ helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;">
 不能是关键字
 
 
-单引号/双引号#
+#单引号/双引号
 单引号会原样输出
 
 双引号里面可以有变量，转义字符
 
 
-字符串## 拼接
+#字符串# 拼接
 name=&amp;#39;zhang&amp;#39;
 helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;">
 <meta property="og:updated_time" content="2019-07-18T07:50:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shellscript总结">
-<meta name="twitter:description" content="shellscript总结#变量#name=&amp;quot;zhang&amp;quot;
+<meta name="twitter:description" content="#shellscript总结#变量name=&amp;quot;zhang&amp;quot;
 
 变量名和等号之间不能有空格
 
@@ -75,13 +75,13 @@ helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;">
 不能是关键字
 
 
-单引号/双引号#
+#单引号/双引号
 单引号会原样输出
 
 双引号里面可以有变量，转义字符
 
 
-字符串## 拼接
+#字符串# 拼接
 name=&amp;#39;zhang&amp;#39;
 helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;">
   
@@ -218,7 +218,7 @@ helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;">
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3><span id="shellscript-zong-jie">shellscript总结</span><a href="#shellscript-zong-jie" class="header-anchor">#</a></h3><h4><span id="bian-liang">变量</span><a href="#bian-liang" class="header-anchor">#</a></h4><pre><code>name=&quot;zhang&quot;
+            <h3><a href="#shellscript-zong-jie" class="header-anchor">#</a><span id="shellscript-zong-jie">shellscript总结</span></h3><h4><a href="#bian-liang" class="header-anchor">#</a><span id="bian-liang">变量</span></h4><pre><code>name=&quot;zhang&quot;
 </code></pre><ul>
 <li><p>变量名和等号之间不能有空格</p>
 </li>
@@ -229,13 +229,13 @@ helloname=&amp;quot;hello, &amp;quot;$name&amp;quot;">
 <li><p>不能是关键字</p>
 </li>
 </ul>
-<h4><span id="dan-yin-hao-shuang-yin-hao">单引号/双引号</span><a href="#dan-yin-hao-shuang-yin-hao" class="header-anchor">#</a></h4><ul>
+<h4><a href="#dan-yin-hao-shuang-yin-hao" class="header-anchor">#</a><span id="dan-yin-hao-shuang-yin-hao">单引号/双引号</span></h4><ul>
 <li><p>单引号会原样输出</p>
 </li>
 <li><p>双引号里面可以有变量，转义字符</p>
 </li>
 </ul>
-<h4><span id="zi-fu-chuan">字符串</span><a href="#zi-fu-chuan" class="header-anchor">#</a></h4><pre><code class="bash"># 拼接
+<h4><a href="#zi-fu-chuan" class="header-anchor">#</a><span id="zi-fu-chuan">字符串</span></h4><pre><code class="bash"># 拼接
 name=&#39;zhang&#39;
 helloname=&quot;hello, &quot;$name&quot;!&quot;
 helloname=&quot;hello, &quot;${name}&quot;!&quot;
@@ -247,7 +247,7 @@ echo ${#name}  # [out]:5
 
 echo ${name:1:4} #[out]:hang
 </code></pre>
-<h4><span id="shu-zu">数组</span><a href="#shu-zu" class="header-anchor">#</a></h4><pre><code class="bash">
+<h4><a href="#shu-zu" class="header-anchor">#</a><span id="shu-zu">数组</span></h4><pre><code class="bash">
 my_array=(A B C D)
 
 echo &quot;数组的元素为: ${my_array[1]}&quot;
@@ -257,7 +257,7 @@ echo &quot;数组的元素为: ${my_array[@]}&quot;
 #数组的元素为: B
 #数组的元素为: A B C D
 </code></pre>
-<h4><span id="wen-jian">文件</span><a href="#wen-jian" class="header-anchor">#</a></h4><pre><code class="bash">#文件存在且为目录
+<h4><a href="#wen-jian" class="header-anchor">#</a><span id="wen-jian">文件</span></h4><pre><code class="bash">#文件存在且为目录
 -d 
 
 #文件存在且为一般文件
@@ -266,7 +266,7 @@ echo &quot;数组的元素为: ${my_array[@]}&quot;
 #文件存在且为链接文件
 -L
 </code></pre>
-<h4><span id="if">if</span><a href="#if" class="header-anchor">#</a></h4><pre><code class="bash">a=10
+<h4><a href="#if" class="header-anchor">#</a><span id="if">if</span></h4><pre><code class="bash">a=10
 b=20
 
 if [ $a == $b ];then
@@ -281,14 +281,14 @@ fi
 
 # [out]:a 等于 b
 </code></pre>
-<h4><span id="for">for</span><a href="#for" class="header-anchor">#</a></h4><pre><code class="bash"># for in
+<h4><a href="#for" class="header-anchor">#</a><span id="for">for</span></h4><pre><code class="bash"># for in
 for loop in 1 2 3 4 5;do
     echo &quot;The value is: $loop&quot;
 done
 
 # [out]:The value is: 1 The value is: 2 The value is: 3 The value is: 4 The value is: 5
 </code></pre>
-<h4><span id="xfind">xfind</span><a href="#xfind" class="header-anchor">#</a></h4><pre><code class="shell">function xfind(){
+<h4><a href="#xfind" class="header-anchor">#</a><span id="xfind">xfind</span></h4><pre><code class="shell">function xfind(){
     find $1 -type f -regex &quot;.*&quot; -print0 | xargs -0  grep -i $2
 }
 
@@ -298,9 +298,9 @@ else
     xfind $1 $2
 fi
 </code></pre>
-<h4><span id="xargs">xargs</span><a href="#xargs" class="header-anchor">#</a></h4><pre><code>管道是标准输出到标准输入，但并不是所有命令都是从标准输入中取参数，所以需要xargs命令。使其从标准输出到命令参数
+<h4><a href="#xargs" class="header-anchor">#</a><span id="xargs">xargs</span></h4><pre><code>管道是标准输出到标准输入，但并不是所有命令都是从标准输入中取参数，所以需要xargs命令。使其从标准输出到命令参数
 </code></pre><p>更多细节点<a href="https://www.cnblogs.com/wangqiguo/p/6464234.html" target="_blank" rel="external">这里</a></p>
-<h4><span id="function">function</span><a href="#function" class="header-anchor">#</a></h4><p>函数返回值只能输0-255数字，且用<code>$?</code>接收</p>
+<h4><a href="#function" class="header-anchor">#</a><span id="function">function</span></h4><p>函数返回值只能输0-255数字，且用<code>$?</code>接收</p>
 <pre><code class="shell">function test(){
     read num
     return  $num
@@ -313,7 +313,7 @@ else
     echo &quot;no&quot;
 fi
 </code></pre>
-<h4><span id="crontab">crontab</span><a href="#crontab" class="header-anchor">#</a></h4><p><a href="http://wangchujiang.com/linux-command/c/crontab.html" target="_blank" rel="external">http://wangchujiang.com/linux-command/c/crontab.html</a></p>
+<h4><a href="#crontab" class="header-anchor">#</a><span id="crontab">crontab</span></h4><p><a href="http://wangchujiang.com/linux-command/c/crontab.html" target="_blank" rel="external">http://wangchujiang.com/linux-command/c/crontab.html</a></p>
 <p>默认日志路径:<code>/var/mail/Username</code></p>
 <p>修改邮件接收地址：<code>MAILTO=939xxxx983@qq.com</code></p>
 <p>日志重定向：<code>* * * * * command &gt;&gt; /Users/Samuel/Desktop/command.log 2&gt;&amp;1</code></p>

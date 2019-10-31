@@ -15,7 +15,7 @@
   </script>
 
   
-  <title>Tag: Linux | 4ch12dy</title>
+  <title>Label: Linux | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
@@ -141,10 +141,10 @@
                             <p>
                                 <strong>Protostar-堆溢出学习-滥用堆metadata重定向程序执行</strong> <small class="post-date">at: 2017-04-26</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
  学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
 
-0x01 C语言源代码##include &lt;stdlib.h&gt;
+#0x01 C语言源代码#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #inclu..
                             </p>
@@ -171,10 +171,10 @@
                             <p>
                                 <strong>Protostar-堆溢出学习-UAF(use after free)</strong> <small class="post-date">at: 2017-04-21</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
 下面看一个堆中常见的漏洞-UAF(use after free)
 
-0x01 C语言源代码##include &lt;stdlib.h&gt;
+#0x01 C语言源代码#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;string.h&gt;
 #include &lt;sys/types.h&gt;
@@ -203,10 +203,10 @@
                             <p>
                                 <strong>Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</strong> <small class="post-date">at: 2017-04-19</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
  现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
 
-0x01 C语言源代码##include &lt;stdlib.h&gt;
+#0x01 C语言源代码#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;string.h&gt;
 #include &lt;stdio.h&gt;
@@ -235,10 +235,10 @@
                             <p>
                                 <strong>Protostar-堆溢出学习-覆盖堆函数指针劫持代码流</strong> <small class="post-date">at: 2017-04-18</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
  学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
 
-0x01 C语言源代码#C代码
+#0x01 C语言源代码C代码
 #include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;string.h&gt;
@@ -267,10 +267,10 @@
                             <p>
                                 <strong>Protostar-栈溢出学习-printf格式%n任意地址写</strong> <small class="post-date">at: 2017-04-17</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
 从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
 
-0x01 C语言源代码##include &lt;stdlib.h&gt;
+#0x01 C语言源代码#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;..
@@ -298,10 +298,10 @@
                             <p>
                                 <strong>Protostar-栈溢出学习-ROP执行shellcode</strong> <small class="post-date">at: 2017-04-16</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
  和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
 
-0x01 stack3##include &lt;stdlib.h&gt;
+#0x01 stack3#include &lt;stdlib.h&gt;
 #include &lt;unistd.h..
                             </p>
                             <button class="button is-info">Read</button>
@@ -327,10 +327,10 @@
                             <p>
                                 <strong>Protostar-栈溢出学习-ret跳转到自定义shellcode</strong> <small class="post-date">at: 2017-04-15</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
  经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
 
-0x01 C语言源代码#Stack5 is a standard buffer overflow, this time introducing shellcode.
+#0x01 C语言源代码Stack5 is a standard buffer overflow, this time introducing shellcode.
 This level is at..
                             </p>
                             <button class="button is-info">Read</button>
@@ -356,10 +356,10 @@ This level is at..
                             <p>
                                 <strong>Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</strong> <small class="post-date">at: 2017-04-13</small>
                                 <br>
-                                0x00 序#
+                                #0x00 序
  接着之前的系列，下面研究两种控制eip的方式
 
-0x01 C语言源代码#Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude t..
+#0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude t..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -384,10 +384,10 @@ This level is at..
                             <p>
                                 <strong>Protostar-栈溢出学习-简单栈溢出修改局部变量值</strong> <small class="post-date">at: 2017-04-11</small>
                                 <br>
-                                0x01 序#
+                                #0x01 序
  为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始吧！
 
-0x01 Protostar虚拟机环境搭建#虚拟机下载地址
+#0x01 Protostar虚拟机环境搭建虚拟机下载地址
 虚拟机环境搭建视频教程
 默认用户名和密码:
 

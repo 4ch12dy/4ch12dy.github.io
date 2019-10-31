@@ -15,7 +15,7 @@
   </script>
 
   
-  <title>Category: iOSRE | 4ch12dy</title>
+  <title>Categorie: iOSRE | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
@@ -135,10 +135,10 @@
                             <p>
                                 <strong>XNU系统调用深度解析</strong> <small class="post-date">at: 2019-01-30</small>
                                 <br>
-                                XNU系统调用深度解析#
+                                #XNU系统调用深度解析
 从一个函数分析到系统调用的内核实现
 
-由一段POC而起##include &lt;stdio.h&gt;
+#由一段POC而起#include &lt;stdio.h&gt;
 #include &lt;mach/i386/kern_return.h&gt;
 #include &lt;mach/mach_traps.h&gt;
 #include &lt;servers/bootstrap.h&gt;..
@@ -166,7 +166,7 @@
                             <p>
                                 <strong>LLDB调试器栈符号化</strong> <small class="post-date">at: 2018-10-03</small>
                                 <br>
-                                强化你的lldb调试器#Why?#lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后..
+                                #强化你的lldb调试器#Why?lldb作为苹果iOS和macOS的调试器在正向开发中十分强大，不过对于逆向人员来说却不是很友好。尤其是那些符号表被strip以后的执行文件。去定位追溯一个函数的执行流程时，查看当前的栈帧只有一堆内存地址，如果要定位是哪个函数通常的流程就是找到当前模块的内存偏移，然后栈上的地址逐一减去改偏移然后去ida中查找改地址，最后..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -191,7 +191,7 @@
                             <p>
                                 <strong>Mach-o动态链接</strong> <small class="post-date">at: 2017-04-10</small>
                                 <br>
-                                0x00 序#可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/u..
+                                #0x00 序可执行文件很少是独立的，除了极少数的一些静态链接的可执行文件以外，大多的都是动态链接，这就需要依赖一些预先存在的库，这些库可以是操作系统提供的动态共享库，也可以是第三方的库。所以在可执行文件中充满了大量对外部库的符号的引用，这些空洞就需要动态链接器来完成所谓的符号绑定。macOS中是内核执行LC_DYLINKER加载命令时启动的，通常为/u..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>

@@ -17,25 +17,25 @@
   
   <title>深入理解iOS动态链接 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="深入理解iOS动态链接#
+  <meta name="description" content="#深入理解iOS动态链接
 本文将通过objc_msgsend来介绍iOS平台上面的动态链接
 
-开始#动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过macho动态链接文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些">
+#开始动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过macho动态链接文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解iOS动态链接">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/09/14/iOS-dyld-dynamic-link/iOS-dyld-dynamic-link/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="深入理解iOS动态链接#
+<meta property="og:description" content="#深入理解iOS动态链接
 本文将通过objc_msgsend来介绍iOS平台上面的动态链接
 
-开始#动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过macho动态链接文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些">
+#开始动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过macho动态链接文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些">
 <meta property="og:updated_time" content="2019-10-17T11:58:34.880Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解iOS动态链接">
-<meta name="twitter:description" content="深入理解iOS动态链接#
+<meta name="twitter:description" content="#深入理解iOS动态链接
 本文将通过objc_msgsend来介绍iOS平台上面的动态链接
 
-开始#动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过macho动态链接文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些">
+#开始动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过macho动态链接文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -172,11 +172,11 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3><span id="shen-ru-li-jie-ios-dong-tai-lian-jie">深入理解iOS动态链接</span><a href="#shen-ru-li-jie-ios-dong-tai-lian-jie" class="header-anchor">#</a></h3><blockquote>
+            <h3><a href="#shen-ru-li-jie-ios-dong-tai-lian-jie" class="header-anchor">#</a><span id="shen-ru-li-jie-ios-dong-tai-lian-jie">深入理解iOS动态链接</span></h3><blockquote>
 <p>本文将通过objc_msgsend来介绍iOS平台上面的动态链接</p>
 </blockquote>
-<h4><span id="kai-shi">开始</span><a href="#kai-shi" class="header-anchor">#</a></h4><p>动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过<a href="http://4ch12dy.site/2017/04/10/macho-dyld-link/macho-dyld-link/" target="_blank" rel="external">macho动态链接</a>文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些心得和理解，希望能够有所帮组。</p>
-<h4><span id="wai-bu-fu-hao-diao-yong-guo-cheng">外部符号调用过程</span><a href="#wai-bu-fu-hao-diao-yong-guo-cheng" class="header-anchor">#</a></h4><p>这里以<code>objc_msgsend</code>这个常见的符号为例，首先我们在ida中找到该符号的桩代码</p>
+<h4><a href="#kai-shi" class="header-anchor">#</a><span id="kai-shi">开始</span></h4><p>动态链接有很多好处这里就不再叙述，本文主要分析动态链接一些平时忽略的细节。在2年前写过<a href="http://4ch12dy.site/2017/04/10/macho-dyld-link/macho-dyld-link/" target="_blank" rel="external">macho动态链接</a>文章去分析过动态链接相关，但是之前分析得平台是x64的mac平台，而且分析得并不是很详细。由于需要对这块知识有一个比较深刻的理解，分析了在iOS平台动态链接的一些细节。本文就是我在分析过程中的一些心得和理解，希望能够有所帮组。</p>
+<h4><a href="#wai-bu-fu-hao-diao-yong-guo-cheng" class="header-anchor">#</a><span id="wai-bu-fu-hao-diao-yong-guo-cheng">外部符号调用过程</span></h4><p>这里以<code>objc_msgsend</code>这个常见的符号为例，首先我们在ida中找到该符号的桩代码</p>
 <pre><code class="assembly">__stubs:000000010000A2E8 ; void *objc_msgSend(void *, const char *, ...)
 __stubs:000000010000A2E8 _objc_msgSend  
 __stubs:000000010000A2E8                                       
@@ -378,7 +378,7 @@ __stub_helper:000000010000A398                 BR              X16     ; dyld_st
 (lldb) x/g 0x000000010000c108
 0x10000c108: 0x00000001817c9b80
 </code></pre><p>那么这里的<code>0x000000010000c108</code>地址在macho文件在是什么地址呢？这里其实是一个指针，保存了外部符号的地址。这个地址在<code>__DATA,__la_symbol_ptr</code>这个区之中。初始值是<code>__TEXT,__stub_helper</code>中的某个地址。</p>
-<h4><span id="wai-bu-fu-hao-diao-yong-zong-jie">外部符号调用总结</span><a href="#wai-bu-fu-hao-diao-yong-zong-jie" class="header-anchor">#</a></h4><p>上面的过程有一点绕，这里从宏哥来解释下整个过程</p>
+<h4><a href="#wai-bu-fu-hao-diao-yong-zong-jie" class="header-anchor">#</a><span id="wai-bu-fu-hao-diao-yong-zong-jie">外部符号调用总结</span></h4><p>上面的过程有一点绕，这里从宏哥来解释下整个过程</p>
 <ul>
 <li><p>程序调用一个外部符号（<code>objc_msgsend</code>）这里就是<code>-[AppDelegate class]</code>方法</p>
 <pre><code class="assembly">__text:0000000100008C34                 LDR             X30, [X30] ; _OBJC_CLASS_$_AppDelegate
@@ -420,7 +420,7 @@ __stub_helper:000000010000A398                 BR              X16     ; dyld_st
 <li><p>最后一个函数符号的地址绑定就完成了</p>
 </li>
 </ul>
-<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
+<h4><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h4><ul>
 <li><a href="http://www.newosxbook.com/articles/DYLD.html#footnote" target="_blank" rel="external">http://www.newosxbook.com/articles/DYLD.html#footnote</a></li>
 <li><a href="https://github.com/opensource-apple/dyld">https://github.com/opensource-apple/dyld</a></li>
 <li><a href="https://github.com/gdbinit/MachOView">https://github.com/gdbinit/MachOView</a></li>
