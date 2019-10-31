@@ -17,37 +17,37 @@
   
   <title>XNU系统调用深度解析 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="XNU系统调用深度解析
+  <meta name="description" content="XNU系统调用深度解析#
 从一个函数分析到系统调用的内核实现
 
-由一段POC而起#include &amp;lt;stdio.h&amp;gt;
+由一段POC而起##include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;mach/i386/kern_return.h&amp;gt;
 #include &amp;lt;mach/mach_traps.h&amp;gt;
 #include &amp;lt;servers/bootstrap.h&amp;gt;
-#include &amp;lt;dirent.h&amp;g">
+#include &amp;lt;dirent.h">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XNU系统调用深度解析">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/01/30/XNU系统调用深度解析/XNU系统调用深度解析/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="XNU系统调用深度解析
+<meta property="og:description" content="XNU系统调用深度解析#
 从一个函数分析到系统调用的内核实现
 
-由一段POC而起#include &amp;lt;stdio.h&amp;gt;
+由一段POC而起##include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;mach/i386/kern_return.h&amp;gt;
 #include &amp;lt;mach/mach_traps.h&amp;gt;
 #include &amp;lt;servers/bootstrap.h&amp;gt;
-#include &amp;lt;dirent.h&amp;g">
+#include &amp;lt;dirent.h">
 <meta property="og:updated_time" content="2019-03-05T15:30:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XNU系统调用深度解析">
-<meta name="twitter:description" content="XNU系统调用深度解析
+<meta name="twitter:description" content="XNU系统调用深度解析#
 从一个函数分析到系统调用的内核实现
 
-由一段POC而起#include &amp;lt;stdio.h&amp;gt;
+由一段POC而起##include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;mach/i386/kern_return.h&amp;gt;
 #include &amp;lt;mach/mach_traps.h&amp;gt;
 #include &amp;lt;servers/bootstrap.h&amp;gt;
-#include &amp;lt;dirent.h&amp;g">
+#include &amp;lt;dirent.h">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -184,10 +184,10 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="XNU系统调用深度解析"><a href="#XNU系统调用深度解析" class="headerlink" title="XNU系统调用深度解析"></a>XNU系统调用深度解析</h3><blockquote>
+            <h3><span id="xnu-xi-tong-diao-yong-shen-du-jie-xi">XNU系统调用深度解析</span><a href="#xnu-xi-tong-diao-yong-shen-du-jie-xi" class="header-anchor">#</a></h3><blockquote>
 <p>从一个函数分析到系统调用的内核实现</p>
 </blockquote>
-<h4 id="由一段POC而起"><a href="#由一段POC而起" class="headerlink" title="由一段POC而起"></a>由一段POC而起</h4><pre><code class="c">#include &lt;stdio.h&gt;
+<h4><span id="you-yi-duan-poc-er-qi">由一段POC而起</span><a href="#you-yi-duan-poc-er-qi" class="header-anchor">#</a></h4><pre><code class="c">#include &lt;stdio.h&gt;
 #include &lt;mach/i386/kern_return.h&gt;
 #include &lt;mach/mach_traps.h&gt;
 #include &lt;servers/bootstrap.h&gt;
@@ -459,7 +459,7 @@ libsystem_kernel.dylib`mach_msg_trap:
 Target 0: (CVE-2019-6231-poc) stopped.
 </code></pre>
 <p>这个函数后面会调用0x100001f系统调用，可以小结得到系统库封装了最底层的实现，最终通过系统调用进入内核。在用户层到这里已经就到头了，无法再跟进。</p>
-<h4 id="XNU内核系统调用流程"><a href="#XNU内核系统调用流程" class="headerlink" title="XNU内核系统调用流程"></a>XNU内核系统调用流程</h4><p>系统调用发生在内核之中，那么最开始处理系统调用的地方又在哪？通过<a href="http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html" target="_blank" rel="external">intel官方文档</a>可以找到</p>
+<h4><span id="xnu-nei-he-xi-tong-diao-yong-liu-cheng">XNU内核系统调用流程</span><a href="#xnu-nei-he-xi-tong-diao-yong-liu-cheng" class="header-anchor">#</a></h4><p>系统调用发生在内核之中，那么最开始处理系统调用的地方又在哪？通过<a href="http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html" target="_blank" rel="external">intel官方文档</a>可以找到</p>
 <pre><code>SYSCALL invokes an OS system-call handler at privilege level 0.
 It does so by loading RIP from the IA32_LSTAR MSR
 </code></pre><p>也就是内核需要将系统调用处理函数入口放到<code>IA32_LSTAR</code> <a href="https://en.wikipedia.org/wiki/Model-specific_register" target="_blank" rel="external">model specific register</a>. 在内核源码中对应在<code>osfmk/i386/mp_desc.c</code>的<code>cpu_syscall_init(cpu_data_t *cdp)</code>函数之中</p>
@@ -631,7 +631,7 @@ hndl_syscall // rdx, pushed in hi64_syscall
 hndl_unix_scall64
 unix_syscall64
 error = (*(callp-&gt;sy_call))((void *)p, vt, &amp;(uthread-&gt;uu_rval[0])); // now we&#39;re there
-</code></pre><h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://www.binss.me/blog/interrupt-and-exception/" target="_blank" rel="external">https://www.binss.me/blog/interrupt-and-exception/</a></p>
+</code></pre><h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><p><a href="https://www.binss.me/blog/interrupt-and-exception/" target="_blank" rel="external">https://www.binss.me/blog/interrupt-and-exception/</a></p>
 <p><a href="https://0xax.gitbooks.io/linux-insides/content/SysCall/linux-syscall-2.html" target="_blank" rel="external">https://0xax.gitbooks.io/linux-insides/content/SysCall/linux-syscall-2.html</a></p>
 <p><a href="https://gist.github.com/yrp604/23e86dce9ca12bf514ef" target="_blank" rel="external">https://gist.github.com/yrp604/23e86dce9ca12bf514ef</a></p>
 

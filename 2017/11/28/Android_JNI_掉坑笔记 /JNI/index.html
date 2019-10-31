@@ -20,8 +20,8 @@
   <meta name="description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
 
 
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
-jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;eq">
+坑1–jni方法签名分号问题#这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
+jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;e">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android JNI踩坑笔记">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/11/28/Android_JNI_掉坑笔记 /JNI/index.html">
@@ -29,16 +29,16 @@ jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;eq">
 <meta property="og:description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
 
 
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
-jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;eq">
+坑1–jni方法签名分号问题#这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
+jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;e">
 <meta property="og:updated_time" content="2017-11-29T03:29:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android JNI踩坑笔记">
 <meta name="twitter:description" content="最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
 
 
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
-jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;eq">
+坑1–jni方法签名分号问题#这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
+jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;e">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -178,20 +178,20 @@ jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;eq">
 <p>最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。</p>
 </blockquote>
 </blockquote>
-<h3 id="坑1–jni方法签名分号问题"><a href="#坑1–jni方法签名分号问题" class="headerlink" title="坑1–jni方法签名分号问题"></a>坑1–jni方法签名分号问题</h3><p>这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名</p>
+<h3><span id="keng-1-jni-fang-fa-qian-ming-fen-hao-wen-ti">坑1–jni方法签名分号问题</span><a href="#keng-1-jni-fang-fa-qian-ming-fen-hao-wen-ti" class="header-anchor">#</a></h3><p>这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名</p>
 <pre><code class="c++">jmethodID equals_id = env-&gt;GetMethodID(string_c, &quot;equals&quot;, &quot;(Ljava/lang/Object;)Z&quot;);
 </code></pre>
 <p>切记当参数或者返回值不是基本类型的时候一定要在末尾加上分号。</p>
 <pre><code class="c++">jmethodID iterator_id = env-&gt;GetMethodID(list_c,&quot;iterator&quot;,&quot;()Ljava/util/Iterator;&quot;);
 </code></pre>
 <p>这类错误常见描述为方法找不到错误。如果遇到类方法找不到切记先检查方法签名是否正确。</p>
-<h3 id="坑2–原生方法包含默认2个参数"><a href="#坑2–原生方法包含默认2个参数" class="headerlink" title="坑2–原生方法包含默认2个参数"></a>坑2–原生方法包含默认2个参数</h3><p>这个坑当然是对jni使用不熟练造成的，未了解其特性，所以对于初学者来说容易犯。看一个原生函数</p>
+<h3><span id="keng-2-yuan-sheng-fang-fa-bao-han-mo-ren-2-ge-can-shu">坑2–原生方法包含默认2个参数</span><a href="#keng-2-yuan-sheng-fang-fa-bao-han-mo-ren-2-ge-can-shu" class="header-anchor">#</a></h3><p>这个坑当然是对jni使用不熟练造成的，未了解其特性，所以对于初学者来说容易犯。看一个原生函数</p>
 <pre><code class="c++">static jboolean nativeFunction(JNIEnv *env, jobject content, jobject someObj){...}
 </code></pre>
 <p>第一个保留参数为<code>JNIEnv</code>虚拟机环境变量，第二个为调用该原生方法的java类对象即上下文。这里多说一句，第二个参数的上下文需根据该方法为静态方法还是实例方法，若为静态方法，则这里上下文为类引用；若为实例方法，则上下文为该类的对象引用。若把类引用当做对象引用，在查找方法id时则会出现方法找不到错误。</p>
 <p>由于很多时候不声明这两个参数同样能正确运行（无其他参数时）导致忽略了第二个参数的存在，以为第二个上下文参数为传入的对象引用。</p>
 <p>这类错误常见描述为当你在某处调用这个对象的方法时，会提示找不到该方法。因为这个对象根本不是你传入的对象。</p>
-<h3 id="坑3—jni调用父类方法的正确姿势"><a href="#坑3—jni调用父类方法的正确姿势" class="headerlink" title="坑3—jni调用父类方法的正确姿势"></a>坑3—jni调用父类方法的正确姿势</h3><p>这里就以一个正确的调用父类方法的流程来讲，起因是当我在查找<code>Exception</code>这个类的<code>getStackTrace</code></p>
+<h3><span id="keng-3-jni-diao-yong-fu-lei-fang-fa-de-zheng-que-zi-shi">坑3—jni调用父类方法的正确姿势</span><a href="#keng-3-jni-diao-yong-fu-lei-fang-fa-de-zheng-que-zi-shi" class="header-anchor">#</a></h3><p>这里就以一个正确的调用父类方法的流程来讲，起因是当我在查找<code>Exception</code>这个类的<code>getStackTrace</code></p>
 <p>方法时提示方法找不到错误，调了会才发现这个方法是在其父类<code>Throwable</code>中，所以正确的写法为：</p>
 <pre><code class="c++">    jclass exception_c = env-&gt;FindClass(&quot;java/lang/Exception&quot;);
     jclass throwable_c = env-&gt;FindClass(&quot;java/lang/Throwable&quot;);
@@ -201,7 +201,7 @@ jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;eq">
 <pre><code class="c++">jobjectArray stes = (jobjectArray)env-&gt;CallNonvirtualObjectMethod(excep, throwable_c, getStackTrace_id);
 </code></pre>
 <p>这里需要传入三个参数，第一个为子类的对象引用，第二个为父类类引用，第三个为方法id。</p>
-<h3 id="坑4—其他小坑"><a href="#坑4—其他小坑" class="headerlink" title="坑4—其他小坑"></a>坑4—其他小坑</h3><p>写jni代码时最大的麻烦在于要写很多代码去定位java中的类和方法，java中一个很简单的调用，在jni层写时或许要写很大一堆，这也不奇怪，因为没有了Android虚拟机，这些本来由虚拟机做的事必须得手动去完成。在写jni层代码时，还有一些小的错误，比如<code>jstring</code>与<code>char*</code>的转换，<code>LOGE()</code>函数中参数为<code>char*</code>的字符串。当然还有一些java与C语言类型对应的问题就不多说了，自己翻下<code>jni.h</code>头文件就能找到。</p>
+<h3><span id="keng-4-qi-ta-xiao-keng">坑4—其他小坑</span><a href="#keng-4-qi-ta-xiao-keng" class="header-anchor">#</a></h3><p>写jni代码时最大的麻烦在于要写很多代码去定位java中的类和方法，java中一个很简单的调用，在jni层写时或许要写很大一堆，这也不奇怪，因为没有了Android虚拟机，这些本来由虚拟机做的事必须得手动去完成。在写jni层代码时，还有一些小的错误，比如<code>jstring</code>与<code>char*</code>的转换，<code>LOGE()</code>函数中参数为<code>char*</code>的字符串。当然还有一些java与C语言类型对应的问题就不多说了，自己翻下<code>jni.h</code>头文件就能找到。</p>
 <p>还有个AndroidStudio的bug在于不能正确的解析jni等头文件，虽然不影响编译，但没有了代码提示以及显示红色看着也挺难受的。网上找到一个解决办法，在对应的<code>build.gradle</code>文件中在<code>defaultConfig{}</code>加入下面的脚本：</p>
 <pre><code class="c">        sourceSets.main{
             jni.srcDirs  &#39;/Users/king/Android/sdk/ndk-bundle/platforms/android-19/arch-mips/usr/include&#39;
@@ -215,7 +215,7 @@ jmethodID equals_id = env-&amp;gt;GetMethodID(string_c, &amp;quot;eq">
 <pre><code class="c">jclass exception_c = (*env)-&gt;FindClass(env, &quot;java/lang/Exception&quot;);
 </code></pre>
 <p>原因在于C++和C的两种写法，可以在文件中宏定义为C++的即可。</p>
-<h3 id="完"><a href="#完" class="headerlink" title="完"></a>完</h3><p>说了这些坑，当然我都踩过，由于刚接触Android jni特性。所以踩了很多坑，尤其是Android不像iOS那样容易debug，多了一层虚拟机导致很多错误不好调式。说到这，还要吐槽下AndroidStudio的gradle这个项目管理器，各种版本或者莫名奇怪的错误，虽然Xcode同样不是很好用，但相比之下，Xcode省心多了。</p>
+<h3><span id="wan">完</span><a href="#wan" class="header-anchor">#</a></h3><p>说了这些坑，当然我都踩过，由于刚接触Android jni特性。所以踩了很多坑，尤其是Android不像iOS那样容易debug，多了一层虚拟机导致很多错误不好调式。说到这，还要吐槽下AndroidStudio的gradle这个项目管理器，各种版本或者莫名奇怪的错误，虽然Xcode同样不是很好用，但相比之下，Xcode省心多了。</p>
 <p>继续踩坑去了…</p>
 
         </div>

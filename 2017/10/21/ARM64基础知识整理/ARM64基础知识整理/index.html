@@ -17,8 +17,8 @@
   
   <title>ARM64基础知识整理 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ARM64基础知识整理Register参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
-其他特殊寄存器
+  <meta name="description" content="ARM64基础知识整理#Register#参数寄存器 (X0-X7)#参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
+其他特殊寄存器#
 
 
 X29(FP)
@@ -43,13 +43,13 @@ PC
 描述
 
 
-CPSR">
+C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ARM64基础知识整理">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/10/21/ARM64基础知识整理/ARM64基础知识整理/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="ARM64基础知识整理Register参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
-其他特殊寄存器
+<meta property="og:description" content="ARM64基础知识整理#Register#参数寄存器 (X0-X7)#参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
+其他特殊寄存器#
 
 
 X29(FP)
@@ -74,13 +74,13 @@ PC
 描述
 
 
-CPSR">
+C">
 <meta property="og:image" content="https://azeria-labs.com/downloads/cheatsheetv1.2-1920x1080.png">
 <meta property="og:updated_time" content="2019-03-08T07:07:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ARM64基础知识整理">
-<meta name="twitter:description" content="ARM64基础知识整理Register参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
-其他特殊寄存器
+<meta name="twitter:description" content="ARM64基础知识整理#Register#参数寄存器 (X0-X7)#参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
+其他特殊寄存器#
 
 
 X29(FP)
@@ -105,7 +105,7 @@ PC
 描述
 
 
-CPSR">
+C">
 <meta name="twitter:image" content="https://azeria-labs.com/downloads/cheatsheetv1.2-1920x1080.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -241,8 +241,8 @@ CPSR">
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="ARM64基础知识整理"><a href="#ARM64基础知识整理" class="headerlink" title="ARM64基础知识整理"></a>ARM64基础知识整理</h3><h4 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h4><h5 id="参数寄存器-X0-X7"><a href="#参数寄存器-X0-X7" class="headerlink" title="参数寄存器 (X0-X7)"></a>参数寄存器 (X0-X7)</h5><p>参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。</p>
-<h5 id="其他特殊寄存器"><a href="#其他特殊寄存器" class="headerlink" title="其他特殊寄存器"></a>其他特殊寄存器</h5><table>
+            <h3><span id="arm64-ji-chu-zhi-shi-zheng-li">ARM64基础知识整理</span><a href="#arm64-ji-chu-zhi-shi-zheng-li" class="header-anchor">#</a></h3><h4><span id="register">Register</span><a href="#register" class="header-anchor">#</a></h4><h5><span id="can-shu-ji-cun-qi-x0-x7">参数寄存器 (X0-X7)</span><a href="#can-shu-ji-cun-qi-x0-x7" class="header-anchor">#</a></h5><p>参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。</p>
+<h5><span id="qi-ta-te-shu-ji-cun-qi">其他特殊寄存器</span><a href="#qi-ta-te-shu-ji-cun-qi" class="header-anchor">#</a></h5><table>
 <thead>
 <tr>
 <th style="text-align:center">X29(FP)</th>
@@ -272,7 +272,7 @@ CPSR">
 </tr>
 </tbody>
 </table>
-<h4 id="Instructions"><a href="#Instructions" class="headerlink" title="Instructions"></a>Instructions</h4><ul>
+<h4><span id="instructions">Instructions</span><a href="#instructions" class="header-anchor">#</a></h4><ul>
 <li><code>mov</code></li>
 </ul>
 <pre><code class="assembly">  mov x0, x1; copies x1 into x0
@@ -298,7 +298,7 @@ ldr x0, [x29]; load the value from the address in x29 into x0
 <li><code>ret</code></li>
 </ul>
 <pre><code>Unlike it’s x86 equivalent which pops the return address from stack, it looks for the return address in the x30 register and jumps there.
-</code></pre><h4 id="Indexing-modes"><a href="#Indexing-modes" class="headerlink" title="Indexing modes"></a>Indexing modes</h4><ul>
+</code></pre><h4><span id="indexing-modes">Indexing modes</span><a href="#indexing-modes" class="header-anchor">#</a></h4><ul>
 <li>Immediate offset : <code>[base, #offset]</code> - Index an offset directly and don’t mess with anything else</li>
 </ul>
 <pre><code class="assembly">ldr x0, [sp, 0x10]; load x0 from sp+0x10
@@ -313,7 +313,7 @@ ldr x0, [x29]; load the value from the address in x29 into x0
 </ul>
 <pre><code class="assembly">ldr x0, [sp], 0x10; load x0 from sp and then increase sp by 0x10
 </code></pre>
-<h4 id="函数调用demo分析"><a href="#函数调用demo分析" class="headerlink" title="函数调用demo分析"></a>函数调用demo分析</h4><pre><code class="assembly">__text:000000010004F0D4                 SUB             SP, SP, #0x70
+<h4><span id="han-shu-diao-yong-demo-fen-xi">函数调用demo分析</span><a href="#han-shu-diao-yong-demo-fen-xi" class="header-anchor">#</a></h4><pre><code class="assembly">__text:000000010004F0D4                 SUB             SP, SP, #0x70
 __text:000000010004F0D8                 STP             X24, X23, [SP,#0x60+var_30]
 __text:000000010004F0DC                 STP             X22, X21, [SP,#0x60+var_20]
 __text:000000010004F0E0                 STP             X20, X19, [SP,#0x60+var_10]
@@ -391,8 +391,8 @@ __text:000000010004F308                 RET
 </tr>
 </tbody>
 </table>
-<h4 id="Arm32"><a href="#Arm32" class="headerlink" title="Arm32"></a>Arm32</h4><p><img src="https://azeria-labs.com/downloads/cheatsheetv1.2-1920x1080.png" alt="arm32"></p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<h4><span id="arm32">Arm32</span><a href="#arm32" class="header-anchor">#</a></h4><p><img src="https://azeria-labs.com/downloads/cheatsheetv1.2-1920x1080.png" alt="arm32"></p>
+<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
 <li><a href="https://www.jianshu.com/p/2f4a5f74ac7a" target="_blank" rel="external">https://www.jianshu.com/p/2f4a5f74ac7a</a></li>
 <li><a href="https://wiki.cdot.senecacollege.ca/wiki/Aarch64_Register_and_Instruction_Quick_Start" target="_blank" rel="external">https://wiki.cdot.senecacollege.ca/wiki/Aarch64_Register_and_Instruction_Quick_Start</a></li>
 <li><a href="https://blog.perfect.blue/ROPing-on-Aarch64" target="_blank" rel="external">https://blog.perfect.blue/ROPing-on-Aarch64</a></li>

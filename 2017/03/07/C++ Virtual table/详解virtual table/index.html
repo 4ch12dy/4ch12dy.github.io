@@ -17,14 +17,14 @@
   
   <title>详解virtual table | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
-关于虚函数的">
+  <meta name="description" content="详解virtual table#C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
+关于虚函数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详解virtual table">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/03/07/C++ Virtual table/详解virtual table/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
-关于虚函数的">
+<meta property="og:description" content="详解virtual table#C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
+关于虚函数">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/2.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/3.png?raw=true">
@@ -37,8 +37,8 @@
 <meta property="og:updated_time" content="2019-02-21T09:58:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="详解virtual table">
-<meta name="twitter:description" content="详解virtual tableC++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
-关于虚函数的">
+<meta name="twitter:description" content="详解virtual table#C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。
+关于虚函数">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -176,7 +176,7 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="详解virtual-table"><a href="#详解virtual-table" class="headerlink" title="详解virtual table"></a>详解virtual table</h2><p>C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。</p>
+            <h2><span id="xiang-jie-virtual-table">详解virtual table</span><a href="#xiang-jie-virtual-table" class="header-anchor">#</a></h2><p>C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。</p>
 <p>关于虚函数的使用方法，我在这里不做过多的阐述。大家可以看看相关的C++的书籍。在这篇文章中，我只想从虚函数的实现机制上面为大家 一个清晰的剖析。</p>
 <p>当然，相同的文章在网上也出现过一些了，但我总感觉这些文章不是很容易阅读，大段大段的代码，没有图片，没有详细的说明，没有比较，没有举一反三。不利于学习和阅读，所以这是我想写下这篇文章的原因。也希望大家多给我提意见。</p>
 <p>言归正传，让我们一起进入虚函数的世界。</p>
@@ -226,14 +226,14 @@ pFun();
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/1.png?raw=true" alt="1"></p>
 <p>注意：在上面这个图中，我在虚函数表的最后多加了一个结点，这是虚函数表的结束结点，就像字符串的结束符“\0”一样，其标志了虚函数表的结束。这个结束标志的值在不同的编译器下是不同的。在<code>WinXP+VS2003</code>下，这个值是NULL。而在<code>Ubuntu 7.10 + Linux 2.6.22 + GCC 4.1.3</code>下，这个值是如果1，表示还有下一个虚函数表，如果值是0，表示是最后一个虚函数表。</p>
 <p>下面，我将分别说明“无覆盖”和“有覆盖”时的虚函数表的样子。没有覆盖父类的虚函数是毫无意义的。我之所以要讲述没有覆盖的情况，主要目的是为了给一个对比。在比较之下，我们可以更加清楚地知道其内部的具体实现。</p>
-<h3 id="一般继承（无虚函数覆盖）"><a href="#一般继承（无虚函数覆盖）" class="headerlink" title="一般继承（无虚函数覆盖）"></a>一般继承（无虚函数覆盖）</h3><p>下面，再让我们来看看继承时的虚函数表是什么样的。假设有如下所示的一个继承关系：</p>
+<h3><span id="yi-ban-ji-cheng-wu-xu-han-shu-fu-gai">一般继承（无虚函数覆盖）</span><a href="#yi-ban-ji-cheng-wu-xu-han-shu-fu-gai" class="header-anchor">#</a></h3><p>下面，再让我们来看看继承时的虚函数表是什么样的。假设有如下所示的一个继承关系：</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/2.png?raw=true" alt="2"></p>
 <p>请注意，在这个继承关系中，子类没有重载任何父类的函数。那么，在派生类的实例中，其虚函数表如下所示：<br>对于实例：Derive d; 的虚函数表如下：<br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/3.png?raw=true" alt="3"><br>我们可以看到下面几点：</p>
 <ol>
 <li>虚函数按照其声明顺序放于表中。</li>
 <li>父类的虚函数在子类的虚函数前面。<br>我相信聪明的你一定可以参考前面的那个程序，来编写一段程序来验证。</li>
 </ol>
-<h3 id="一般继承（有虚函数覆盖）"><a href="#一般继承（有虚函数覆盖）" class="headerlink" title="一般继承（有虚函数覆盖）"></a>一般继承（有虚函数覆盖）</h3><p>覆盖父类的虚函数是很显然的事情，不然，虚函数就变得毫无意义。下面，我们来看一下，如果子类中有虚函数重载了父类的虚函数，会是一个什么样子？假设，我们有下面这样的一个继承关系。</p>
+<h3><span id="yi-ban-ji-cheng-you-xu-han-shu-fu-gai">一般继承（有虚函数覆盖）</span><a href="#yi-ban-ji-cheng-you-xu-han-shu-fu-gai" class="header-anchor">#</a></h3><p>覆盖父类的虚函数是很显然的事情，不然，虚函数就变得毫无意义。下面，我们来看一下，如果子类中有虚函数重载了父类的虚函数，会是一个什么样子？假设，我们有下面这样的一个继承关系。</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/4.png?raw=true" alt="4"></p>
 <p>为了让大家看到被继承过后的效果，在这个类的设计中，我只覆盖了父类的一个函数：f()。那么，对于派生类的实例，其虚函数表会是下面的一个样子：</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/5.png?raw=true" alt="5"></p>
@@ -248,7 +248,7 @@ pFun();
 
 b-&gt;f();
 </code></pre><p>由b所指的内存中的虚函数表的<code>f()</code>的位置已经被<code>Derive::f()</code>函数地址所取代，于是在实际调用发生时，是<code>Derive::f()</code>被调用了。这就实现了多态。</p>
-<h3 id="多重继承（无虚函数覆盖）"><a href="#多重继承（无虚函数覆盖）" class="headerlink" title="多重继承（无虚函数覆盖）"></a>多重继承（无虚函数覆盖）</h3><p>下面，再让我们来看看多重继承中的情况，假设有下面这样一个类的继承关系。注意：子类并没有覆盖父类的函数。</p>
+<h3><span id="duo-chong-ji-cheng-wu-xu-han-shu-fu-gai">多重继承（无虚函数覆盖）</span><a href="#duo-chong-ji-cheng-wu-xu-han-shu-fu-gai" class="header-anchor">#</a></h3><p>下面，再让我们来看看多重继承中的情况，假设有下面这样一个类的继承关系。注意：子类并没有覆盖父类的函数。</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/6.png?raw=true" alt="6"></p>
 <p>对于子类实例中的虚函数表，是下面这个样子：</p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/C++%20Virtual%20table/7.png?raw=true" alt="7"><br>我们可以看到：</p>
@@ -285,13 +285,13 @@ b1-&gt;g(); //Base1::g()
 b2-&gt;g(); //Base2::g()
 
 b3-&gt;g(); //Base3::g()
-</code></pre><h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>每次写C++的文章，总免不了要批判一下C++。这篇文章也不例外。通过上面的讲述，相信我们对虚函数表有一个比较细致的了解了。水可载舟，亦可覆舟。下面，让我们来看看我们可以用虚函数表来干点什么坏事吧。</p>
-<h4 id="一、通过父类型的指针访问子类自己的虚函数"><a href="#一、通过父类型的指针访问子类自己的虚函数" class="headerlink" title="一、通过父类型的指针访问子类自己的虚函数"></a>一、通过父类型的指针访问子类自己的虚函数</h4><p>我们知道，子类没有重载父类的虚函数是一件毫无意义的事情。因为多态也是要基于函数重载的。虽然在上面的图中我们可以看到Base1的虚表中有Derive的虚函数，但我们根本不可能使用下面的语句来调用子类的自有虚函数：</p>
+</code></pre><h3><span id="an-quan-xing">安全性</span><a href="#an-quan-xing" class="header-anchor">#</a></h3><p>每次写C++的文章，总免不了要批判一下C++。这篇文章也不例外。通过上面的讲述，相信我们对虚函数表有一个比较细致的了解了。水可载舟，亦可覆舟。下面，让我们来看看我们可以用虚函数表来干点什么坏事吧。</p>
+<h4><span id="yi-tong-guo-fu-lei-xing-de-zhi-zhen-fang-wen-zi-lei-zi-ji-de-xu-han-shu">一、通过父类型的指针访问子类自己的虚函数</span><a href="#yi-tong-guo-fu-lei-xing-de-zhi-zhen-fang-wen-zi-lei-zi-ji-de-xu-han-shu" class="header-anchor">#</a></h4><p>我们知道，子类没有重载父类的虚函数是一件毫无意义的事情。因为多态也是要基于函数重载的。虽然在上面的图中我们可以看到Base1的虚表中有Derive的虚函数，但我们根本不可能使用下面的语句来调用子类的自有虚函数：</p>
 <pre><code>Base1 *b1 = new Derive();
 
 b1-&gt;f1(); //编译出错
 </code></pre><p>任何妄图使用父类指针想调用子类中的未覆盖父类的成员函数的行为都会被编译器视为非法，所以，这样的程序根本无法编译通过。但在运行时，我们可以通过指针的方式访问虚函数表来达到违反C++语义的行为。（关于这方面的尝试，通过阅读后面附录的代码，相信你可以做到这一点）</p>
-<h4 id="二、访问non-public的虚函数"><a href="#二、访问non-public的虚函数" class="headerlink" title="二、访问non-public的虚函数"></a>二、访问non-public的虚函数</h4><p>另外，如果父类的虚函数是<code>private</code>或是<code>protected</code>的，但这些非<code>public</code>的虚函数同样会存在于虚函数表中，所以，我们同样可以使用访问虚函数表的方式来访问这些<code>non-public</code>的虚函数，这是很容易做到的。</p>
+<h4><span id="er-fang-wen-non-public-de-xu-han-shu">二、访问non-public的虚函数</span><a href="#er-fang-wen-non-public-de-xu-han-shu" class="header-anchor">#</a></h4><p>另外，如果父类的虚函数是<code>private</code>或是<code>protected</code>的，但这些非<code>public</code>的虚函数同样会存在于虚函数表中，所以，我们同样可以使用访问虚函数表的方式来访问这些<code>non-public</code>的虚函数，这是很容易做到的。</p>
 <p>如：</p>
 <pre><code>class Base {
 
@@ -316,7 +316,7 @@ Fun pFun = (Fun)*((int*)*(int*)(&amp;d)+0);
 pFun();
 
 }
-</code></pre><h3 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h3><p>C++这门语言是一门Magic的语言，对于程序员来说，我们似乎永远摸不清楚这门语言背着我们在干了什么。需要熟悉这门语言，我们就必需要了解C++里面的那些东西，需要去了解C++中那些危险的东西。不然，这是一种搬起石头砸自己脚的编程语言。</p>
+</code></pre><h3><span id="jie-shu-yu">结束语</span><a href="#jie-shu-yu" class="header-anchor">#</a></h3><p>C++这门语言是一门Magic的语言，对于程序员来说，我们似乎永远摸不清楚这门语言背着我们在干了什么。需要熟悉这门语言，我们就必需要了解C++里面的那些东西，需要去了解C++中那些危险的东西。不然，这是一种搬起石头砸自己脚的编程语言。</p>
 <p>文章转载：<a href="http://www.cppblog.com/dawnbreak/archive/2009/03/10/76084.aspx" target="_blank" rel="external">http://www.cppblog.com/dawnbreak/archive/2009/03/10/76084.aspx</a></p>
 
         </div>

@@ -17,22 +17,16 @@
   
   <title>angr learning note | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="angr学习笔记安装macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。
-
-It">
+  <meta name="description" content="angr学习笔记#安装#macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="angr learning note">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/03/angr-learning-note/angr-learning-note/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="angr学习笔记安装macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。
-
-It">
+<meta property="og:description" content="angr学习笔记#安装#macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。">
 <meta property="og:updated_time" content="2019-04-19T11:33:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="angr learning note">
-<meta name="twitter:description" content="angr学习笔记安装macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。
-
-It">
+<meta name="twitter:description" content="angr学习笔记#安装#macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是pip install angr却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -167,7 +161,7 @@ It">
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="angr学习笔记"><a href="#angr学习笔记" class="headerlink" title="angr学习笔记"></a>angr学习笔记</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是<code>pip install angr</code>却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。</p>
+            <h3><span id="angr-xue-xi-bi-ji">angr学习笔记</span><a href="#angr-xue-xi-bi-ji" class="header-anchor">#</a></h3><h4><span id="an-zhuang">安装</span><a href="#an-zhuang" class="header-anchor">#</a></h4><p>macOS平台上面安装angr的时候还是折腾了一会，刚开始网上都说angr对python3不兼容，然后用python2去安装，但是<code>pip install angr</code>却有问题，然后看官方的文档才发现angr现在主要支持python3，python2不再支持了，反正最新版的angr安装不了(virtualenv需要python3)，要用python2的话，可以安装以前版本的。</p>
 <blockquote>
 <p>It is built for Python 3: Python 2 support is not feasable due to the looming EOL and the small size of our team.</p>
 </blockquote>
@@ -198,7 +192,7 @@ install_name_tool -change libunicorn.1.dylib &quot;$UNICORN&quot;/lib/libunicorn
 install_name_tool -change libpyvex.dylib &quot;$PYVEX&quot;/lib/libpyvex.dylib &quot;$ANGR&quot;/lib/angr_native.dylib
 </code></pre>
 <p>就是通过重新指定加载<code>libunicorn.dylib</code>和<code>libpyvex.dylib</code> 的位置。执行完脚本以后，angr算是安装完成了。</p>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>直接上例子来学习，官方的fauxware例子</p>
+<h4><span id="shi-yong">使用</span><a href="#shi-yong" class="header-anchor">#</a></h4><p>直接上例子来学习，官方的fauxware例子</p>
 <p>C源码如下</p>
 <pre><code class="c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
@@ -286,7 +280,7 @@ print(st2.posix.dumps(0))
 b&#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00SOSNEAKY\x00&#39;
 b&#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00S\x80\x80\x80@\x80\x80\x00\x00&#39;
 </code></pre><p>可以看出st1也就是成功授权的输入为SOSNEAKY。</p>
-<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><h5 id="factory"><a href="#factory" class="headerlink" title="factory"></a>factory</h5><p>该对象提供了大多数的功能，能够将二进制对象分解为很方便处理的对象。</p>
+<h4><span id="ji-ben-gai-nian">基本概念</span><a href="#ji-ben-gai-nian" class="header-anchor">#</a></h4><h5><span id="factory">factory</span><a href="#factory" class="header-anchor">#</a></h5><p>该对象提供了大多数的功能，能够将二进制对象分解为很方便处理的对象。</p>
 <ul>
 <li><p>blocks</p>
 <p><code>project.factory.block()</code>给定一个地址，返回其basic block，这里的block与llvm中的block一致。获取了block就能进一步对其指令等操作。</p>
@@ -350,8 +344,8 @@ block.instruction_addrs # 指令地址list
 <p>通过上面的方法去执行程序，这样会得到下一个state，此时active的state已经变了，step方法会执行到下一个basic block。之前的state仍然保留不变。</p>
 </li>
 </ul>
-<h4 id="待更新"><a href="#待更新" class="headerlink" title="待更新"></a>待更新</h4><p>…</p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<h4><span id="dai-geng-xin">待更新</span><a href="#dai-geng-xin" class="header-anchor">#</a></h4><p>…</p>
+<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
 <li><a href="https://docs.angr.io/core-concepts/" target="_blank" rel="external">https://docs.angr.io/core-concepts/</a></li>
 <li><a href="https://www.secpulse.com/archives/83197.html" target="_blank" rel="external">https://www.secpulse.com/archives/83197.html</a></li>
 </ul>

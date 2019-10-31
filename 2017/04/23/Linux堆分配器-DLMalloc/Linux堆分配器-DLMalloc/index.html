@@ -17,27 +17,27 @@
   
   <title>深入理解Linux堆分配器-DLMalloc | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序
+  <meta name="description" content="0x00 序#
  当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-0x01 目录1.DLMalloc2.内存Chu">
+0x01 目录#1.DLMalloc2.内存C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解Linux堆分配器-DLMalloc">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序
+<meta property="og:description" content="0x00 序#
  当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-0x01 目录1.DLMalloc2.内存Chu">
+0x01 目录#1.DLMalloc2.内存C">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-1.png?raw=true">
 <meta property="og:updated_time" content="2019-02-21T10:00:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Linux堆分配器-DLMalloc">
-<meta name="twitter:description" content="0x00 序
+<meta name="twitter:description" content="0x00 序#
  当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-0x01 目录1.DLMalloc2.内存Chu">
+0x01 目录#1.DLMalloc2.内存C">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -179,18 +179,18 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
+            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><blockquote>
 <p> 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。</p>
 </blockquote>
-<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><p>1.DLMalloc<br>2.内存Chunk<br>3.Bin<br>4.malloc源码free()函数分析</p>
-<h2 id="0x02-DLMalloc"><a href="#0x02-DLMalloc" class="headerlink" title="0x02 DLMalloc"></a>0x02 DLMalloc</h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。<br>明显内存分配器在操作系统中是相当重要的，主要在需要满足下列的特点：</p>
+<h2><span id="0x01-mu-lu">0x01 目录</span><a href="#0x01-mu-lu" class="header-anchor">#</a></h2><p>1.DLMalloc<br>2.内存Chunk<br>3.Bin<br>4.malloc源码free()函数分析</p>
+<h2><span id="0x02-dlmalloc">0x02 DLMalloc</span><a href="#0x02-dlmalloc" class="header-anchor">#</a></h2><p>Doug Lea’s Malloc (dlmalloc)是一个GNU C库的内存分配器，它能够通过calloc(),malloc(), free()和realloc()等动态分配和释放的函数来管理内存。<br>明显内存分配器在操作系统中是相当重要的，主要在需要满足下列的特点：</p>
 <ul>
 <li>稳定性(stability)</li>
 <li>性能(performance)</li>
 <li>避免碎片化(avoidance of fragmentation)</li>
 <li>低空间开销(low space overhead）<br>根据上面的内存特点，将有助于后面对chunk以及Bin等的理解。</li>
 </ul>
-<h2 id="0x03-内存chunk"><a href="#0x03-内存chunk" class="headerlink" title="0x03 内存chunk"></a>0x03 内存chunk</h2><p>1.什么是chunk？<br>chunk是堆中一些连续的内存块，可以用作分配，释放，拆分，合并。不存在两个连续的释放chunk，这是在于相邻的chunk会合并。</p>
+<h2><span id="0x03-nei-cun-chunk">0x03 内存chunk</span><a href="#0x03-nei-cun-chunk" class="header-anchor">#</a></h2><p>1.什么是chunk？<br>chunk是堆中一些连续的内存块，可以用作分配，释放，拆分，合并。不存在两个连续的释放chunk，这是在于相邻的chunk会合并。</p>
 <p>2.数据结构</p>
 <pre><code>struct malloc_chunk {
     INTERNAL_SIZE_T prev_size; //当前chunk前一个chunk的大小，仅在前一个为freed才使用
@@ -208,9 +208,9 @@
 <p>3.更多细节<br>因为chunk是按照8字节对齐的，所以当前块中的size低三位将用作相关标志，从右到左A M P分别代表：是否在主heap？是否通过mmap()分配？前一个chunk是否在使用？<br>然后可以想到有一个最小chunk的存在，其大小为16字节()。  </p>
 <p>4.特殊chunk<br>top chunk:指可能内存边界的末端，也被称作wilderness chunk。如果其他bin都不满足malloc的情况下，就会从top chunk里去一部分去满足分配请求，剩余的则作为新的top chunk，并且top chunk不在任何一个bin中。随着被分离和合并top chunk会增大和减小。</p>
 <p>last_remainder:和top chunk一样，不在任何一个bin中，但最终可能会合并到一个bin中。可以看英文原文解释：The last_remainder chunk is the result of allocation requests for small chunks that have no exact fit in any of the bins. If the request is larger than the last_remainder chunk but smaller than a block in a bin, then the chunk is split again. The last_remainder chunk is the result of having to split a larger chunk into two, one part of it is handed out from the allocation, and the other because the last_remainder chunk.</p>
-<h2 id="0x04-Bin"><a href="#0x04-Bin" class="headerlink" title="0x04 Bin"></a>0x04 Bin</h2><p>chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。<br>这里我主要介绍fsatbin和normalbin</p>
+<h2><span id="0x04-bin">0x04 Bin</span><a href="#0x04-bin" class="header-anchor">#</a></h2><p>chunk一旦被释放后就会被存储在叫做Bin的链表中，Bin有不同大小的链表，方便与下次查找到最适当的chunk。通常来说有small-bin，large-bin，fast-bin。<br>这里我主要介绍fsatbin和normalbin</p>
 <p>(1)fastbin：是一种单链表bin，不同系统定义了一个最大值，当chunk大小小于等于这个最大值时，就会被释放到fastbin中，正如名字那样，为了更快的free和malloc，这个链表是无序的，是后进先出（LIFO），并且不与其他chunk合并。<br>(2)normalbin:是一种双向链表bin，当chunk大小大于fastbin的大小时就会被放入这个bin，并且有着各种大小的normalbin(减少碎片)，bin内部的chunk按大小组织起来。释放后会于相邻的chunk合并。</p>
-<h2 id="0x05-free-源代码分析及相关细节"><a href="#0x05-free-源代码分析及相关细节" class="headerlink" title="0x05 free()源代码分析及相关细节"></a>0x05 free()源代码分析及相关细节</h2><p><code>free(void *mem)--&gt;__libc_free(void *mem)</code></p>
+<h2><span id="0x05-free-yuan-dai-ma-fen-xi-ji-xiang-guan-xi-jie">0x05 free()源代码分析及相关细节</span><a href="#0x05-free-yuan-dai-ma-fen-xi-ji-xiang-guan-xi-jie" class="header-anchor">#</a></h2><p><code>free(void *mem)--&gt;__libc_free(void *mem)</code></p>
 <pre><code>void
 __libc_free (void *mem)
 {
@@ -529,7 +529,7 @@ _int_free (mstate av, mchunkptr p, int have_lock)
 }
 </code></pre><p>现在我们重点放在<code>unlink()</code>，当两个相邻chunk需要合并的时候，势必需要将临近的chunk从原来的双链表上取下来，然后与当前chunk合并成一个更大的块。等等！怎么取下来的呢？如果这里存在一个恶意的chunk即fd和bk都是一些恶意地址指针，则会出现任意地址写的一个漏洞。在这里我们就先不去讨论进一步的利用过程，只需知道存在一个这样的漏洞即可，后面会根据这个分析去漏洞利用。</p>
 <p><a href="https://code.woboq.org/userspace/glibc/malloc/malloc.c.html#__libc_free" target="_blank" rel="external">glibc/malloc.c源码</a></p>
-<h2 id="0x06-参考"><a href="#0x06-参考" class="headerlink" title="0x06 参考"></a>0x06 参考</h2><ol>
+<h2><span id="0x06-can-kao">0x06 参考</span><a href="#0x06-can-kao" class="header-anchor">#</a></h2><ol>
 <li><a href="http://phrack.org/issues/57/8.html#article" target="_blank" rel="external">Vudo malloc tricks</a></li>
 <li><a href="http://gee.cs.oswego.edu/dl/html/malloc.html" target="_blank" rel="external">A Memory Allocator</a></li>
 <li><a href="http://phrack.org/issues/57/9.html#article" target="_blank" rel="external">Once upon a free()</a></li>

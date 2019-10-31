@@ -17,20 +17,20 @@
   
   <title>Android应用安装过程深度解析 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Android应用安装过程深度解析
+  <meta name="description" content="Android应用安装过程深度解析#
 本文由我和willing对整个安装过程的原理梳理，感谢willing精心的绘图以及相关源码整理。
 
-开始关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。
-整体流程一个 Android 应用安装到手机上大致分">
+开始#关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。
+整体流程#一个 Android 应用安装到手机上">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android应用安装过程深度解析">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/08/01/android-apk-install-process/android-apk-install-process/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="Android应用安装过程深度解析
+<meta property="og:description" content="Android应用安装过程深度解析#
 本文由我和willing对整个安装过程的原理梳理，感谢willing精心的绘图以及相关源码整理。
 
-开始关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。
-整体流程一个 Android 应用安装到手机上大致分">
+开始#关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。
+整体流程#一个 Android 应用安装到手机上">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801151901799.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152013042.png?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152050671.png?raw=true">
@@ -49,11 +49,11 @@
 <meta property="og:updated_time" content="2019-08-01T10:29:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android应用安装过程深度解析">
-<meta name="twitter:description" content="Android应用安装过程深度解析
+<meta name="twitter:description" content="Android应用安装过程深度解析#
 本文由我和willing对整个安装过程的原理梳理，感谢willing精心的绘图以及相关源码整理。
 
-开始关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。
-整体流程一个 Android 应用安装到手机上大致分">
+开始#关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。
+整体流程#一个 Android 应用安装到手机上">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801151901799.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -191,11 +191,11 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="Android应用安装过程深度解析"><a href="#Android应用安装过程深度解析" class="headerlink" title="Android应用安装过程深度解析"></a>Android应用安装过程深度解析</h3><blockquote>
+            <h3><span id="android-ying-yong-an-zhuang-guo-cheng-shen-du-jie-xi">Android应用安装过程深度解析</span><a href="#android-ying-yong-an-zhuang-guo-cheng-shen-du-jie-xi" class="header-anchor">#</a></h3><blockquote>
 <p>本文由我和willing对整个安装过程的原理梳理，感谢willing精心的绘图以及相关源码整理。</p>
 </blockquote>
-<h4 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h4><p>关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。</p>
-<h4 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h4><p>一个 Android 应用安装到手机上大致分为四种情形：</p>
+<h4><span id="kai-shi">开始</span><a href="#kai-shi" class="header-anchor">#</a></h4><p>关于对Android应用的安装过程梳理，是因为很多重打包的外挂利用系统矫正器来绕过安卓系统的签名校验。为了分析其原理，详细分析了Android应用安装的过程，找到其中签名校验的地方，进一步做一些对抗和检测。</p>
+<h4><span id="zheng-ti-liu-cheng">整体流程</span><a href="#zheng-ti-liu-cheng" class="header-anchor">#</a></h4><p>一个 Android 应用安装到手机上大致分为四种情形：</p>
 <ul>
 <li>系统应用，在设备每次启动时完成安装</li>
 <li>通过 adb install 命令安装</li>
@@ -203,7 +203,7 @@
 <li>第三方应用安装或双击安装包，会启动系统应用引导安装</li>
 </ul>
 <p>无论采用哪种安装方式，最终的安装过程都会走到 PackageManagerService，由这个类来完成一系列的工作。PackageManagerService 实际上是一个系统服务，负责提供系统上所有应用的管理，包括安装、优化、查询和卸载，这个类最终会通过 socket 与 installd 这个守护进程通信，真实对应用进行操作的其实是由 installd 这个进程完成。</p>
-<h4 id="场景一：系统应用安装"><a href="#场景一：系统应用安装" class="headerlink" title="场景一：系统应用安装"></a>场景一：系统应用安装</h4><p>在设备启动时，Linux 系统的用户空间进程 init （pid = 1）会孵化许多子进程，包括一系列守护进程，其中就有上面提到的 installd，然后会孵化许多重要的系统服务，如 servicemanager，这个进程会负责管理所有服务的 Binder 通信，最后 init 还会孵化 zygote 进程，这个进程是第一个 Java 进程，zygote 进程会孵化出许多应用程序进程，包括 launcher 进程，即桌面进程，zygote 还会孵化出 system_server 进程，负责启动和管理 Framework 的 Java 层服务，包括 PackageManagerService、ActivityManagerService 等。</p>
+<h4><span id="chang-jing-yi-xi-tong-ying-yong-an-zhuang">场景一：系统应用安装</span><a href="#chang-jing-yi-xi-tong-ying-yong-an-zhuang" class="header-anchor">#</a></h4><p>在设备启动时，Linux 系统的用户空间进程 init （pid = 1）会孵化许多子进程，包括一系列守护进程，其中就有上面提到的 installd，然后会孵化许多重要的系统服务，如 servicemanager，这个进程会负责管理所有服务的 Binder 通信，最后 init 还会孵化 zygote 进程，这个进程是第一个 Java 进程，zygote 进程会孵化出许多应用程序进程，包括 launcher 进程，即桌面进程，zygote 还会孵化出 system_server 进程，负责启动和管理 Framework 的 Java 层服务，包括 PackageManagerService、ActivityManagerService 等。</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801151901799.png?raw=true" alt="image-20190801151901799"></p>
 <p><strong>补充：system_server 的启动与运行流程</strong></p>
 <p>system_server 由 zygote 进程孵化，是整个 Android Framework 的基础</p>
@@ -269,7 +269,7 @@
 <p>可以看到依次调用 scanDirLI()、scanPackageLI()、scanPackageInternalLI()</p>
 <p>其中，scanDirLI() 调用了 ParallelPackageParser 类进行解析，从名字也能看出做了一些并行的优化处理，真正的工作还是交给 PackageParser 来完成，PackageParser 的 parsePackage() 方法内部完成了应用的解析，实际上是解析了 AndroidManifest.xml 文件里面各个标签，包括包名、版本、权限、各组件这些信息，最后的解析结果放在 PackageParser.Package 类中返回给 PMS，这样 PMS 就拥有应用的信息便与做各种管理</p>
 <p>后面继续调用了 scanPackageLI() 和 scanPackageInternalLI() 是进一步检测应用是否需要更新，如果需要更新则接着调用 createInstallArgsForExisting() 构造安装参数开始安装（后面还会遇到这个函数，暂时不展开），安装涉及到的签名校验也是在这里，调用了 collectCertificatesLI()、compareSignatures() 等</p>
-<h4 id="场景二：adb-命令安装"><a href="#场景二：adb-命令安装" class="headerlink" title="场景二：adb 命令安装"></a>场景二：adb 命令安装</h4><p>adb 是 Android SDK 提供的一个命令行工具，为客户端-服务器架构，服务端为移动端上运行的守护进程 adbd，与 installd 一样由 init 进程创建</p>
+<h4><span id="chang-jing-er-adb-ming-ling-an-zhuang">场景二：adb 命令安装</span><a href="#chang-jing-er-adb-ming-ling-an-zhuang" class="header-anchor">#</a></h4><p>adb 是 Android SDK 提供的一个命令行工具，为客户端-服务器架构，服务端为移动端上运行的守护进程 adbd，与 installd 一样由 init 进程创建</p>
 <p>源码路径为：<a href="http://androidxref.com/8.1.0_r33/xref/system/core/adb/" target="_blank" rel="external">http://androidxref.com/8.1.0_r33/xref/system/core/adb/</a></p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152448109.png?raw=true" alt="image-20190801152448109"></p>
 <p>adb_commandline() 函数接收 adb 命令行参数，调用 install_app() 执行安装流程，这个函数会对命令行做一些修改，实际上调用 pm 命令，并通过 send_shell_command() 将命令发送给 Pm 类。</p>
@@ -279,7 +279,7 @@
 <p>PackageInstallerSession 的 commit() 方法首先将包信息封装到 PackageInstallObserverAdapter 这个类中，是 PackageInstallerService 的一个内部类，然后通过这个适配器获取 PackageInstallObserver2 对象代理，这是一个跨进程的观察者，接收安装状态的回调，最后用 Handler 的 obtainMessage 构造一个 MSG_COMMIT 类型的消息并发送出去。</p>
 <p>发送的消息由 PackageInstallerService 的 Handler.Callback 接受，然后调用 commitLocked()，此方法最终会调用 PMS 的 installStage() 方法。</p>
 <p>PackageInstallObserver2 对象接收到安装成功的回调时，会接着调用 PackageInstallerService 的 dispatchSessionFinished()，这个方法最后也是到了 PMS 里面调用 sendSessionCommitBroadcast() 方法。</p>
-<h4 id="场景三：第三方应用安装"><a href="#场景三：第三方应用安装" class="headerlink" title="场景三：第三方应用安装"></a>场景三：第三方应用安装</h4><p>当下载一个新的应用包双击安装时，实际上是发送了一个 “android.intent.action.INSTALL_PACKAGE” 的 intent，这个时候会唤起 Android 系统的一个应用 PackageInstaller 来完成安装操作</p>
+<h4><span id="chang-jing-san-di-san-fang-ying-yong-an-zhuang">场景三：第三方应用安装</span><a href="#chang-jing-san-di-san-fang-ying-yong-an-zhuang" class="header-anchor">#</a></h4><p>当下载一个新的应用包双击安装时，实际上是发送了一个 “android.intent.action.INSTALL_PACKAGE” 的 intent，这个时候会唤起 Android 系统的一个应用 PackageInstaller 来完成安装操作</p>
 <p>PackageInstaller 的应用代码位于：<a href="http://androidxref.com/8.1.0_r33/xref/packages/apps/PackageInstaller/" target="_blank" rel="external">http://androidxref.com/8.1.0_r33/xref/packages/apps/PackageInstaller/</a></p>
 <p>安装位置 /system/priv-app/GooglePackageInstaller，是一个 Android 系统默认应用程序，提供了用户界面来管理应用或包，用于安装普通文件</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152605993.png?raw=true" alt="image-20190801152605993"></p>
@@ -292,7 +292,7 @@
 <p>接下来是 onStart() 方法，这里会依次调用 getPackageManager()，getPackageInstaller()，registerSessionCallback() 注册会话的回调。</p>
 <p>最后是 onResume() 方法，这个方法里会获取 session 的相关信息，然后创建并执行 InstallingAsyncTask() 的安装服务，其中的 doInBackground() 方法会将应用信息通过 IO 流写入 PackageInstaller.Session 中，onPostExecute() 方法则构造一个 PendingIntent 并将它的 IntentSender 通过 PackageInstaller.Session 的 commit() 方法发送出去</p>
 <p>这里就跟 adb 安装走到了同一个流程中。</p>
-<h4 id="深入-PMS-中的安装"><a href="#深入-PMS-中的安装" class="headerlink" title="深入 PMS 中的安装"></a>深入 PMS 中的安装</h4><p>上面的后面两种场景最后都会通过 PackageInstallerSession 的 commit() 方法提交一个安装的会话，并且最终调用到了 PackageManagerService 的 installStage() 方法</p>
+<h4><span id="shen-ru-pms-zhong-de-an-zhuang">深入 PMS 中的安装</span><a href="#shen-ru-pms-zhong-de-an-zhuang" class="header-anchor">#</a></h4><p>上面的后面两种场景最后都会通过 PackageInstallerSession 的 commit() 方法提交一个安装的会话，并且最终调用到了 PackageManagerService 的 installStage() 方法</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152711796.png?raw=true" alt="image-20190801152711796"></p>
 <p>在 installStage() 里会基于传入的参数构造一个 InstallParams 对象，这个对象中包含安装包的所有数据，然后将这个对象作为消息内容，通过 mHandler 发送一个类型为 INIT_COPY 的消息。</p>
 <p>所有类型的消息处理都在 PackageHandler 里，这个类会通过 Binder 与 system_server 创建的 ServiceThread 线程绑定，PackageHandler 负责分发任务，ServiceThread 负责处理任务。</p>
@@ -311,7 +311,7 @@
 <p>installNewPackageLI() 里面调用 scanPackageTraceLI() 执行安装，然后这个函数里面又会继续调用 scanPackageInternalLI() 执行包解析，最后将 PackageParser.Package 对象返回出来，扫描完包之后就会调用 updateSettingsLI() 更新 Settings，也就是更新应用在 PMS 中的注册信息，会修改包括 packages.xml、package.list 等相关文件，如果安装成功则调用 prepareAppDataAfterInstallLIF() 来创建相关的数据目录，失败则执行回退操作 deletePackageLIF()</p>
 <p><strong>3、处理 POST_INSTALL 消息</strong></p>
 <p>首先从 mRunningInstalls 中拿到 PostInstallData 对象，mRunningInstalls 是 PostInstallData 格式的列表，在应用安装成功时构建，在安装完成后会调用 delete() 移除这一条记录，接下来取 PostInstallData 对象中的一些信息如安装参数，授予的权限等作为参数调用 handlePackagePostInstall() 执行安装完成的后续操作，包括授予权限，发送安装成功广播，发送启动广播等等</p>
-<h4 id="安装过程小结"><a href="#安装过程小结" class="headerlink" title="安装过程小结"></a>安装过程小结</h4><p>与应用相关的一些目录</p>
+<h4><span id="an-zhuang-guo-cheng-xiao-jie">安装过程小结</span><a href="#an-zhuang-guo-cheng-xiao-jie" class="header-anchor">#</a></h4><p>与应用相关的一些目录</p>
 <ul>
 <li><p>/system/priv-app：系统应用安装路径，Android 4.4+ 开始出现，区分系统应用权限，拥有 SignatureOrSystem 权限，此目录下的 service 具有保活能力</p>
 </li>
@@ -339,7 +339,7 @@
 <li>解析 AndroidManifest.xml 及其他资源文件，提取应用包信息，注册到 packags.xml 中</li>
 <li>由 Launcher 进程通过 PMS 取出所有应用程序，展示在桌面上</li>
 </ol>
-<h4 id="PMS-与-PM-与APM"><a href="#PMS-与-PM-与APM" class="headerlink" title="PMS 与 PM 与APM"></a>PMS 与 PM 与APM</h4><p>前面的一切分析都是围绕 PackageManagerService 来进行的，但是实际上平时开发过程中基本接触不到这个类，在用户层用得最多的应该是 PackageManager 这个类</p>
+<h4><span id="pms-yu-pm-yu-apm">PMS 与 PM 与APM</span><a href="#pms-yu-pm-yu-apm" class="header-anchor">#</a></h4><p>前面的一切分析都是围绕 PackageManagerService 来进行的，但是实际上平时开发过程中基本接触不到这个类，在用户层用得最多的应该是 PackageManager 这个类</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/android-apk-install-process/image-20190801152858658.png?raw=true" alt="image-20190801152858658"></p>
 <p>通常在用户层通过 Context 的 getPackageManager() 方法来获取 PackageManager 实例，Context 的 getPackageManager() 实现在 ContextImpl 里面，这个函数实际上返回的是一个 ApplicationPackageManager 对象，ApplicationPackageManager 类构造函数需要两个璨是，一个是 ContextImpl 自身，另一个是通过 ActivityThread 的 getPackageManager() 获取 IPackageManager 对象</p>
 <p>ActivityThread 的 getPackageManager() 首先调用 ServiceManager 的 getService(“package”) 获取 IBinder 对象，然后通过 IPackageManger.Stub.asInterface(IBinder) 获取 IPackageManager 对象，实际上为这个对象的一个代理</p>
@@ -372,7 +372,7 @@
 <p>ApplicationPackageManager 是 PackageManager 的实现类，它继承了 PackageManager 并实现其所有抽象方法</p>
 <p>PackageManagerService 继承了 IPackageManager.Stub</p>
 <p>因此，总结来说就是，ApplicationPackageManager 是 AIDL 模型中 Binder 通信的客户端，PackageMangerService 就是服务端，客户端的所有的功能都是通过一个 IPackageManager 类型的成员变量去完成的，实际上这个变量就是 PackageManagerService 的一个代理，通过这个代理客户端可以调用到 PackageManagerService 中的一些方法</p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
 <li><a href="http://androidxref.com/8.1.0_r33/xref/" target="_blank" rel="external">http://androidxref.com/8.1.0_r33/xref/</a></li>
 <li><a href="https://juejin.im/post/5b7e72bbe51d453894001ef0#heading-6" target="_blank" rel="external">https://juejin.im/post/5b7e72bbe51d453894001ef0#heading-6</a></li>
 <li><a href="http://solart.cc/2016/10/30/install_apk/" target="_blank" rel="external">http://solart.cc/2016/10/30/install_apk/</a></li>

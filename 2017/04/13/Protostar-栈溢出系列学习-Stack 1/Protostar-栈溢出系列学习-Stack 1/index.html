@@ -17,18 +17,18 @@
   
   <title>Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序
+  <meta name="description" content="0x00 序#
  接着之前的系列，下面研究两种控制eip的方式
 
-0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved">
+0x01 C语言源代码#Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the save">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序
+<meta property="og:description" content="0x00 序#
  接着之前的系列，下面研究两种控制eip的方式
 
-0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved">
+0x01 C语言源代码#Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the save">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-1.png?raw=true">
 <meta property="og:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-2.png?raw=true">
@@ -45,10 +45,10 @@
 <meta property="og:updated_time" content="2017-05-02T14:33:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip">
-<meta name="twitter:description" content="0x00 序
+<meta name="twitter:description" content="0x00 序#
  接着之前的系列，下面研究两种控制eip的方式
 
-0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved">
+0x01 C语言源代码#Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the save">
 <meta name="twitter:image" content="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -188,10 +188,10 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><blockquote>
+            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><blockquote>
 <p> 接着之前的系列，下面研究两种控制eip的方式</p>
 </blockquote>
-<h2 id="0x01-C语言源代码"><a href="#0x01-C语言源代码" class="headerlink" title="0x01 C语言源代码"></a>0x01 C语言源代码</h2><p>Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved EIP)</p>
+<h2><span id="0x01-c-yu-yan-yuan-dai-ma">0x01 C语言源代码</span><a href="#0x01-c-yu-yan-yuan-dai-ma" class="header-anchor">#</a></h2><p>Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved EIP)</p>
 <p>Hints:<br>both gdb and objdump is your friend you determining where the win() function lies in memory.</p>
 <pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-5.png?raw=true" alt="1-5"><br><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-6.png?raw=true" alt="1-6"></p>
 <p><strong>成功执行win()函数</strong></p>
 <p><img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-7.png?raw=true" alt="1-7"></p>
-<h2 id="0x02-通过ret指令控制eip"><a href="#0x02-通过ret指令控制eip" class="headerlink" title="0x02 通过ret指令控制eip"></a>0x02 通过ret指令控制eip</h2><p>Stack4 takes a look at overwriting saved EIP and standard buffer overflows.</p>
+<h2><span id="0x02-tong-guo-ret-zhi-ling-kong-zhi-eip">0x02 通过ret指令控制eip</span><a href="#0x02-tong-guo-ret-zhi-ling-kong-zhi-eip" class="header-anchor">#</a></h2><p>Stack4 takes a look at overwriting saved EIP and standard buffer overflows.</p>
 <p>This level is at /opt/protostar/bin/stack4</p>
 <p>Hints:<br>A variety of introductory papers into buffer overflows may help.<br>gdb lets you do “run &lt; input”<br>EIP is not directly after the end of buffer, compiler padding can also increase the size.</p>
 <pre><code>#include &lt;stdlib.h&gt;

@@ -17,37 +17,37 @@
   
   <title>Protostar-堆溢出系列学习-heap 0 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-0x01 heap0C代码
+  <meta name="description" content="0x00 序#学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
+0x01 heap0#C代码
 #include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
 #include &amp;lt;stdio.h&amp;gt;
-#include &amp;">
+#include">
 <meta name="keywords">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Protostar-堆溢出系列学习-heap 0">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-0x01 heap0C代码
+<meta property="og:description" content="0x00 序#学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
+0x01 heap0#C代码
 #include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
 #include &amp;lt;stdio.h&amp;gt;
-#include &amp;">
+#include">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-1.png">
 <meta property="og:updated_time" content="2017-04-20T13:49:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-堆溢出系列学习-heap 0">
-<meta name="twitter:description" content="0x00 序学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-0x01 heap0C代码
+<meta name="twitter:description" content="0x00 序#学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
+0x01 heap0#C代码
 #include &amp;lt;stdlib.h&amp;gt;
 #include &amp;lt;unistd.h&amp;gt;
 #include &amp;lt;string.h&amp;gt;
 #include &amp;lt;stdio.h&amp;gt;
-#include &amp;">
+#include">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -186,8 +186,8 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
-<h2 id="0x01-heap0"><a href="#0x01-heap0" class="headerlink" title="0x01 heap0"></a>0x01 heap0</h2><p><code>C代码</code></p>
+            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><p>学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。</p>
+<h2><span id="0x01-heap0">0x01 heap0</span><a href="#0x01-heap0" class="header-anchor">#</a></h2><p><code>C代码</code></p>
 <pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;string.h&gt;
@@ -228,10 +228,10 @@ int main(int argc, char **argv)
   f-&gt;fp();
 
 }
-</code></pre><h2 id="0x02-简单分析-amp-思考"><a href="#0x02-简单分析-amp-思考" class="headerlink" title="0x02 简单分析&amp;思考"></a>0x02 简单分析&amp;思考</h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
+</code></pre><h2><span id="0x02-jian-dan-fen-xi-amp-si-kao">0x02 简单分析&amp;思考</span><a href="#0x02-jian-dan-fen-xi-amp-si-kao" class="header-anchor">#</a></h2><p>先在堆上分配了一个data和fp的结构体，然后使fp指向<code>nowinner</code>函数，然后打印对应分配的堆地址，以及将<code>argv[1]</code>复制到data结构体，最后调用<code>nowinner</code>函数。</p>
 <p>可以知道我们需要去执行<code>winner</code>函数，怎么做到呢？</p>
 <p>由于<code>strcpy</code>没对数据长度进行检查，那我们是否可以利用堆溢出将fp结构体里面的函数指针改为<code>winner</code>函数？Here we go！</p>
-<h2 id="0x03-malloc"><a href="#0x03-malloc" class="headerlink" title="0x03 malloc()"></a>0x03 malloc()</h2><p>在继续分析之前，我们先来简单的介绍一下<code>malloc</code>函数，在这里<code>malloc</code>函数更多是对<code>mmap</code>系统调用函数的一个封装，为什么要封装呢？也就是为什么不直接调用<code>mmap</code>来进行堆分配，原因是为了方便堆的管理，简单的理解可以把堆看做一个很大的内存块。</p>
+<h2><span id="0x03-malloc">0x03 malloc()</span><a href="#0x03-malloc" class="header-anchor">#</a></h2><p>在继续分析之前，我们先来简单的介绍一下<code>malloc</code>函数，在这里<code>malloc</code>函数更多是对<code>mmap</code>系统调用函数的一个封装，为什么要封装呢？也就是为什么不直接调用<code>mmap</code>来进行堆分配，原因是为了方便堆的管理，简单的理解可以把堆看做一个很大的内存块。</p>
 <p>那是如何管理堆的呢？见下</p>
 <table>
 <thead>
@@ -271,7 +271,7 @@ int main(int argc, char **argv)
 </table>
 <p>每次分配的时候会额外分配16字节的管理开销，来表示所分配堆的信息。比如可以通过<code>addr-4</code>拿到自身的分配大小从而决定下次分配的选择</p>
 <p><strong>注：分配大小的第一位表示前面的内存块是否在使用</strong></p>
-<h2 id="0x04-调试-amp-hack"><a href="#0x04-调试-amp-hack" class="headerlink" title="0x04 调试&amp;hack"></a>0x04 调试&amp;hack</h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
+<h2><span id="0x04-diao-shi-amp-hack">0x04 调试&amp;hack</span><a href="#0x04-diao-shi-amp-hack" class="header-anchor">#</a></h2><p>通过前面的分析，我们的目的很明确，需要通过<code>strcpy(d-&gt;name, argv[1]);</code>去重写fp结构体里面的函数指针，使其为<code>winner</code>函数的地址。</p>
 <p>1.利用gdb查看strcpy前后堆的情况<br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap 0/king/4chendyBlog/paper/stackBufferOverflow/Protostar-堆溢出系列学习-heap/ 0/0-0.png" alt="0-0"><br>我们看到AAAABBBBCCC…分配到了data堆上，如果我们输入更长的数据，就可以将fp的<code>nowinner</code>地址改为<code>winner</code>地址</p>
 <p>2.查看<code>winner</code>地址，重写fp函数指针</p>
 <pre><code>(gdb) p winner 

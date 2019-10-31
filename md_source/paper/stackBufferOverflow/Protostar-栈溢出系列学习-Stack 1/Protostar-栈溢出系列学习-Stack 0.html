@@ -17,15 +17,15 @@
   
   <title>Protostar-栈溢出系列学习-Stack 1 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x00 序接着之前的系列，下面研究两种控制eip的方式
-0x01 通过覆盖栈中的函数指针控制eipStack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the">
+  <meta name="description" content="0x00 序#接着之前的系列，下面研究两种控制eip的方式
+0x01 通过覆盖栈中的函数指针控制eip#Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting t">
 <meta name="keywords">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Protostar-栈溢出系列学习-Stack 1">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 0.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x00 序接着之前的系列，下面研究两种控制eip的方式
-0x01 通过覆盖栈中的函数指针控制eipStack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the">
+<meta property="og:description" content="0x00 序#接着之前的系列，下面研究两种控制eip的方式
+0x01 通过覆盖栈中的函数指针控制eip#Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting t">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-0.png">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-1.png">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-2.png">
@@ -42,8 +42,8 @@
 <meta property="og:updated_time" content="2017-04-15T13:06:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Protostar-栈溢出系列学习-Stack 1">
-<meta name="twitter:description" content="0x00 序接着之前的系列，下面研究两种控制eip的方式
-0x01 通过覆盖栈中的函数指针控制eipStack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the">
+<meta name="twitter:description" content="0x00 序#接着之前的系列，下面研究两种控制eip的方式
+0x01 通过覆盖栈中的函数指针控制eip#Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting t">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io.git/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-0.png">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -182,8 +182,8 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="0x00-序"><a href="#0x00-序" class="headerlink" title="0x00 序"></a>0x00 序</h2><p>接着之前的系列，下面研究两种控制eip的方式</p>
-<h2 id="0x01-通过覆盖栈中的函数指针控制eip"><a href="#0x01-通过覆盖栈中的函数指针控制eip" class="headerlink" title="0x01 通过覆盖栈中的函数指针控制eip"></a>0x01 通过覆盖栈中的函数指针控制eip</h2><p>Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved EIP)</p>
+            <h2><span id="0x00-xu">0x00 序</span><a href="#0x00-xu" class="header-anchor">#</a></h2><p>接着之前的系列，下面研究两种控制eip的方式</p>
+<h2><span id="0x01-tong-guo-fu-gai-zhan-zhong-de-han-shu-zhi-zhen-kong-zhi-eip">0x01 通过覆盖栈中的函数指针控制eip</span><a href="#0x01-tong-guo-fu-gai-zhan-zhong-de-han-shu-zhi-zhen-kong-zhi-eip" class="header-anchor">#</a></h2><p>Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude to overwriting the saved EIP)</p>
 <p>Hints:<br>both gdb and objdump is your friend you determining where the win() function lies in memory.</p>
 <pre><code>#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
@@ -221,7 +221,7 @@ int main(int argc, char **argv)
 <p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-5.png" alt="1-5"><br><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-6.png" alt="1-6"></p>
 <p><strong>成功执行win()函数</strong></p>
 <p><img src="/4ch12dy/4ch12dy.github.io.git/md_source/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack 1/king/4chendyBlog/paper/stackBufferOverflow/Protostar-栈溢出系列学习-Stack/ 1/pic/1-7.png" alt="1-7"></p>
-<h2 id="0x02-通过ret指令控制eip"><a href="#0x02-通过ret指令控制eip" class="headerlink" title="0x02 通过ret指令控制eip"></a>0x02 通过ret指令控制eip</h2><p>Stack4 takes a look at overwriting saved EIP and standard buffer overflows.</p>
+<h2><span id="0x02-tong-guo-ret-zhi-ling-kong-zhi-eip">0x02 通过ret指令控制eip</span><a href="#0x02-tong-guo-ret-zhi-ling-kong-zhi-eip" class="header-anchor">#</a></h2><p>Stack4 takes a look at overwriting saved EIP and standard buffer overflows.</p>
 <p>This level is at /opt/protostar/bin/stack4</p>
 <p>Hints:<br>A variety of introductory papers into buffer overflows may help.<br>gdb lets you do “run &lt; input”<br>EIP is not directly after the end of buffer, compiler padding can also increase the size.</p>
 <pre><code>#include &lt;stdlib.h&gt;

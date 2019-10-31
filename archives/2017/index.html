@@ -167,17 +167,17 @@
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            C++类结构以及vtable分析
+                            C++类结构以及vtable分析#
 通过实验自己对一些C++数据结构的理解
 
-实验一#include &lt;iostream&gt;
+实验一##include &lt;iostream&gt;
 
 using namespace std;
 
 // 基类
 class Shape 
 {
-   publ..
+   pu..
                         </p>
                         <p class="date text-shadow">2017-12-02</p>
                         <button class="button is-info is-small">Read More</button>
@@ -202,7 +202,7 @@ class Shape
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
-                先说两句前不久IDA7.0发布，这次相较之前来说有很多的改动，首先整个IDA是x86 64位架构..
+                先说两句#前不久IDA7.0发布，这次相较之前来说有很多的改动，首先整个IDA是x86 64位架..
             </p>
             <p class="date text-shadow is-marginless">2017-11-30</p>
         </div>
@@ -251,7 +251,7 @@ class Shape
             
             <p class="sub-title text-shadow"></p>
             <p class="is-marginless text-shadow post-content-text">
-                先说两句前不久IDA7.0发布，这次相较之前来说有很多的改动，首先整个IDA是x86 64位架构..
+                先说两句#前不久IDA7.0发布，这次相较之前来说有很多的改动，首先整个IDA是x86 64位架..
             </p>
             <p class="date text-shadow is-marginless">2017-11-30</p>
         </div>
@@ -302,10 +302,10 @@ class Shape
                                             
                                         </p>
                                         <p>
-                                            C++类结构以及vtable分析
+                                            C++类结构以及vtable分析#
 通过实验自己对一些C++数据结构的理解
 
-实验一#include &lt;iostream&gt;
+实验一##include &lt;iostream&gt;
 
 using namespace std;
 
@@ -315,8 +315,7 @@ class Shape
    public:
       void setWidth(int w)
       {
-         width = w;
- ..
+         width = w;..
                                         </p>
                                         <p>2017-12-02</p>
                                         <button class="button is-small">Read More</button>
@@ -347,7 +346,7 @@ class Shape
                                             
                                         </p>
                                         <p>
-                                            先说两句前不久IDA7.0发布，这次相较之前来说有很多的改动，首先整个IDA是x86 64位架构，而之前却一直是i386 32位，因此插件同样为64位的dylib。不仅这样，SDK上某些接口也发生了改变，导致很多优秀的插件不得不重新改动源码，很多在IDA7上编译也存在问题。下面我将以IDA的官方插件findcrypt2来说明IDA7的插件编译细节。编译I..
+                                            先说两句#前不久IDA7.0发布，这次相较之前来说有很多的改动，首先整个IDA是x86 64位架构，而之前却一直是i386 32位，因此插件同样为64位的dylib。不仅这样，SDK上某些接口也发生了改变，导致很多优秀的插件不得不重新改动源码，很多在IDA7上编译也存在问题。下面我将以IDA的官方插件findcrypt2来说明IDA7的插件编译细节。编译..
                                         </p>
                                         <p>2017-11-30</p>
                                         <button class="button is-small">Read More</button>
@@ -379,8 +378,8 @@ class Shape
 最近项目需要用到jni去实现一些功能，在原生层调用java层的过程中，踩了很多坑，这里做个记录，方便以后查阅，以及如果遇到一些错误，看看有没有这里的坑。
 
 
-坑1–jni方法签名分号问题这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
-jmethodID equals_id = env-&gt;GetMetho..
+坑1–jni方法签名分号问题#这是一个很常见的问题，第一次写jni中方法签名的时候很容易遇到这个错误，比如下面这个签名
+jmethodID equals_id = env-&gt;GetMeth..
                                         </p>
                                         <p>2017-11-28</p>
                                         <button class="button is-small">Read More</button>
@@ -411,8 +410,8 @@ jmethodID equals_id = env-&gt;GetMetho..
                                             
                                         </p>
                                         <p>
-                                            ARM64基础知识整理Register参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
-其他特殊寄存器
+                                            ARM64基础知识整理#Register#参数寄存器 (X0-X7)#参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
+其他特殊寄存器#
 
 
 X29(FP)
@@ -429,8 +428,7 @@ SP
 栈顶寄存器，类比x64中
 
 
-PC
-指向..
+P..
                                         </p>
                                         <p>2017-10-21</p>
                                         <button class="button is-small">Read More</button>
@@ -464,8 +462,8 @@ PC
                                             
 由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
 
-x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
-x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其中..
+x86指令编码格式#很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
+x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer”，表示的是一种复杂的指令集，其..
                                         </p>
                                         <p>2017-10-11</p>
                                         <button class="button is-small">Read More</button>
@@ -527,7 +525,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
                                             
                                         </p>
                                         <p>
-                                            0x00 目录
+                                            0x00 目录#
 
 断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
 
@@ -537,7 +535,7 @@ LLVM简介
 一个基于LLVM简单的代码混淆例子
 参考链接
 
-0x01 LLVM简介LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成语言..
+0x01 LLVM简介#LLVM(low level virtual machine)是一个先进的编译器框架，它提供了一种代码编写良好的中间表示(IR)，可以作为多种语言的后端，还可以提供与变成..
                                         </p>
                                         <p>2017-06-25</p>
                                         <button class="button is-small">Read More</button>
@@ -570,9 +568,9 @@ LLVM简介
                                             
                                         </p>
                                         <p>
-                                            0x00 写在前面第一次做pwnhub题，最近参加了几场ctf比赛，pwnhub的题还是比较有一定难度的，这里记录下其中的一道逆向题。题目在这里
-0x01 简单分析拿到题目后试着在虚拟机里运行了一下，看下有什么提示
-然后转去hopper搜下相关字符串，并没有发现error相关字符串，syclover也没有相关printf等函数输出，看来只能上gdb调试看..
+                                            0x00 写在前面#第一次做pwnhub题，最近参加了几场ctf比赛，pwnhub的题还是比较有一定难度的，这里记录下其中的一道逆向题。题目在这里
+0x01 简单分析#拿到题目后试着在虚拟机里运行了一下，看下有什么提示
+然后转去hopper搜下相关字符串，并没有发现error相关字符串，syclover也没有相关printf等函数输出，看来只能上gdb调..
                                         </p>
                                         <p>2017-05-28</p>
                                         <button class="button is-small">Read More</button>
@@ -599,10 +597,10 @@ LLVM简介
                                             
                                         </p>
                                         <p>
-                                            0x00 写在前面
+                                            0x00 写在前面#
  突然在邮件中收到Quora中这样一个问题”What does X equal in $\sqrt{x+15} + \sqrt{x} = 15$? “ 凭着曾经对数学的热爱，我点了进去。顺便学习了点知识。
 
-0x01 你会怎么解决？不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都知道..
+0x01 你会怎么解决？#不得不承认，这种题型在初高中时候还是蛮常见的，在我的脑海里，也别无他法，一步一步去根号解方程吧。但都..
                                         </p>
                                         <p>2017-05-04</p>
                                         <button class="button is-small">Read More</button>
@@ -641,8 +639,8 @@ LLVM简介
                                             
                                         </p>
                                         <p>
-                                            0x00 写在前面
- 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS“..
+                                            0x00 写在前面#
+ 不知道为什么，刚开始就有很多话想说。因为看似是本文开始，实际却是连续几天几夜的分析的结束。本文将详细介绍iOS三叉戟漏洞，其影响涉及OS X 10.11.6和 iOS 9.3.4。这里为了方便以及简单，环境为OS X 关注iOS安全的技术人员都或多或少的了解这个漏洞，这里就不多说，可以参考下面的链接或者自行Google 1.iOS..
                                         </p>
                                         <p>2017-05-01</p>
                                         <button class="button is-small">Read More</button>

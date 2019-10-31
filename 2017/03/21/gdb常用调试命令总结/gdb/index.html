@@ -17,37 +17,31 @@
   
   <title>gdb常用调试命令总结 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
-0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
+  <meta name="description" content="0x01 序#最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
+0x02 命令行参数#有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
 
 gdb命令行的 –args 参数
 gdb环境中 set args命令
-show args查看程序参数
-
-0x">
+show args查看程序参数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gdb常用调试命令总结">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2017/03/21/gdb常用调试命令总结/gdb/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
-0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
+<meta property="og:description" content="0x01 序#最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
+0x02 命令行参数#有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
 
 gdb命令行的 –args 参数
 gdb环境中 set args命令
-show args查看程序参数
-
-0x">
+show args查看程序参数">
 <meta property="og:updated_time" content="2019-02-21T09:58:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gdb常用调试命令总结">
-<meta name="twitter:description" content="0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
-0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
+<meta name="twitter:description" content="0x01 序#最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
+0x02 命令行参数#有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
 
 gdb命令行的 –args 参数
 gdb环境中 set args命令
-show args查看程序参数
-
-0x">
+show args查看程序参数">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -184,21 +178,21 @@ show args查看程序参数
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2 id="0x01-序"><a href="#0x01-序" class="headerlink" title="0x01 序"></a>0x01 序</h2><p>最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。</p>
-<h2 id="0x02-命令行参数"><a href="#0x02-命令行参数" class="headerlink" title="0x02 命令行参数"></a>0x02 命令行参数</h2><p>有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：</p>
+            <h2><span id="0x01-xu">0x01 序</span><a href="#0x01-xu" class="header-anchor">#</a></h2><p>最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。</p>
+<h2><span id="0x02-ming-ling-xing-can-shu">0x02 命令行参数</span><a href="#0x02-ming-ling-xing-can-shu" class="header-anchor">#</a></h2><p>有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：</p>
 <ol>
 <li>gdb命令行的 –args 参数</li>
 <li>gdb环境中 set args命令</li>
 <li>show args查看程序参数</li>
 </ol>
-<h2 id="0x03-多线程调试"><a href="#0x03-多线程调试" class="headerlink" title="0x03 多线程调试"></a>0x03 多线程调试</h2><p>多线程调试可能是问得最多的。其实，重要就是下面几个命令：</p>
+<h2><span id="0x03-duo-xian-cheng-diao-shi">0x03 多线程调试</span><a href="#0x03-duo-xian-cheng-diao-shi" class="header-anchor">#</a></h2><p>多线程调试可能是问得最多的。其实，重要就是下面几个命令：</p>
 <p>info thread 查看当前进程的线程。<br>thread <id> 切换调试的线程为指定ID的线程。<br>break file.c:100 thread all  在file.c文件第100行处为所有经过这里的线程设置断点。<br>set scheduler-locking off|on|step，这个是问得最多的。在使用step或者continue命令调试当前被调试线程的时候，其他线程也是同时执行的，怎么只让被调试程序执行呢？通过这个命令就可以实现这个需求。</id></p>
 <ul>
 <li>off 不锁定任何线程，也就是所有线程都执行，这是默认值。</li>
 <li>on 只有当前被调试程序会执行。</li>
 <li>step 在单步的时候，除了next过一个函数的情况(熟悉情况的人可能知道，这其实是一个设置断点然后continue的行为)以外，只有当前线程会执行。</li>
 </ul>
-<h2 id="0x04-断点"><a href="#0x04-断点" class="headerlink" title="0x04 断点"></a>0x04 断点</h2><ul>
+<h2><span id="0x04-duan-dian">0x04 断点</span><a href="#0x04-duan-dian" class="header-anchor">#</a></h2><ul>
 <li>break *0x000000   下断点</li>
 <li>info breakpoints  查看断点</li>
 <li>delete break 1    删除断点</li>
@@ -210,7 +204,7 @@ show args查看程序参数
 <li>break main 在main函数处设置断点</li>
 <li>break test 在函数test处设置断点</li>
 </ul>
-<h2 id="0x05-x命令"><a href="#0x05-x命令" class="headerlink" title="0x05 x命令"></a>0x05 x命令</h2><p>也许，你很喜欢用p命令。所以，当你不知道变量名的时候，你可能会手足无措，因为p命令总是需要一个变量名的。x命令是用来查看内存的，在gdb中 “help x” 你可以查看其帮助。</p>
+<h2><span id="0x05-x-ming-ling">0x05 x命令</span><a href="#0x05-x-ming-ling" class="header-anchor">#</a></h2><p>也许，你很喜欢用p命令。所以，当你不知道变量名的时候，你可能会手足无措，因为p命令总是需要一个变量名的。x命令是用来查看内存的，在gdb中 “help x” 你可以查看其帮助。</p>
 <ul>
 <li>x/x 以十六进制输出</li>
 <li>x/d 以十进制输出</li>
@@ -220,7 +214,7 @@ show args查看程序参数
 <li>x/5i $pc  查看汇编代码</li>
 <li>x/4wx 0x000000 查看内存</li>
 </ul>
-<h2 id="0x06-command命令"><a href="#0x06-command命令" class="headerlink" title="0x06 command命令"></a>0x06 command命令</h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：</p>
+<h2><span id="0x06-command-ming-ling">0x06 command命令</span><a href="#0x06-command-ming-ling" class="header-anchor">#</a></h2><p>有一些朋友问我如何自动化调试。这里向大家介绍command命令，简单的理解一下，其就是把一组gdb的命令打包，有点像字处理软件的“宏”。下面是一个示例：</p>
 <pre><code>(gdb) break func
 Breakpoint 1 at 0x3475678: file test.c, line 12.
 (gdb) command 1
@@ -232,7 +226,7 @@ End with a line saying just &quot;end&quot;.
 &gt;end
 (gdb)
 </code></pre><p>当我们的断点到达时，自动执行command中的三个命令，把func的三个参数值打出来。</p>
-<h2 id="0x07-其他"><a href="#0x07-其他" class="headerlink" title="0x07 其他"></a>0x07 其他</h2><ul>
+<h2><span id="0x07-qi-ta">0x07 其他</span><a href="#0x07-qi-ta" class="header-anchor">#</a></h2><ul>
 <li>step /  s  下一步，直接执行下一条程序</li>
 <li><code>set disassembly-flavor intel 设置为intel汇编指令</code></li>
 <li>info proc mappings </li>
@@ -247,7 +241,7 @@ End with a line saying just &quot;end&quot;.
 <li>p *array@len 输出数组</li>
 <li>p i 输出i的值</li>
 </ul>
-<h2 id="0x08-附表"><a href="#0x08-附表" class="headerlink" title="0x08 附表"></a>0x08 附表</h2><p><strong>寄存器宽度表</strong></p>
+<h2><span id="0x08-fu-biao">0x08 附表</span><a href="#0x08-fu-biao" class="header-anchor">#</a></h2><p><strong>寄存器宽度表</strong></p>
 <pre><code>|63..32|31..16|15-8|7-0|
                |AH.|AL.|
                |AX.....|

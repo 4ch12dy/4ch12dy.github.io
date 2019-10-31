@@ -17,14 +17,14 @@
   
   <title>再谈arm指令编码 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="再谈arm指令编码背景最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
-arm指令编码与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：">
+  <meta name="description" content="再谈arm指令编码#背景#最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
+arm指令编码#与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示">
 <meta property="og:type" content="article">
 <meta property="og:title" content="再谈arm指令编码">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/04/15/arm-instruction-encode/arm-instruction-encode/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="再谈arm指令编码背景最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
-arm指令编码与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：">
+<meta property="og:description" content="再谈arm指令编码#背景#最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
+arm指令编码#与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140548217.png?raw=true?raw=true?raw=true?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140740378.png?raw=true?raw=true?raw=true?raw=true">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140801936.png?raw=true?raw=true?raw=true?raw=true">
@@ -34,8 +34,8 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 <meta property="og:updated_time" content="2019-09-23T09:37:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="再谈arm指令编码">
-<meta name="twitter:description" content="再谈arm指令编码背景最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
-arm指令编码与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：">
+<meta name="twitter:description" content="再谈arm指令编码#背景#最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。
+arm指令编码#与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140548217.png?raw=true?raw=true?raw=true?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -171,8 +171,8 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="再谈arm指令编码"><a href="#再谈arm指令编码" class="headerlink" title="再谈arm指令编码"></a>再谈arm指令编码</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。</p>
-<h4 id="arm指令编码"><a href="#arm指令编码" class="headerlink" title="arm指令编码"></a>arm指令编码</h4><p>与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：</p>
+            <h3><span id="zai-tan-arm-zhi-ling-bian-ma">再谈arm指令编码</span><a href="#zai-tan-arm-zhi-ling-bian-ma" class="header-anchor">#</a></h3><h4><span id="bei-jing">背景</span><a href="#bei-jing" class="header-anchor">#</a></h4><p>最近在做一个项目中需要patch arm指令，由于之前只是对arm指令编码了解一个大概，但patch指令需要对其指令编码十分熟悉才可以，所以重新学习了一遍arm指令。记录下学习结果。</p>
+<h4><span id="arm-zhi-ling-bian-ma">arm指令编码</span><a href="#arm-zhi-ling-bian-ma" class="header-anchor">#</a></h4><p>与x86指令的编码不同，arm指令是一个定长的指令编码格式，这种方式有很多好处，方便流水线的方式指令解码。这里arm指令采用的是32位等长编码格式。按类型的位域分布，如下所示：</p>
 <table>
 <thead>
 <tr>
@@ -205,7 +205,7 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140548217.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428140548217"></p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140740378.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428140740378"></p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/arm-instruction-encode/image-20190428140801936.png?raw=true?raw=true?raw=true?raw=true" alt="image-20190428140801936"></p>
-<h4 id="thumb指令编码"><a href="#thumb指令编码" class="headerlink" title="thumb指令编码"></a>thumb指令编码</h4><p>和arm指令类似，thumb指令集作为arm指令集的一个子集，它具有16位的指令宽度，与arm指令的32位宽度想必，thumb指令集保留了32位宽度的优势下节省了系统的储存空间。</p>
+<h4><span id="thumb-zhi-ling-bian-ma">thumb指令编码</span><a href="#thumb-zhi-ling-bian-ma" class="header-anchor">#</a></h4><p>和arm指令类似，thumb指令集作为arm指令集的一个子集，它具有16位的指令宽度，与arm指令的32位宽度想必，thumb指令集保留了32位宽度的优势下节省了系统的储存空间。</p>
 <table>
 <thead>
 <tr>
@@ -337,7 +337,7 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 </tbody>
 </table>
 <p>  所以条件为<code>0001=NE</code>，<code>条件执行=000</code>，即只有下一条指令需要条件执行，所以该指令为<code>IT NE</code></p>
-<h4 id="arm-arm64-online-assemble-disassemble"><a href="#arm-arm64-online-assemble-disassemble" class="headerlink" title="arm/arm64 online assemble/disassemble"></a>arm/arm64 online assemble/disassemble</h4><ul>
+<h4><span id="arm-arm64-online-assemble-disassemble">arm/arm64 online assemble/disassemble</span><a href="#arm-arm64-online-assemble-disassemble" class="header-anchor">#</a></h4><ul>
 <li><p><a href="https://azm.azerialabs.com/" target="_blank" rel="external">https://azm.azerialabs.com/</a></p>
 </li>
 <li><p><a href="https://wunkolo.github.io/OakSim/" target="_blank" rel="external">https://wunkolo.github.io/OakSim/</a></p>
@@ -349,7 +349,7 @@ arm指令编码与x86指令的编码不同，arm指令是一个定长的指令�
 <li><p><a href="https://salmanarif.bitbucket.io/visual/index.html" target="_blank" rel="external">https://salmanarif.bitbucket.io/visual/index.html</a></p>
 </li>
 </ul>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
 <li><a href="https://alisdair.mcdiarmid.org/arm-immediate-value-encoding/" target="_blank" rel="external">https://alisdair.mcdiarmid.org/arm-immediate-value-encoding/</a></li>
 <li><a href="http://engold.ui.ac.ir/~nikmehr/Appendix_B2.pdf" target="_blank" rel="external">http://engold.ui.ac.ir/~nikmehr/Appendix_B2.pdf</a> 指令对应表</li>
 <li><a href="http://armconverter.com/" target="_blank" rel="external">http://armconverter.com/</a> 在线转换</li>

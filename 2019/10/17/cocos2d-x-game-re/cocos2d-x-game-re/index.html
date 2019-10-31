@@ -17,26 +17,26 @@
   
   <title>cocos2d-x游戏逆向分析实践 | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="cocos2d-x游戏逆向分析实践
+  <meta name="description" content="cocos2d-x游戏逆向分析实践#
 本文将以一款简单的cocos2d-x的iOS版游戏《PassItThough》来进行简单的逆向分析以及外挂编写
 
-如何下手？这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是我或">
+如何下手？#这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cocos2d-x游戏逆向分析实践">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/10/17/cocos2d-x-game-re/cocos2d-x-game-re/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="cocos2d-x游戏逆向分析实践
+<meta property="og:description" content="cocos2d-x游戏逆向分析实践#
 本文将以一款简单的cocos2d-x的iOS版游戏《PassItThough》来进行简单的逆向分析以及外挂编写
 
-如何下手？这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是我或">
+如何下手？#这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是">
 <meta property="og:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/cocos2d-x-game-re/PassItThough.jpeg?raw=true">
 <meta property="og:updated_time" content="2019-10-17T12:58:54.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cocos2d-x游戏逆向分析实践">
-<meta name="twitter:description" content="cocos2d-x游戏逆向分析实践
+<meta name="twitter:description" content="cocos2d-x游戏逆向分析实践#
 本文将以一款简单的cocos2d-x的iOS版游戏《PassItThough》来进行简单的逆向分析以及外挂编写
 
-如何下手？这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是我或">
+如何下手？#这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是">
 <meta name="twitter:image" content="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/cocos2d-x-game-re/PassItThough.jpeg?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -174,11 +174,11 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h3 id="cocos2d-x游戏逆向分析实践"><a href="#cocos2d-x游戏逆向分析实践" class="headerlink" title="cocos2d-x游戏逆向分析实践"></a>cocos2d-x游戏逆向分析实践</h3><blockquote>
+            <h3><span id="cocos2d-x-you-xi-ni-xiang-fen-xi-shi-jian">cocos2d-x游戏逆向分析实践</span><a href="#cocos2d-x-you-xi-ni-xiang-fen-xi-shi-jian" class="header-anchor">#</a></h3><blockquote>
 <p>本文将以一款简单的cocos2d-x的iOS版游戏《PassItThough》来进行简单的逆向分析以及外挂编写</p>
 </blockquote>
-<h4 id="如何下手？"><a href="#如何下手？" class="headerlink" title="如何下手？"></a>如何下手？</h4><p>这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是我或者大多数刚进行游戏分析的最关键的问题。我会尽可能的描述清楚我从对游戏一无所知到最后成功破解一个游戏的过程，从我学习cocos2d-x游戏框架到最终破解完成耗时差不多6天时间，在这些时间里面前面4天都主要在学习cocos2d-x这个游戏引擎，后面对《PassItThough》游戏的逆向破解反而只用了两天，这里我要说明的一点在于，只有你对这个引擎或者框架足够熟悉了解以后才能有方向的进行逆向，瞎猜或者乱撞运气好可能会成功，但我坚持的观点是逆向不是全靠猜的，而是有方向的。所以如果在看这篇文章之前对cocosd-x这个游戏引擎还不熟悉的话，建议先学习一下这个引擎之后再回来看这篇文章。</p>
-<h4 id="游戏介绍"><a href="#游戏介绍" class="headerlink" title="游戏介绍"></a>游戏介绍</h4><p>这是一个十分简单的游戏，如下所示</p>
+<h4><span id="ru-he-xia-shou">如何下手？</span><a href="#ru-he-xia-shou" class="header-anchor">#</a></h4><p>这是我分析的第一个cocos2d-x的游戏，也是我第一次分析游戏。就我目前的搜索到的资料来看，关于cocos2d-x游戏的逆向分析文章可以说几乎没有，所以我准备写一篇自己在分析cocos2d-x游戏过程中的一些理解和技巧。如何下手确实是我或者大多数刚进行游戏分析的最关键的问题。我会尽可能的描述清楚我从对游戏一无所知到最后成功破解一个游戏的过程，从我学习cocos2d-x游戏框架到最终破解完成耗时差不多6天时间，在这些时间里面前面4天都主要在学习cocos2d-x这个游戏引擎，后面对《PassItThough》游戏的逆向破解反而只用了两天，这里我要说明的一点在于，只有你对这个引擎或者框架足够熟悉了解以后才能有方向的进行逆向，瞎猜或者乱撞运气好可能会成功，但我坚持的观点是逆向不是全靠猜的，而是有方向的。所以如果在看这篇文章之前对cocosd-x这个游戏引擎还不熟悉的话，建议先学习一下这个引擎之后再回来看这篇文章。</p>
+<h4><span id="you-xi-jie-shao">游戏介绍</span><a href="#you-xi-jie-shao" class="header-anchor">#</a></h4><p>这是一个十分简单的游戏，如下所示</p>
 <p><img src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/cocos2d-x-game-re/PassItThough.jpeg?raw=true" alt="PassItThough"></p>
 <p>游戏玩法就是拖动红环到另一端即可进入下一关，默认只有过关以后才能进入下一关，其他关卡都是没有解锁的。但是在拖动过程之中不能触碰到海草，一旦触碰就会游戏失败。</p>
 <p>这里有两种破解选择：</p>
@@ -186,7 +186,7 @@
 <li>忽略海草触碰，不触发游戏失败</li>
 <li>解锁关卡，使其能够玩后面的关卡</li>
 </ul>
-<h4 id="逆向分析思路"><a href="#逆向分析思路" class="headerlink" title="逆向分析思路"></a>逆向分析思路</h4><p>先说结果，我最终实现的是解锁关卡，再进入一个关卡的时候直接游戏通关，能够解锁下一个关卡。</p>
+<h4><span id="ni-xiang-fen-xi-si-lu">逆向分析思路</span><a href="#ni-xiang-fen-xi-si-lu" class="header-anchor">#</a></h4><p>先说结果，我最终实现的是解锁关卡，再进入一个关卡的时候直接游戏通关，能够解锁下一个关卡。</p>
 <p>由于cocos2d-x是c++编写的游戏，在进行逆向的时候如果没有目的盲目的分析，你可能会怀疑人生，拖到ida里面会发现没有函数符号，全是指针偏移等，可以说无从下手。在这里，我们还是从最终目的出发，假设我们想实现触碰海草不会触发游戏失败的外挂，这里应该怎么思考实现这个功能呢？</p>
 <p>从我学习cocos2d-x的经验来看，这里需要解决的是如何找到碰撞检测函数，一旦我们找到的话直接patch掉这个函数不就可以实现目的了吗？但是怎么去找这个函数还是十分麻烦的，我的想法是可能这个函数在点击和拖动事件的回调之中，也就是在拖动的过程中去判断环和海草是否碰撞。那么接下来的问题就是怎么找到拖动的回调函数？</p>
 <p>熟悉cocos2d-x就知道，一般实现逻辑就是在Scene中注册点击事件回调函数来处理屏幕中的点击事件，通常的代码如下：</p>
@@ -362,7 +362,7 @@ __text:0000000100014018                 BL              __ZdlPv ; operator delet
 0x100458c48    STR             XZR, [X19,#0x460]    sub_100458B74
 --------------------------------------------------------
 </code></pre><p>结合之前那几个点击函数，会发现有两处相同的函数，即上面的回调函数。经过分析发现就是<code>onTouchMoved</code>和<code>onTouchBegan</code>对<code>Sprite</code>进行了引用。这也很合理，在这两个时间中肯定会对该<code>Sprite</code>进行操作。所以接下来重点分析这两个函数。不过我对其进行大量分析和调试发现，这两个函数中并没有进行碰撞检测。由于对游戏开发不熟悉，如果不是在拖动事件函数中检测，那又会在哪里检测呢？</p>
-<h4 id="换个思路"><a href="#换个思路" class="headerlink" title="换个思路"></a>换个思路</h4><p>前面说到检测碰撞的函数并不在拖动事件函数中，那还可能是怎么检测碰撞的呢？想象一下可能是用一个线程去循环检测是否发生碰撞以及游戏是否结束的。那我们又应该怎么去分析呢？虽然检测是在单独的线程之中，但检测碰撞本身肯定需要对环本身操作，所以用上面同样的方法去找到环的代码调用位置。</p>
+<h4><span id="huan-ge-si-lu">换个思路</span><a href="#huan-ge-si-lu" class="header-anchor">#</a></h4><p>前面说到检测碰撞的函数并不在拖动事件函数中，那还可能是怎么检测碰撞的呢？想象一下可能是用一个线程去循环检测是否发生碰撞以及游戏是否结束的。那我们又应该怎么去分析呢？虽然检测是在单独的线程之中，但检测碰撞本身肯定需要对环本身操作，所以用上面同样的方法去找到环的代码调用位置。</p>
 <p>环初始化位置</p>
 <pre><code class="c++">sub_100014CA8(v303, &quot;common/ring2.png&quot;);
 v145 = sub_10039FAD4((__int64)v303);
@@ -565,9 +565,9 @@ __text:0000000100017CD4                 STR             W8, [X19,#0x5BC]
 <p>将那个位置patch为nop以后，发现游戏直接通过了，进入下一关又直接通关，回到主菜单发现后面的游戏关卡也都解锁了。有点暴力，游戏不玩就直接通关了，没啥游戏体验，但终究能够解锁后面的关卡和通关，所以也能接受了。</p>
 <p>关于在调试中patch的代码在我写的lldb调试工具中的<code>patcher</code>命令</p>
 <p><a href="https://github.com/4ch12dy/xia0LLDB">https://github.com/4ch12dy/xia0LLDB</a></p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>这个游戏算是比较完整的分析完了，在这过程之中，学习到了很多，也发现了与一般app逆向的区别。由于是C++代码，使得逆向分析十分困难，只能用一些分析技巧才能找到关键代码。cocos2d-x引擎游戏算是游戏逆向分析里面比较麻烦的一类了，在腾讯那本游戏安全里面针对这种游戏也没有很好地逆向方法，只提及了字符串搜索，更多可能是猜的过程。但就我分析的思路来看，还是有规律和经验可循的。</p>
-<h4 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h4><p>后面可能会做一个对于C++虚函数表恢复的插件以及编写这个游戏的外挂代码</p>
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<h4><span id="zong-jie">总结</span><a href="#zong-jie" class="header-anchor">#</a></h4><p>这个游戏算是比较完整的分析完了，在这过程之中，学习到了很多，也发现了与一般app逆向的区别。由于是C++代码，使得逆向分析十分困难，只能用一些分析技巧才能找到关键代码。cocos2d-x引擎游戏算是游戏逆向分析里面比较麻烦的一类了，在腾讯那本游戏安全里面针对这种游戏也没有很好地逆向方法，只提及了字符串搜索，更多可能是猜的过程。但就我分析的思路来看，还是有规律和经验可循的。</p>
+<h4><span id="todo">Todo</span><a href="#todo" class="header-anchor">#</a></h4><p>后面可能会做一个对于C++虚函数表恢复的插件以及编写这个游戏的外挂代码</p>
+<h4><span id="can-kao">参考</span><a href="#can-kao" class="header-anchor">#</a></h4><ul>
 <li><p><a href="https://www.cnblogs.com/Antiver/p/10173474.html" target="_blank" rel="external">https://www.cnblogs.com/Antiver/p/10173474.html</a></p>
 </li>
 <li><p><a href="https://github.com/4ch12dy/xia0LLDB">https://github.com/4ch12dy/xia0LLDB</a></p>
