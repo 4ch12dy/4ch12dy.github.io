@@ -15,12 +15,12 @@
   </script>
 
   
-  <title>Label: Linux | 4ch12dy</title>
+  <title>Tag: linux | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="给我一点时间和power">
 <meta property="og:type" content="website">
 <meta property="og:title" content="4ch12dy">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/Linux/index.html">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/linux/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="给我一点时间和power">
 <meta name="twitter:card" content="summary">
@@ -120,7 +120,7 @@
 
 <div class="container tag-cate-wrap">
     <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·Linux</strong></h1>
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·linux</strong></h1>
     </div>
 
     
@@ -128,25 +128,23 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/04/26/Protostar-堆溢出系列学习-heap 3/Protostar-堆溢出系列学习-heap 3/">
+                <a href="/2017/04/23/Linux堆分配器-DLMalloc/Linux堆分配器-DLMalloc/">
                     
                     <div class="media-left">
                         <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%203/0-0.png?raw=true" style="height: 100%; width: 100%">
+                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Linux%E5%A0%86%E5%88%86%E9%85%8D%E5%99%A8-DLMalloc/0-0.png?raw=true" style="height: 100%; width: 100%">
                         </figure>
                     </div>
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>Protostar-堆溢出学习-滥用堆metadata重定向程序执行</strong> <small class="post-date">at: 2017-04-26</small>
+                                <strong>深入理解Linux堆分配器-DLMalloc</strong> <small class="post-date">at: 2017-04-23</small>
                                 <br>
                                 #0x00 序
- 学习最后一个堆溢出漏洞，在这之前，强烈建议先阅读下我之前对linux堆管理DLMalloc的分析这是一个滥用堆metadata导致free()函数造成任意地址写的一个漏洞利用。下面一步一步的分析
+ 当学习漏洞利用到一定阶段的时候，就需要对操作系统层面有足够的认识。无疑Linux的堆管理一直是不能甚解。因此这篇文章将对Linux的DLMalloc进行详细的介绍，以此对操作系统的堆管理有一个清晰整体的认识，当我在学习的过程中，好像没有发现一篇中文文章来详细介绍相关内容，所以本文仅仅是我通过学习和实践得到的理解，若有不对，请指出。
 
-#0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#inclu..
+#..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -158,240 +156,18 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
+                <a href="/2017/03/21/gdb常用调试命令总结/gdb/">
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>Protostar-堆溢出学习-UAF(use after free)</strong> <small class="post-date">at: 2017-04-21</small>
+                                <strong>gdb常用调试命令总结</strong> <small class="post-date">at: 2017-03-21</small>
                                 <br>
-                                #0x00 序
-下面看一个堆中常见的漏洞-UAF(use after free)
+                                #0x01 序最近在做TCTF上一道Linux下的逆向题，对GDB的调试很多命令相关做一个小总结，可能不是很系统，只是记一些比较常用的，后面可能会不定期更新。
+#0x02 命令行参数有时候，我们需要调试的程序需要有命令行参数，很多朋友都不知道怎么设置调试的程序的命令行参数。其实，有两种方法：
 
-#0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;stdi..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/19/Protostar-堆溢出系列学习-heap 1/Protostar-堆溢出系列学习-heap 1/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%201/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-堆溢出学习-strcpy堆指针造成任意地址GOT表写</strong> <small class="post-date">at: 2017-04-19</small>
-                                <br>
-                                #0x00 序
- 现在我们来学习一下利用堆溢出修改GOT表达到代码劫持的列子。
-
-#0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;sys/types..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/18/Protostar-堆溢出系列学习-heap 0/Protostar-堆溢出系列学习-heap 0/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%200/0-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-堆溢出学习-覆盖堆函数指针劫持代码流</strong> <small class="post-date">at: 2017-04-18</small>
-                                <br>
-                                #0x00 序
- 学习了栈溢出相关的漏洞利用技巧，下面进入堆溢出相关。和栈溢出一样，从最简单的堆溢出开始，看看是如何利用堆溢出去控制程序的执行流程的。
-
-#0x01 C语言源代码C代码
-#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#includ..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/17/Protostar-栈溢出系列学习-format 0/Protostar-栈溢出系列学习-format 0/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-format%200/0-1.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-栈溢出学习-printf格式%n任意地址写</strong> <small class="post-date">at: 2017-04-17</small>
-                                <br>
-                                #0x00 序
-从现在开始我们先结束stack类型的漏洞，来学习一些format类型的漏洞，非常有趣。但也确实让我想了很久。
-
-#0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/16/Protostar-栈溢出系列学习-Stack 3/Protostar-栈溢出系列学习-Stack 3/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%203/3-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-栈溢出学习-ROP执行shellcode</strong> <small class="post-date">at: 2017-04-16</small>
-                                <br>
-                                #0x00 序
- 和前面的栈溢出系列，我们覆盖了返回地址，通过ret控制eip使其执行我们在栈上存放的shellcode。这次，我们做了一些栈上的限制，比如现在的操作体系都会有DSP，ASLR等保护。本文就借此来学习一些ROP的知识。
-
-#0x01 stack3#include &lt;stdlib.h&gt;
-#include &lt;unistd.h..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/15/Protostar-栈溢出系列学习-Stack 2/Protostar-栈溢出系列学习-Stack 2/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%202/2-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-栈溢出学习-ret跳转到自定义shellcode</strong> <small class="post-date">at: 2017-04-15</small>
-                                <br>
-                                #0x00 序
- 经过前面的学习，我们已经了解了简单的栈溢出利用手段，建议看本文章前先看下前面的分析。这次我们来做点有趣的事，我们引入shellcode。
-
-#0x01 C语言源代码Stack5 is a standard buffer overflow, this time introducing shellcode.
-This level is at..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/13/Protostar-栈溢出系列学习-Stack 1/Protostar-栈溢出系列学习-Stack 1/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%201/1-0.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-栈溢出学习-覆盖栈函数指针和ret指令控制eip</strong> <small class="post-date">at: 2017-04-13</small>
-                                <br>
-                                #0x00 序
- 接着之前的系列，下面研究两种控制eip的方式
-
-#0x01 C语言源代码Stack3 looks at environment variables, and how they can be set, and overwriting function pointers stored on the stack (as a prelude t..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2017/04/11/Protostar-栈溢出系列学习-Stack 0/Protostar-栈溢出系列学习-Stack 0/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E6%A0%88%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-Stack%200/0-1.png?raw=true" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>Protostar-栈溢出学习-简单栈溢出修改局部变量值</strong> <small class="post-date">at: 2017-04-11</small>
-                                <br>
-                                #0x01 序
- 为了加强自己在漏洞利用方面的能力，准备做一个栈溢出和堆溢出利用的系列学习，从最简单的栈溢出学习开始，学习平台是本地搭建的一个基于linux系统的Protostar学习虚拟机环境，里面有从易到难的示例溢出漏洞程序。那就开始吧！
-
-#0x01 Protostar虚拟机环境搭建虚拟机下载地址
-虚拟机环境搭建视频教程
-默认用户名和密码:
-
-us..
+gdb命令行的 –args 参数
+gdb环境中 set ar..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
