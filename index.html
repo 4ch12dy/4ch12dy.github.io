@@ -171,18 +171,11 @@
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            
+                            #unity3d il2cpp原理解析及逆向分析
+本文可能写得有点乱，主要完整记录了我从一无所知去逆向原理的流程，所以保留了很多分析过程中的信息，第一部分逆向分析如果对逆向过程不感兴趣简单看下就行
 
-  
-  
-    Need password to decrypt!
-    
-  
-
-Incorrect Password!
-No content to display!
-
-U2FsdGVkX1/HsgE5kJzSD5IEEUP..
+#背景介绍il2cpp以及mono
+..
                         </p>
                         <p class="date text-shadow">2019-11-06</p>
                         <button class="button is-info is-small">Read More</button>
@@ -329,18 +322,12 @@ I..
                                             
                                         </p>
                                         <p>
-                                            
+                                            #unity3d il2cpp原理解析及逆向分析
+本文可能写得有点乱，主要完整记录了我从一无所知去逆向原理的流程，所以保留了很多分析过程中的信息，第一部分逆向分析如果对逆向过程不感兴趣简单看下就行
 
-  
-  
-    Need password to decrypt!
-    
-  
-
-Incorrect Password!
-No content to display!
-
-U2FsdGVkX1/HsgE5kJzSD5IEEUPk3ZzoQI4UBKLMZd8W2pz2XPRHKzO2Uj4mXb1/abr2Ugtsb59tnyI9D7A5Dhj..
+#背景介绍il2cpp以及mono
+https://gameinstitute.qq.com/community/detail/126815
+一篇官方文档介..
                                         </p>
                                         <p>2019-11-06</p>
                                         <button class="button is-small">Read More</button>
@@ -414,7 +401,7 @@ U2FsdGVkX1/HsgE5kJzSD5IEEUPk3ZzoQI4UBKLMZd8W2pz2XPRHKzO2Uj4mXb1/abr2Ugtsb59tnyI9
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX19jmhLpQYvt4mSMrOFZpH6DBY2xtc5i72fwEPHNy5cNEqvjC4nnvtz7WR9oKPla5C/TqZ7Ypw2imKU..
+U2FsdGVkX1+lALGDNKJ4aLFIbRmhLd7LRXXBxJ4VA2THd7/2xmu5doKlyxbcIeB256YsgcUTurYcNu7H/HuywBH..
                                         </p>
                                         <p>2019-10-14</p>
                                         <button class="button is-small">Read More</button>
@@ -437,9 +424,9 @@ U2FsdGVkX19jmhLpQYvt4mSMrOFZpH6DBY2xtc5i72fwEPHNy5cNEqvjC4nnvtz7WR9oKPla5C/TqZ7Y
                                         
                                         <p>
                                             
-                                                <span class="tag is-post-tag">RE</span>
-                                            
                                                 <span class="tag is-post-tag">C++</span>
+                                            
+                                                <span class="tag is-post-tag">RE</span>
                                             
                                                 <span class="tag is-post-tag">arm64</span>
                                             
@@ -456,7 +443,7 @@ U2FsdGVkX19jmhLpQYvt4mSMrOFZpH6DBY2xtc5i72fwEPHNy5cNEqvjC4nnvtz7WR9oKPla5C/TqZ7Y
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX1+WIFgHQ/q8sjN8MM9D2lUPhLC1xXAaXKZsdiSNZ4kbAJrr6rDJTlU36AJJlEpA6XZD7R0p3CIpxF0..
+U2FsdGVkX1/Biv7fxCkxg2TZuX53pDWx+2IssVsyT5BGX3eIBdTa6tCR3XyCxhoDPIYOBT/Y8rFyvxEi4B+8V9x..
                                         </p>
                                         <p>2019-10-14</p>
                                         <button class="button is-small">Read More</button>
@@ -559,7 +546,7 @@ U2FsdGVkX1+WIFgHQ/q8sjN8MM9D2lUPhLC1xXAaXKZsdiSNZ4kbAJrr6rDJTlU36AJJlEpA6XZD7R0p
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7MxlV+SB..
+U2FsdGVkX1+ecHGbLc7sVpp8Yyg03PCcVvTzs7Yt/zL8r+eonQObA3YsuQcnd5ofLgra0BcsezmX3B5E+rzaWvz..
                                         </p>
                                         <p>2019-09-11</p>
                                         <button class="button is-small">Read More</button>
@@ -617,9 +604,9 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                                         
                                         <p>
                                             
-                                                <span class="tag is-post-tag">MDM</span>
-                                            
                                                 <span class="tag is-post-tag">wiki</span>
+                                            
+                                                <span class="tag is-post-tag">MDM</span>
                                             
                                         </p>
                                         <p>
@@ -827,6 +814,14 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
         </div>
         <div class="content-inner is-flex flex-wrap justify-space-between">
             
+                <a class="tags-item" href="tags/ARM64/" title="ARM64" rel="1">
+                    ARM64
+                </a>
+            
+                <a class="tags-item" href="tags/android/" title="android" rel="2">
+                    android
+                </a>
+            
                 <a class="tags-item" href="tags/Arduino/" title="Arduino" rel="1">
                     Arduino
                 </a>
@@ -835,12 +830,16 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     IOT
                 </a>
             
-                <a class="tags-item" href="tags/ARM64/" title="ARM64" rel="1">
-                    ARM64
+                <a class="tags-item" href="tags/C/" title="C++" rel="3">
+                    C++
                 </a>
             
-                <a class="tags-item" href="tags/android/" title="android" rel="2">
-                    android
+                <a class="tags-item" href="tags/ida/" title="ida" rel="1">
+                    ida
+                </a>
+            
+                <a class="tags-item" href="tags/vtable/" title="vtable" rel="1">
+                    vtable
                 </a>
             
                 <a class="tags-item" href="tags/Electron/" title="Electron" rel="1">
@@ -851,16 +850,20 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     RE
                 </a>
             
-                <a class="tags-item" href="tags/ida/" title="ida" rel="1">
-                    ida
+                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
+                    linux
                 </a>
             
-                <a class="tags-item" href="tags/C/" title="C++" rel="3">
-                    C++
+                <a class="tags-item" href="tags/heap/" title="heap" rel="2">
+                    heap
                 </a>
             
-                <a class="tags-item" href="tags/vtable/" title="vtable" rel="1">
-                    vtable
+                <a class="tags-item" href="tags/malloc/" title="malloc" rel="1">
+                    malloc
+                </a>
+            
+                <a class="tags-item" href="tags/free/" title="free" rel="1">
+                    free
                 </a>
             
                 <a class="tags-item" href="tags/Linux/" title="Linux" rel="9">
@@ -875,12 +878,8 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     堆溢出
                 </a>
             
-                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
-                    strcpy
-                </a>
-            
-                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
-                    GOT表
+                <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
+                    UAF
                 </a>
             
                 <a class="tags-item" href="tags/Pegasus/" title="Pegasus" rel="1">
@@ -903,28 +902,12 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     PoC
                 </a>
             
-                <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
-                    UAF
+                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
+                    strcpy
                 </a>
             
-                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
-                    linux
-                </a>
-            
-                <a class="tags-item" href="tags/heap/" title="heap" rel="2">
-                    heap
-                </a>
-            
-                <a class="tags-item" href="tags/malloc/" title="malloc" rel="1">
-                    malloc
-                </a>
-            
-                <a class="tags-item" href="tags/free/" title="free" rel="1">
-                    free
-                </a>
-            
-                <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
-                    栈溢出
+                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
+                    GOT表
                 </a>
             
                 <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
@@ -935,6 +918,10 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     DLMalloc
                 </a>
             
+                <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
+                    栈溢出
+                </a>
+            
                 <a class="tags-item" href="tags/printf/" title="printf" rel="1">
                     printf
                 </a>
@@ -943,12 +930,12 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     format
                 </a>
             
-                <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
-                    XNU
+                <a class="tags-item" href="tags/Android/" title="Android" rel="2">
+                    Android
                 </a>
             
-                <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
-                    Kernel
+                <a class="tags-item" href="tags/debug/" title="debug" rel="2">
+                    debug
                 </a>
             
                 <a class="tags-item" href="tags/tctf/" title="tctf" rel="1">
@@ -963,16 +950,24 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     angr
                 </a>
             
-                <a class="tags-item" href="tags/Android/" title="Android" rel="2">
-                    Android
+                <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
+                    XNU
                 </a>
             
-                <a class="tags-item" href="tags/debug/" title="debug" rel="2">
-                    debug
+                <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
+                    Kernel
                 </a>
             
                 <a class="tags-item" href="tags/hook/" title="hook" rel="2">
                     hook
+                </a>
+            
+                <a class="tags-item" href="tags/tweak/" title="tweak" rel="1">
+                    tweak
+                </a>
+            
+                <a class="tags-item" href="tags/Accessibility/" title="Accessibility" rel="1">
+                    Accessibility
                 </a>
             
                 <a class="tags-item" href="tags/arm/" title="arm" rel="1">
@@ -983,12 +978,36 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     AutoJS
                 </a>
             
+                <a class="tags-item" href="tags/ollvm/" title="ollvm" rel="1">
+                    ollvm
+                </a>
+            
+                <a class="tags-item" href="tags/cocos2d-x/" title="cocos2d-x" rel="1">
+                    cocos2d-x
+                </a>
+            
+                <a class="tags-item" href="tags/arm64/" title="arm64" rel="1">
+                    arm64
+                </a>
+            
                 <a class="tags-item" href="tags/gdb/" title="gdb" rel="1">
                     gdb
                 </a>
             
-                <a class="tags-item" href="tags/tweak/" title="tweak" rel="1">
-                    tweak
+                <a class="tags-item" href="tags/cocos2d/" title="cocos2d" rel="1">
+                    cocos2d
+                </a>
+            
+                <a class="tags-item" href="tags/iOS/" title="iOS" rel="2">
+                    iOS
+                </a>
+            
+                <a class="tags-item" href="tags/wiki/" title="wiki" rel="3">
+                    wiki
+                </a>
+            
+                <a class="tags-item" href="tags/MDM/" title="MDM" rel="1">
+                    MDM
                 </a>
             
                 <a class="tags-item" href="tags/crackme/" title="crackme" rel="1">
@@ -999,32 +1018,8 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     看雪
                 </a>
             
-                <a class="tags-item" href="tags/iOS/" title="iOS" rel="2">
-                    iOS
-                </a>
-            
-                <a class="tags-item" href="tags/MDM/" title="MDM" rel="1">
-                    MDM
-                </a>
-            
-                <a class="tags-item" href="tags/wiki/" title="wiki" rel="3">
-                    wiki
-                </a>
-            
                 <a class="tags-item" href="tags/lldb/" title="lldb" rel="1">
                     lldb
-                </a>
-            
-                <a class="tags-item" href="tags/Accessibility/" title="Accessibility" rel="1">
-                    Accessibility
-                </a>
-            
-                <a class="tags-item" href="tags/windows/" title="windows" rel="1">
-                    windows
-                </a>
-            
-                <a class="tags-item" href="tags/ollvm/" title="ollvm" rel="1">
-                    ollvm
                 </a>
             
                 <a class="tags-item" href="tags/mach-o/" title="mach-o" rel="1">
@@ -1037,6 +1032,10 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
             
                 <a class="tags-item" href="tags/stub/" title="stub" rel="1">
                     stub
+                </a>
+            
+                <a class="tags-item" href="tags/windows/" title="windows" rel="1">
+                    windows
                 </a>
             
                 <a class="tags-item" href="tags/math/" title="math" rel="1">
@@ -1055,8 +1054,8 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     python
                 </a>
             
-                <a class="tags-item" href="tags/shell/" title="shell" rel="1">
-                    shell
+                <a class="tags-item" href="tags/unicorn/" title="unicorn" rel="1">
+                    unicorn
                 </a>
             
                 <a class="tags-item" href="tags/unity3d/" title="unity3d" rel="1">
@@ -1067,12 +1066,8 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     il2cpp
                 </a>
             
-                <a class="tags-item" href="tags/unicorn/" title="unicorn" rel="1">
-                    unicorn
-                </a>
-            
-                <a class="tags-item" href="tags/arm64/" title="arm64" rel="1">
-                    arm64
+                <a class="tags-item" href="tags/shell/" title="shell" rel="1">
+                    shell
                 </a>
             
                 <a class="tags-item" href="tags/x86/" title="x86" rel="1">
@@ -1087,16 +1082,8 @@ U2FsdGVkX1/CN1+PMDUUTiancA8n0wPHb4lgP15/Bi7bfxrYQ59RXA3sNptbh7j3O8IM4GK0ICOlZUM7
                     LLDB
                 </a>
             
-                <a class="tags-item" href="tags/cocos2d/" title="cocos2d" rel="1">
-                    cocos2d
-                </a>
-            
                 <a class="tags-item" href="tags/kext/" title="kext" rel="1">
                     kext
-                </a>
-            
-                <a class="tags-item" href="tags/cocos2d-x/" title="cocos2d-x" rel="1">
-                    cocos2d-x
                 </a>
             
                 <a class="tags-item" href="tags/LLVM/" title="LLVM" rel="1">
