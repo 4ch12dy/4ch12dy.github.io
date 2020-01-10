@@ -147,33 +147,35 @@
                 <!-- 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-7-desktop">
-        <a href="/2017/10/11/x86指令编码笔记/X86指令编码笔记/">
+        <a href="/2017/10/21/ARM64基础知识整理/ARM64基础知识整理/">
             <div class="full-height post-hover"
                  style="
-                         background-image: url('https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true');
+                         background-image: url('https://azeria-labs.com/downloads/cheatsheetv1.2-1920x1080.png');
                          height: 350px;
                          background-size: cover;
                          background-repeat: no-repeat;
                          ">
                     <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
                         <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            X86指令编码笔记
+                            ARM64基础知识整理
                         </h1>
                         <div>
                         
                             `
-                                <span class="tag is-post-tag">x86</span>
+                                <span class="tag is-post-tag">ARM64</span>
                             
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            
-由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
+                            #ARM64基础知识整理#Register#参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
+#其他特殊寄存器
 
-#x86指令编码格式很多时候我们都是查阅指令参考页去了解一个指令的含义，但这并不能理解指令的编码格式。而只有学会看懂opcode表的时候才是王道。
-x86是一种CISC指..
+
+X29(FP)
+栈帧寄存器  类比x64中rbp
+..
                         </p>
-                        <p class="date text-shadow">2017-10-11</p>
+                        <p class="date text-shadow">2017-10-21</p>
                         <button class="button is-info is-small">Read More</button>
                     </div>
             </div>
@@ -183,6 +185,31 @@ x86是一种CISC指..
         <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
                 
+<a class="post-hover" href="/2017/10/11/x86指令编码笔记/X86指令编码笔记/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                X86指令编码笔记
+            </h3>
+            
+            
+            <span class="tag is-post-tag">x86</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                
+由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
+
+#x86指令编码格式很多时候我..
+            </p>
+            <p class="date text-shadow is-marginless">2017-10-11</p>
+        </div>
+    </div>
+</a>
+            
+            
+                
 <a class="post-hover" href="/2017/08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -201,34 +228,6 @@ x86是一种CISC指..
 最近在学习一个Mac平台上开源的rootKit框架，里面确实有很多干货，本文就来分析其中与用..
             </p>
             <p class="date text-shadow is-marginless">2017-08-10</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                初-LLVM的代码混淆
-            </h3>
-            
-            
-            <span class="tag is-post-tag">LLVM</span>
-            
-            <span class="tag is-post-tag">obfuscation</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                #0x00 目录
-
-断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
-
-..
-            </p>
-            <p class="date text-shadow is-marginless">2017-06-25</p>
         </div>
     </div>
 </a>
@@ -238,6 +237,31 @@ x86是一种CISC指..
     <div class="column is-12 is-hidden-desktop">
         
         
+<a class="post-hover" href="/2017/10/11/x86指令编码笔记/X86指令编码笔记/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/X86%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E7%AC%94%E8%AE%B0/%E6%8C%87%E4%BB%A4%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F.png?raw=true')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                X86指令编码笔记
+            </h3>
+            
+            
+            <span class="tag is-post-tag">x86</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                
+由于重装系统同步导致原文章消失，只能再写一遍，方便以后查阅。
+
+#x86指令编码格式很多时候我..
+            </p>
+            <p class="date text-shadow is-marginless">2017-10-11</p>
+        </div>
+    </div>
+</a>
+        
+        
+        
 <a class="post-hover" href="/2017/08/10/一种用户层与kext内核扩展交互方式/一种用户层与kext内核扩展交互方式/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -256,34 +280,6 @@ x86是一种CISC指..
 最近在学习一个Mac平台上开源的rootKit框架，里面确实有很多干货，本文就来分析其中与用..
             </p>
             <p class="date text-shadow is-marginless">2017-08-10</p>
-        </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/LLVM/0-0.png?raw=true')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                初-LLVM的代码混淆
-            </h3>
-            
-            
-            <span class="tag is-post-tag">LLVM</span>
-            
-            <span class="tag is-post-tag">obfuscation</span>
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                #0x00 目录
-
-断断续续的学习了一段时间的LLVM，记录下学习进度，随着后面的学习待更新
-
-..
-            </p>
-            <p class="date text-shadow is-marginless">2017-06-25</p>
         </div>
     </div>
 </a>
@@ -294,6 +290,55 @@ x86是一种CISC指..
                     
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
+                        <div class="content-box " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/10/21/ARM64基础知识整理/ARM64基础知识整理/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('https://azeria-labs.com/downloads/cheatsheetv1.2-1920x1080.png')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>ARM64基础知识整理</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">ARM64</span>
+                                            
+                                        </p>
+                                        <p>
+                                            #ARM64基础知识整理#Register#参数寄存器 (X0-X7)参数寄存器，在函数调用的时候传参使用。X0-X7分别对应8个参数，多于8个的参数保存在栈中。
+#其他特殊寄存器
+
+
+X29(FP)
+栈帧寄存器  类比x64中rbp
+
+
+
+
+X30(LR)
+链接寄存器，保存函数返回地址，x64该地址保存在栈中
+
+
+SP
+栈顶寄存器，类比x64中
+
+
+P..
+                                        </p>
+                                        <p>2017-10-21</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/10/11/x86指令编码笔记/X86指令编码笔记/">
                             <div class="columns" style="min-height: 230px;">
@@ -357,7 +402,7 @@ x86是一种CISC指令集，CISC的全称是“Complex Instruction Set Computer�
                     
                 
                     
-                        <!-- <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;"> -->
+                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2017/06/25/初-LLVM的代码混淆/初-LLVM的代码混淆/">
                             <div class="columns" style="min-height: 230px;">
@@ -529,7 +574,7 @@ LLVM简介
 Incorrect Password!
 No content to display!
 
-U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gExhODL8c..
+U2FsdGVkX18u5duYxIQGNozkBRcic4OIumjEJwd380FAqFd3swOH/xk8yJaCyYZFvCBtdhdQqXHFsI7ae9yuAZl..
                                         </p>
                                         <p>2017-04-29</p>
                                         <button class="button is-small">Read More</button>
@@ -616,50 +661,6 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
 #..
                                         </p>
                                         <p>2017-04-23</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
-                        <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2017/04/21/Protostar-堆溢出系列学习-heap 2/Protostar-堆溢出系列学习-heap 2/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
-                                         style="margin: 10px; background-size: cover;background-image: url('https://github.com/NULL-ME/NULL-ME.github.io/blob/master/articlePic/Protostar-%E5%A0%86%E6%BA%A2%E5%87%BA%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-heap%202/0-0.png?raw=true')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>Protostar-堆溢出学习-UAF(use after free)</h3>
-                                        
-                                        <p>
-                                            
-                                                <span class="tag is-post-tag">Linux</span>
-                                            
-                                                <span class="tag is-post-tag">Protostar</span>
-                                            
-                                                <span class="tag is-post-tag">堆溢出</span>
-                                            
-                                                <span class="tag is-post-tag">UAF</span>
-                                            
-                                        </p>
-                                        <p>
-                                            #0x00 序
-下面看一个堆中常见的漏洞-UAF(use after free)
-
-#0x01 C语言源代码#include &lt;stdlib.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;string.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;stdi..
-                                        </p>
-                                        <p>2017-04-21</p>
                                         <button class="button is-small">Read More</button>
                                     </div>
                                 </div>
@@ -809,11 +810,11 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
         <!--post数量和tag category 数量-->
         <div class="site-box is-flex">
             <div class="flex-1 is-flex flex-column center full-height right-line">
-                <strong>63</strong>
+                <strong>64</strong>
                 <p>Posts</p>
             </div>
             <div class="flex-1 is-flex flex-column center full-height">
-                <strong>72</strong>
+                <strong>73</strong>
                 <p>Tags</p>
             </div>
         </div>
@@ -828,14 +829,6 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     android
                 </a>
             
-                <a class="tags-item" href="tags/Electron/" title="Electron" rel="1">
-                    Electron
-                </a>
-            
-                <a class="tags-item" href="tags/RE/" title="RE" rel="15">
-                    RE
-                </a>
-            
                 <a class="tags-item" href="tags/Arduino/" title="Arduino" rel="1">
                     Arduino
                 </a>
@@ -844,20 +837,44 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     IOT
                 </a>
             
-                <a class="tags-item" href="tags/C/" title="C++" rel="3">
-                    C++
-                </a>
-            
-                <a class="tags-item" href="tags/ida/" title="ida" rel="2">
-                    ida
-                </a>
-            
                 <a class="tags-item" href="tags/ARM64/" title="ARM64" rel="1">
                     ARM64
                 </a>
             
+                <a class="tags-item" href="tags/Electron/" title="Electron" rel="1">
+                    Electron
+                </a>
+            
+                <a class="tags-item" href="tags/RE/" title="RE" rel="16">
+                    RE
+                </a>
+            
+                <a class="tags-item" href="tags/C/" title="C++" rel="3">
+                    C++
+                </a>
+            
                 <a class="tags-item" href="tags/vtable/" title="vtable" rel="1">
                     vtable
+                </a>
+            
+                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
+                    linux
+                </a>
+            
+                <a class="tags-item" href="tags/heap/" title="heap" rel="2">
+                    heap
+                </a>
+            
+                <a class="tags-item" href="tags/malloc/" title="malloc" rel="1">
+                    malloc
+                </a>
+            
+                <a class="tags-item" href="tags/free/" title="free" rel="1">
+                    free
+                </a>
+            
+                <a class="tags-item" href="tags/ida/" title="ida" rel="2">
+                    ida
                 </a>
             
                 <a class="tags-item" href="tags/Linux/" title="Linux" rel="9">
@@ -872,12 +889,12 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     堆溢出
                 </a>
             
-                <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
-                    metadata
+                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
+                    strcpy
                 </a>
             
-                <a class="tags-item" href="tags/DLMalloc/" title="DLMalloc" rel="1">
-                    DLMalloc
+                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
+                    GOT表
                 </a>
             
                 <a class="tags-item" href="tags/Pegasus/" title="Pegasus" rel="1">
@@ -900,60 +917,20 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     PoC
                 </a>
             
-                <a class="tags-item" href="tags/linux/" title="linux" rel="2">
-                    linux
-                </a>
-            
-                <a class="tags-item" href="tags/heap/" title="heap" rel="2">
-                    heap
-                </a>
-            
-                <a class="tags-item" href="tags/malloc/" title="malloc" rel="1">
-                    malloc
-                </a>
-            
-                <a class="tags-item" href="tags/free/" title="free" rel="1">
-                    free
-                </a>
-            
                 <a class="tags-item" href="tags/UAF/" title="UAF" rel="1">
                     UAF
-                </a>
-            
-                <a class="tags-item" href="tags/strcpy/" title="strcpy" rel="1">
-                    strcpy
-                </a>
-            
-                <a class="tags-item" href="tags/GOT表/" title="GOT表" rel="1">
-                    GOT表
                 </a>
             
                 <a class="tags-item" href="tags/栈溢出/" title="栈溢出" rel="4">
                     栈溢出
                 </a>
             
-                <a class="tags-item" href="tags/tctf/" title="tctf" rel="1">
-                    tctf
+                <a class="tags-item" href="tags/metadata/" title="metadata" rel="1">
+                    metadata
                 </a>
             
-                <a class="tags-item" href="tags/re/" title="re" rel="2">
-                    re
-                </a>
-            
-                <a class="tags-item" href="tags/Android/" title="Android" rel="2">
-                    Android
-                </a>
-            
-                <a class="tags-item" href="tags/debug/" title="debug" rel="2">
-                    debug
-                </a>
-            
-                <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
-                    XNU
-                </a>
-            
-                <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
-                    Kernel
+                <a class="tags-item" href="tags/DLMalloc/" title="DLMalloc" rel="1">
+                    DLMalloc
                 </a>
             
                 <a class="tags-item" href="tags/printf/" title="printf" rel="1">
@@ -964,24 +941,60 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     format
                 </a>
             
+                <a class="tags-item" href="tags/Android/" title="Android" rel="2">
+                    Android
+                </a>
+            
+                <a class="tags-item" href="tags/debug/" title="debug" rel="2">
+                    debug
+                </a>
+            
+                <a class="tags-item" href="tags/tctf/" title="tctf" rel="1">
+                    tctf
+                </a>
+            
+                <a class="tags-item" href="tags/re/" title="re" rel="2">
+                    re
+                </a>
+            
                 <a class="tags-item" href="tags/angr/" title="angr" rel="2">
                     angr
-                </a>
-            
-                <a class="tags-item" href="tags/AutoJS/" title="AutoJS" rel="1">
-                    AutoJS
-                </a>
-            
-                <a class="tags-item" href="tags/arm/" title="arm" rel="1">
-                    arm
                 </a>
             
                 <a class="tags-item" href="tags/tweak/" title="tweak" rel="1">
                     tweak
                 </a>
             
+                <a class="tags-item" href="tags/XNU/" title="XNU" rel="1">
+                    XNU
+                </a>
+            
+                <a class="tags-item" href="tags/Kernel/" title="Kernel" rel="1">
+                    Kernel
+                </a>
+            
                 <a class="tags-item" href="tags/hook/" title="hook" rel="2">
                     hook
+                </a>
+            
+                <a class="tags-item" href="tags/arm/" title="arm" rel="1">
+                    arm
+                </a>
+            
+                <a class="tags-item" href="tags/AutoJS/" title="AutoJS" rel="1">
+                    AutoJS
+                </a>
+            
+                <a class="tags-item" href="tags/Accessibility/" title="Accessibility" rel="1">
+                    Accessibility
+                </a>
+            
+                <a class="tags-item" href="tags/cocos2d/" title="cocos2d" rel="1">
+                    cocos2d
+                </a>
+            
+                <a class="tags-item" href="tags/ollvm/" title="ollvm" rel="1">
+                    ollvm
                 </a>
             
                 <a class="tags-item" href="tags/crackme/" title="crackme" rel="1">
@@ -1000,20 +1013,24 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     gdb
                 </a>
             
-                <a class="tags-item" href="tags/wiki/" title="wiki" rel="3">
-                    wiki
+                <a class="tags-item" href="tags/go/" title="go" rel="1">
+                    go
                 </a>
             
                 <a class="tags-item" href="tags/MDM/" title="MDM" rel="1">
                     MDM
                 </a>
             
+                <a class="tags-item" href="tags/wiki/" title="wiki" rel="3">
+                    wiki
+                </a>
+            
                 <a class="tags-item" href="tags/lldb/" title="lldb" rel="1">
                     lldb
                 </a>
             
-                <a class="tags-item" href="tags/arm64/" title="arm64" rel="2">
-                    arm64
+                <a class="tags-item" href="tags/windows/" title="windows" rel="1">
+                    windows
                 </a>
             
                 <a class="tags-item" href="tags/mach-o/" title="mach-o" rel="1">
@@ -1028,12 +1045,8 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     stub
                 </a>
             
-                <a class="tags-item" href="tags/windows/" title="windows" rel="1">
-                    windows
-                </a>
-            
-                <a class="tags-item" href="tags/math/" title="math" rel="1">
-                    math
+                <a class="tags-item" href="tags/python/" title="python" rel="2">
+                    python
                 </a>
             
                 <a class="tags-item" href="tags/CTF/" title="CTF" rel="1">
@@ -1044,24 +1057,16 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     writeup
                 </a>
             
-                <a class="tags-item" href="tags/python/" title="python" rel="2">
-                    python
+                <a class="tags-item" href="tags/arm64/" title="arm64" rel="2">
+                    arm64
+                </a>
+            
+                <a class="tags-item" href="tags/math/" title="math" rel="1">
+                    math
                 </a>
             
                 <a class="tags-item" href="tags/shell/" title="shell" rel="1">
                     shell
-                </a>
-            
-                <a class="tags-item" href="tags/cocos2d-x/" title="cocos2d-x" rel="1">
-                    cocos2d-x
-                </a>
-            
-                <a class="tags-item" href="tags/ollvm/" title="ollvm" rel="1">
-                    ollvm
-                </a>
-            
-                <a class="tags-item" href="tags/instruction/" title="instruction" rel="1">
-                    instruction
                 </a>
             
                 <a class="tags-item" href="tags/x86/" title="x86" rel="1">
@@ -1070,6 +1075,22 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
             
                 <a class="tags-item" href="tags/unicorn/" title="unicorn" rel="1">
                     unicorn
+                </a>
+            
+                <a class="tags-item" href="tags/frida/" title="frida" rel="1">
+                    frida
+                </a>
+            
+                <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="2">
+                    LLDB
+                </a>
+            
+                <a class="tags-item" href="tags/instruction/" title="instruction" rel="1">
+                    instruction
+                </a>
+            
+                <a class="tags-item" href="tags/kext/" title="kext" rel="1">
+                    kext
                 </a>
             
                 <a class="tags-item" href="tags/LLVM/" title="LLVM" rel="1">
@@ -1084,24 +1105,8 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
                     正则表达式
                 </a>
             
-                <a class="tags-item" href="tags/Accessibility/" title="Accessibility" rel="1">
-                    Accessibility
-                </a>
-            
-                <a class="tags-item" href="tags/frida/" title="frida" rel="1">
-                    frida
-                </a>
-            
-                <a class="tags-item" href="tags/kext/" title="kext" rel="1">
-                    kext
-                </a>
-            
-                <a class="tags-item" href="tags/LLDB/" title="LLDB" rel="2">
-                    LLDB
-                </a>
-            
-                <a class="tags-item" href="tags/cocos2d/" title="cocos2d" rel="1">
-                    cocos2d
+                <a class="tags-item" href="tags/cocos2d-x/" title="cocos2d-x" rel="1">
+                    cocos2d-x
                 </a>
             
                 <a class="tags-item" href="tags/unity3d/" title="unity3d" rel="1">
@@ -1119,7 +1124,7 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
             <strong>Categories</strong>
         </div>
         <div class="content-inner">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/CTF/">CTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/IDA/">IDA</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/IOT/">IOT</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/LLVM/">LLVM</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/OS/">OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/RE/">RE</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/assembly/">assembly</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/crackme/">crackme</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/ctf/">ctf</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/dev/">dev</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSCVE/">iOSCVE</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSRE/">iOSRE</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/kext-iokit/">kext/iokit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/me/">me</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/misc/">misc</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/note/">note</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/pwn/">pwn</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/re/">re</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/way/">way</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/wiki/">wiki</a><span class="category-list-count">4</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../categories/C/">C++</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/CTF/">CTF</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/IDA/">IDA</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/IOT/">IOT</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/LLVM/">LLVM</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/Linux堆栈漏洞学习系列/">Linux堆栈漏洞学习系列</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/OS/">OS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/RE/">RE</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/assembly/">assembly</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/crackme/">crackme</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/ctf/">ctf</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/dev/">dev</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSCVE/">iOSCVE</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/iOSRE/">iOSRE</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/kext-iokit/">kext/iokit</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/me/">me</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/misc/">misc</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/note/">note</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/pwn/">pwn</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/re/">re</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/way/">way</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="../../categories/wiki/">wiki</a><span class="category-list-count">4</span></li></ul>
         </div>
     </div>
     <div class="content-inner content-box">
@@ -1127,7 +1132,7 @@ U2FsdGVkX19WIQFUz4JlFKQu2B/wiBBOyi6Gv9mk2zuLhz8Stl+JCaq9UndLgojFBjOjP49YC0eUU5gE
             <strong>Archives</strong>
         </div>
         <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/12/">December 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/11/">November 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/09/">September 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/08/">August 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/07/">July 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/04/">April 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/03/">March 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/09/">September 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">April 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/02/">February 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2020/01/">January 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/12/">December 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/11/">November 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/10/">October 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/09/">September 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/08/">August 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/07/">July 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/04/">April 2019</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/03/">March 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2019/01/">January 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/09/">September 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2018/04/">April 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/10/">October 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/04/">April 2017</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/03/">March 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2017/02/">February 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2016/08/">August 2016</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 </aside>
