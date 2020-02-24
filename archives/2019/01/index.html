@@ -147,7 +147,7 @@
                 <!-- 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-12">
-        <a href="/2019/01/30/XNU系统调用深度解析/XNU系统调用深度解析/">
+        <a href="/2019/01/30/XNU-syscall-analyzing/XNU系统调用深度解析/">
             <div class="full-height post-hover"
                  style="
                          background-image: url('');
@@ -198,7 +198,7 @@
                     
                         <!-- <div class="content-box  " style="margin-bottom: 27px;"> -->
                         <div class="content-box " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/30/XNU系统调用深度解析/XNU系统调用深度解析/">
+                            <a class="post-hover" href="/2019/01/30/XNU-syscall-analyzing/XNU系统调用深度解析/">
                             <div class="columns" style="min-height: 230px;">
                                 
                                 <div class="column is-8-desktop post-content is-flex align-center">
@@ -279,5 +279,20 @@
 <script src="../../../js/search_core.js"></script>
 <script src="../../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

