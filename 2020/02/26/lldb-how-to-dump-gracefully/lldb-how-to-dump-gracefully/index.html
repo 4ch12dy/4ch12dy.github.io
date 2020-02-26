@@ -15,17 +15,17 @@
   </script>
 
   
-  <title>如何优雅的在LLDB里dump Macho | 4ch12dy</title>
+  <title>如何优雅的在LLDB里dumpdecrypted | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何优雅的在LLDB里dump Macho">
+<meta property="og:title" content="如何优雅的在LLDB里dumpdecrypted">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2020/02/26/lldb-how-to-dump-gracefully/lldb-how-to-dump-gracefully/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
-<meta property="og:updated_time" content="2020-02-26T18:22:48.758Z">
+<meta property="og:updated_time" content="2020-02-26T18:25:20.344Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何优雅的在LLDB里dump Macho">
+<meta name="twitter:title" content="如何优雅的在LLDB里dumpdecrypted">
 <meta name="twitter:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
@@ -144,7 +144,7 @@
     <div class="container post-box">
         <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
             <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
-                <strong>如何优雅的在LLDB里dump Macho</strong>
+                <strong>如何优雅的在LLDB里dumpdecrypted</strong>
             </h1>
             
             <div class="is-flex align-center">
