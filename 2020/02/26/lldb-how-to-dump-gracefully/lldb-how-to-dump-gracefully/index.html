@@ -23,7 +23,7 @@
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2020/02/26/lldb-how-to-dump-gracefully/lldb-how-to-dump-gracefully/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
-<meta property="og:updated_time" content="2020-02-26T18:28:15.847Z">
+<meta property="og:updated_time" content="2020-02-26T18:59:56.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何优雅的在LLDB里dumpdecrypted">
 <meta name="twitter:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
@@ -236,6 +236,7 @@ load_images(enum dyld_image_states state, uint32_t infoCount,
     frame #4: 0x000000010146f7ac dyld`ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&amp;) + 40
     frame #5: 0x0000000101469f64 dyld`ImageLoader::recursiveInitialization(ImageLoader::LinkContext const&amp;, unsigned int, char const*, ImageLoader::InitializerTimingList&amp;, ImageLoader::UninitedUpwards&amp;) + 512
 </code></pre><p>这时候执行dumpdecrypted发现就没问题了，顺利脱壳。后面在封装成一个命令，这样只要调试器挂上以后，执行命令自动下断点，触发以后自动执行脱壳命令，这样就要优雅很多。</p>
+<p>现在<a href="https://github.com/4ch12dy/xia0LLDB">xia0LLDB</a>中dumpdecrypted已经更新，在以后台模式启动app，lldb挂上去以后，直接执行<code>dumpdecrypted -X</code>即可</p>
 <h3><a href="#geng-duo-si-kao" class="header-anchor">#</a><span id="geng-duo-si-kao">更多思考</span></h3><p>本文来说，这里应该就完了，已经找到了一个比较优雅的dump点。不过我却陷入了思考，这个<code>TweakInject.dylib</code>凭啥就能优先初始化执行代码，能够保证在基础模块初始化之后，其他模块之前。正常来说肯定是做不到的，除非对dyld进行修改，使其优先初始化这个dylib。所以是怎么做到这得呢？搜索了一番没有发现是什么资料，随后我又对unc0ver进行了测试（因为我用的Chimera越狱），之前我就说过这两个越狱其实差异很大，导致我想看下unc0ver中这里是怎么处理的，同样对<code>CFBundleGetMainBundle</code>下断点，堆栈如下</p>
 <pre><code>(lldb) bt
 * thread #1, queue = &#39;com.apple.main-thread&#39;, stop reason = breakpoint 1.1
@@ -354,5 +355,20 @@ load_images(enum dyld_image_states state, uint32_t infoCount,
 <script src="../../../../../js/search_core.js"></script>
 <script src="../../../../../js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
