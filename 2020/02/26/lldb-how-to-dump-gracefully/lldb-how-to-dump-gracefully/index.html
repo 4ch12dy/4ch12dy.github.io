@@ -23,7 +23,7 @@
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2020/02/26/lldb-how-to-dump-gracefully/lldb-how-to-dump-gracefully/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
-<meta property="og:updated_time" content="2020-02-26T18:25:20.344Z">
+<meta property="og:updated_time" content="2020-02-26T18:28:15.847Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何优雅的在LLDB里dumpdecrypted">
 <meta name="twitter:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
@@ -227,7 +227,8 @@ load_images(enum dyld_image_states state, uint32_t infoCount,
 </code></pre>
 <p>注释上也写了，这个函数其实主要就是去处理<code>+load</code>方法的，这样说来我们直接在这个方法下断点可以吗？事实上是可以的，但是进程会加载很多模块，在调试器中去需要频繁的进行check是否当前就是app的模块。那这个点其实也是不优雅的。</p>
 <h3><a href="#liu-an-hua-ming" class="header-anchor">#</a><span id="liu-an-hua-ming">柳暗花明</span></h3><p>在调试的时候由于一个偶然的bug，调试器断在了<code>TweakInject.dylib</code>这里面的一个函数。而且此时app的<code>+load</code>代码并没有执行，而且看名字应该是加载tweak的dylib用的，然后就去google 了一下这个，发现是有开源代码的</p>
-<p><a href="https://github.com/chr1s0x1/TweakInject，看了下源码发现确实就是用来加载`/Library/MobileSubstrate/DynamicLibraries`下的dylib的，规则就是根据plist的字段。而且现在像`libobjc.A.dylib`这样的基础模块以及初始化完成。所以是能够执行OC代码，那这个时机应该就是最佳的dump时机。所以我对`CoreFoundation`">https://github.com/chr1s0x1/TweakInject，看了下源码发现确实就是用来加载`/Library/MobileSubstrate/DynamicLibraries`下的dylib的，规则就是根据plist的字段。而且现在像`libobjc.A.dylib`这样的基础模块以及初始化完成。所以是能够执行OC代码，那这个时机应该就是最佳的dump时机。所以我对`CoreFoundation`</a> 里面的<code>CFBundleGetMainBundle</code>函数下断点。堆栈如下</p>
+<p><a href="https://github.com/chr1s0x1/TweakInject">https://github.com/chr1s0x1/TweakInject</a></p>
+<p>看了下源码发现确实就是用来加载<code>/Library/MobileSubstrate/DynamicLibraries</code>下的dylib的，规则就是根据plist的字段。而且现在像<code>libobjc.A.dylib</code>这样的基础模块以及初始化完成。所以是能够执行OC代码，那这个时机应该就是最佳的dump时机。所以我对<code>CoreFoundation</code> 里面的<code>CFBundleGetMainBundle</code>函数下断点。堆栈如下</p>
 <pre><code>* frame #0: 0x00000001fd2d18ac CoreFoundation`CFBundleGetMainBundle
     frame #1: 0x00000001fdbfeadc Foundation`+[NSBundle mainBundle] + 112
     frame #2: 0x00000001012b6ee0 TweakInject.dylib`___lldb_unnamed_symbol1$$TweakInject.dylib + 96
@@ -353,20 +354,5 @@ load_images(enum dyld_image_states state, uint32_t infoCount,
 <script src="../../../../../js/search_core.js"></script>
 <script src="../../../../../js/script.js"></script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
