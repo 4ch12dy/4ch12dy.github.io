@@ -17,16 +17,16 @@
   
   <title>如何优雅的在LLDB里dumpdecrypted | 4ch12dy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
+  <meta name="description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱直接闪退、不明crash等。因为现在的脱壳工具前提必须是app至少能正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何优雅的在LLDB里dumpdecrypted">
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2020/02/26/lldb-how-to-dump-gracefully/lldb-how-to-dump-gracefully/index.html">
 <meta property="og:site_name" content="4ch12dy">
-<meta property="og:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
-<meta property="og:updated_time" content="2020-02-26T18:59:56.399Z">
+<meta property="og:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱直接闪退、不明crash等。因为现在的脱壳工具前提必须是app至少能正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现">
+<meta property="og:updated_time" content="2020-02-27T06:31:25.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何优雅的在LLDB里dumpdecrypted">
-<meta name="twitter:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默">
+<meta name="twitter:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱直接闪退、不明crash等。因为现在的脱壳工具前提必须是app至少能正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现">
   
     <link rel="alternate" href="/atom.xml" title="4ch12dy" type="application/atom+xml">
   
@@ -169,7 +169,7 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h2><a href="#ru-he-you-ya-de-zai-lldb-li-dumpdecrypted" class="header-anchor">#</a><span id="ru-he-you-ya-de-zai-lldb-li-dumpdecrypted">如何优雅的在LLDB里dumpdecrypted</span></h2><h3><a href="#kai-shi" class="header-anchor">#</a><span id="kai-shi">开始</span></h3><p>之前写过一篇<a href="http://4ch12dy.site/2019/09/23/lldb-dumpdecrypted/lldb-dumpdecrypted/" target="_blank" rel="external">文章</a>介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱、不明crash等。因为现在的脱壳工具前提必须是app至少等正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默认讨论是针对启动就crash的场景。</p>
+            <h2><a href="#ru-he-you-ya-de-zai-lldb-li-dumpdecrypted" class="header-anchor">#</a><span id="ru-he-you-ya-de-zai-lldb-li-dumpdecrypted">如何优雅的在LLDB里dumpdecrypted</span></h2><h3><a href="#kai-shi" class="header-anchor">#</a><span id="kai-shi">开始</span></h3><p>之前写过一篇<a href="http://4ch12dy.site/2019/09/23/lldb-dumpdecrypted/lldb-dumpdecrypted/" target="_blank" rel="external">文章</a>介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱直接闪退、不明crash等。因为现在的脱壳工具前提必须是app至少能正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现，本文默认讨论是针对启动就crash的场景。</p>
 <h3><a href="#wen-ti" class="header-anchor">#</a><span id="wen-ti">问题？</span></h3><p>由于在LLDB中脱壳的特殊性，LLDB以后台模式启动App后，能拿到最早的执行点，所以App代码还没执行，自然是不会crash的，但是这个时机是没有办法进行脱壳的，因为很多基础模块都没有加载到进程，而我写的脱壳代码是需要执行环境（直接进行内存dump的话是不需要）。所以才有了之前那篇文章设置断点的方式，主要就是为了能够在基础模块加载完后，app代码还未执行之前进行dump。也因为如此，写了一个能对<code>mod_init_func</code>下断点的命令，但这种方式一直都不优雅，很麻烦，而且<code>+[Class load]</code>的执行时机在<code>mod_init_func</code>之前，如果把检测的代码放到那里，这时候程序以及退出了。</p>
 <h3><a href="#ni-xiang-fen-xi" class="header-anchor">#</a><span id="ni-xiang-fen-xi">逆向分析</span></h3><p>其实对于dump的时机问题，最开始就在思考怎么容易的去拿到一个点。但之前在dyld源码中查找过相关api，不过没有找打合适的点。最近分析一个app正是用的<code>+[Class load]</code>方式进行的检测，导致脱壳费了一点精力，所以想完善一下。开始分析：</p>
 <p>首先<code>+[Class load]</code>的调用链如下</p>
@@ -260,7 +260,8 @@ load_images(enum dyld_image_states state, uint32_t infoCount,
     frame #17: 0x000000010d369208 cy-c5bKjj.dylib`dyldbootstrap::start(dyld3::MachOLoaded const*, int, char const**, dyld3::MachOLoaded const*, unsigned long*) + 396
     frame #18: 0x000000010d369038 cy-c5bKjj.dylib`_dyld_start + 56
 </code></pre><p>这里可以发现并不是<code>TweakInject.dylib</code>，而是<code>SubstrateLoader.dylib</code>从名字上来看应该也是用作加载tweak的dylib的。另外有个注意的地方在于，调用者并不是dyld，而是<code>cy-c5bKjj.dylib</code>完整的路径是<code>/Library/Caches/cy-c5bKjj.dylib</code>，然而去文件中发现并不存在，可能是动态生成加载到进程以后就删除了？</p>
-<h3><a href="#zui-hou" class="header-anchor">#</a><span id="zui-hou">最后</span></h3><p>这里目前还有几个疑问没解决，后面找到了答案再来更新。</p>
+<h3><a href="#2020-02-27-geng-xin" class="header-anchor">#</a><span id="2020-02-27-geng-xin">2020-02-27更新</span></h3><p>应该找到是怎么实现的了…有时间再写</p>
+<h3><a href="#zui-hou" class="header-anchor">#</a><span id="zui-hou">最后</span></h3><p><del>这里目前还有几个疑问没解决，后面找到了答案再来更新。</del></p>
 <h3><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h3><ul>
 <li><a href="https://github.com/Chr0nicT/TweakInject">https://github.com/Chr0nicT/TweakInject</a></li>
 <li><a href="https://github.com/chr1s0x1/TweakInject">https://github.com/chr1s0x1/TweakInject</a></li>
