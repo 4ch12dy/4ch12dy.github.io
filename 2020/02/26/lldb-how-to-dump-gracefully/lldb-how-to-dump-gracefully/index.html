@@ -23,7 +23,7 @@
 <meta property="og:url" content="https://github.com/4ch12dy/4ch12dy.github.io.git/2020/02/26/lldb-how-to-dump-gracefully/lldb-how-to-dump-gracefully/index.html">
 <meta property="og:site_name" content="4ch12dy">
 <meta property="og:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱直接闪退、不明crash等。因为现在的脱壳工具前提必须是app至少能正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现">
-<meta property="og:updated_time" content="2020-02-27T06:31:25.299Z">
+<meta property="og:updated_time" content="2020-02-28T08:42:51.477Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何优雅的在LLDB里dumpdecrypted">
 <meta name="twitter:description" content="#如何优雅的在LLDB里dumpdecrypted#开始之前写过一篇文章介绍了在LLDB中的脱壳工具，原理是将dumpdecrypted移植成了LLDB脚本。该脱壳的场景主要是针对一些无法正常启动的app进行脱壳，例如，检测到越狱直接闪退、不明crash等。因为现在的脱壳工具前提必须是app至少能正常启动。但是在LLDB中脱壳那篇文章关于脱壳流程其实很繁琐，所以这里将进行改进，用一种优雅的方式实现">
@@ -259,8 +259,16 @@ load_images(enum dyld_image_states state, uint32_t infoCount,
     frame #16: 0x000000010d36edb4 cy-c5bKjj.dylib`dyld::_main(macho_header const*, unsigned long, int, char const**, char const**, char const**, unsigned long*) + 4616
     frame #17: 0x000000010d369208 cy-c5bKjj.dylib`dyldbootstrap::start(dyld3::MachOLoaded const*, int, char const**, dyld3::MachOLoaded const*, unsigned long*) + 396
     frame #18: 0x000000010d369038 cy-c5bKjj.dylib`_dyld_start + 56
-</code></pre><p>这里可以发现并不是<code>TweakInject.dylib</code>，而是<code>SubstrateLoader.dylib</code>从名字上来看应该也是用作加载tweak的dylib的。另外有个注意的地方在于，调用者并不是dyld，而是<code>cy-c5bKjj.dylib</code>完整的路径是<code>/Library/Caches/cy-c5bKjj.dylib</code>，然而去文件中发现并不存在，可能是动态生成加载到进程以后就删除了？</p>
-<h3><a href="#2020-02-27-geng-xin" class="header-anchor">#</a><span id="2020-02-27-geng-xin">2020-02-27更新</span></h3><p>应该找到是怎么实现的了…有时间再写</p>
+</code></pre><p>这里可以发现并不是<code>TweakInject.dylib</code>，而是<code>SubstrateLoader.dylib</code>从名字上来看应该也是用作加载tweak的dylib的。另外有个注意的地方在于，调用者并不是dyld，而是<code>cy-c5bKjj.dylib</code>完整的路径是<code>/Library/Caches/cy-c5bKjj.dylib</code>，然而去文件中发现并不存在。</p>
+<h3><a href="#geng-xin-2020-02-28" class="header-anchor">#</a><span id="geng-xin-2020-02-28">更新（2020-02-28）</span></h3><p>找到原因了，本来写了一段，不过又删除了。原因是后面涉及到的知识点太多了，如果只是用这一个节去简单说下原理，那无疑会遗漏很多细节，于是我准备再写一篇，详细介绍这背后的所有知识点。主要涉及到以下内容</p>
+<ul>
+<li>jailbreak post exploit patching </li>
+<li>tweak loader</li>
+<li>dyld how to load and init image</li>
+<li>DYLD_INSERT_LIBRARIES details</li>
+<li><code>+[Class load]</code> and mod_init_func</li>
+<li>…</li>
+</ul>
 <h3><a href="#zui-hou" class="header-anchor">#</a><span id="zui-hou">最后</span></h3><p><del>这里目前还有几个疑问没解决，后面找到了答案再来更新。</del></p>
 <h3><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h3><ul>
 <li><a href="https://github.com/Chr0nicT/TweakInject">https://github.com/Chr0nicT/TweakInject</a></li>
