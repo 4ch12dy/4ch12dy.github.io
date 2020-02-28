@@ -29,7 +29,7 @@
 本文以coolstar系越狱为基础讨论
 
 #背景本文由如何优雅的在LLDB里dumpdecrypted中tweak loader优先初始化的一个思考而来，里面提出了一个疑问在于，tweak loader到底何时加载到进程以及何时被初始化的。而在去探索这个答案的过程中，发现背后涉及到的却是和整个越狱相关，正好借此去深入了解越狱的相关细节。">
-<meta property="og:updated_time" content="2020-02-28T10:54:21.644Z">
+<meta property="og:updated_time" content="2020-02-28T10:55:45.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Step into Jailbreak and dyld">
 <meta name="twitter:description" content="#Step into Jailbreak and dyld
@@ -472,7 +472,6 @@ typedef const char* (*dyld_image_state_change_handler)(enum dyld_image_states st
 }
 </code></pre>
 <p>其中<code>doModInitFunctions</code>就会解析load command找到<code>_DATA,_mod_init_func</code>列表进行初始化调用。</p>
-<p>#### </p>
 <h3><a href="#zui-hou" class="header-anchor">#</a><span id="zui-hou">最后</span></h3><p>对于coolstar系的越狱简单的分析就到这里，unc0ver越狱的话整体流程应该差不多，但在<code>substrate</code>层应该实现差异挺大的，后面有时间的话再分析下相关实现了。</p>
 <h3><a href="#can-kao" class="header-anchor">#</a><span id="can-kao">参考</span></h3><ul>
 <li><a href="https://github.com/opensource-apple/dyld">https://github.com/opensource-apple/dyld</a></li>
@@ -480,6 +479,7 @@ typedef const char* (*dyld_image_state_change_handler)(enum dyld_image_states st
 <li><a href="https://github.com/Chr0nicT/TweakInject">https://github.com/Chr0nicT/TweakInject</a></li>
 <li><a href="https://github.com/chr1s0x1/TweakInject">https://github.com/chr1s0x1/TweakInject</a></li>
 <li><a href="https://github.com/coolstar/electra">https://github.com/coolstar/electra</a></li>
+<li><a href="https://coolstarorg.tumblr.com/" target="_blank" rel="external">https://coolstarorg.tumblr.com/</a></li>
 </ul>
 
         </div>
